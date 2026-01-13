@@ -6,6 +6,7 @@ import { CircleDollarSign, X } from 'lucide-react';
 import { getTeamJerseyImage } from '../../../utils/athleteUtils';
 import { usePlayerData } from '../../../providers/PlayerDataProvider';
 import CircleButton from '../../ui/buttons/BackButton';
+import { usePlayerSeasonTeam } from '../../../hooks/seasons/useSeasonTeams';
 
 type Props = {
   onClose?: () => void
@@ -14,17 +15,19 @@ type Props = {
 export default function PlayerProfileBanner({onClose} : Props) {
   const { player } = usePlayerData();
   const [playerImageErr, setPlayerImageErr] = useState<boolean>(false);
+  
+  const {playerImageUrl, seasonTeam} = usePlayerSeasonTeam(player);
 
   // Use the same image fallback logic as PlayerGameCard
   const imageUrl = useMemo(() => {
     // First try to use the player's actual image
-    if (player?.image_url && !playerImageErr) {
-      return player.image_url;
+    if ((playerImageUrl || player?.image_url) && !playerImageErr) {
+      return playerImageUrl || player?.image_url;
     }
 
     // Fall back to team jersey image
-    return player?.team?.athstat_id ? getTeamJerseyImage(player.team.athstat_id) : undefined;
-  }, [player, playerImageErr]);
+    return seasonTeam?.image_url || player?.team?.athstat_id ? getTeamJerseyImage(seasonTeam?.image_url || player?.team?.athstat_id) : undefined;
+  }, [player?.image_url, player?.team?.athstat_id, playerImageErr, playerImageUrl, seasonTeam?.image_url]);
 
   const pr = player?.power_rank_rating ?? 0;
   const cardTier: CardTier =
@@ -58,6 +61,7 @@ export default function PlayerProfileBanner({onClose} : Props) {
             src={imageUrl}
             className="h-[200px] object-contain"
             onError={() => setPlayerImageErr(true)}
+            key={player.tracking_id}
           />
         </div>
       ) : (

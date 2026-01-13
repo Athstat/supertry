@@ -18,6 +18,7 @@ import { useScoutingList } from "../../hooks/fantasy/scouting/useScoutingList";
 import { useNavigate } from "react-router-dom";
 import QuickActionButton from "../ui/buttons/QuickActionButton";
 import RoundedCard from "../ui/cards/RoundedCard";
+import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams";
 
 
 type SortField = 'power_rank_rating' | 'price' | null;
@@ -281,6 +282,7 @@ function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer }: PlayerL
     // const infoButtonRef = useRef<HTMLDivElement | null>(null);
     const { remainingBudget } = usePlayerPicker();
     const { inView, ref } = useInView({ triggerOnce: true });
+    const { seasonTeam } = usePlayerSeasonTeam(player);
 
     const isAffordable = (player?.price ?? 0) <= remainingBudget;
 
@@ -312,8 +314,9 @@ function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer }: PlayerL
                 <td onClick={handleViewPlayerProfile} className="overflow-clip"  >
 
                     <div className="flex cursor-pointer flex-row items-center gap-2 w-full" >
+
                         <TeamJersey
-                            teamId={player.team_id}
+                            teamId={seasonTeam?.athstat_id}
                             className={twMerge(
                                 "min-h-10 max-h-10 min-w-10 max-w-10",
                                 "lg:min-h-10 lg:max-h-10 lg:min-w-10 lg:max-w-10"
@@ -333,7 +336,7 @@ function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer }: PlayerL
                             </div>
 
                             {isAffordable && (<SecondaryText className="text-[10px]" >
-                                {player?.team?.athstat_name ?? player.position_class}
+                                {seasonTeam?.athstat_name ?? player.position_class}
                             </SecondaryText>)}
 
                             {!isAffordable && (

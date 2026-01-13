@@ -3,6 +3,7 @@ import TeamJersey from '../../player/TeamJersey';
 import PlayerMugshot from '../../player/PlayerMugshot';
 import SecondaryText from '../../ui/typography/SecondaryText';
 import RankNumberCard from '../../ui/cards/RankNumberCard';
+import { usePlayerSeasonTeam } from '../../../hooks/seasons/useSeasonTeams';
 
 type Props = {
   rank: number | string;
@@ -14,6 +15,9 @@ type Props = {
 
 /** Renders a Horizontal Player Ranking Card */
 export function PlayerRankingCard({ rank, onClick, player, value, borderColor = '#1196F5' }: Props) {
+  
+  const {seasonTeam} = usePlayerSeasonTeam(player);
+  
   const handleOnClick = () => {
     if (onClick) {
       onClick(player);
@@ -56,7 +60,7 @@ export function PlayerRankingCard({ rank, onClick, player, value, borderColor = 
 
         <div className="min-w-0 flex-1">
           <p className="text-sm truncate">{player.player_name}</p>
-          <SecondaryText className="text-xs truncate">{player.team?.athstat_name}</SecondaryText>
+          <SecondaryText className="text-xs truncate">{seasonTeam?.athstat_name}</SecondaryText>
         </div>
 
         <div className="flex-shrink-0 mr-4 flex flex-row items-center justify-end">

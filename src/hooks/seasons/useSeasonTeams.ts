@@ -1,4 +1,4 @@
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import { SeasonTeamsContext } from "../../contexts/SeasonTeamsContext";
 import { IAthleteTeam, IProAthlete } from "../../types/athletes";
 
@@ -10,7 +10,7 @@ export function useSeasonTeams() {
         throw Error("useSeasonTeams() hook must be mounted inside the SeasonTeamsProvider");
     }
 
-    const {teams, isLoading, refresh: mutate, error, season} = context;
+    const { teams, isLoading, refresh: mutate, error, season } = context;
 
     const getTeamById = useCallback((teamId: string) => {
         return teams.find((t) => t.athstat_id === teamId);
@@ -35,17 +35,29 @@ export function useSeasonTeams() {
         mutate,
         error,
         getTeamById,
-        getAthleteSeasonTeam
+        getAthleteSeasonTeam,
+        season
     }
 }
 
 
 /** Hook that gets an athletes season team */
-export function usePlayerSeasonTeam(player: IProAthlete) {
-    const {getAthleteSeasonTeam} = useSeasonTeams();
-    const seasonTeam = getAthleteSeasonTeam(player.athlete_teams || []) || player.team;
+export function usePlayerSeasonTeam(player?: IProAthlete) {
+    const { getAthleteSeasonTeam, season } = useSeasonTeams();
+    const seasonTeam = getAthleteSeasonTeam(player?.athlete_teams || []) || player?.team;
+
+    const athleteTeams = useMemo(() => {
+        return player?.athlete_teams || [];
+    }, [player?.athlete_teams]);
+
+    const athleteSeasonTeam = useMemo(() => {
+        return athleteTeams.find((t) => {
+            return t.season_id === season?.id;
+        });
+    }, [athleteTeams, season?.id]);
 
     return {
-        seasonTeam
+        seasonTeam: seasonTeam || player?.team,
+        playerImageUrl: athleteSeasonTeam?.player_image_url || player?.image_url
     }
 }
