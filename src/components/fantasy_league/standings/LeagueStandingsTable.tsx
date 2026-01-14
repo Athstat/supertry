@@ -3,7 +3,7 @@ import {
   FantasySeasonRankingItem,
 } from '../../../types/fantasyLeagueGroups';
 import SecondaryText from '../../ui/typography/SecondaryText';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import RoundedCard from '../../ui/cards/RoundedCard';
 import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
@@ -13,6 +13,7 @@ import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
 import { useNavigate } from 'react-router-dom';
 import { ErrorState } from '../../ui/ErrorState';
 import { LeagueStandingsTableRow } from './LeagueStandingsTableRow';
+import StickyUserRankingCard from './StickyUserRankingCard';
 
 type Props = {
   round?: IFantasyLeagueRound
@@ -25,6 +26,7 @@ export default function LeagueStandingsTable({
   round: selectedRound
 }: Props) {
 
+  const userRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   const { authUser } = useAuth();
@@ -87,7 +89,17 @@ export default function LeagueStandingsTable({
     return [...base, ...membersWhoDidntScorePoints];
   }, [leftOutMembers, standings]);
 
+  const userRanking = completeStandings.find((r) => {
+    return r.user_id === authUser?.kc_id;
+  })
+
   const isLoading = loadingOfficialLeague || loadingStandings;
+
+  const handleScrollToUser = () => {
+    if (userRef.current) {
+      userRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
 
   if (error) {
     return (
@@ -134,24 +146,34 @@ export default function LeagueStandingsTable({
         </div>
       )}
 
+      <StickyUserRankingCard
+        userRanking={userRanking}
+        onClick={handleScrollToUser}
+      />
+
       {!isLoading && <div className="divide-y dark:divide-slate-700/20 divide-slate-300/40">
         {completeStandings.map((ranking, index) => {
+
+          const isUser = authUser?.kc_id === ranking.user_id
+
           return (
             <div
-              key={ranking.user_id}
+              ref={isUser ? userRef : undefined}
             >
               <LeagueStandingsTableRow
                 ranking={ranking}
-                key={ranking.user_id}
                 index={index}
-                isUser={authUser?.kc_id === ranking.user_id}
+                isUser={isUser}
                 hideUserScore={hideUserScore}
                 onClick={handleSelectMember}
               />
             </div>
           );
+
         })}
       </div>}
+
+
     </div>
   );
 }

@@ -28,7 +28,8 @@ export function LeagueStandingsTableRow({ ranking, isUser, hideUserScore, index,
     }
 
     return (
-        <div
+        <section
+            id={isUser ? 'user-ranking' : undefined}
             className={twMerge(
                 'cursor-pointer flex flex-col gap-2 hover:bg-slate-200 hover:dark:bg-slate-800/60 p-2',
                 isUser && 'bg-blue-500 text-white && hover:bg-blue-500 hover:dark:bg-blue-500',
@@ -75,7 +76,7 @@ export function LeagueStandingsTableRow({ ranking, isUser, hideUserScore, index,
                     <p>{pointsDisplay}</p>
                 </div>
             </div>
-        </div>
+        </section>
     );
 }
 
