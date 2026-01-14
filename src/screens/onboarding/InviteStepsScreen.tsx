@@ -6,7 +6,7 @@ import PrimaryButton from "../../components/ui/buttons/PrimaryButton";
 import { Trophy, Users } from "lucide-react";
 import { LoadingIndicator } from "../../components/ui/LoadingIndicator";
 import FantasyLeagueGroupDataProvider from "../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import SecondaryText from "../../components/ui/typography/SecondaryText";
 import { useFetchUser } from "../../hooks/auth/useAuthUser";
@@ -16,6 +16,7 @@ import { GooglePlayButton, AppStoreButton } from 'react-mobile-app-button';
 import { APP_GOOGLE_PLAYSTORE_LINK, APP_IOS_APPSTORE_LINK } from '../../types/constants';
 import { useStoreLinks } from "../../hooks/marketing/useStoreLinks";
 import { useTheme } from "../../contexts/ThemeContext";
+import { Activity } from "react";
 
 
 export default function InviteStepsScreen() {
@@ -128,21 +129,28 @@ function InviteView() {
 
         <div className="flex flex-col w-full gap-4">
 
-          <AppStoreButton
-            url={oneLinkUrl ?? APP_IOS_APPSTORE_LINK}
-            theme={theme === 'dark' ? 'dark' : 'dark'}
-            width={300}
-            height={60}
-          />
+          <Activity mode={oneLinkUrl ? 'hidden' : 'visible'} >
+            <AppStoreButton
+              url={oneLinkUrl ?? APP_IOS_APPSTORE_LINK}
+              theme={theme === 'dark' ? 'dark' : 'dark'}
+              width={300}
+              height={60}
+            />
 
-          <GooglePlayButton
-            url={oneLinkUrl ?? APP_GOOGLE_PLAYSTORE_LINK}
-            theme={theme === 'dark' ? 'dark' : 'dark'}
-            className="w-[300px] text-nowrap p-4"
-            width={300}
-            height={60}
-          />
+            <GooglePlayButton
+              url={oneLinkUrl ?? APP_GOOGLE_PLAYSTORE_LINK}
+              theme={theme === 'dark' ? 'dark' : 'dark'}
+              className="w-[300px] text-nowrap p-4"
+              width={300}
+              height={60}
+            />
+          </Activity>
 
+          <Activity mode={oneLinkUrl ? 'visible' : 'hidden'} >
+            <Link to={oneLinkUrl || ''} target="blank" >
+              <PrimaryButton>Download App</PrimaryButton>
+            </Link>
+          </Activity>
         </div>
       </div>
     </section >
