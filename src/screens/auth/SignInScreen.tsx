@@ -10,6 +10,7 @@ export function SignInScreen() {
   const [isLoading, ] = useState(false);
 
   const [searchParams] = useSearchParams();
+  console.log("Search Params ", searchParams.toString())
   const returnUrl = searchParams.get('return');
 
   return (
