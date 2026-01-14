@@ -17,7 +17,7 @@ import { useOfficialLeagueGroup } from '../../../hooks/fantasy/scouting/seasons/
 
 
 /** Renders fantasy league group standings */
-export function FantasyLeagueStandings() {
+export function FantasyLeagueStandingsTab() {
   const { userMemberRecord, league, currentRound } = useFantasyLeagueGroup();
 
   const { authUser } = useAuth();

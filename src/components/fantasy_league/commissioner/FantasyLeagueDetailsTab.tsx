@@ -10,7 +10,8 @@ import { fantasyLeagueGroupsService } from "../../../services/fantasy/fantasyLea
 import { ErrorState } from "../../ui/ErrorState";
 import { logger } from "../../../services/logger";
 
-export default function LeagueCommissionerTab() {
+/** Renders a fantasy league details tab */
+export default function FantasyLeagueDetailsTab() {
 
   const { league, mutateLeague } = useFantasyLeagueGroup();
   const { ref, inView: isTopButtonInView } = useInView();

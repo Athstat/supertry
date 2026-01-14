@@ -3,12 +3,13 @@ import CircleButton from "../../components/ui/buttons/BackButton";
 import PageView from "../../components/ui/containers/PageView";
 import { useNavigate, useParams } from "react-router-dom";
 import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
-import { FantasyLeagueStandings } from "../../components/fantasy_league/standings/FantasyLeagueStandings";
+import { FantasyLeagueStandingsTab } from "../../components/fantasy_league/standings/FantasyLeagueStandingsTab";
 import RoundedCard from "../../components/ui/cards/RoundedCard";
 import FantasyLeagueGroupDataProvider from "../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider";
 import FantasyLeagueHeader from "../../components/fantasy_league/standings/FantasyLeagueHeader";
 import { TabSwitchContainer, TabSwitchOption } from "../../components/ui/buttons/TabSwitchOption";
-import { useState } from "react";
+import { Activity, useState } from "react";
+import FantasyLeagueDetailsTab from "../../components/fantasy_league/commissioner/FantasyLeagueDetailsTab";
 
 type LocalViewModel = "standings" | "details";
 
@@ -68,7 +69,14 @@ function Content() {
                 </TabSwitchContainer>
             </div>
 
-            <FantasyLeagueStandings />
+            <Activity mode={viewModal === 'standings' ? 'visible' : 'hidden'} >
+                <FantasyLeagueStandingsTab />
+            </Activity>
+
+            <Activity mode={viewModal === 'details' ? 'visible' : 'hidden'} >
+                <FantasyLeagueDetailsTab />
+            </Activity>
+
         </PageView>
     )
 }
