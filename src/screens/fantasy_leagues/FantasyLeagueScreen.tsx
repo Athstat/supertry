@@ -8,7 +8,9 @@ import RoundedCard from "../../components/ui/cards/RoundedCard";
 import FantasyLeagueGroupDataProvider from "../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider";
 import FantasyLeagueHeader from "../../components/fantasy_league/standings/FantasyLeagueHeader";
 import { TabSwitchContainer, TabSwitchOption } from "../../components/ui/buttons/TabSwitchOption";
+import { useState } from "react";
 
+type LocalViewModel = "standings" | "details";
 
 /** Renders a fantasy League screen */
 export default function FantasyLeagueScreen() {
@@ -30,6 +32,14 @@ function Content() {
 
     const navigate = useNavigate();
 
+    const [viewModal, setViewMode] = useState<LocalViewModel>("standings");
+
+    const handleChangeViewMode = (newMode?: string) => {
+        if (newMode) {
+            setViewMode(newMode as LocalViewModel);
+        }
+    }
+
     const handleBack = () => {
         navigate(`/leagues`);
     }
@@ -40,17 +50,23 @@ function Content() {
         <PageView className="pt-6 flex flex-col gap-4" >
             <FantasyLeagueHeader handleBack={handleBack} />
 
-            <TabSwitchContainer>
-                <TabSwitchOption
-                    label="Standings"
-                    value="standings"
-                />
+            <div className="px-4" >
+                <TabSwitchContainer className="" >
+                    <TabSwitchOption
+                        label="Standings"
+                        value="standings"
+                        onSelect={handleChangeViewMode}
+                        current={viewModal}
+                    />
 
-                <TabSwitchOption
-                    label="Details"
-                    value="details"
-                />
-            </TabSwitchContainer>
+                    <TabSwitchOption
+                        label="Details"
+                        value="details"
+                        onSelect={handleChangeViewMode}
+                        current={viewModal}
+                    />
+                </TabSwitchContainer>
+            </div>
 
             <FantasyLeagueStandings />
         </PageView>
