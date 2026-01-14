@@ -96,10 +96,8 @@ export function useServerPing() {
 
     const pingKey = '/server-ping';
     const {data: message, isLoading, error} = useSWR(pingKey, () => pingServer(), {
-        revalidateOnFocus: true,
-        revalidateOnMount: true,
+        revalidateOnFocus: false,
         revalidateOnReconnect: true,
-        revalidateIfStale: true,
         refreshInterval: 1000 * 60 * 60
     });
 
