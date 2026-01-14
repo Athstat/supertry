@@ -2,12 +2,11 @@ import { ArrowLeft } from "lucide-react";
 import CircleButton from "../../components/ui/buttons/BackButton";
 import PageView from "../../components/ui/containers/PageView";
 import { useNavigate, useParams } from "react-router-dom";
-import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
-import { JoinOrInviteButton } from "../../components/fantasy_league/buttons/JoinLeagueButton";
 import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
 import { FantasyLeagueStandings } from "../../components/fantasy_league/standings/FantasyLeagueStandings";
 import RoundedCard from "../../components/ui/cards/RoundedCard";
 import FantasyLeagueGroupDataProvider from "../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider";
+import LeagueStandingsHeader from "../../components/fantasy_league/standings/LeagueStandingsHeader";
 
 
 /** Renders League standings screen */
@@ -30,8 +29,6 @@ function Content() {
 
     const navigate = useNavigate();
 
-    const { league } = useFantasyLeagueGroup();
-
     const handleBack = () => {
         navigate(`/leagues`);
     }
@@ -41,22 +38,7 @@ function Content() {
 
     return (
         <PageView className="pt-6 flex flex-col gap-4" >
-            <div className="flex px-4 flex-row items-center justify-between" >
-                <div>
-                    <CircleButton
-                        onClick={handleBack}
-                    >
-                        <ArrowLeft />
-                    </CircleButton>
-                </div>
-
-                <div>
-                    <p>{league?.title}</p>
-                </div>
-
-                <JoinOrInviteButton />
-            </div>
-
+            <LeagueStandingsHeader handleBack={handleBack} />
             <FantasyLeagueStandings />
         </PageView>
     )
