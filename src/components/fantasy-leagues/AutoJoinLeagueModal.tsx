@@ -15,6 +15,8 @@ import { useJoinLeague } from "../../hooks/leagues/useJoinLeague";
 import { useFetchUser } from "../../hooks/auth/useAuthUser";
 import { LoadingIndicator } from "../ui/LoadingIndicator";
 import ErrorCard from "../ui/cards/ErrorCard";
+import { mutate, preload } from "swr";
+import { swrFetchKeys } from "../../utils/swrKeys";
 
 export default function AutoJoinLeagueModal() {
 
@@ -87,6 +89,7 @@ function Content({ inviter, joinCode, onClose }: Props) {
                 setSelectedSeason(league.season);
             }
 
+            mutate(swrFetchKeys.getLeagueGroupMembers(league.id));
             const nextUrl = `/league/${league.id}/standings`;
             handleJoinLeague(league, nextUrl, onClose);
 

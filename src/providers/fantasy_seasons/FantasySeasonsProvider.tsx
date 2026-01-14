@@ -2,7 +2,7 @@ import { Fragment, ReactNode, useEffect } from 'react';
 import { fantasySeasonsAtom } from '../../state/fantasy/fantasyLeagueScreen.atoms';
 import { fantasySeasonsAtoms } from '../../state/dashboard/dashboard.atoms';
 import { ScopeProvider } from 'jotai-scope';
-import { useAtom, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { fantasySeasonsService } from '../../services/fantasy/fantasySeasonsService';
 import { swrFetchKeys } from '../../utils/swrKeys';
 import { seasonService } from '../../services/seasonsService';
@@ -39,12 +39,14 @@ function InnerProvider({ children }: Props) {
   const [fantasySeasons, setFantasySeasons] = useAtom(fantasySeasonsAtom);
   const [currentSeason, setCurrentSeason] = useAtom(fantasySeasonsAtoms.currentSeasonAtom);
   const [seasonRounds, setSeasonRounds] = useAtom(fantasySeasonsAtoms.seasonRoundsAtom);
+  const selectedSeason = useAtomValue(fantasySeasonsAtoms.selectedDashboardSeasonAtom);
   const [, setCurrentRound] = useAtom(fantasySeasonsAtoms.currentSeasonRoundAtom);
   const setLoading = useSetAtom(fantasySeasonsAtoms.isFantasySeasonsLoadingAtom);
 
   const {authUser} = useAuth();
 
   const seasonsKey = authUser ? swrFetchKeys.getActiveFantasySeasons(authUser?.kc_id) : null;
+  
   const { data: seasonsFetched, isLoading: loadingSeasons } = useSWR(seasonsKey, () =>
     fantasySeasonsService.getAllFantasySeasons(true), {
       revalidateOnFocus: false,
@@ -52,8 +54,10 @@ function InnerProvider({ children }: Props) {
       dedupingInterval: CACHING_CONFIG.fantasySeasonsCachePeriod
     }
   );
+  
+  const finalSeason = selectedSeason || currentSeason;
 
-  const roundsKey = currentSeason ? swrFetchKeys.getSeasonRounds(currentSeason.id) : null;
+  const roundsKey = finalSeason ? swrFetchKeys.getSeasonRounds(finalSeason.id) : null;
   const { data: roundsFetched, isLoading: loadingRounds } = useSWRImmutable(roundsKey, () =>
     seasonService.getSeasonRounds(currentSeason?.id ?? '')
   );
