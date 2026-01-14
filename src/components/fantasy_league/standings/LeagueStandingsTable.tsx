@@ -1,14 +1,10 @@
-import { User } from 'lucide-react';
-import { twMerge } from 'tailwind-merge';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
 import {
-  FantasyLeagueGroupMember,
-  FantasySeasonOverallRanking,
+  FantasySeasonRankingItem,
 } from '../../../types/fantasyLeagueGroups';
 import SecondaryText from '../../ui/typography/SecondaryText';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
-import { smartRoundUp } from '../../../utils/intUtils';
 import RoundedCard from '../../ui/cards/RoundedCard';
 import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
 import { useOfficialLeagueGroup } from '../../../hooks/fantasy/scouting/seasons/useOfficialLeagueGroup';
@@ -16,24 +12,22 @@ import { useLeagueGroupStandings } from '../../../hooks/fantasy/standings/useLea
 import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
 import { useNavigate } from 'react-router-dom';
 import { ErrorState } from '../../ui/ErrorState';
+import { LeagueStandingsTableRow } from './LeagueStandingsTableRow';
 
 type Props = {
   round?: IFantasyLeagueRound
   hideUserScore?: boolean;
 };
 
-/** Renders a league standings table component */
+/** Renders a league standings table component for a given round */
 export default function LeagueStandingsTable({
   hideUserScore,
-  round
+  round: selectedRound
 }: Props) {
 
   const navigate = useNavigate();
 
   const { authUser } = useAuth();
-
-  const selectedRound = round;
-  const roundFilterId = selectedRound?.id || 'overall';
   const { members, league, currentRound } = useFantasyLeagueGroup();
 
   const { standings, isLoading: loadingStandings, error } = useLeagueGroupStandings(league?.id, {
@@ -46,10 +40,11 @@ export default function LeagueStandingsTable({
     fantasyAnalytics.trackViewedStandingsTab();
   }, []);
 
-  const handleSelectMember = useCallback((member: FantasyLeagueGroupMember) => {
+  const handleSelectMember = useCallback((member: FantasySeasonRankingItem) => {
 
     fantasyAnalytics.trackClickedRowOnLeagueStandings();
 
+    const roundFilterId = selectedRound?.id || 'overall';
     const roundNumber = roundFilterId === "overall" ? currentRound?.start_round : selectedRound?.start_round;
     const queryParams = roundNumber ? `?round_number=${roundNumber}` : "";
 
@@ -62,7 +57,7 @@ export default function LeagueStandingsTable({
       navigate(`/league/${featuredLeague.id}/member/${member.user_id}${queryParams}`);
     }
 
-  }, [authUser, currentRound, featuredLeague, navigate, roundFilterId, selectedRound])
+  }, [authUser, currentRound, featuredLeague, navigate, selectedRound])
 
 
   const exclude_ids = standings.map((s) => {
@@ -73,9 +68,9 @@ export default function LeagueStandingsTable({
     return !exclude_ids.includes(m.user_id);
   })
 
-  const completeStandings: (FantasySeasonOverallRanking)[] = useMemo(() => {
+  const completeStandings: (FantasySeasonRankingItem)[] = useMemo(() => {
     const base = [...standings];
-    const membersWhoDidntScorePoints = leftOutMembers.map<(FantasySeasonOverallRanking)>((m) => {
+    const membersWhoDidntScorePoints = leftOutMembers.map<(FantasySeasonRankingItem)>((m) => {
       return {
         user_id: m.user_id,
         first_name: m.user.first_name,
@@ -94,16 +89,16 @@ export default function LeagueStandingsTable({
 
   const isLoading = loadingOfficialLeague || loadingStandings;
 
-    if (error) {
-      return (
-        <div>
-          <ErrorState
-            error="Whoops, Failed to load league standings"
-            message="Something wen't wrong please try again"
-          />
-        </div>
-      );
-    }
+  if (error) {
+    return (
+      <div>
+        <ErrorState
+          error="Whoops, Failed to load league standings"
+          message="Something wen't wrong please try again"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="overflow-y-auto rounded-xl bg-slate-100 dark:bg-slate-800/40">
@@ -145,7 +140,7 @@ export default function LeagueStandingsTable({
             <div
               key={ranking.user_id}
             >
-              <LeagueStandingsRow
+              <LeagueStandingsTableRow
                 ranking={ranking}
                 key={ranking.user_id}
                 index={index}
@@ -157,74 +152,6 @@ export default function LeagueStandingsTable({
           );
         })}
       </div>}
-    </div>
-  );
-}
-
-type StandingsProps = {
-  ranking: FantasySeasonOverallRanking;
-  index: number;
-  isUser?: boolean;
-  hideUserScore?: boolean;
-  onClick?: (member: FantasyLeagueGroupMember) => void
-};
-
-function LeagueStandingsRow({ ranking, isUser, hideUserScore, index, onClick }: StandingsProps) {
-  const { members } = useFantasyLeagueGroup();
-  const memberRecord = members.find(m => m.user_id === ranking.user_id);
-
-  const rank = ranking.league_rank ?? index + 1;
-
-  const shouldHideScore = (isUser && hideUserScore) || !ranking.total_score
-
-  const pointsDisplay = shouldHideScore ? '-' : smartRoundUp(ranking.total_score);
-
-  const handleClick = () => {
-    if (onClick && memberRecord) {
-      onClick(memberRecord);
-    }
-  }
-
-  return (
-    <div
-      className={twMerge(
-        'flex flex-row  cursor-pointer hover:bg-slate-200 hover:dark:bg-slate-800/60  p-3 items-center gap-2 justify-between',
-        isUser && 'bg-blue-500 text-white'
-      )}
-
-      onClick={handleClick}
-    >
-      <div className="flex flex-row items-center gap-2">
-        <div className="flex flex-row">
-          {/* {badge && <div className='text-sm' >{badge}</div>} */}
-          <SecondaryText className={twMerge(
-            "w-10",
-            isUser && "text-white dark:text-white"
-          )}>
-            {/* {rank} {badge}{' '} */}
-            {rank}
-          </SecondaryText>
-        </div>
-
-        {isUser && (
-          <div className=" w-6 h-6 bg-blue-500 rounded-xl flex flex-col items-center justify-center">
-            <User className="w-4 h-4 text-white" />
-          </div>
-        )}
-
-        <div className="flex flex-col">
-          <p>{memberRecord?.user.username ?? ranking.username ?? ranking.first_name}</p>
-          {isUser && hideUserScore && (
-            <p className={twMerge('text-xs', isUser ? 'text-white/80' : 'text-gray-500')}>
-              Claim account to see your points
-            </p>
-          )}
-        </div>
-      </div>
-
-      <div className="text-right">
-        <p>{pointsDisplay}</p>
-      </div>
     </div>
   );
 }
