@@ -20,8 +20,8 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     }
 
     if (!isAuthenticated) {
-        return <Navigate to={`/signin?return=${returnPath}`} state={{
-            fromPathname: pathname
+        return <Navigate to={`/signin`} state={{
+            fromPathname: decodeURIComponent(returnPath)
         }} />;
     }
 
