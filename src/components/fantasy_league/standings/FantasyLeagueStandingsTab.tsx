@@ -1,76 +1,24 @@
-import { } from 'lucide-react';
-import { useCallback, useEffect } from 'react';
 import { EyeOff } from 'lucide-react';
-import { ErrorState } from '../../ui/ErrorState';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 import { isGuestUser } from '../../../utils/deviceId/deviceIdUtils';
 import LeagueStandingsTable from './LeagueStandingsTable';
 import ClaimAccountNoticeCard from '../../auth/guest/ClaimAccountNoticeCard';
-import { FantasyLeagueGroupMember } from '../../../types/fantasyLeagueGroups';
-import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
 import { useLeagueRoundStandingsFilter } from '../../../hooks/fantasy/useLeagueRoundStandingsFilter';
-import { useLeagueGroupStandings } from '../../../hooks/fantasy/standings/useLeagueGroupOverallStandings';
-import LeagueStandingsFilterSelector, { SelectedWeekIndicator } from './LeagueStandingsFilterSelector';
-import { useOfficialLeagueGroup } from '../../../hooks/fantasy/scouting/seasons/useOfficialLeagueGroup';
 import PrimaryButton from '../../ui/buttons/PrimaryButton';
+import LeagueStandingsFilter from './StandingsFilter';
 
 
 /** Renders fantasy league group standings */
 export function FantasyLeagueStandingsTab() {
 
-  const { userMemberRecord, league, currentRound } = useFantasyLeagueGroup();
+  const { userMemberRecord, sortedRounds } = useFantasyLeagueGroup();
 
   const { authUser } = useAuth();
   const isGuest = isGuestUser(authUser);
 
-  const { roundFilterId, selectedRound } = useLeagueRoundStandingsFilter();
-  const navigate = useNavigate();
-
-  const { standings, isLoading: loadingStandings, error } = useLeagueGroupStandings(league?.id, {
-    round_number: selectedRound?.start_round || undefined
-  });
-
-  const { featuredLeague, isLoading: loadingOfficialLeague } = useOfficialLeagueGroup(league?.season_id)
-
-  useEffect(() => {
-    fantasyAnalytics.trackViewedStandingsTab();
-  }, []);
-
-  // Handle team row clicks
-
-  const handleSelectMember = useCallback((member: FantasyLeagueGroupMember) => {
-
-    fantasyAnalytics.trackClickedRowOnLeagueStandings();
-
-    const roundNumber = roundFilterId === "overall" ? currentRound?.start_round : selectedRound?.start_round;
-    const queryParams = roundNumber ? `?round_number=${roundNumber}` : "";
-
-    if (featuredLeague) {
-      if (member.user_id === authUser?.kc_id) {
-        navigate(`/league/${featuredLeague.id}${queryParams}`);
-        return;
-      }
-
-      navigate(`/league/${featuredLeague.id}/member/${member.user_id}${queryParams}`);
-    }
-
-  }, [authUser, currentRound, featuredLeague, navigate, roundFilterId, selectedRound])
-
-
-  const isLoading = loadingOfficialLeague || loadingStandings;
-
-  if (error) {
-    return (
-      <div>
-        <ErrorState
-          error="Whoops, Failed to load league standings"
-          message="Something wen't wrong please try again"
-        />
-      </div>
-    );
-  }
+  const { selectedRound, currentOption, setRoundFilterId } = useLeagueRoundStandingsFilter();
 
   return (
     <div className="flex flex-col gap-4">
@@ -79,21 +27,20 @@ export function FantasyLeagueStandingsTab() {
         {userMemberRecord && <ClaimAccountNoticeCard reasonNum={2} />}
       </div>
 
-      <div className="flex flex-row items-center px-4 justify-between">
-        <SelectedWeekIndicator />
-        <LeagueStandingsFilterSelector />
-      </div>
+      <LeagueStandingsFilter 
+        currentRound={currentOption}
+        leagueRounds={sortedRounds}
+        onChange={setRoundFilterId}
+      />
 
       <div className="relative px-2">
-        <div className={`${!isGuest ? 'blur-[10px] pointer-events-none select-none' : ''}`}>
+        <div className={`${isGuest ? 'blur-[10px] pointer-events-none select-none' : ''}`}>
           <LeagueStandingsTable
-            standings={standings}
-            isLoading={isLoading}
-            handleSelectMember={handleSelectMember}
+            round={selectedRound}
           />
         </div>
 
-        {!isGuest && (
+        {isGuest && (
           <ClaimAccontCard />
         )}
       </div>

@@ -6,32 +6,65 @@ import {
   FantasySeasonOverallRanking,
 } from '../../../types/fantasyLeagueGroups';
 import SecondaryText from '../../ui/typography/SecondaryText';
-import { useMemo } from 'react';
-import { useLeagueRoundStandingsFilter } from '../../../hooks/fantasy/useLeagueRoundStandingsFilter';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { smartRoundUp } from '../../../utils/intUtils';
 import RoundedCard from '../../ui/cards/RoundedCard';
+import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
+import { useOfficialLeagueGroup } from '../../../hooks/fantasy/scouting/seasons/useOfficialLeagueGroup';
+import { useLeagueGroupStandings } from '../../../hooks/fantasy/standings/useLeagueGroupOverallStandings';
+import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
+import { useNavigate } from 'react-router-dom';
+import { ErrorState } from '../../ui/ErrorState';
 
 type Props = {
-  isLoading?: boolean;
-  standings: FantasySeasonOverallRanking[];
-  handleSelectMember: (m: FantasyLeagueGroupMember) => void;
+  round?: IFantasyLeagueRound
   hideUserScore?: boolean;
 };
 
 /** Renders a league standings table component */
 export default function LeagueStandingsTable({
-  isLoading,
-  standings,
-  handleSelectMember,
   hideUserScore,
+  round
 }: Props) {
 
-  const {authUser} = useAuth();
-  const { selectedRound } = useLeagueRoundStandingsFilter();
+  const navigate = useNavigate();
 
-  const { members } = useFantasyLeagueGroup();
-  
+  const { authUser } = useAuth();
+
+  const selectedRound = round;
+  const roundFilterId = selectedRound?.id || 'overall';
+  const { members, league, currentRound } = useFantasyLeagueGroup();
+
+  const { standings, isLoading: loadingStandings, error } = useLeagueGroupStandings(league?.id, {
+    round_number: selectedRound?.start_round || undefined
+  });
+
+  const { featuredLeague, isLoading: loadingOfficialLeague } = useOfficialLeagueGroup(league?.season_id)
+
+  useEffect(() => {
+    fantasyAnalytics.trackViewedStandingsTab();
+  }, []);
+
+  const handleSelectMember = useCallback((member: FantasyLeagueGroupMember) => {
+
+    fantasyAnalytics.trackClickedRowOnLeagueStandings();
+
+    const roundNumber = roundFilterId === "overall" ? currentRound?.start_round : selectedRound?.start_round;
+    const queryParams = roundNumber ? `?round_number=${roundNumber}` : "";
+
+    if (featuredLeague) {
+      if (member.user_id === authUser?.kc_id) {
+        navigate(`/league/${featuredLeague.id}${queryParams}`);
+        return;
+      }
+
+      navigate(`/league/${featuredLeague.id}/member/${member.user_id}${queryParams}`);
+    }
+
+  }, [authUser, currentRound, featuredLeague, navigate, roundFilterId, selectedRound])
+
+
   const exclude_ids = standings.map((s) => {
     return s.user_id;
   })
@@ -57,7 +90,20 @@ export default function LeagueStandingsTable({
     });
 
     return [...base, ...membersWhoDidntScorePoints];
-  }, [leftOutMembers, standings])
+  }, [leftOutMembers, standings]);
+
+  const isLoading = loadingOfficialLeague || loadingStandings;
+
+    if (error) {
+      return (
+        <div>
+          <ErrorState
+            error="Whoops, Failed to load league standings"
+            message="Something wen't wrong please try again"
+          />
+        </div>
+      );
+    }
 
   return (
     <div className="overflow-y-auto rounded-xl bg-slate-100 dark:bg-slate-800/40">
@@ -129,9 +175,9 @@ function LeagueStandingsRow({ ranking, isUser, hideUserScore, index, onClick }: 
 
   const rank = ranking.league_rank ?? index + 1;
 
-  const shouldHideScore = (isUser && hideUserScore) || !ranking.total_score 
+  const shouldHideScore = (isUser && hideUserScore) || !ranking.total_score
 
-  const pointsDisplay =  shouldHideScore ? '-' :  smartRoundUp(ranking.total_score);
+  const pointsDisplay = shouldHideScore ? '-' : smartRoundUp(ranking.total_score);
 
   const handleClick = () => {
     if (onClick && memberRecord) {
