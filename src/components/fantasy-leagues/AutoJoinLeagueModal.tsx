@@ -29,7 +29,7 @@ export default function AutoJoinLeagueModal() {
     const { user: inviter, isLoading: loadingUser } = useFetchUser(inviterId);
 
     const isOpen = Boolean(leagueId) && Boolean(inviterId) && Boolean(joinCode) && Boolean(event);
-    
+
     const handleClose = useCallback(() => {
         setSearchParams((prev) => {
             prev.delete(qs.JOIN_CODE);
@@ -81,15 +81,17 @@ function Content({ inviter, joinCode, onClose }: Props) {
     const { league } = useFantasyLeagueGroup();
 
     const handleJoin = useCallback(() => {
-        if (league?.season) {
+        if (league && league?.season) {
 
             if (league.season.id !== selectedSeason?.id) {
                 setSelectedSeason(league.season);
             }
 
-            handleJoinLeague(league);
+            const nextUrl = `/league/${league.id}/standings`;
+            handleJoinLeague(league, nextUrl, onClose);
+
         }
-    }, [handleJoinLeague, league, selectedSeason, setSelectedSeason]);
+    }, [handleJoinLeague, league, onClose, selectedSeason?.id, setSelectedSeason]);
 
     const inviterUsername = inviter?.username || inviter?.first_name || inviter?.last_name;
 
@@ -99,7 +101,7 @@ function Content({ inviter, joinCode, onClose }: Props) {
         return (
 
             <div className="flex flex-col gap-1" >
-                
+
                 <div className="flex flex-row items-center justify-between" >
                     <p className="font-semibold text-lg" >{league?.title} Invite</p>
 
