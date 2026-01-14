@@ -16,6 +16,10 @@ export function useLeagueGroupStandings(leagueGroupId?: string, options?: League
   const key = shouldFetch ? `/fantasy-league-groups/${leagueGroupId}/standings/overall${round_number ? `/weekly/${round_number}` : ""}` : null;
   const { data, isLoading, error } = useSWR(key, () => {
     return leagueStandingsFetcher(leagueGroupId || '', round_number);
+  }, {
+    revalidateOnFocus: false,
+    revalidateIfStale: true,
+    refreshInterval: 1000 * 60 * 5 // every 5 minutes
   });
 
   const standings = useMemo(() => {

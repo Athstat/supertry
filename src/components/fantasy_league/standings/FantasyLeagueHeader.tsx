@@ -13,7 +13,7 @@ export default function FantasyLeagueHeader({ handleBack }: Props) {
     const {league} = useFantasyLeagueGroup();
 
     return (
-        <div className="flex px-4 flex-row items-center justify-between" >
+        <div className="flex pt-2 px-4 flex-row items-center justify-between" >
             <div>
                 <CircleButton
                     onClick={handleBack}

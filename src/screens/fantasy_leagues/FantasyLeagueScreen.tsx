@@ -48,7 +48,7 @@ function Content() {
     useHideTopNavBar();
 
     return (
-        <PageView className="pt-6 flex flex-col gap-4" >
+        <PageView className=" flex flex-col gap-4" >
             <FantasyLeagueHeader handleBack={handleBack} />
 
             <div className="px-4" >
