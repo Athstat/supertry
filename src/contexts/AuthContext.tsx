@@ -1,11 +1,10 @@
-import { createContext, useContext, ReactNode, useCallback, Activity } from 'react';
+import { createContext, useContext, ReactNode, useCallback, Activity, useState, useEffect } from 'react';
 import { authService } from '../services/authService';
 import { useAuthToken } from '../providers/AuthTokenProvider';
 import useSWR, { KeyedMutator } from 'swr';
-import { DjangoAuthUser } from '../types/auth';
+import { AuthStatus, DjangoAuthUser } from '../types/auth';
 import ScrummyLoadingState from '../components/ui/ScrummyLoadingState';
 import { analytics } from '../services/analytics/anayticsService';
-import { useDebounced } from '../hooks/web/useDebounced';
 import { CACHING_CONFIG } from '../types/constants';
 
 type AuthContextType = {
@@ -15,6 +14,7 @@ type AuthContextType = {
   authUser: DjangoAuthUser | undefined;
   isLoading: boolean;
   refreshAuthUser: KeyedMutator<DjangoAuthUser | undefined>;
+  authStatus: AuthStatus
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -40,8 +40,13 @@ declare global {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const { accessToken, setAcessToken, saveUserInfoToLocalStorage, clearAccessTokenAndUser } =
-    useAuthToken();
+
+  const [status, setStatus] = useState<AuthStatus>('loading');
+
+  const {
+    accessToken, setAcessToken, saveUserInfoToLocalStorage,
+    clearAccessTokenAndUser
+  } = useAuthToken();
 
   const fetchKey = accessToken ? `/auth-user/${accessToken}` : null;
 
@@ -63,7 +68,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     analytics.trackUserLogout();
   }, [clearAccessTokenAndUser]);
 
-  const isLoadingDebounced = useDebounced(isLoading, 500);
+  useEffect(() => {
+    if (!accessToken) {
+      setStatus('unauthenticated');
+      return;
+    }
+
+    if (isLoading) {
+      setStatus('loading');
+      return;
+    }
+
+    if (authUser) {
+      setStatus('authenticated');
+    } else {
+      setStatus('unauthenticated');
+    }
+  }, [accessToken, isLoading, authUser]);
 
   return (
     <AuthContext.Provider
@@ -71,21 +92,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         authUser,
         setAuth,
         logout,
-        isAuthenticated: authUser !== undefined,
-        isLoading,
+        isAuthenticated: status === 'authenticated',
+        isLoading: status === 'loading',
         refreshAuthUser: mutate,
+        authStatus: status
       }}
     >
-      <Activity mode={isLoadingDebounced ? 'hidden' : 'visible'}>{children}</Activity>
-
-      <Activity mode={isLoadingDebounced ? 'visible' : 'hidden'}>
+      <Activity mode={status === 'loading' ? 'hidden' : 'visible'}>{children}</Activity>
+      <Activity mode={status === 'loading' ? 'visible' : 'hidden'}>
         <ScrummyLoadingState />
       </Activity>
     </AuthContext.Provider>
   );
 }
 
- 
+
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
