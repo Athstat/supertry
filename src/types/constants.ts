@@ -293,3 +293,5 @@ export type LeagueInviteParamsDef = {
   'usri'?: string,
   'jc'?: string
 }
+
+export const TEMP_GUEST_USER_DEVICE_ID = 'temp_guest_user_provider_device_id';

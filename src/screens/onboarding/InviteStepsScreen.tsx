@@ -80,9 +80,9 @@ function Content() {
 
 function InviteView() {
 
-  const {isDelaying} = useDelay(500);
+  const { isDelaying } = useDelay(500);
   const { theme } = useTheme();
-  
+
   const { league, members, isLoading: loadingLeague } = useFantasyLeagueGroup();
 
   const [searchParams] = useSearchParams();
@@ -114,7 +114,7 @@ function InviteView() {
     )
   }
 
-  const isInviteLinkInvalid = (!inviter || !isJoinCodeMatch) && !isLoading
+  const isInviteLinkInvalid = (!!inviter && !!isJoinCodeMatch && !!league) && !isLoading
 
   if (isInviteLinkInvalid) {
     return (
@@ -157,7 +157,7 @@ function InviteView() {
 
       <div className="flex flex-col gap-4 items-center justify-center " >
         <SecondaryText className="max-w-[60%] text-center" >You have been invited by {inviter?.username} to join {league?.title} on SCRUMMY</SecondaryText>
-        
+
         <Link to={openInAppLink} >
           <PrimaryButton className="w-fit py-3 px-8" >Join League In SCRUMMY App</PrimaryButton>
         </Link>

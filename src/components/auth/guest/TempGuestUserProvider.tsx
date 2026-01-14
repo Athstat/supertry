@@ -1,6 +1,7 @@
-import { createContext, ReactNode, useEffect, useState } from "react"
-import { useAuth } from "../../../contexts/AuthContext";
+import { ReactNode, useEffect, useState } from "react"
 import { authService } from "../../../services/authService";
+import { authTokenService } from "../../../services/auth/authTokenService";
+import { TEMP_GUEST_USER_DEVICE_ID } from "../../../types/constants";
 
 type Props = {
     children?: ReactNode,
@@ -8,59 +9,60 @@ type Props = {
     guestDeviceName?: string
 }
 
-type TempGuestUserContext = {
-    guestDeviceName?: string
-}
-
-export const TempGuestUserContext = createContext<TempGuestUserContext | null>(null);
-
 /** Component that temporarily provides a guest user account to its children */
-export default function TempGuestUserProvider({ children, loadingFallback, guestDeviceName = 'temp_guest_user_provider_device_id' }: Props) {
+export default function TempGuestUserProvider({ children, loadingFallback }: Props) {
 
-    const [isProcessing, setIsProcessing] = useState(false);
-    const { authStatus, setAuth } = useAuth();
+    const guestDeviceName = TEMP_GUEST_USER_DEVICE_ID;
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const authenticator = async () => {
 
-            if (authStatus !== 'unauthenticated') return;
-
-            setIsProcessing(true);
-
             try {
+                const token = authTokenService.getAccessToken();
+
+                if (token !== null) {
+                    return;
+                }
 
                 const res = await authService.authenticateAsGuestUser({
                     realDeviceId: guestDeviceName,
                     storedDeviceId: guestDeviceName
                 });
 
-                const { data } = res;
-
-                if (data) {
-                    setAuth(data.token, data.user);
-                    setIsProcessing(false);
-                    return;
+                if (res.data) {
+                    authTokenService.saveLoginTokens(res.data.token, res.data.user);
                 }
-
             } finally {
-                setIsProcessing(false);
+                setIsLoading(false);
             }
 
         }
 
         authenticator();
 
-    }, [authStatus, guestDeviceName, setAuth]);
+        return () => {
+            const flush = async () => {
+                const user = authService.getUserInfoSync();
 
-    if (authStatus === 'loading' || isProcessing) {
+                if (user?.device_id === TEMP_GUEST_USER_DEVICE_ID) {
+                    authService.logout();
+                }
+            }
+
+            flush();
+         }
+    })
+
+    if (isLoading) {
         return (
             <>{loadingFallback}</>
         )
     }
 
     return (
-        <TempGuestUserContext.Provider value={{ guestDeviceName }} >
+        <>
             {children}
-        </TempGuestUserContext.Provider>
+        </>
     )
 }
