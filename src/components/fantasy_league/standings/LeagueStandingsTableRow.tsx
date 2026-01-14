@@ -1,4 +1,4 @@
-import { Crown, User } from "lucide-react";
+import { Medal, User } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { FantasySeasonRankingItem } from "../../../types/fantasyLeagueGroups";
 import { smartRoundUp } from "../../../utils/intUtils";
@@ -96,13 +96,13 @@ function RankingCrown({ isUser, ranking }: RankingCrownProps) {
 
     return (
         <div className={twMerge(
-            "w-fit px-2 py-0.5 bg-gradient-to-r from-[#1196F5] to-[#1196F5] text-white dark:text-white rounded-full flex flex-row items-center gap-2",
+            "w-fit px-2 py-1 bg-gradient-to-r from-[#1196F5] to-[#1196F5] text-white dark:text-white rounded-full flex flex-row items-center gap-2",
             isUser && 'from-white to-white text-[#1196F5] dark:text-[#1196F5]',
             rankType === 'gold' && 'from-[#FFC603] to-[#d29402] text-black dark:text-black',
             rankType === 'silver' && 'from-[#a8a8a8] to-[#848484] text-white dark:text-white',
             rankType === 'bronze' && 'from-[#8c5304] to-[#e66305] text-white dark:text-white',
         )} >
-            <Crown className="w-4 h-4" />
+            <Medal className="w-4 h-4" />
         </div>
     )
 }
