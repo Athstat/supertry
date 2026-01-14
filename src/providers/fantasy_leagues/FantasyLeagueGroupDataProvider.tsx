@@ -49,6 +49,9 @@ export default function FantasyLeagueGroupDataProvider({
 }
 
 function Fetcher({ children, leagueId, loadingFallback, skipCache, fetchMembers = true }: Props) {
+
+  
+
   const [leagueGroup, setFantasyLeagueGroup] = useAtom(fantasyLeagueGroupAtom);
   const setFantasyLeagueMembers = useSetAtom(fantasyLeagueGroupMembersAtom);
   const setFantasyLeagueGroupRounds = useSetAtom(fantasyLeagueGroupRoundsAtom);
@@ -70,11 +73,14 @@ function Fetcher({ children, leagueId, loadingFallback, skipCache, fetchMembers 
 
   const shouldFetchMembers = leagueId && fetchMembers;
   const membersKey = shouldFetchMembers ? swrFetchKeys.getLeagueGroupMembers(leagueId) : null;
+  
   const {
     data: members,
     isLoading: loadingMembers,
     mutate,
-  } = useSWR(membersKey, () => fantasyLeagueGroupsService.getGroupMembers(leagueId ?? ''));
+  } = useSWR(membersKey, () => fantasyLeagueGroupsService.getGroupMembers(leagueId ?? ''), {
+    revalidateIfStale: true
+  });
 
   const roundsKey = leagueId ? swrFetchKeys.getLeagueGroupRounds(leagueId) : null;
   const { data: rounds, isLoading: loadingRounds } = useSWR(roundsKey, () =>

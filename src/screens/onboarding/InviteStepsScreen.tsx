@@ -1,193 +1,209 @@
-import { useEffect, useState } from 'react';
-import { useQueryValue } from '../../hooks/web/useQueryState';
-import ScrummyLogoHorizontal from '../../components/branding/scrummy_logo_horizontal';
-import SecondaryText from '../../components/ui/typography/SecondaryText';
-import { useTheme } from '../../contexts/ThemeContext';
-
+import { twMerge } from "tailwind-merge";
+import ScrummyLogoHorizontal from "../../components/branding/scrummy_logo_horizontal";
+import PageView from "../../components/ui/containers/PageView";
+import { AppColours, leagueInviteQueryParams } from "../../types/constants";
+import PrimaryButton from "../../components/ui/buttons/PrimaryButton";
+import { Trophy, Users } from "lucide-react";
+import { LoadingIndicator } from "../../components/ui/LoadingIndicator";
+import FantasyLeagueGroupDataProvider from "../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider";
+import { Link, useSearchParams } from "react-router-dom";
+import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
+import SecondaryText from "../../components/ui/typography/SecondaryText";
+import { useFetchUser } from "../../hooks/auth/useAuthUser";
+import ErrorCard from "../../components/ui/cards/ErrorCard";
+import { PillCard } from "../../components/ui/buttons/PillTag";
 import { GooglePlayButton, AppStoreButton } from 'react-mobile-app-button';
 import { APP_GOOGLE_PLAYSTORE_LINK, APP_IOS_APPSTORE_LINK } from '../../types/constants';
-import { Copy, Lock } from 'lucide-react';
-import PrimaryButton from '../../components/ui/buttons/PrimaryButton';
-import { InfoCard } from '../../components/ui/cards/StatCard';
-import { Toast } from '../../components/ui/Toast';
-import { analytics } from '../../services/analytics/anayticsService';
-import { logger } from '../../services/logger';
+import { useStoreLinks } from "../../hooks/marketing/useStoreLinks";
+import { useTheme } from "../../contexts/ThemeContext";
+import { Activity, useCallback, useMemo } from "react";
+import { Download } from "lucide-react";
+import { isMobile } from "react-device-detect";
+import TempGuestUserProvider from "../../components/auth/guest/TempGuestUserProvider";
+import ScrummyLoadingState from "../../components/ui/ScrummyLoadingState";
+import { deleteTempGuestAccount } from "../../utils/authUtils";
 
-/** Renders Screen to help show the user's how to except invitations
- * for the app
- */
+
 export default function InviteStepsScreen() {
-  const userName = useQueryValue('user_name');
-  const leagueName = useQueryValue('league_name');
-  const joinCode = useQueryValue('join_code');
+
+  return (
+    <TempGuestUserProvider
+      loadingFallback={<ScrummyLoadingState />}
+    >
+      <Content />
+    </TempGuestUserProvider>
+  )
+}
+
+
+function Content() {
+
+  const [searchParams] = useSearchParams();
+  const leagueId = searchParams.get(leagueInviteQueryParams.LEAGUE_ID);
+  const { oneLinkUrl } = useStoreLinks();
+
+  return (
+    <PageView className="py-0 p-0" >
+      <header className={twMerge(
+        "sticky top-0 border-b dark:border-slate-700 flex flex-row items-center justify-between z-50 bg-white/80 backdrop-blur-sm shadow-none mb-0 pb-0",
+        AppColours.BACKGROUND
+      )}>
+        <div className="container mx-auto px-1 h-16 overflow-hidden flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div
+              className="flex flex-row overflow-hidden items-start justify-start cursor-pointer"
+              tabIndex={0}
+              aria-label="Navigate to home"
+            >
+              <ScrummyLogoHorizontal className="" />
+            </div>
+          </div>
+        </div>
+
+        <div className="pr-2" >
+          <Link to={oneLinkUrl || ''} target={'blank'} >
+            <PrimaryButton className="text-nowrap" >Download App</PrimaryButton>
+          </Link>
+        </div>
+      </header>
+
+      <FantasyLeagueGroupDataProvider
+        leagueId={leagueId || ''}
+        loadingFallback={<LoadingIndicator />}
+      >
+        <InviteView />
+      </FantasyLeagueGroupDataProvider>
+
+    </PageView>
+  )
+}
+
+function InviteView() {
 
   const { theme } = useTheme();
 
-  const [message, setMessage] = useState<string>();
+  const { league, members, isLoading: loadingLeague } = useFantasyLeagueGroup();
 
-  // Optional AppsFlyer OneLink support: if VITE_AF_ONELINK_BASE_URL is set,
-  // we build a single OneLink URL that preserves UTMs and extra context.
-  const oneLinkBase = import.meta.env.VITE_AF_ONELINK_BASE_URL;
+  const [searchParams] = useSearchParams();
+  const inviterId = searchParams.get(leagueInviteQueryParams.USER_ID);
+  const joinCode = searchParams.get(leagueInviteQueryParams.JOIN_CODE);
 
-  //console.log('oneLinkBase', oneLinkBase);
+  const { user: inviter, isLoading: loadingUser } = useFetchUser(inviterId);
+  const isJoinCodeMatch = joinCode?.toUpperCase() === league?.entry_code?.toUpperCase();
 
-  const oneLinkUrl = (() => {
-    if (!oneLinkBase) return null;
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const url = new URL(oneLinkBase);
+  const { oneLinkUrl } = useStoreLinks(league);
 
-      // Standard UTM mappings to AppsFlyer params
-      url.searchParams.set('pid', params.get('utm_source') || 'website'); // media source
-      const campaign = params.get('utm_campaign');
-      if (campaign) url.searchParams.set('c', campaign);
+  const isLoading = loadingLeague || loadingUser;
 
-      const channel = params.get('utm_medium');
-      if (channel) url.searchParams.set('af_channel', channel);
+  const qs = leagueInviteQueryParams;
 
-      const term = params.get('utm_term');
-      if (term) url.searchParams.set('af_sub1', term);
+  const inAppLink = useMemo(() => {
+    const resourcePath = `leagues?event=accept_invite&${qs.LEAGUE_ID}=${league?.id}&${qs.USER_ID}=${inviter?.kc_id}&${qs.JOIN_CODE}=${joinCode}`;
 
-      const content = params.get('utm_content');
-      if (content) url.searchParams.set('af_sub2', content);
-
-      // Extra context for analytics/debug
-      if (joinCode) url.searchParams.set('af_sub3', (joinCode ?? '').toUpperCase());
-      if (leagueName) url.searchParams.set('af_sub4', leagueName as string);
-      if (userName) url.searchParams.set('af_sub5', userName as string);
-
-      return url.toString();
-    } catch {
-      return null;
+    if (isMobile) {
+      return `scrummy://${resourcePath}`;
     }
-  })();
 
-  //console.log('oneLinkUrl', oneLinkUrl);
+    return `/${resourcePath}`;
+  }, [inviter?.kc_id, joinCode, league?.id, qs.JOIN_CODE, qs.LEAGUE_ID, qs.USER_ID]);
 
-  // Track landing with UTM context
-  useEffect(() => {
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const utm = {
-        utm_source: params.get('utm_source') || undefined,
-        utm_medium: params.get('utm_medium') || undefined,
-        utm_campaign: params.get('utm_campaign') || undefined,
-        utm_id: params.get('utm_id') || undefined,
-        utm_term: params.get('utm_term') || undefined,
-        utm_content: params.get('utm_content') || undefined,
-        has_one_link: !!oneLinkUrl,
-        league_name: leagueName || undefined,
-        user_name: userName || undefined,
-        join_code: (joinCode ?? '').toUpperCase() || undefined,
-      };
-      analytics.track('[Marketing] Invite Steps Viewed', utm);
-    } catch (e) {
-      logger.error('Error ', e);
-    }
-  }, [oneLinkUrl, leagueName, userName, joinCode]);
+  const handleOpenInApp = useCallback(() => {
+    deleteTempGuestAccount();
+    window.open(inAppLink, '_blank');
+  }, [inAppLink]);
 
-  const handleCopyEntryCode = () => {
-    if (joinCode) {
-      navigator.clipboard.writeText(joinCode ?? '');
-      setMessage('Entry code was copied to clip board');
-    }
-  };
+  if (isLoading) {
+    return (
+      <LoadingSkeleton />
+    )
+  }
 
-  return (
-    <div className="dark:bg-black dark:text-white w-[100%] lg:px-[30%] pb-20 h-[100vh] overflow-y-auto p-4 gap-4 flex flex-col items-center ">
-      <div className="flex flex-row items-center justify-center h-20">
-        <ScrummyLogoHorizontal />
-      </div>
+  const isInviteLinkInvalid = (!inviter || !league || !isJoinCodeMatch) && !isLoading;
 
-      <div className="flex flex-col items-center gap-4 justify-center">
-        <h1 className="font-bold text-xl text-black dark:text-white">{leagueName}</h1>
-        <SecondaryText className="text-center w-4/5 lg:w-[1/2] text-slate-700">
-          Congrats! You have been invited by <strong>{userName}</strong> to join{' '}
-          <strong>{leagueName}</strong>. Time to join the scrum!
-        </SecondaryText>
-      </div>
-
-      <div className="flex flex-col gap-6 w-full p-4">
-        <div className="flex flex-row w-full items-center gap-4">
-          <div className="w-10 h-10 rounded-full bg-blue-500 items-center flex flex-col justify-center text-white">
-            <p className="text-lg font-bold">1</p>
-          </div>
-
-          <div>
-            <p className="text-lg font-semibold">Download SCRUMMY App</p>
-          </div>
-        </div>
-
-        <div className="flex flex-col w-full gap-4">
-          <GooglePlayButton
-            url={oneLinkUrl ?? APP_GOOGLE_PLAYSTORE_LINK}
-            theme={theme === 'dark' ? 'dark' : 'dark'}
-            className="w-[300px] text-nowrap p-4"
-            width={300}
-            height={60}
-          />
-
-          <AppStoreButton
-            url={oneLinkUrl ?? APP_IOS_APPSTORE_LINK}
-            theme={theme === 'dark' ? 'dark' : 'dark'}
-            width={300}
-            height={60}
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-6 w-full p-4">
-        <div className="flex flex-row w-full items-center gap-4">
-          <div className="w-10 h-10 rounded-full bg-blue-500 items-center flex flex-col justify-center text-white">
-            <p className="text-lg font-bold">2</p>
-          </div>
-
-          <div>
-            <p className="text-lg font-semibold">Create Account</p>
-          </div>
-        </div>
-
-        <div className="flex flex-col w-full gap-4">
-          <p>Create your profile (or log in) and setup your own SCRUMMY profile.</p>
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-6 w-full p-4">
-        <div className="flex flex-row w-full items-center gap-4">
-          <div className="w-10 h-10 rounded-full bg-blue-500 items-center flex flex-col justify-center text-white">
-            <p className="text-lg font-bold">3</p>
-          </div>
-
-          <div>
-            <p className="text-lg font-semibold">
-              Use Join code <strong>{(joinCode ?? '').toUpperCase()}</strong>
-            </p>
-          </div>
-        </div>
-
-        <div className="flex flex-col w-full gap-4">
-          <p>
-            Heag to the Leagues Screen and tap on 'Join by code' and enter{' '}
-            <strong>{(joinCode ?? '').toUpperCase()}</strong> to join <strong>{leagueName}</strong>
-          </p>
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-4 w-full">
-        <InfoCard label="Entry Code" value={joinCode ?? '-'} icon={<Lock className="w-4 h-4" />} />
-
-        <PrimaryButton onClick={handleCopyEntryCode}>
-          <Copy />
-          Copy Entry Code
-        </PrimaryButton>
-
-        <Toast
-          isVisible={message !== undefined}
-          onClose={() => setMessage(undefined)}
-          message={message ?? ''}
-          type="info"
+  if (isInviteLinkInvalid) {
+    return (
+      <div className="flex flex-col items-center justify-center p-6" >
+        <ErrorCard
+          error="Something wen't wrong with the invite link"
+          message="The invite link appears to be broken. Please ask the inviter to send another invite link, then try again"
+          className="p-3 h-fit"
         />
       </div>
+    )
+  }
+
+  const pluralMembers = members.length > 1;
+
+  return (
+    <section className="flex flex-col mt-10 gap-4 items-center justify-center p-4" >
+
+      <div className="flex w-fit flex-col cursor-pointer transition-all ease-in items-center gap-2 " >
+        <Trophy className="w-20 h-20" />
+        <p className="font-semibold" >{league?.title}</p>
+
+        <div className="flex flex-row items-center gap-2" >
+          <PillCard className="flex flex-row items-center justify-center gap-2" >
+            <Users className="w-4 h-4" />
+            <p>{members.length} Member{pluralMembers ? 's' : ''}</p>
+          </PillCard>
+
+          <PillCard className="flex flex-row items-center justify-center gap-2" >
+            <Trophy className="w-4 h-4" />
+            <p>{league?.season.name}</p>
+          </PillCard>
+        </div>
+
+      </div>
+
+      <div className="flex flex-col gap-4 items-center justify-center " >
+        <SecondaryText className="max-w-[60%] text-center" >You have been invited by {inviter?.username} to join {league?.title} on SCRUMMY</SecondaryText>
+
+        <PrimaryButton onClick={handleOpenInApp} className="w-fit py-3 px-8" >Join League In SCRUMMY App</PrimaryButton>
+
+      </div>
+
+      <div className="flex flex-col gap-2 mt-6 items-center justify-center" >
+        <SecondaryText className="text-center max-w-[80%]" >Don't have the SCRUMMY App installed? First install the app then follow this link again to join the league</SecondaryText>
+
+        <div className="flex flex-col w-full gap-4">
+
+          <Activity mode={oneLinkUrl ? 'hidden' : 'visible'} >
+            <AppStoreButton
+              url={APP_IOS_APPSTORE_LINK}
+              theme={theme === 'dark' ? 'dark' : 'dark'}
+              width={300}
+              height={60}
+            />
+
+            <GooglePlayButton
+              url={APP_GOOGLE_PLAYSTORE_LINK}
+              theme={theme === 'dark' ? 'dark' : 'dark'}
+              className="w-[300px] text-nowrap p-4"
+              width={300}
+              height={60}
+            />
+          </Activity>
+
+          <Activity mode={oneLinkUrl ? 'visible' : 'hidden'} >
+            <Link to={oneLinkUrl || ''} target="blank" >
+              <div className="flex flex-col items-center justify-center w-full" >
+                <PrimaryButton className="flex w-fit flex-row items-center gap-4" >
+                  <p> Download App</p>
+                  <Download />
+                </PrimaryButton>
+              </div>
+            </Link>
+          </Activity>
+        </div>
+      </div>
+    </section >
+  )
+}
+
+function LoadingSkeleton() {
+  return (
+    <div>
+      <LoadingIndicator />
     </div>
-  );
+  )
 }

@@ -33,7 +33,7 @@ export const AuthRoute = ({ children }: { children: React.ReactNode }) => {
     const { state } = useLocation();
 
     if (isAuthenticated) {
-        const nextRoute = state?.fromPathname ?? '/dashboard';
+        const nextRoute = state?.fromPathname || '/dashboard';
         return <Navigate to={nextRoute} />;
     }
 

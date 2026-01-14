@@ -105,8 +105,8 @@ function AnimatedRoot({ children, className }: NoAnimationProps) {
                 exit={{ y: ["100%", "50%", "0%"] }}
                 transition={{
                     type: "spring",
-                    stiffness: 400,
-                    damping: 40,
+                    stiffness: 200,
+                    damping: 20,
                 }}
             >
                 {children}

@@ -11,7 +11,7 @@ export function useJoinLeague() {
 
     const navigate = useNavigate()
 
-    const handleJoinLeague = async (league: FantasyLeagueGroup, nextUrl?: string) => {
+    const handleJoinLeague = async (league: FantasyLeagueGroup, nextUrl?: string, beforeNav?: () => void) => {
 
         setLoading(true);
 
@@ -26,6 +26,10 @@ export function useJoinLeague() {
 
                 fantasyAnalytics.trackJoinedLeagueByCode(league.id);
 
+                if (beforeNav) {
+                    beforeNav();
+                }
+
                 if (nextUrl) {
                     navigate(nextUrl, {
                         state: {
@@ -34,6 +38,7 @@ export function useJoinLeague() {
                     });
                     return;
                 }
+                
                 window.location.reload();
                 setLoading(false);
             } else {

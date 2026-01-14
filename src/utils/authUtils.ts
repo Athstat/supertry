@@ -1,6 +1,8 @@
+import { authService } from "../services/authService";
 import { logger } from "../services/logger";
 import { DjangoAuthUser } from "../types/auth";
 import { jwtDecode } from "jwt-decode";
+import { TEMP_GUEST_USER_DEVICE_ID } from "../types/constants";
 
 export function validateUsername(username: string) {
   const usernameRegex = /^[a-zA-Z0-9_]{3,30}$/;
@@ -72,4 +74,13 @@ export function isEmailVerified(user: DjangoAuthUser) {
     user.verification_state === "verified" &&
     user.is_claimed_account === true
   );
+}
+
+/** Function that deletes and flushes a temporal guest account */
+export function deleteTempGuestAccount () {
+  const user = authService.getUserInfoSync();
+
+  if (user?.email === `${TEMP_GUEST_USER_DEVICE_ID}@devices.scrummy-app.ai`) {
+    authService.logout();
+  }
 }

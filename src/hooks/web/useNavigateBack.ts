@@ -30,9 +30,7 @@ export function useNavigateBack() {
             return;
         }
 
-        console.log("Stack before ", stack);
         stack.hardPop();
-        console.log("Stack after ", stack);
         const nextPath = stack.peek();
 
         setStack(stack);

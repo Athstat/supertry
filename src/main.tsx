@@ -1,3 +1,5 @@
+// import {scan} from "react-scan";
+
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
@@ -8,6 +10,12 @@ import App from './App';
 //   // For example, automatic IP address collection on events
 //   sendDefaultPii: true
 // });
+
+// scan({
+//   enabled: true
+// })
+
+// React Scan is used for checking how many times components rerender
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <App />

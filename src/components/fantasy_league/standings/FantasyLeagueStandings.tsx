@@ -77,8 +77,6 @@ export function FantasyLeagueStandings() {
         {userMemberRecord && <ClaimAccountNoticeCard reasonNum={2} />}
       </div>
 
-
-
       <div className="flex flex-row items-center px-4 justify-between">
         <div className="flex flex-row items-center gap-2">
           <Table2 />

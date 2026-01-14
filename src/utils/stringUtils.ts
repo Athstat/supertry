@@ -134,16 +134,24 @@ export const abbreviateSeasonName = (seasonName: string): string => {
     if (seasonName.startsWith('Six Nations')) {
         return seasonName.replace('Six Nations', '6N')
     }
-    
+
     return seasonName;
 };
 
 export function trimSeasonYear(seasonName: string) {
-  const abbreviated = abbreviateSeasonName(seasonName);
-  if (seasonName.includes(" ") && abbreviated) {
-    const [seasonNamePart] = abbreviated.split(" ");
-    return seasonNamePart;
-  }
+    const abbreviated = abbreviateSeasonName(seasonName);
+    if (seasonName.includes(" ") && abbreviated) {
+        const [seasonNamePart] = abbreviated.split(" ");
+        return seasonNamePart;
+    }
 
-  return abbreviated || seasonName;
+    return abbreviated || seasonName;
+}
+
+export function encodeToBase64(inStr?: string) {
+    return btoa(inStr || '');
+}
+
+export function decodeFromBase64(base64Str?: string) {
+    return atob(base64Str || '');
 }

@@ -7,8 +7,8 @@ import { useTooltip } from "../../../hooks/ui/useTooltip";
 import { useSportActions } from "../../../hooks/useSportActions";
 
 type StatCardProps = {
-  label: string;
-  value: number | string | undefined;
+  label?: string;
+  value?: number | string | undefined;
   icon?: ReactNode;
   valueClassName?: string;
   iconClassName?: string;

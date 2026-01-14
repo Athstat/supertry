@@ -147,5 +147,9 @@ declare module "lucide-react" {
   export const School : CIP;
   export const CheckCircle : CIP;
   export const ClockFading : CIP;
+  export const CopyIcon : CIP;
+  export const CircleX : CIP;
+  export const Download : CIP;
+  
 }
 

@@ -156,48 +156,6 @@ export const leagueGroupService = {
     }
   },
 
-  /**
-   * Generate a shareable invite link
-   */
-  generateInviteLink: (inviteCode: string): string => {
-    const baseUrl = window.location.origin;
-    return `${baseUrl}/join-group/${inviteCode}`;
-  },
-
-  /**
-   * Generate invite message for sharing
-   */
-  generateInviteMessage: (groupName: string, inviteCode: string): string => {
-    const inviteLink = leagueGroupService.generateInviteLink(inviteCode);
-    return `Join my league group "${groupName}" on SCRUMMY! Use code: ${inviteCode} or click: ${inviteLink}`;
-  },
-
-  /**
-   * Share via native sharing (if available)
-   */
-  shareInvite: async (groupName: string, inviteCode: string): Promise<void> => {
-    const message = leagueGroupService.generateInviteMessage(groupName, inviteCode);
-
-    // Check if native sharing is available
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: `Join ${groupName} on SCRUMMY`,
-          text: message,
-          url: leagueGroupService.generateInviteLink(inviteCode),
-        });
-      } catch (error) {
-        // User cancelled sharing or error occurred
-        console.log('Sharing cancelled or failed:', error);
-      }
-    } else {
-      // Fallback: copy to clipboard
-      await navigator.clipboard.writeText(message);
-      // You might want to show a toast notification here
-    }
-  },
-
-
   /** Returns all the leagues the user has joined */
   getUserJoinedLeagueGroups: async (): Promise<FantasyLeagueGroup[]> => {
     try {

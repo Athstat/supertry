@@ -1,46 +1,65 @@
 import { useAuth } from "../../contexts/AuthContext";
 import { analytics } from "../../services/analytics/anayticsService";
+import { leagueInviteQueryParams } from "../../types/constants";
 import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
+import { isMobileWebView } from "../../utils/bridgeUtils";
 
 export function useShareLeague(league?: FantasyLeagueGroup) {
 
     const { authUser } = useAuth();
     const username = authUser?.username || authUser?.first_name;
 
+    const qs = leagueInviteQueryParams;
+
+    const baseUrl = (import.meta)?.env?.VITE_APP_LINK_BASE_URL || window.location.origin;
+    const inviteLink = encodeURI(`${baseUrl}/invite-steps?${qs.LEAGUE_ID}=${league?.id}&${qs.USER_ID}=${authUser?.kc_id}&${qs.JOIN_CODE}=${league?.entry_code}`);
+
+    const handleShareWithBridge = (message: string) => {
+        const jsonObj = { message };
+
+        window.ReactNativeWebView?.postMessage(JSON.stringify({
+            type: 'NATIVE_SHARE',
+            payload: JSON.stringify(jsonObj)
+        }));
+    }
+
+    const isMobileShareAvailable = isMobileWebView() && Boolean(window.CAN_USE_MOBILE_SHARE_API);
+
     const handleShare = () => {
 
         if (!league) return;
 
-        const baseUrl = (import.meta)?.env?.VITE_APP_LINK_BASE_URL || window.location.origin;
-        const inviteInstructions = encodeURI(`${baseUrl}/invite-steps?league_name=${league?.title ?? ''}&user_name=${username ?? ''}&join_code=${league?.entry_code ?? ''}`);
-
-        const shareMessage =`You've been invited to join ${league.title} on SCRUMMY! Tap the link below to get started.\n${inviteInstructions}`;
+        const shareMessage = `${username} is inviting you to join ${league.title} league on SCRUMMY 🏉. Use the link below to join\n\n${inviteLink}`
 
         // Ensure there are no leading blank lines
         //const cleanedMessage = shareMessage.replace(/\r\n/g, '\n').replace(/^\s*\n+/, '');
 
         // Share ONLY the composed message text (no title/url),
         // so the share sheet doesn't prepend extra lines.
-        const shareData: ShareData = {
-            title: `SCRUMMY Fantasy League Invite`,
-            text: `🔥 You've been invited to join ${league.title} on SCRUMMY! Tap the link below to get started.\n\n${inviteInstructions}`,
-            // url: inviteInstructions
-        };
 
+
+        if (isMobileShareAvailable) {
+            handleShareWithBridge(shareMessage);
+            return;
+        }
+
+        const shareData: ShareData = {
+            text: shareMessage
+        };
 
         if (navigator.share) {
             navigator.share(shareData)
-            .then(() => {
-                analytics.trackFriendInvitesSent('League_Invite_Button', league);
-            })
-            .catch(err => {
-                console.error('Share failed:', err);
-                // Fallback to clipboard if share dismissed or fails
-                navigator.clipboard
-                    .writeText(shareMessage)
-                    .then(() => alert('Invite copied to clipboard'))
-                    .catch(() => alert('Unable to share or copy. Please try manually.'));
-            });
+                .then(() => {
+                    analytics.trackFriendInvitesSent('League_Invite_Button', league);
+                })
+                .catch(err => {
+                    console.error('Share failed:', err);
+                    // Fallback to clipboard if share dismissed or fails
+                    navigator.clipboard
+                        .writeText(shareMessage)
+                        .then(() => alert('Invite copied to clipboard'))
+                        .catch(() => alert('Unable to share or copy. Please try manually.'));
+                });
         } else {
             navigator.clipboard
                 .writeText(shareMessage)
@@ -51,7 +70,8 @@ export function useShareLeague(league?: FantasyLeagueGroup) {
 
 
     return {
-        handleShare
+        handleShare,
+        inviteLink
     }
 
 }
