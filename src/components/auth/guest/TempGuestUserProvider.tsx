@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from "react"
+import { createContext, ReactNode, useEffect } from "react"
 import { useAuth } from "../../../contexts/AuthContext";
 import { authService } from "../../../services/authService";
 import { useDelay } from "../../../hooks/web/useDelay";
@@ -8,6 +8,13 @@ type Props = {
     loadingFallback?: ReactNode,
     guestDeviceName?: string
 }
+
+type TempGuestUserContext = {
+    guestDeviceName?: string
+}
+
+
+export const TempGuestUserContext = createContext<TempGuestUserContext | null>(null);
 
 /** Component that temporarily provides a guest user account to its children */
 export default function TempGuestUserProvider({ children, loadingFallback, guestDeviceName = 'temp_guest_user_provider_device_id' }: Props) {
@@ -53,8 +60,8 @@ export default function TempGuestUserProvider({ children, loadingFallback, guest
     }
 
     return (
-        <>
+        <TempGuestUserContext.Provider value={{guestDeviceName}} >
             {children}
-        </>
+        </TempGuestUserContext.Provider>
     )
 }
