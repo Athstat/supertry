@@ -3,7 +3,7 @@ import { TempGuestUserContext } from "../../components/auth/guest/TempGuestUserP
 import { useAuth } from "../../contexts/AuthContext";
 
 export function useTempGuestUser() {
-    const {authUser, logout} = useAuth();
+    const {authUser, logout, authStatus} = useAuth();
     const context = useContext(TempGuestUserContext);
 
     if (!context) {
@@ -11,8 +11,11 @@ export function useTempGuestUser() {
     }
 
     const deauthenticate = () => {
-        if (authUser?.device_id === context.guestDeviceName) {
-            logout();
+
+        if (authStatus === 'authenticated') {   
+            if (authUser?.device_id === context.guestDeviceName) {
+                logout();
+            }
         }
     }
 

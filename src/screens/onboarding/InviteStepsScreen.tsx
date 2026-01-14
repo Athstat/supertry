@@ -21,6 +21,7 @@ import { Download } from "lucide-react";
 import { isMobile } from "react-device-detect";
 import TempGuestUserProvider from "../../components/auth/guest/TempGuestUserProvider";
 import ScrummyLoadingState from "../../components/ui/ScrummyLoadingState";
+import { useDelay } from "../../hooks/web/useDelay";
 
 
 export default function InviteStepsScreen() {
@@ -79,9 +80,11 @@ function Content() {
 
 function InviteView() {
 
+  const {isDelaying} = useDelay(500);
   const { theme } = useTheme();
-
+  
   const { league, members, isLoading: loadingLeague } = useFantasyLeagueGroup();
+
   const [searchParams] = useSearchParams();
   const inviterId = searchParams.get(leagueInviteQueryParams.USER_ID);
   const joinCode = searchParams.get(leagueInviteQueryParams.JOIN_CODE);
@@ -105,7 +108,7 @@ function InviteView() {
     return `/${resourcePath}`;
   }, [inviter?.kc_id, joinCode, league?.id, qs.JOIN_CODE, qs.LEAGUE_ID, qs.USER_ID]);
 
-  if (isLoading) {
+  if (isLoading || isDelaying) {
     return (
       <LoadingSkeleton />
     )
