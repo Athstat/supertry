@@ -19,9 +19,23 @@ import { useTheme } from "../../contexts/ThemeContext";
 import { Activity, useMemo } from "react";
 import { Download } from "lucide-react";
 import { isMobile } from "react-device-detect";
+import TempGuestUserProvider from "../../components/auth/guest/TempGuestUserProvider";
+import ScrummyLoadingState from "../../components/ui/ScrummyLoadingState";
 
 
 export default function InviteStepsScreen() {
+
+  return (
+    <TempGuestUserProvider
+      loadingFallback={<ScrummyLoadingState />}
+    >
+      <Content />
+    </TempGuestUserProvider>
+  )
+}
+
+
+function Content() {
 
   const [searchParams] = useSearchParams();
   const leagueId = searchParams.get(leagueInviteQueryParams.LEAGUE_ID);

@@ -1,4 +1,4 @@
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, useSearchParams } from "react-router-dom";
 import ScrummyLoadingState from "../../ui/ScrummyLoadingState";
 import RouteErrorBoundary from "../../ui/navigation/RouteErrorBoundary";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -7,6 +7,9 @@ import { useAuth } from "../../../contexts/AuthContext";
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     const { isAuthenticated, isLoading } = useAuth();
     const {pathname} = useLocation();
+    const [searchParams] = useSearchParams();
+
+    const returnPath = pathname + searchParams;
 
     if (isLoading) {
         return (
@@ -15,8 +18,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     }
 
     if (!isAuthenticated) {
-
-        return <Navigate to="/signin" state={{
+        return <Navigate to={`/signin?return=${returnPath}`} state={{
             fromPathname: pathname
         }} />;
     }
