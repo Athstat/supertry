@@ -6,11 +6,12 @@ import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
 import { FantasyLeagueStandings } from "../../components/fantasy_league/standings/FantasyLeagueStandings";
 import RoundedCard from "../../components/ui/cards/RoundedCard";
 import FantasyLeagueGroupDataProvider from "../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider";
-import LeagueStandingsHeader from "../../components/fantasy_league/standings/LeagueStandingsHeader";
+import FantasyLeagueHeader from "../../components/fantasy_league/standings/FantasyLeagueHeader";
+import { TabSwitchContainer, TabSwitchOption } from "../../components/ui/buttons/TabSwitchOption";
 
 
-/** Renders League standings screen */
-export default function LeagueStandingsScreen() {
+/** Renders a fantasy League screen */
+export default function FantasyLeagueScreen() {
 
     const { leagueId } = useParams();
     return (
@@ -37,7 +38,20 @@ function Content() {
 
     return (
         <PageView className="pt-6 flex flex-col gap-4" >
-            <LeagueStandingsHeader handleBack={handleBack} />
+            <FantasyLeagueHeader handleBack={handleBack} />
+
+            <TabSwitchContainer>
+                <TabSwitchOption
+                    label="Standings"
+                    value="standings"
+                />
+
+                <TabSwitchOption
+                    label="Details"
+                    value="details"
+                />
+            </TabSwitchContainer>
+
             <FantasyLeagueStandings />
         </PageView>
     )

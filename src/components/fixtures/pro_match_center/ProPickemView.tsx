@@ -26,7 +26,7 @@ export default function FixturesProPickemView({ displayFixtures, hasAnyFixtures,
     onMoveNextWeek();
   };
 
-  const handleChaneLocalView = useCallback((val?: string) => {
+  const handleChangeLocalView = useCallback((val?: string) => {
     if (val) {
       setLocalView(val as LocalViewMode);
     }
@@ -55,7 +55,7 @@ export default function FixturesProPickemView({ displayFixtures, hasAnyFixtures,
           label="Predict"
           value="predict"
           current={localView}
-          onSelect={handleChaneLocalView}
+          onSelect={handleChangeLocalView}
           className="text-sm font-semibold"
         />
 
@@ -63,7 +63,7 @@ export default function FixturesProPickemView({ displayFixtures, hasAnyFixtures,
           label="Leaderboard"
           value="leaderboard"
           current={localView}
-          onSelect={handleChaneLocalView}
+          onSelect={handleChangeLocalView}
           className="text-sm font-semibold"
         />
       </TabSwitchContainer>

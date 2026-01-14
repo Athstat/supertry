@@ -8,7 +8,7 @@ type Props = {
 }
 
 /** Renders a fantasy league standings header */
-export default function LeagueStandingsHeader({ handleBack }: Props) {
+export default function FantasyLeagueHeader({ handleBack }: Props) {
 
     const {league} = useFantasyLeagueGroup();
 
