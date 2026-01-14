@@ -31,6 +31,7 @@ export default function LeagueStandingsTable({
   const { selectedRound } = useLeagueRoundStandingsFilter();
 
   const { members } = useFantasyLeagueGroup();
+  
   const exclude_ids = standings.map((s) => {
     return s.user_id;
   })
