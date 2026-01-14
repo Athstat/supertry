@@ -17,12 +17,14 @@ import { APP_GOOGLE_PLAYSTORE_LINK, APP_IOS_APPSTORE_LINK } from '../../types/co
 import { useStoreLinks } from "../../hooks/marketing/useStoreLinks";
 import { useTheme } from "../../contexts/ThemeContext";
 import { Activity } from "react";
+import { Download } from "lucide-react";
 
 
 export default function InviteStepsScreen() {
 
   const [searchParams] = useSearchParams();
   const leagueId = searchParams.get(leagueInviteQueryParams.LEAGUE_ID);
+  const { oneLinkUrl } = useStoreLinks();
 
   return (
     <PageView className="py-0 p-0" >
@@ -43,7 +45,9 @@ export default function InviteStepsScreen() {
         </div>
 
         <div className="pr-2" >
-          <PrimaryButton className="text-nowrap" >Download App</PrimaryButton>
+          <Link to={oneLinkUrl || ''} target={'blank'} >
+            <PrimaryButton className="text-nowrap" >Download App</PrimaryButton>
+          </Link>
         </div>
       </header>
 
@@ -70,7 +74,7 @@ function InviteView() {
   const { user: inviter, isLoading: loadingUser } = useFetchUser(inviterId);
   const isJoinCodeMatch = joinCode?.toUpperCase() === league?.entry_code?.toUpperCase();
 
-  const { oneLinkUrl } = useStoreLinks();
+  const { oneLinkUrl } = useStoreLinks(league);
 
   const isLoading = loadingLeague || loadingUser;
 
@@ -95,6 +99,7 @@ function InviteView() {
   }
 
   const pluralMembers = members.length > 1;
+  
 
   return (
     <section className="flex flex-col mt-10 gap-4 items-center justify-center p-4" >
@@ -121,7 +126,7 @@ function InviteView() {
 
       <div className="flex flex-col gap-4 items-center justify-center " >
         <SecondaryText className="max-w-[60%] text-center" >You have been invited by {inviter?.username} to join {league?.title} on SCRUMMY</SecondaryText>
-        <PrimaryButton className="w-fit" >Join In SCRUMMY App</PrimaryButton>
+        <PrimaryButton className="w-fit py-3 px-8" >Join League In SCRUMMY App</PrimaryButton>
       </div>
 
       <div className="flex flex-col gap-2 mt-6" >
@@ -131,14 +136,14 @@ function InviteView() {
 
           <Activity mode={oneLinkUrl ? 'hidden' : 'visible'} >
             <AppStoreButton
-              url={oneLinkUrl ?? APP_IOS_APPSTORE_LINK}
+              url={APP_IOS_APPSTORE_LINK}
               theme={theme === 'dark' ? 'dark' : 'dark'}
               width={300}
               height={60}
             />
 
             <GooglePlayButton
-              url={oneLinkUrl ?? APP_GOOGLE_PLAYSTORE_LINK}
+              url={APP_GOOGLE_PLAYSTORE_LINK}
               theme={theme === 'dark' ? 'dark' : 'dark'}
               className="w-[300px] text-nowrap p-4"
               width={300}
@@ -148,7 +153,10 @@ function InviteView() {
 
           <Activity mode={oneLinkUrl ? 'visible' : 'hidden'} >
             <Link to={oneLinkUrl || ''} target="blank" >
-              <PrimaryButton>Download App</PrimaryButton>
+              <PrimaryButton className="flex flex-row items-center gap-4" >
+                <p> Download App</p>
+                <Download />
+              </PrimaryButton>
             </Link>
           </Activity>
         </div>

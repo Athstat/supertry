@@ -149,6 +149,7 @@ declare module "lucide-react" {
   export const ClockFading : CIP;
   export const CopyIcon : CIP;
   export const CircleX : CIP;
+  export const Download : CIP;
   
 }
 
