@@ -155,7 +155,7 @@ function InviteView() {
       <div className="flex flex-col gap-4 items-center justify-center " >
         <SecondaryText className="max-w-[60%] text-center" >You have been invited by {inviter?.username} to join {league?.title} on SCRUMMY</SecondaryText>
         
-        <Link to={openInAppLink} target="blank" >
+        <Link to={openInAppLink} >
           <PrimaryButton className="w-fit py-3 px-8" >Join League In SCRUMMY App</PrimaryButton>
         </Link>
 
