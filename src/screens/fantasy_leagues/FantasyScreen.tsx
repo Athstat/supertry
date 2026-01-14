@@ -5,6 +5,7 @@ import PageView from '../../components/ui/containers/PageView';
 import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 import { Activity } from 'react';
+import AutoJoinLeagueModal from '../../components/fantasy-leagues/AutoJoinLeagueModal';
 
 /** Renders the Fantasy/League Screen */
 export function FantasyScreen() {
@@ -35,6 +36,8 @@ export function FantasyScreen() {
       <Activity mode={showSeasonsOverview ? "visible" : "hidden"} >
         <FantasySeasonOptionsList />
       </Activity>
+
+      <AutoJoinLeagueModal />
 
     </PageView>
   );

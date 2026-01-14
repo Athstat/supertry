@@ -4,11 +4,19 @@ import { twMerge } from "tailwind-merge"
 type Props = {
     className?: string,
     onClick?: () => void,
-    children?: ReactNode
+    children?: ReactNode,
+    disabled?: boolean
 }
 
 /** Renders a circle button UI */
-export default function CircleButton({ className, onClick, children }: Props) {
+export default function CircleButton({ className, onClick, children, disabled }: Props) {
+    
+    const handleClick = () => {
+        if (!disabled && onClick) {
+            onClick();
+        }
+    }
+    
     return (
         <div
             className={twMerge(
@@ -18,7 +26,7 @@ export default function CircleButton({ className, onClick, children }: Props) {
                 'border border-slate-200 dark:border-slate-700',
                 className
             )}
-            onClick={onClick}
+            onClick={handleClick}
         >
             {children}
         </div>
