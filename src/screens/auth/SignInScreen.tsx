@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import EmailPasswordLoginBox from '../../components/auth/login/EmailPasswordLoginBox';
@@ -8,6 +8,9 @@ import { AuthLayout } from '../../components/auth/layouts/AuthLayout';
 
 export function SignInScreen() {
   const [isLoading, ] = useState(false);
+
+  const [searchParams] = useSearchParams();
+  const returnUrl = searchParams.get('return');
 
   return (
     <>
@@ -34,6 +37,7 @@ export function SignInScreen() {
       )}
 
       <AuthLayout title="Welcome back" subtitle="Sign in to your account">
+        <p>Return {returnUrl}</p>
         <div className="mt-8 space-y-3">
           {/* Google Sign In Button */}
 
