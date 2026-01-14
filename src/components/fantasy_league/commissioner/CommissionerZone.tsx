@@ -14,11 +14,21 @@ import { FantasyLeagueGroup } from '../../../types/fantasyLeagueGroups'
 import CircleButton from '../../ui/buttons/BackButton'
 import RoundedCard from '../../ui/cards/RoundedCard'
 import { ShieldUser } from 'lucide-react'
+import { useAuth } from '../../../contexts/AuthContext'
 
 export default function CommissionerZone() {
 
-    const [showEditInfo, setShowEditInfo] = useState(true);
+    const {authUser} = useAuth();
+    const {league} = useFantasyLeagueGroup();
+
+    const isCommissioner = authUser?.kc_id === league?.creator_id;
+
+    const [showEditInfo, setShowEditInfo] = useState(false);
     const toggleShowEditInfo = () => setShowEditInfo(prev => !prev);
+
+    if (!isCommissioner) {
+        return;
+    }
 
     return (
         <div className='flex flex-col gap-2' >
