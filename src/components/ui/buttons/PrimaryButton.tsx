@@ -13,7 +13,7 @@ type Props = {
     destroy?: boolean,
     slate?: boolean
 }
-export default function PrimaryButton({ children, className, onClick, disbabled, isLoading = false, type, disabled, destroy }: Props) {
+export default function PrimaryButton({ children, className, onClick, disbabled, isLoading = false, type, disabled, destroy, slate }: Props) {
 
     const handleOnClick = () => {
         if (onClick) {
@@ -29,6 +29,7 @@ export default function PrimaryButton({ children, className, onClick, disbabled,
                 "hover:bg-blue-700 dark:hover:bg-blue-700",
                 "border border-primary-500 text-sm lg:text-base",
                 destroy && "bg-red-600 dark:bg-red-600 hover:bg-red-700 dark:hover:bg-red-700 border-red-500",
+                slate && "bg-slate-600 dark:bg-slate-700 hover:bg-slate-700 dark:hover:bg-slate-700 border-slate-500",
                 className,
                 (disbabled || disabled) && "opacity-40 cursor-not-allowed",
                 isLoading && 'animate-pulse'

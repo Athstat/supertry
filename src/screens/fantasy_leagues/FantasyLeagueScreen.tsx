@@ -33,7 +33,7 @@ function Content() {
 
     const navigate = useNavigate();
 
-    const [viewModal, setViewMode] = useState<LocalViewModel>("standings");
+    const [viewModal, setViewMode] = useState<LocalViewModel>('details');
 
     const handleChangeViewMode = (newMode?: string) => {
         if (newMode) {

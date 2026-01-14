@@ -150,6 +150,7 @@ declare module "lucide-react" {
   export const CopyIcon : CIP;
   export const CircleX : CIP;
   export const Download : CIP;
+  export const ShieldUser : CIP;
   
 }
 
