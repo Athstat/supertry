@@ -2,6 +2,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { analytics } from "../../services/analytics/anayticsService";
 import { leagueInviteQueryParams } from "../../types/constants";
 import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
+import { isMobileWebView } from "../../utils/bridgeUtils";
 
 export function useShareLeague(league?: FantasyLeagueGroup) {
 
@@ -12,6 +13,17 @@ export function useShareLeague(league?: FantasyLeagueGroup) {
 
     const baseUrl = (import.meta)?.env?.VITE_APP_LINK_BASE_URL || window.location.origin;
     const inviteLink = encodeURI(`${baseUrl}/invite-steps?${qs.LEAGUE_ID}=${league?.id}&${qs.USER_ID}=${authUser?.kc_id}&${qs.JOIN_CODE}=${league?.entry_code}`);
+
+    const handleShareWithBridge = (message: string) => {
+        const jsonObj = { message };
+
+        window.ReactNativeWebView?.postMessage(JSON.stringify({
+            type: 'NATIVE_SHARE',
+            payload: JSON.stringify(jsonObj)
+        }));
+    }
+
+    const isMobileShareAvailable = isMobileWebView() && Boolean(window.CAN_USE_MOBILE_SHARE_API);
 
     const handleShare = () => {
 
@@ -25,23 +37,29 @@ export function useShareLeague(league?: FantasyLeagueGroup) {
         // Share ONLY the composed message text (no title/url),
         // so the share sheet doesn't prepend extra lines.
 
+
+        if (isMobileShareAvailable) {
+            handleShareWithBridge(shareMessage);
+            return;
+        }
+
         const shareData: ShareData = {
             text: shareMessage
         };
 
         if (navigator.share) {
             navigator.share(shareData)
-            .then(() => {
-                analytics.trackFriendInvitesSent('League_Invite_Button', league);
-            })
-            .catch(err => {
-                console.error('Share failed:', err);
-                // Fallback to clipboard if share dismissed or fails
-                navigator.clipboard
-                    .writeText(shareMessage)
-                    .then(() => alert('Invite copied to clipboard'))
-                    .catch(() => alert('Unable to share or copy. Please try manually.'));
-            });
+                .then(() => {
+                    analytics.trackFriendInvitesSent('League_Invite_Button', league);
+                })
+                .catch(err => {
+                    console.error('Share failed:', err);
+                    // Fallback to clipboard if share dismissed or fails
+                    navigator.clipboard
+                        .writeText(shareMessage)
+                        .then(() => alert('Invite copied to clipboard'))
+                        .catch(() => alert('Unable to share or copy. Please try manually.'));
+                });
         } else {
             navigator.clipboard
                 .writeText(shareMessage)

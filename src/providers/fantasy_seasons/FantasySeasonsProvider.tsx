@@ -2,13 +2,12 @@ import { Fragment, ReactNode, useEffect } from 'react';
 import { fantasySeasonsAtom } from '../../state/fantasy/fantasyLeagueScreen.atoms';
 import { fantasySeasonsAtoms } from '../../state/dashboard/dashboard.atoms';
 import { ScopeProvider } from 'jotai-scope';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { fantasySeasonsService } from '../../services/fantasy/fantasySeasonsService';
 import { swrFetchKeys } from '../../utils/swrKeys';
 import { seasonService } from '../../services/seasonsService';
 import { logger } from '../../services/logger';
 import { useDebounced } from '../../hooks/web/useDebounced';
-import useSWRImmutable from 'swr/immutable';
 import useSWR from 'swr';
 import { CACHING_CONFIG, SELECTED_SEASON_ID_KEY } from '../../types/constants';
 import { useAuth } from '../../contexts/AuthContext';
@@ -39,7 +38,7 @@ function InnerProvider({ children }: Props) {
   const [fantasySeasons, setFantasySeasons] = useAtom(fantasySeasonsAtom);
   const [currentSeason, setCurrentSeason] = useAtom(fantasySeasonsAtoms.currentSeasonAtom);
   const [seasonRounds, setSeasonRounds] = useAtom(fantasySeasonsAtoms.seasonRoundsAtom);
-  const selectedSeason = useAtomValue(fantasySeasonsAtoms.selectedDashboardSeasonAtom);
+  const [selectedSeason, setSelectedSeason] = useAtom(fantasySeasonsAtoms.selectedDashboardSeasonAtom);
   const [, setCurrentRound] = useAtom(fantasySeasonsAtoms.currentSeasonRoundAtom);
   const setLoading = useSetAtom(fantasySeasonsAtoms.isFantasySeasonsLoadingAtom);
 
@@ -58,8 +57,8 @@ function InnerProvider({ children }: Props) {
   const finalSeason = selectedSeason || currentSeason;
 
   const roundsKey = finalSeason ? swrFetchKeys.getSeasonRounds(finalSeason.id) : null;
-  const { data: roundsFetched, isLoading: loadingRounds } = useSWRImmutable(roundsKey, () =>
-    seasonService.getSeasonRounds(currentSeason?.id ?? '')
+  const { data: roundsFetched, isLoading: loadingRounds } = useSWR(roundsKey, () =>
+    seasonService.getSeasonRounds(finalSeason?.id ?? '')
   );
 
   const isFetching = loadingRounds || loadingSeasons;
@@ -85,6 +84,7 @@ function InnerProvider({ children }: Props) {
       })
       
       if (prevSavedSeason) {
+        setSelectedSeason(prevSavedSeason);
         setCurrentSeason(prevSavedSeason);
         return;
       }
@@ -92,7 +92,7 @@ function InnerProvider({ children }: Props) {
 
       setCurrentSeason(fantasySeasons[0]);
     }
-  }, [setCurrentSeason, fantasySeasons]);
+  }, [setCurrentSeason, fantasySeasons, setSelectedSeason]);
 
   useEffect(() => {
     if (roundsFetched) {
