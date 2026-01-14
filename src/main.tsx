@@ -15,6 +15,8 @@ import App from './App';
 //   enabled: true
 // })
 
+// React Scan is used for checking how many times components rerender
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <App />
 );
