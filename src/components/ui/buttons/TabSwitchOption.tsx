@@ -35,3 +35,21 @@ export function TabSwitchOption({ label, current, value, onSelect, icon, classNa
         </div>
     )
 }
+
+
+type TabSwitchContainerProps = {
+    children?: ReactNode,
+    className?: string
+}
+
+/** Renders a tab switch container object */
+export function TabSwitchContainer({children, className} : TabSwitchContainerProps) {
+    return (
+        <div className={twMerge(
+            "bg-slate-200 border dark:border-slate-700/50 dark:bg-slate-800 overflow-clip p-1 w-full h-[45px] rounded-xl flex flex-row items-center justify-between",
+            className
+        )} >
+            {children}
+        </div>
+    )
+}
