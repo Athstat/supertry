@@ -16,12 +16,13 @@ import { GooglePlayButton, AppStoreButton } from 'react-mobile-app-button';
 import { APP_GOOGLE_PLAYSTORE_LINK, APP_IOS_APPSTORE_LINK } from '../../types/constants';
 import { useStoreLinks } from "../../hooks/marketing/useStoreLinks";
 import { useTheme } from "../../contexts/ThemeContext";
-import { Activity, useMemo } from "react";
+import { Activity, useCallback, useMemo } from "react";
 import { Download } from "lucide-react";
 import { isMobile } from "react-device-detect";
 import TempGuestUserProvider from "../../components/auth/guest/TempGuestUserProvider";
 import ScrummyLoadingState from "../../components/ui/ScrummyLoadingState";
 import { getAuthHeader } from "../../utils/backendUtils";
+import { deleteTempGuestAccount } from "../../utils/authUtils";
 
 
 export default function InviteStepsScreen() {
@@ -99,7 +100,7 @@ function InviteView() {
 
   const qs = leagueInviteQueryParams;
 
-  const openInAppLink = useMemo(() => {
+  const inAppLink = useMemo(() => {
     const resourcePath = `leagues?event=accept_invite&${qs.LEAGUE_ID}=${league?.id}&${qs.USER_ID}=${inviter?.kc_id}&${qs.JOIN_CODE}=${joinCode}`;
 
     if (isMobile) {
@@ -109,15 +110,16 @@ function InviteView() {
     return `/${resourcePath}`;
   }, [inviter?.kc_id, joinCode, league?.id, qs.JOIN_CODE, qs.LEAGUE_ID, qs.USER_ID]);
 
+  const handleOpenInApp = useCallback(() => {
+    deleteTempGuestAccount();
+    window.open(inAppLink, '_blank');
+  }, [inAppLink]);
+
   if (isLoading) {
     return (
       <LoadingSkeleton />
     )
   }
-
-  console.log('League ', league);
-  console.log('User ', inviter);
-  console.log('isJoinCode Match', isJoinCodeMatch);
 
   const isInviteLinkInvalid = (!inviter || !league || !isJoinCodeMatch) && !isLoading;
 
@@ -161,9 +163,7 @@ function InviteView() {
       <div className="flex flex-col gap-4 items-center justify-center " >
         <SecondaryText className="max-w-[60%] text-center" >You have been invited by {inviter?.username} to join {league?.title} on SCRUMMY</SecondaryText>
 
-        <Link to={openInAppLink} >
-          <PrimaryButton className="w-fit py-3 px-8" >Join League In SCRUMMY App</PrimaryButton>
-        </Link>
+        <PrimaryButton onClick={handleOpenInApp} className="w-fit py-3 px-8" >Join League In SCRUMMY App</PrimaryButton>
 
       </div>
 

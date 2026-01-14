@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useState } from "react"
 import { authService } from "../../../services/authService";
 import { authTokenService } from "../../../services/auth/authTokenService";
 import { TEMP_GUEST_USER_DEVICE_ID } from "../../../types/constants";
+import { deleteTempGuestAccount } from "../../../utils/authUtils";
 
 type Props = {
     children?: ReactNode,
@@ -42,15 +43,7 @@ export default function TempGuestUserProvider({ children, loadingFallback }: Pro
         authenticator();
 
         return () => {
-            const flush = async () => {
-                const user = authService.getUserInfoSync();
-
-                if (user?.device_id === TEMP_GUEST_USER_DEVICE_ID) {
-                    authService.logout();
-                }
-            }
-
-            flush();
+            deleteTempGuestAccount();
          }
     })
 
