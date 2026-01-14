@@ -72,7 +72,8 @@ export default function LeagueStandingsTable({
 
   const completeStandings: (FantasySeasonRankingItem)[] = useMemo(() => {
     const base = [...standings];
-    const membersWhoDidntScorePoints = leftOutMembers.map<(FantasySeasonRankingItem)>((m) => {
+    const lastRanking = standings.length;
+    const membersWhoDidntScorePoints = leftOutMembers.map<(FantasySeasonRankingItem)>((m, index) => {
       return {
         user_id: m.user_id,
         first_name: m.user.first_name,
@@ -80,7 +81,7 @@ export default function LeagueStandingsTable({
         username: m.user.username,
         total_score: 0,
         rank: undefined,
-        league_rank: undefined,
+        league_rank: lastRanking + index + 1,
         created_at: new Date(),
         updated_at: new Date()
       }
