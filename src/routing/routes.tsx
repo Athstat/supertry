@@ -104,7 +104,7 @@ export const dataRouter = createBrowserRouter([
             },
 
             {
-                path: "/join-group/:inviteCode",
+                path: "/league/:leagueId/join",
                 element: (
                     <ProtectedRoute>
                         <JoinGroupScreen />

@@ -16,8 +16,9 @@ import { GooglePlayButton, AppStoreButton } from 'react-mobile-app-button';
 import { APP_GOOGLE_PLAYSTORE_LINK, APP_IOS_APPSTORE_LINK } from '../../types/constants';
 import { useStoreLinks } from "../../hooks/marketing/useStoreLinks";
 import { useTheme } from "../../contexts/ThemeContext";
-import { Activity } from "react";
+import { Activity, useMemo } from "react";
 import { Download } from "lucide-react";
+import { isMobile } from "react-device-detect";
 
 
 export default function InviteStepsScreen() {
@@ -78,6 +79,18 @@ function InviteView() {
 
   const isLoading = loadingLeague || loadingUser;
 
+  const qs = leagueInviteQueryParams;
+
+  const openInAppLink = useMemo(() => {
+    const resourcePath = `leagues?event=accept_invite&${qs.LEAGUE_ID}=${league?.id}&${qs.USER_ID}=${inviter?.kc_id}&${qs.JOIN_CODE}=${joinCode}`;
+
+    if (isMobile) {
+      return `scrummy://${resourcePath}`;
+    }
+
+    return `/${resourcePath}`;
+  }, [inviter?.kc_id, joinCode, league?.id, qs.JOIN_CODE, qs.LEAGUE_ID, qs.USER_ID]);
+
   if (isLoading) {
     return (
       <LoadingSkeleton />
@@ -99,7 +112,8 @@ function InviteView() {
   }
 
   const pluralMembers = members.length > 1;
-  
+
+
 
   return (
     <section className="flex flex-col mt-10 gap-4 items-center justify-center p-4" >
@@ -126,7 +140,11 @@ function InviteView() {
 
       <div className="flex flex-col gap-4 items-center justify-center " >
         <SecondaryText className="max-w-[60%] text-center" >You have been invited by {inviter?.username} to join {league?.title} on SCRUMMY</SecondaryText>
-        <PrimaryButton className="w-fit py-3 px-8" >Join League In SCRUMMY App</PrimaryButton>
+        
+        <Link to={openInAppLink} target="blank" >
+          <PrimaryButton className="w-fit py-3 px-8" >Join League In SCRUMMY App</PrimaryButton>
+        </Link>
+
       </div>
 
       <div className="flex flex-col gap-2 mt-6" >
