@@ -49,6 +49,9 @@ export default function FantasyLeagueGroupDataProvider({
 }
 
 function Fetcher({ children, leagueId, loadingFallback, skipCache, fetchMembers = true }: Props) {
+
+  
+
   const [leagueGroup, setFantasyLeagueGroup] = useAtom(fantasyLeagueGroupAtom);
   const setFantasyLeagueMembers = useSetAtom(fantasyLeagueGroupMembersAtom);
   const setFantasyLeagueGroupRounds = useSetAtom(fantasyLeagueGroupRoundsAtom);

@@ -21,10 +21,12 @@ import { Download } from "lucide-react";
 import { isMobile } from "react-device-detect";
 import TempGuestUserProvider from "../../components/auth/guest/TempGuestUserProvider";
 import ScrummyLoadingState from "../../components/ui/ScrummyLoadingState";
-import { useDelay } from "../../hooks/web/useDelay";
+import { getAuthHeader } from "../../utils/backendUtils";
 
 
 export default function InviteStepsScreen() {
+
+  console.log('Auth Headers ', getAuthHeader());
 
   return (
     <TempGuestUserProvider
@@ -80,7 +82,6 @@ function Content() {
 
 function InviteView() {
 
-  const { isDelaying } = useDelay(500);
   const { theme } = useTheme();
 
   const { league, members, isLoading: loadingLeague } = useFantasyLeagueGroup();
@@ -108,13 +109,17 @@ function InviteView() {
     return `/${resourcePath}`;
   }, [inviter?.kc_id, joinCode, league?.id, qs.JOIN_CODE, qs.LEAGUE_ID, qs.USER_ID]);
 
-  if (isLoading || isDelaying) {
+  if (isLoading) {
     return (
       <LoadingSkeleton />
     )
   }
 
-  const isInviteLinkInvalid = (!!inviter && !!isJoinCodeMatch && !!league) && !isLoading
+  console.log('League ', league);
+  console.log('User ', inviter);
+  console.log('isJoinCode Match', isJoinCodeMatch);
+
+  const isInviteLinkInvalid = (!inviter || !league || !isJoinCodeMatch) && !isLoading;
 
   if (isInviteLinkInvalid) {
     return (
@@ -129,8 +134,6 @@ function InviteView() {
   }
 
   const pluralMembers = members.length > 1;
-
-
 
   return (
     <section className="flex flex-col mt-10 gap-4 items-center justify-center p-4" >
