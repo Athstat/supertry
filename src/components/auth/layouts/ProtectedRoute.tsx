@@ -9,7 +9,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     const {pathname} = useLocation();
     const [searchParams] = useSearchParams();
 
-    const returnPath = pathname + searchParams;
+    const returnPath = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '');
 
     if (isLoading) {
         return (
