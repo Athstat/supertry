@@ -158,8 +158,6 @@ function InviteView() {
 
       </div>
 
-
-
       <div className="flex flex-col gap-4 items-center justify-center " >
         <SecondaryText className="max-w-[60%] text-center" >You have been invited by {inviter?.username} to join {league?.title} on SCRUMMY</SecondaryText>
 
@@ -167,8 +165,8 @@ function InviteView() {
 
       </div>
 
-      <div className="flex flex-col gap-2 mt-6" >
-        <p>Don't have the SCRUMMY App installed?</p>
+      <div className="flex flex-col gap-2 mt-6 items-center justify-center" >
+        <SecondaryText className="text-center max-w-[80%]" >Don't have the SCRUMMY App installed? First install the app then follow this link again to join the league</SecondaryText>
 
         <div className="flex flex-col w-full gap-4">
 
@@ -191,10 +189,12 @@ function InviteView() {
 
           <Activity mode={oneLinkUrl ? 'visible' : 'hidden'} >
             <Link to={oneLinkUrl || ''} target="blank" >
-              <PrimaryButton className="flex flex-row items-center gap-4" >
-                <p> Download App</p>
-                <Download />
-              </PrimaryButton>
+              <div className="flex flex-col items-center justify-center w-full" >
+                <PrimaryButton className="flex w-fit flex-row items-center gap-4" >
+                  <p> Download App</p>
+                  <Download />
+                </PrimaryButton>
+              </div>
             </Link>
           </Activity>
         </div>
