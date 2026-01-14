@@ -50,6 +50,7 @@ export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
     <BottomSheetView
       hideHandle
       className="min-h-[30vh] max-h-[95vh] p-4 dark:border-t dark:border-l dark:border-r border-slate-700 flex flex-col"
+      onClickOutside={onClose}
     >
       <div className="flex flex-row items-center gap-2 justify-between" >
         <p className="text-xl font-semibold" >Invite Friends</p>
@@ -99,7 +100,7 @@ export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
         </div>
       </section>
 
-      <section className="flex flex-col gap-3 p-6">
+      <section className="flex flex-col gap-3 pt-6">
         <PrimaryButton onClick={handleShareJoinLink} className="flex-1 py-3 gap-3 flex flex-row items-center"  >
           <p>Share Join Link</p>
           <Share2 className="w-5 h-5" />
