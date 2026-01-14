@@ -2,6 +2,7 @@ import { createContext, ReactNode, useEffect } from "react"
 import { useAuth } from "../../../contexts/AuthContext";
 import { authService } from "../../../services/authService";
 import { useDelay } from "../../../hooks/web/useDelay";
+import { useTempGuestUser } from "../../../hooks/auth/useTempGuestUser";
 
 type Props = {
     children?: ReactNode,
@@ -61,7 +62,30 @@ export default function TempGuestUserProvider({ children, loadingFallback, guest
 
     return (
         <TempGuestUserContext.Provider value={{guestDeviceName}} >
-            {children}
+            <Inner>
+                {children}
+            </Inner>
         </TempGuestUserContext.Provider>
+    )
+}
+
+type InnerProps = {
+    children?: ReactNode
+}
+
+function Inner({children} : InnerProps) {
+    
+    const {deauthenticate} = useTempGuestUser();
+
+    useEffect(() => {
+        return () => {
+            deauthenticate();
+        }
+    })
+    
+    return (
+        <>
+            {children}
+        </>
     )
 }
