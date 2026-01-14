@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import { logger } from "../../services/logger";
 
 export function useCanvas(setErrorMessage: (val?: string) => void, setSuccessMessage: (val?: string) => void) {
     const ref = useRef<HTMLCanvasElement>(null);
@@ -34,7 +33,7 @@ export function useCanvas(setErrorMessage: (val?: string) => void, setSuccessMes
                 setSuccessMessage("QR-code was copied to your clipboard")
 
             } catch (err) {
-                logger.error('Failed to copy canvas ', err);
+                console.error('Failed to copy canvas ', err);
                 setErrorMessage("Oops! Something wen't wrong copying the QR-code")
             } finally {
                 setIsCopying(false);

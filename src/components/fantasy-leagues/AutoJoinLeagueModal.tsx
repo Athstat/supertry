@@ -15,7 +15,7 @@ import { useJoinLeague } from "../../hooks/leagues/useJoinLeague";
 import { useFetchUser } from "../../hooks/auth/useAuthUser";
 import { LoadingIndicator } from "../ui/LoadingIndicator";
 import ErrorCard from "../ui/cards/ErrorCard";
-import { mutate, preload } from "swr";
+import { mutate } from "swr";
 import { swrFetchKeys } from "../../utils/swrKeys";
 
 export default function AutoJoinLeagueModal() {

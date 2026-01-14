@@ -30,7 +30,7 @@ export function FantasySeasonsDrawer() {
             hideHandle
         >
             <div className="flex flex-row items-center justify-between" >
-                <p className="font-semibold text-lg" >Select Competition</p>
+                <p className="font-semibold text-lg dark:text-white" >Select Competition</p>
                 <CircleButton onClick={handleClose} >
                     <X />
                 </CircleButton>
