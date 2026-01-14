@@ -21,13 +21,10 @@ import { Download } from "lucide-react";
 import { isMobile } from "react-device-detect";
 import TempGuestUserProvider from "../../components/auth/guest/TempGuestUserProvider";
 import ScrummyLoadingState from "../../components/ui/ScrummyLoadingState";
-import { getAuthHeader } from "../../utils/backendUtils";
 import { deleteTempGuestAccount } from "../../utils/authUtils";
 
 
 export default function InviteStepsScreen() {
-
-  console.log('Auth Headers ', getAuthHeader());
 
   return (
     <TempGuestUserProvider

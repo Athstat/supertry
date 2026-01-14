@@ -45,7 +45,7 @@ export default function TempGuestUserProvider({ children, loadingFallback }: Pro
         return () => {
             deleteTempGuestAccount();
          }
-    })
+    }, [guestDeviceName]);
 
     if (isLoading) {
         return (
