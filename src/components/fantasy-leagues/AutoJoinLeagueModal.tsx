@@ -34,12 +34,15 @@ export default function AutoJoinLeagueModal() {
 
     const handleClose = useCallback(() => {
         setSearchParams((prev) => {
-            prev.delete(qs.JOIN_CODE);
-            prev.delete(qs.LEAGUE_ID);
-            prev.delete(qs.USER_ID);
-            prev.delete('event');
 
-            return prev;
+            const next = new URLSearchParams(prev);
+
+            next.delete(qs.JOIN_CODE);
+            next.delete(qs.LEAGUE_ID);
+            next.delete(qs.USER_ID);
+            next.delete('event');
+
+            return next;
         })
     }, [qs.JOIN_CODE, qs.LEAGUE_ID, qs.USER_ID, setSearchParams])
 
