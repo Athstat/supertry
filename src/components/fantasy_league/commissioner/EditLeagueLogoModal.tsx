@@ -21,12 +21,12 @@ const [files, setFiles] = useState<File[]>([]);
 
     const {league, mutateLeague} = useFantasyLeagueGroup();
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         if (onClose) {
             setFiles([]);
             onClose();
         }
-    }
+    }, [onClose]);
 
     const handleUpload = useCallback(async () => {
         try {
@@ -55,7 +55,7 @@ const [files, setFiles] = useState<File[]>([]);
             setUploading(false);
         }
 
-    }, [league, files, handleClose]);
+    }, [files, league, mutateLeague, handleClose]);
 
     if (!isOpen) {
         return null;
@@ -76,10 +76,11 @@ const [files, setFiles] = useState<File[]>([]);
                 </div>
             </div>
 
-            <form>
+            <form className="py-4" >
                 <ImageFileInput 
                     files={files}
                     setFiles={setFiles}
+                    previewSize={100}
                 />
             </form>
 

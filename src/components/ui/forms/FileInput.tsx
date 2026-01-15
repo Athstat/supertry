@@ -5,23 +5,25 @@ import { ImagePlus } from "lucide-react";
 
 type Props = {
     files: File[],
-    setFiles: (files: File[]) => void
+    setFiles: (files: File[]) => void,
+    previewSize?: number
 }
 
 
 /** Renders a file input component */
-export default function ImageFileInput({files, setFiles} : Props) {
+export default function ImageFileInput({files, setFiles, previewSize} : Props) {
 
     const onDrop = useCallback(<T extends File>(acceptedFiles: T[]) => {
         console.log("Accepted Files ", acceptedFiles);
         setFiles(acceptedFiles);
-    }, []);
+    }, [setFiles]);
     
     const {
         getRootProps,
         getInputProps,
-        isDragActive
-    } = useDropzone({onDrop})
+        isDragActive,
+        
+    } = useDropzone({onDrop, useFsAccessApi: false})
 
     return (
         <div className="flex flex-col gap-4" {...getRootProps()} >
@@ -36,7 +38,7 @@ export default function ImageFileInput({files, setFiles} : Props) {
             )}
 
             {files.map((f, index) => {
-                return <ImageFilePreview file={f} key={index + f.name} />
+                return <ImageFilePreview size={previewSize} file={f} key={index + f.name} />
             })}
         </div>
     )
@@ -65,18 +67,21 @@ function DropzoneCardActive() {
 }
 
 type FilePreviewProps = {
-    file: File
+    file: File,
+    size?: number
 }
 
-function ImageFilePreview({file} : FilePreviewProps) {
+function ImageFilePreview({file, size} : FilePreviewProps) {
     
     const previewUrl = URL.createObjectURL(file);
     
     return (
-        <div>
+        <div className="flex flex-row items-center justify-center" >
             <img 
                 src={previewUrl}
                 className="rounded-xl"
+                width={size}
+                height={size}
             />
         </div>
     )
