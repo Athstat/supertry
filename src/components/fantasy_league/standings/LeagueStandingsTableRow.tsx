@@ -32,7 +32,7 @@ export function LeagueStandingsTableRow({ ranking, isUser, hideUserScore, index,
             id={isUser ? 'user-ranking' : undefined}
             className={twMerge(
                 'cursor-pointer flex flex-col gap-2 hover:bg-slate-200 hover:dark:bg-slate-800/60 p-2',
-                isUser && 'bg-blue-500 text-white && hover:bg-blue-500 hover:dark:bg-blue-500',
+                isUser && 'bg-slate-300 text-white && hover:bg-slate-300 dark:bg-slate-700 hover:dark:bg-slate-700/90',
                 isPointsKing && ' rounded-xl'
             )}
 
