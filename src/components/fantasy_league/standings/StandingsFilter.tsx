@@ -27,7 +27,7 @@ export default function LeagueStandingsFilter({ currentRound, onChange, leagueRo
         <div className="flex flex-row items-center px-4 justify-between">
             <div>
                 <p className="font-medium text-lg" >
-                    {currentRound?.lable} Rankings
+                    {currentRound?.lable} Leaderboard
                 </p>
             </div>
 
