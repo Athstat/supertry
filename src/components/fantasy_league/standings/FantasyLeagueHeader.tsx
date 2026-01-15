@@ -3,6 +3,8 @@ import CircleButton from '../../ui/buttons/BackButton'
 import { JoinOrInviteButton } from '../buttons/JoinLeagueButton'
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup'
 import LeagueGroupBanner from '../LeagueGroupBanner'
+import { twMerge } from 'tailwind-merge'
+import { AppColours } from '../../../types/constants'
 
 type Props = {
     handleBack?: () => void
@@ -18,7 +20,11 @@ export default function FantasyLeagueHeader({ handleBack }: Props) {
 
             <LeagueGroupBanner league={league} />
 
-            <div className='flex absolute top-0 left-0 w-full pt-2 px-4 flex-row items-center justify-between' >
+            <div className={twMerge(
+                'flex absolute top-0 left-0 w-full pt-2 px-4 flex-row items-center justify-between pb-10',
+                'bg-gradient-to-b to-transparent',
+                AppColours.BACKGROUND_GRADIENT
+            )} >
                 <div className='flex flex-row items-center gap-2' >
                     <CircleButton
                         onClick={handleBack}
