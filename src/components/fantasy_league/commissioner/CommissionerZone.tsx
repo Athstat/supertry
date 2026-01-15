@@ -15,6 +15,8 @@ import CircleButton from '../../ui/buttons/BackButton'
 import RoundedCard from '../../ui/cards/RoundedCard'
 import { ShieldUser } from 'lucide-react'
 import { useAuth } from '../../../contexts/AuthContext'
+import BottomSheetHandle from '../../ui/modals/BottomSheetHandle'
+import { EditLeagueBannerModal } from './EditLeagueBannerModal'
 
 export default function CommissionerZone() {
 
@@ -71,6 +73,8 @@ export default function CommissionerZone() {
                 isOpen={showEditInfo}
                 onClose={toggleShowEditInfo}
             />
+
+            <EditLeagueBannerModal isOpen={true} onClose={() => {}} />
         </div>
     )
 }
@@ -224,3 +228,4 @@ function EditLeagueInfoModal({ isOpen, onClose }: EditInfoProps) {
         </BottomSheetView>
     )
 }
+
