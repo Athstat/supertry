@@ -5,7 +5,7 @@ import { logger } from "./logger"
 export const competitionService = {
 
     /** Function to fetch for athelte that belong to a competition */
-    getAthletes: async (competitionId: string) : Promise<IProAthlete[]> => {
+    getAthletes: async (competitionId: string | number) : Promise<IProAthlete[]> => {
         
         try {
             const uri = getUri(`/api/v1/competitions/${competitionId}/athletes`);
