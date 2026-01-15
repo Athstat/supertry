@@ -23,9 +23,11 @@ export function TabSwitchOption({ label, current, value, onSelect, icon, classNa
     return (
         <div
             className={twMerge(
-                "flex-1 text-xs cursor-pointer h-full flex flex-row gap-1 text-slate-700 dark:text-slate-300 rounded-xl items-center justify-center",
+                "flex-1 text-xs cursor-pointer h-full flex flex-row gap-1 text-slate-700 font-bold px-8 dark:text-slate-300 rounded-full items-center justify-center",
                 // isCurrent && AppColours.BACKGROUND,
-                isCurrent && "bg-blue-600 text-white dark:text-white",
+                'dark:hover:bg-slate-700/60',
+                isCurrent && "bg-blue-600 dark:bg-white text-white dark:text-dark-950 dark:hover:bg-white",
+
                 className
             )}
             onClick={handleOnClick}
@@ -46,7 +48,7 @@ type TabSwitchContainerProps = {
 export function TabSwitchContainer({children, className} : TabSwitchContainerProps) {
     return (
         <div className={twMerge(
-            "bg-slate-200 border dark:border-slate-700/50 dark:bg-slate-800 overflow-clip p-1 w-full h-[45px] rounded-xl flex flex-row items-center justify-between",
+            "bg-slate-200 border-none dark:border-slate-700/50 dark:bg-black/80 overflow-clip p-[2px] w-full h-[35px] flex flex-row items-center justify-between rounded-full",
             className
         )} >
             {children}

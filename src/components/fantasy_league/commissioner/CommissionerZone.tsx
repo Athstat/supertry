@@ -46,10 +46,10 @@ export default function CommissionerZone() {
                 </div>
             </div>
 
-            <div className='flex flex-col gap-2' >
+            <div className='flex flex-col gap-2 text-sm' >
                 <RoundedCard
                     className='py-2 px-4 cursor-pointer flex flex-col gap-1'
-                    onClick={toggleEditBanner}
+                    onClick={toggleShowEditInfo}
                 >
                     <div className='flex flex-row items-center gap-2 justify-between' >
                         <div>

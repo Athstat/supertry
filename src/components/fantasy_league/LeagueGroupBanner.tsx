@@ -11,7 +11,7 @@ export default function LeagueGroupBanner({league} : Props) {
 
   if (league?.banner && !error) {
     return (
-      <div className="w-full h-[240px] overflow-clip" >
+      <div className="w-full max-h-[240px] overflow-clip" >
         <img 
           onError={() => setError(true)}
           src={league.banner}

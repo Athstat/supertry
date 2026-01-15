@@ -47,11 +47,11 @@ function Content() {
     useHideTopNavBar();
 
     return (
-        <PageView className=" flex flex-col gap-4" >
+        <PageView className=" flex flex-col gap-4 overflow-x-hidden" >
             <FantasyLeagueHeader handleBack={handleBack} />
 
-            <div className="px-4" >
-                <TabSwitchContainer className="" >
+            <div className="px-4 flex mt-4 flex-row items-center justify-center" >
+                <TabSwitchContainer className="w-full" >
                     <TabSwitchOption
                         label="Standings"
                         value="standings"

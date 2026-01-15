@@ -42,7 +42,7 @@ export default function FantasyLeagueHeader({ handleBack }: Props) {
             </div>
 
             <div className='absolute -bottom-3 left-5' >
-                <LeagueGroupLogo className='w-14 h-14' league={league} />
+                <LeagueGroupLogo className='w-16 h-16' league={league} />
             </div>
         </div>
     )
