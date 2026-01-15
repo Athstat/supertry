@@ -16,16 +16,19 @@ import RoundedCard from '../../ui/cards/RoundedCard'
 import { ShieldUser } from 'lucide-react'
 import { useAuth } from '../../../contexts/AuthContext'
 import { EditLeagueBannerModal } from './EditLeagueBannerModal'
+import { Image } from 'lucide-react'
 
 export default function CommissionerZone() {
 
-    const {authUser} = useAuth();
-    const {league} = useFantasyLeagueGroup();
+    const { authUser } = useAuth();
+    const { league } = useFantasyLeagueGroup();
 
     const isCommissioner = authUser?.kc_id === league?.creator_id;
 
     const [showEditInfo, setShowEditInfo] = useState(false);
+    const [showEditBanner, setShowEditBanner] = useState(false);
     const toggleShowEditInfo = () => setShowEditInfo(prev => !prev);
+    const toggleEditBanner = () => setShowEditBanner(prev => !prev);
 
     if (!isCommissioner) {
         return;
@@ -48,7 +51,7 @@ export default function CommissionerZone() {
                 </div>
             </div>
 
-            <div>
+            <div className='flex flex-col gap-2' >
                 <RoundedCard
                     className='py-2 px-4 cursor-pointer flex flex-col gap-1'
                     onClick={toggleShowEditInfo}
@@ -66,6 +69,24 @@ export default function CommissionerZone() {
 
                     <SecondaryText>Edit your leagues name, description and visibility</SecondaryText>
                 </RoundedCard>
+
+                <RoundedCard
+                    className='py-2 px-4 cursor-pointer flex flex-col gap-1'
+                    onClick={toggleEditBanner}
+                >
+                    <div className='flex flex-row items-center gap-2 justify-between' >
+                        <div className='flex flex-row items-center gap-2' >
+                            <Image className='w-4 h-4' />
+                            <p>Edit Banner</p>
+                        </div>
+
+                        <div>
+                            <ChevronRight />
+                        </div>
+                    </div>
+
+                    <SecondaryText>Edit your leagues banner</SecondaryText>
+                </RoundedCard>
             </div>
 
             <EditLeagueInfoModal
@@ -73,7 +94,7 @@ export default function CommissionerZone() {
                 onClose={toggleShowEditInfo}
             />
 
-            <EditLeagueBannerModal isOpen={true} onClose={() => {}} />
+            <EditLeagueBannerModal isOpen={showEditBanner} onClose={toggleEditBanner} />
         </div>
     )
 }

@@ -21,7 +21,14 @@ export function EditLeagueBannerModal({ isOpen, onClose }: EditLeagueBannerProps
     const [isUploading, setUploading] = useState(false);
     const [error, setError] = useState<string>();
 
-    const {league, mutateLeague} = useFantasyLeagueGroup()
+    const {league, mutateLeague} = useFantasyLeagueGroup();
+
+    const handleClose = () => {
+        if (onClose) {
+            setFiles([]);
+            onClose();
+        }
+    }
 
     const handleUpload = useCallback(async () => {
         try {
@@ -37,13 +44,9 @@ export function EditLeagueBannerModal({ isOpen, onClose }: EditLeagueBannerProps
             const updatedLeague = await fantasyLeagueGroupsService.updateBannerAndLogo(league?.id || '', banner);
 
             if (updatedLeague) {
-                await mutateLeague(updatedLeague);
+                mutateLeague(updatedLeague);
                 setUploading(false);
-                
-                if (onClose) {
-                    onClose();
-                }
-
+                handleClose();
                 return;
             }
 
@@ -54,7 +57,7 @@ export function EditLeagueBannerModal({ isOpen, onClose }: EditLeagueBannerProps
             setUploading(false);
         }
 
-    }, [league, files]);
+    }, [league, files, handleClose]);
 
     if (!isOpen) {
         return null;
@@ -69,7 +72,7 @@ export function EditLeagueBannerModal({ isOpen, onClose }: EditLeagueBannerProps
                 <p className='font-semibold text-lg' >Edit Banner</p>
 
                 <div>
-                    <CircleButton>
+                    <CircleButton onClick={handleClose}>
                         <X />
                     </CircleButton>
                 </div>

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useCallback } from "react"
 import {useDropzone} from 'react-dropzone';
 import SecondaryText from "../typography/SecondaryText";
 import { ImagePlus } from "lucide-react";
