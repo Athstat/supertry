@@ -2,6 +2,7 @@ import { ArrowLeft } from 'lucide-react'
 import CircleButton from '../../ui/buttons/BackButton'
 import { JoinOrInviteButton } from '../buttons/JoinLeagueButton'
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup'
+import LeagueGroupBanner from '../LeagueGroupBanner'
 
 type Props = {
     handleBack?: () => void
@@ -10,23 +11,28 @@ type Props = {
 /** Renders a fantasy league standings header */
 export default function FantasyLeagueHeader({ handleBack }: Props) {
 
-    const {league} = useFantasyLeagueGroup();
+    const { league } = useFantasyLeagueGroup();
 
     return (
-        <div className="flex pt-2 px-4 flex-row items-center justify-between" >
-            <div>
-                <CircleButton
-                    onClick={handleBack}
-                >
-                    <ArrowLeft />
-                </CircleButton>
-            </div>
+        <div className="flex flex-col relative" >
 
-            <div>
-                <p>{league?.title}</p>
-            </div>
+            <LeagueGroupBanner league={league} />
 
-            <JoinOrInviteButton />
+            <div className='flex absolute top-0 left-0 w-full pt-2 px-4 flex-row items-center justify-between' >
+                <div className='flex flex-row items-center gap-2' >
+                    <CircleButton
+                        onClick={handleBack}
+                    >
+                        <ArrowLeft />
+                    </CircleButton>
+
+                    <div>
+                        <p className='font-semibold text-lg' >{league?.title}</p>
+                    </div>
+                </div>
+
+                <JoinOrInviteButton />
+            </div>
         </div>
     )
 }
