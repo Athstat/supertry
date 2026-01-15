@@ -2,7 +2,7 @@ import { RestPromise } from "../../types/auth";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { EditFantasyLeagueGroupReq, FantasyLeagueGroup, FantasyLeagueGroupMember, FantasySeasonRankingItem, MemberRankingDetail, NewFantasyLeagueGroupReq } from "../../types/fantasyLeagueGroups";
 import { IFixture } from "../../types/games";
-import { getAuthHeader, getUri } from "../../utils/backendUtils"
+import { getAuthHeader, getAuthHeaderFormMultipart, getUri } from "../../utils/backendUtils"
 import { authService } from "../authService";
 import { logger } from "../logger";
 
@@ -388,6 +388,36 @@ export const fantasyLeagueGroupsService = {
 
         return undefined;
     },
+
+    updateBannerAndLogo: async (leagueId: string, banner?: File, logo?: File) => {
+        try {
+            const uri = getUri(`/api/v1/fantasy-league-groups/${leagueId}/upload/banner`);
+
+            const formData = new FormData();
+            if (banner) {
+                formData.append('banner', banner)
+            }
+
+            if (logo) {
+                formData.append('logo', logo);
+            }
+
+            const res = await fetch(uri, {
+                body: formData,
+                method: 'POST',
+                headers: getAuthHeaderFormMultipart()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as FantasyLeagueGroup;
+            }
+
+        } catch (err) {
+            logger.error('Error updating banner and logo ', err);
+        }
+
+        return undefined;
+    }
 
 
 }

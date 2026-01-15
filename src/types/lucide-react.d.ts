@@ -151,6 +151,8 @@ declare module "lucide-react" {
   export const CircleX : CIP;
   export const Download : CIP;
   export const ShieldUser : CIP;
+  export const ImagePlus : CIP;
+  export const Upload : CIP;
   
 }
 

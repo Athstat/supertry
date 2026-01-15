@@ -30,6 +30,18 @@ export function getAuthHeader(accessTokenFromParams?: string) {
   };
 }
 
+export function getAuthHeaderFormMultipart(accessTokenFromParams?: string) {
+  const accessToken = accessTokenFromParams ?? authTokenService.getAccessToken();
+
+  const authHeader = {
+    Authorization: `Token ${accessToken}`,
+  };
+
+  return {
+    ...(accessToken ? authHeader : {}),
+  };
+}
+
 export function applicationJsonHeader() {
   return {
     'Content-Type': 'application/json',
