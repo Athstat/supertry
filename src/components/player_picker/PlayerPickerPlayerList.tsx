@@ -3,8 +3,6 @@ import { usePlayerPicker } from "../../hooks/playerPicker/usePlayerPicker";
 import { IProAthlete } from "../../types/athletes";
 import SecondaryText from "../ui/typography/SecondaryText";
 import { athleteSearchPredicate } from "../../utils/athleteUtils";
-import useSWR from "swr";
-import { seasonService } from "../../services/seasonsService";
 import TeamJersey from "../player/TeamJersey";
 import { twMerge } from "tailwind-merge";
 import { useInView } from "react-intersection-observer";
@@ -19,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import QuickActionButton from "../ui/buttons/QuickActionButton";
 import RoundedCard from "../ui/cards/RoundedCard";
 import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams";
+import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
 
 
 type SortField = 'power_rank_rating' | 'price' | null;
@@ -36,16 +35,12 @@ export default function PlayerPickerPlayerList({ onSelect }: Props) {
 
     const {
         searchQuery, positionPool, availbleTeams,
-        leagueRound, filterTeams, excludePlayers,
+        filterTeams, excludePlayers,
         remainingBudget, viewType
     } = usePlayerPicker();
 
     const { list, loadingList } = useScoutingList();
-
-    const key = leagueRound ? `/all-players` : null;
-    const { data: fetchedAthletes, isLoading: loadingAthletes } = useSWR(key, () => seasonService.getSeasonAthletes(leagueRound?.season_id ?? ''));
-
-    const athletes = useMemo(() => fetchedAthletes ?? [], [fetchedAthletes]);
+    const {athletes, isLoading: loadingAthletes} = useSupportedAthletes();
 
     const [profileModalPlayer, setProfileModalPlayer] = useState<IProAthlete>();
     const [showModal, setShowModal] = useState<boolean>(false);
