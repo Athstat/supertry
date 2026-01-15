@@ -26,7 +26,7 @@ export function TabSwitchOption({ label, current, value, onSelect, icon, classNa
                 "flex-1 text-xs cursor-pointer h-full flex flex-row gap-1 text-slate-700 font-bold px-8 dark:text-slate-300 rounded-full items-center justify-center",
                 // isCurrent && AppColours.BACKGROUND,
                 'dark:hover:bg-slate-700/60',
-                isCurrent && "bg-blue-600 dark:bg-white text-white dark:text-dark-950 dark:hover:bg-white",
+                isCurrent && "bg-blue-600 dark:bg-blue-600 text-white dark:text-white dark:hover:bg-blue-700",
 
                 className
             )}
