@@ -5,6 +5,7 @@ import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGr
 import LeagueGroupBanner from '../LeagueGroupBanner'
 import { twMerge } from 'tailwind-merge'
 import { AppColours } from '../../../types/constants'
+import LeagueGroupLogo from '../LeagueGroupLogo'
 
 type Props = {
     handleBack?: () => void
@@ -38,6 +39,10 @@ export default function FantasyLeagueHeader({ handleBack }: Props) {
                 </div>
 
                 <JoinOrInviteButton />
+            </div>
+
+            <div className='absolute -bottom-3 left-5' >
+                <LeagueGroupLogo className='w-14 h-14' league={league} />
             </div>
         </div>
     )
