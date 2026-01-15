@@ -23,7 +23,7 @@ export default function LeagueGroupBanner({league} : Props) {
   }
 
   return (
-    <div className="w-full h-[240px]  bg-slate-300 dark:bg-slate-700" >
+    <div className="w-full h-[150px]  bg-slate-300 dark:bg-slate-700" >
       
     </div>
   )

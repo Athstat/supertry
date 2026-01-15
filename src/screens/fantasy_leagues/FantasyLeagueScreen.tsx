@@ -32,8 +32,7 @@ export default function FantasyLeagueScreen() {
 function Content() {
 
     const navigate = useNavigate();
-
-    const [viewModal, setViewMode] = useState<LocalViewModel>('details');
+    const [viewModal, setViewMode] = useState<LocalViewModel>('standings');
 
     const handleChangeViewMode = (newMode?: string) => {
         if (newMode) {
