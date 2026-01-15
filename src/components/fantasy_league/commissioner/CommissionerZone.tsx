@@ -1,23 +1,14 @@
-import { ChevronRight, Pencil, X } from 'lucide-react'
-import LeagueVisibilityInput from '../../fantasy-leagues/create_league_modal/LeagueVisibilityInput'
-import PrimaryButton from '../../ui/buttons/PrimaryButton'
-import { ErrorState } from '../../ui/ErrorState'
-import InputField, { TextField } from '../../ui/forms/InputField'
+import { ChevronRight, Pencil } from 'lucide-react'
 import SecondaryText from '../../ui/typography/SecondaryText'
 import { useState } from 'react'
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup'
-import { fantasyLeagueGroupsService } from '../../../services/fantasy/fantasyLeagueGroupsService'
-import { logger } from '../../../services/logger'
-import { useInView } from 'react-intersection-observer'
-import BottomSheetView from '../../ui/modals/BottomSheetView'
-import { FantasyLeagueGroup } from '../../../types/fantasyLeagueGroups'
-import CircleButton from '../../ui/buttons/BackButton'
 import RoundedCard from '../../ui/cards/RoundedCard'
 import { ShieldUser } from 'lucide-react'
 import { useAuth } from '../../../contexts/AuthContext'
 import { EditLeagueBannerModal } from './EditLeagueBannerModal'
 import { Image } from 'lucide-react'
 import { EditLeagueInfoModal } from './EditLeagueInfoModal'
+import EditLeagueLogoModal from './EditLeagueLogoModal'
 
 export default function CommissionerZone() {
 
@@ -28,8 +19,11 @@ export default function CommissionerZone() {
 
     const [showEditInfo, setShowEditInfo] = useState(false);
     const [showEditBanner, setShowEditBanner] = useState(false);
+    const [showEditLogo, setShowEditLogo] = useState(false);
+
     const toggleShowEditInfo = () => setShowEditInfo(prev => !prev);
     const toggleEditBanner = () => setShowEditBanner(prev => !prev);
+    const toggleEditLogo = () => setShowEditLogo(prev => !prev);
 
     if (!isCommissioner) {
         return;
@@ -55,12 +49,16 @@ export default function CommissionerZone() {
             <div className='flex flex-col gap-2' >
                 <RoundedCard
                     className='py-2 px-4 cursor-pointer flex flex-col gap-1'
-                    onClick={toggleShowEditInfo}
+                    onClick={toggleEditBanner}
                 >
                     <div className='flex flex-row items-center gap-2 justify-between' >
-                        <div className='flex flex-row items-center gap-2' >
-                            <Pencil className='w-4 h-4' />
-                            <p>Edit League info</p>
+                        <div>
+                            <div className='flex flex-row items-center gap-2' >
+                                <Pencil className='w-4 h-4' />
+                                <p>Edit League Info</p>
+                            </div>
+
+                            <SecondaryText>Edit your leagues banner</SecondaryText>
                         </div>
 
                         <div>
@@ -68,7 +66,6 @@ export default function CommissionerZone() {
                         </div>
                     </div>
 
-                    <SecondaryText>Edit your leagues name, description and visibility</SecondaryText>
                 </RoundedCard>
 
                 <RoundedCard
@@ -76,9 +73,13 @@ export default function CommissionerZone() {
                     onClick={toggleEditBanner}
                 >
                     <div className='flex flex-row items-center gap-2 justify-between' >
-                        <div className='flex flex-row items-center gap-2' >
-                            <Image className='w-4 h-4' />
-                            <p>Edit Banner</p>
+                        <div>
+                            <div className='flex flex-row items-center gap-2' >
+                                <Image className='w-4 h-4' />
+                                <p>Edit Banner</p>
+                            </div>
+
+                            <SecondaryText>Edit your league's banner</SecondaryText>
                         </div>
 
                         <div>
@@ -86,16 +87,46 @@ export default function CommissionerZone() {
                         </div>
                     </div>
 
-                    <SecondaryText>Edit your leagues banner</SecondaryText>
+                </RoundedCard>
+
+
+                <RoundedCard
+                    className='py-2 px-4 cursor-pointer flex flex-col gap-1'
+                    onClick={toggleEditLogo}
+                >
+                    <div className='flex flex-row items-center gap-2 justify-between' >
+                        <div>
+                            <div className='flex flex-row items-center gap-2' >
+                                <Image className='w-4 h-4' />
+                                <p>Edit League Logo</p>
+                            </div>
+
+                            <SecondaryText>Edit your league's logo</SecondaryText>
+                        </div>
+
+                        <div>
+                            <ChevronRight />
+                        </div>
+                    </div>
+
                 </RoundedCard>
             </div>
+
 
             <EditLeagueInfoModal
                 isOpen={showEditInfo}
                 onClose={toggleShowEditInfo}
             />
 
-            <EditLeagueBannerModal isOpen={showEditBanner} onClose={toggleEditBanner} />
+            <EditLeagueBannerModal 
+                isOpen={showEditBanner}
+                onClose={toggleEditBanner} 
+            />
+
+            <EditLeagueLogoModal 
+                isOpen={showEditLogo}
+                onClose={toggleEditLogo}
+            />
         </div>
     )
 }
