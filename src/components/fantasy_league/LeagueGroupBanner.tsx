@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups"
 
 type Props = {
@@ -6,10 +7,13 @@ type Props = {
 
 export default function LeagueGroupBanner({league} : Props) {
 
-  if (league?.banner) {
+  const [error,setError] = useState(false);
+
+  if (league?.banner && !error) {
     return (
       <div className="w-full h-[240px] overflow-clip" >
         <img 
+          onError={() => setError(true)}
           src={league.banner}
           alt={`${league.title} Banner`}
           className="w-full h-fit object-fill"
