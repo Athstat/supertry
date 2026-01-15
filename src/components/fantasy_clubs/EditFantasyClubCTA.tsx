@@ -13,7 +13,7 @@ export default function EditFantasyClubCTA() {
     }
 
     return (
-        <RoundedCard onClick={handleClick} className="p-2 flex flex-row items-center justify-between dark:border-slate-600" >
+        <RoundedCard onClick={handleClick} className="p-2 cursor-pointer hover:bg-slate-200 flex flex-row items-center justify-between dark:border-slate-600" >
 
             <div className="flex flex-row items-center gap-2" >
                 <Shield  />
