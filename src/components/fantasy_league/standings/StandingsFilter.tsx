@@ -2,7 +2,6 @@ import { IFantasyLeagueRound } from "../../../types/fantasyLeague";
 import { StandingsFilterItem } from "../../../types/standings";
 import { DropdownOption } from "../../../types/ui";
 import Dropdown from "../../ui/forms/Dropdown";
-import SecondaryText from "../../ui/typography/SecondaryText";
 
 type Props = {
     currentRound?: StandingsFilterItem,
@@ -27,9 +26,9 @@ export default function LeagueStandingsFilter({ currentRound, onChange, leagueRo
     return (
         <div className="flex flex-row items-center px-4 justify-between">
             <div>
-                <SecondaryText className="font-medium text-md" >
+                <p className="font-medium text-lg" >
                     {currentRound?.lable} Rankings
-                </SecondaryText>
+                </p>
             </div>
 
             <div>
