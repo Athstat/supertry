@@ -64,6 +64,7 @@ function Content() {
             <DashboardHeroCTASection
                 roundTeam={roundTeam}
                 deadlineText='Competiton Deadline:'
+                hideVerboseInstructions
             />
         </DashboardHeroFrame>
     )
