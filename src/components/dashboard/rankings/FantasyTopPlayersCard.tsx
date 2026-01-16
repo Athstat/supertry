@@ -60,7 +60,7 @@ export default function FantasyTopPlayersCard({className} : Props) {
         {/* Title */}
         <div className="p-4">
           <p className="font-semibold text-xl text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald', }}>
-            Top Rated 6 Nations Players
+            Top Rated Six Nations Players
           </p>
         </div>
 
