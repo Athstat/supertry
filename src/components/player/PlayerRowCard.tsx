@@ -21,7 +21,7 @@ export default function PlayerRowCard({ player, onClick }: Props) {
     const { ref, inView } = useInView({ triggerOnce: true });
     const countryFlag = getCountryEmojiFlag(player.nationality, true);
 
-    const {seasonTeam} = usePlayerSeasonTeam(player);
+    const { seasonTeam } = usePlayerSeasonTeam(player);
 
     const handelClick = () => {
         if (onClick) {
@@ -31,14 +31,12 @@ export default function PlayerRowCard({ player, onClick }: Props) {
 
     return (
 
-        <>
-            <span ref={ref} />
-
-
-            {inView && <tr
-                onClick={handelClick}
-                className="cursor-pointer dark:hover:bg-slate-800 hover:bg-slate-100"
-            >
+        <tr
+            ref={ref}
+            onClick={handelClick}
+            className="cursor-pointer dark:hover:bg-slate-800 hover:bg-slate-100"
+        >
+            {inView && <>
                 <td className="py-3" >
                     <div className="flex flex-row items-center gap-2" >
                         <div>
@@ -90,8 +88,7 @@ export default function PlayerRowCard({ player, onClick }: Props) {
                         />
                     </div>
                 </td>
-
-            </tr>}
-        </>
+            </>}
+        </tr>
     )
 }
