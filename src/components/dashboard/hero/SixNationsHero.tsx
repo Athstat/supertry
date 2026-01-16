@@ -4,7 +4,7 @@ import { useUserRoundTeam } from '../../../hooks/fantasy/useUserRoundTeam';
 import { DashboardHeroLoadingSkeleton, DashboardHeroFrame, DashboardHeroHeader, DashboardHeroScoreSection, DashboardHeroCTASection } from './DashboardHeroSections';
 import { useFeaturedLeague } from '../../../hooks/leagues/useFeaturedLeague';
 import FantasyLeagueGroupDataProvider from '../../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider';
-import { Trophy } from 'lucide-react';
+import TrophyStartIcon from '../../ui/icons/TrophyStartIcon';
 
 /** Renders the dashboard hero */
 export default function DashboardHero() {
@@ -51,7 +51,7 @@ function Content() {
             >
                 <div className='bg-black/80 rounded-xl w-[95%] py-4 h-fit flex flex-col items-center justify-center gap-2' >
                     <div className='flex flex-col border-b-2 border-[#D94204] w-[40%] pb-2 items-center justify-center' >
-                        <Trophy className='text-[#D94204] w-8 h-8' />
+                        <TrophyStartIcon width='30' height='30' />
                     </div>
 
                     <div>
