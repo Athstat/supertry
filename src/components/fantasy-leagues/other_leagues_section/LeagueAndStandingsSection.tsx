@@ -7,11 +7,10 @@ import { IFantasySeason } from "../../../types/fantasy/fantasySeason"
 import { FantasyLeagueGroup } from "../../../types/fantasyLeagueGroups"
 import PrimaryButton from "../../ui/buttons/PrimaryButton"
 import NoContentCard from "../../ui/typography/NoContentMessage"
-import SecondaryText from "../../ui/typography/SecondaryText"
 import CreateLeagueModal from "../create_league_modal/CreateLeagueModal"
-import LeagueGroupsTable from "../LeagueGroupsTable"
 import RoundedCard from "../../ui/cards/RoundedCard"
 import { useAuth } from "../../../contexts/AuthContext"
+import LeagueGroupsSection from "../LeagueGroupsSection"
 
 type Props = {
     fantasySeason: IFantasySeason
@@ -86,43 +85,25 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
             </div> */}
 
             <div className="flex flex-col gap-10 mt-4" >
-                <section className="flex flex-col gap-2" >
-                    <div>
-                        <p className="font-semibold" >Official Leagues</p>
-                        <SecondaryText>Leagues created by SCRUMMY</SecondaryText>
-                    </div>
 
-                    <LeagueGroupsTable
-                        leagues={officialLeagues}
-                    />
+                <LeagueGroupsSection
+                    title="Official Leagues"
+                    description="Leagues created by SCRUMMY"
+                    leagues={officialLeagues}
+                    isVerified
+                />
 
-                </section>
+                <LeagueGroupsSection
+                    title="My Leagues"
+                    description="Leagues created by you"
+                    leagues={myLeagues}
+                />
 
-                <section className="flex flex-col gap-2" >
-
-                    <div>
-                        <p className="font-semibold" >My Leagues</p>
-                        <SecondaryText>Leagues you created</SecondaryText>
-                    </div>
-
-                    <LeagueGroupsTable
-                        leagues={myLeagues}
-                    />
-
-                </section>
-
-                <section className="flex flex-col gap-2" >
-
-                    <div>
-                        <p className="font-semibold" >Join Leagues</p>
-                        <SecondaryText>Leagues you are apart of, created by others</SecondaryText>
-                    </div>
-
-                    <LeagueGroupsTable
-                        leagues={joinedLeagues}
-                    />
-
-                </section>
+                <LeagueGroupsSection
+                    title="Joined Leagues"
+                    description="Other leagues you are apart of, created by others"
+                    leagues={joinedLeagues}
+                />
 
                 <SuggestedLeaguesSections
                     fantasySeason={fantasySeason}

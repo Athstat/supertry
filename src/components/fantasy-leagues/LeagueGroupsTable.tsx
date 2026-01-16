@@ -8,13 +8,17 @@ import { Link } from "react-router-dom";
 import SecondaryText from "../ui/typography/SecondaryText";
 import RoundedCard from "../ui/cards/RoundedCard";
 import LeagueGroupLogo from "../fantasy_league/LeagueGroupLogo";
+import NoContentCard from "../ui/typography/NoContentMessage";
 
 type Props = {
-    leagues: FantasyLeagueGroup[]
+    leagues: FantasyLeagueGroup[],
+    emptyMessage?: string
 }
 
 /** Renders a table of Fantasy League Groups */
-export default function LeagueGroupsTable({ leagues }: Props) {
+export default function LeagueGroupsTable({ leagues, emptyMessage }: Props) {
+
+    const noLeagues = leagues.length === 0;
 
     const getLeagueLink = (league: FantasyLeagueGroup) => {
         return `/league/${league.id}/standings`;
@@ -37,6 +41,12 @@ export default function LeagueGroupsTable({ leagues }: Props) {
                     </Link>
                 )
             })}
+
+            {noLeagues && (
+                <NoContentCard 
+                    message={emptyMessage || 'No leagues were found'}
+                />
+            )}
         </div>
     )
 }
