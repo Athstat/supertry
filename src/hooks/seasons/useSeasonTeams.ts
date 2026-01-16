@@ -16,18 +16,28 @@ export function useSeasonTeams() {
         return teams.find((t) => t.athstat_id === teamId);
     }, [teams]);
 
+    
+
     /** Function that takes an array of an athlete teams and picks up the right team based on the current season */
     const getAthleteSeasonTeam = useCallback((athleteTeams: IAthleteTeam[]) => {
         const athleteSeasonTeam = athleteTeams.find((t) => {
             return t.season_id === season?.id;
         });
 
+        const sameCompetitionTeam = athleteTeams.find((a) => {
+            return (season?.competition_id)?.toString() === (a.competition_id)?.toString();
+        });
+
         if (athleteSeasonTeam) {
             return getTeamById(athleteSeasonTeam.team_id);
         }
 
+        if (sameCompetitionTeam) {
+            return getTeamById(sameCompetitionTeam.team_id);
+        }
+
         return undefined;
-    }, [getTeamById, season?.id])
+    }, [getTeamById, season]);
 
     return {
         teams,
