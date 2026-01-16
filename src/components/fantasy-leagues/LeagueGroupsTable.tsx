@@ -7,7 +7,6 @@ import React from 'react'
 import { Link } from "react-router-dom";
 import SecondaryText from "../ui/typography/SecondaryText";
 import RoundedCard from "../ui/cards/RoundedCard";
-import LeagueGroupLogo from "../fantasy_league/LeagueGroupLogo";
 import NoContentCard from "../ui/typography/NoContentMessage";
 
 type Props = {
@@ -90,7 +89,7 @@ function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
 
 
             <div className="flex flex-row items-center gap-2" >
-                <LeagueGroupLogo className="w-6 h-6" league={leagueGroup} />
+                {/* <LeagueGroupLogo className="w-6 h-6" league={leagueGroup} /> */}
                 <h3 className="text-sm font-medium text-gray-900 dark:text-white truncate">
                     {leagueGroup.title}
                 </h3>
