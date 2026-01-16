@@ -195,10 +195,11 @@ export function DashboardHeroScoreSection({ roundTeam, children }: ScoreProps) {
 
 type CTASectionProps = {
   roundTeam?: IFantasyLeagueTeam,
-  deadlineText?: string
+  deadlineText?: string,
+  hideVerboseInstructions?: boolean
 }
 
-export function DashboardHeroCTASection({ roundTeam, deadlineText }: CTASectionProps) {
+export function DashboardHeroCTASection({ roundTeam, deadlineText, hideVerboseInstructions = false }: CTASectionProps) {
 
   const navigate = useNavigate();
   const [showHelpModal, setShowHelpModal] = useState(false);
@@ -243,7 +244,7 @@ export function DashboardHeroCTASection({ roundTeam, deadlineText }: CTASectionP
   }
 
 
-  if (isFirstTime) {
+  if (isFirstTime && !hideVerboseInstructions) {
     return (
       <Fragment>
         {nextDeadline && nextDeadlineRound && (
