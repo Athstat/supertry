@@ -10,6 +10,7 @@ import SecondaryText from "../../ui/typography/SecondaryText";
 import MatchPrCard from "../../rankings/MatchPrCard";
 import { useFixtureScreen } from "../../../hooks/fixtures/useFixture";
 import RoundedCard from "../../ui/cards/RoundedCard";
+import { usePlayerSeasonTeam } from "../../../hooks/seasons/useSeasonTeams";
 
 type Props = {
     fixture: IFixture
@@ -26,6 +27,8 @@ export default function FixturePotmCard({ fixture }: Props) {
 
     const potmId = potm?.athlete_id;
     const { athlete, isLoading: loadingAthlete } = useAthlete(potmId);
+
+    const {seasonTeam} = usePlayerSeasonTeam(athlete);
 
     const isLoading = loadingPotm || loadingAthlete;
 
@@ -80,8 +83,7 @@ export default function FixturePotmCard({ fixture }: Props) {
 
                         {athlete.image_url && <div>
                             <SmartPlayerMugshot
-                                url={athlete?.image_url}
-                                teamId={athlete?.team_id}
+                                teamId={seasonTeam?.athstat_id}
                             />
                         </div>}
 

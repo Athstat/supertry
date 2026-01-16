@@ -34,10 +34,10 @@ export function TeamRosterPitchView({ team, fixture }: TeamRosterProps) {
         })
     }, [teamRoster]);
 
-    if (isLoading) {
+    if (!isLoading) {
         return (
             <div className="mt-4 relative animate-pulse" >
-                <RugbyPitch3DRaster className="max-h-[500px]" />
+                <RugbyPitch3DRaster className="max-h-[800px]" />
             </div>
         )
     }
