@@ -17,12 +17,12 @@ export function Header() {
     '/dashboard',
     '/league',
     '/players'
-  ] 
+  ]
 
   const showCompetitionSelector = pathsToShowCompetitionSelector.find((p) => {
     return location.pathname?.startsWith(p);
   })
-    
+
 
   return (
     <Activity mode={topNavViewMode}>
@@ -43,15 +43,17 @@ export function Header() {
 
             {/* {isInQa && <BetaTag />} */}
 
-            {showCompetitionSelector && (
-              <div className="ml-2">
-                <CompetitionSelector />
-              </div>
-            )}
+
           </div>
 
+          {showCompetitionSelector && (
+            <div className="ml-2">
+              <CompetitionSelector />
+            </div>
+          )}
+
           <div className="flex items-center gap-4">
-            <NotificationsBellButton/>
+            <NotificationsBellButton />
             <UserProfileButton />
           </div>
 

@@ -132,7 +132,7 @@ export const abbreviateSeasonName = (seasonName: string): string => {
     }
 
     if (seasonName.startsWith('Six Nations')) {
-        return seasonName.replace('Six Nations', '6N')
+        return seasonName.replace('Six Nations', 'M6N')
     }
 
     return seasonName;
