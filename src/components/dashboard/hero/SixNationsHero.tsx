@@ -4,20 +4,11 @@ import { useUserRoundTeam } from '../../../hooks/fantasy/useUserRoundTeam';
 import { DashboardHeroLoadingSkeleton, DashboardHeroFrame, DashboardHeroHeader, DashboardHeroScoreSection, DashboardHeroCTASection } from './DashboardHeroSections';
 import { useFeaturedLeague } from '../../../hooks/leagues/useFeaturedLeague';
 import FantasyLeagueGroupDataProvider from '../../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider';
-import { useFantasySeasons } from '../../../hooks/dashboard/useFantasySeasons';
-import SixNationsHero from './SixNationsHero';
 
 /** Renders the dashboard hero */
 export default function DashboardHero() {
 
-  const {selectedSeason} = useFantasySeasons();
   const {featuredLeague} = useFeaturedLeague();
-
-  if (selectedSeason?.name.includes('Six Nations 2026')) {
-    return (
-      <SixNationsHero />
-    )
-  }
 
   return (
     <FantasyLeagueGroupDataProvider
@@ -49,10 +40,16 @@ function Content() {
   }
 
   return (
-    <DashboardHeroFrame>
-      <DashboardHeroHeader />
+    <DashboardHeroFrame 
+        imageUrl={'/images/dashboard/6nations_banner_bg.png'} 
+        hideBeastImage
+    >
+      <DashboardHeroHeader title='PLAY 6NATIONS FANTASY' />
       <DashboardHeroScoreSection roundTeam={roundTeam} />
-      <DashboardHeroCTASection roundTeam={roundTeam} />
+      <DashboardHeroCTASection 
+        roundTeam={roundTeam}
+        deadlineText='Competiton Deadline'
+    />
     </DashboardHeroFrame>
   )
 }
