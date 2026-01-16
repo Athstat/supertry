@@ -13,7 +13,7 @@ export default function LeagueGroupLogo({ league, className }: Props) {
     const defaultImageUrl = "https://dp7xhssw324ru.cloudfront.net/default_trophy_logo.png";
 
     const [error, setError] = useState(false);
-    const imageUrl = league?.logo || defaultImageUrl;
+    const imageUrl = league?.logo;
 
     if (imageUrl && !error) {
         return (

@@ -25,7 +25,7 @@ export default function FantasyLeagueDetailsTab() {
 
   return (
     <Fragment>
-      <div className="flex flex-col gap-6 px-4" >
+      <div className="flex flex-col gap-6 px-4 mt-5" >
 
         <div className="flex flex-col gap-4">
           <div>
