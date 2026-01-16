@@ -1,4 +1,4 @@
-import { useCallback } from "react"
+import { useCallback, useEffect, useMemo } from "react"
 import {useDropzone} from 'react-dropzone';
 import SecondaryText from "../typography/SecondaryText";
 import { ImagePlus } from "lucide-react";
@@ -14,7 +14,6 @@ type Props = {
 export default function ImageFileInput({files, setFiles, previewSize} : Props) {
 
     const onDrop = useCallback(<T extends File>(acceptedFiles: T[]) => {
-        console.log("Accepted Files ", acceptedFiles);
         setFiles(acceptedFiles);
     }, [setFiles]);
     
@@ -73,7 +72,15 @@ type FilePreviewProps = {
 
 function ImageFilePreview({file, size} : FilePreviewProps) {
     
-    const previewUrl = URL.createObjectURL(file);
+    const previewUrl = useMemo(() => {
+        return URL.createObjectURL(file)
+    }, [file]);
+
+    useEffect(() => {
+        return () => {
+            URL.revokeObjectURL(previewUrl)
+        }
+    }, [previewUrl]);
     
     return (
         <div className="flex flex-row items-center justify-center" >

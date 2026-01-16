@@ -163,6 +163,7 @@ export default function LeagueStandingsTable({
           return (
             <div
               ref={isUser ? userRef : undefined}
+              key={ranking.user_id}
             >
               <LeagueStandingsTableRow
                 ranking={ranking}

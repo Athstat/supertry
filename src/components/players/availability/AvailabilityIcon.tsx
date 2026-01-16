@@ -170,12 +170,6 @@ export function RoundAvailabilityText({ athlete, className, round }: RoundProps)
         return;
     }
 
-    // const handleViewGame = () => {
-    //     navigate(`/fixtures/${report.game?.game_id}`);
-    // }
-
-    console.log(report);
-
     return (
         <WarningCard className={twMerge(
             'text-xs',
