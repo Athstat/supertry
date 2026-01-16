@@ -11,7 +11,7 @@ export function usePlayerRoundAvailability(athleteId: string, seasonId: string, 
   const finalSeasonId = selectedSeason?.id || seasonId;
 
   const shouldFetch = (Boolean(athleteId) && Boolean(finalSeasonId)) && (roundNumber > 0);
-  const key = shouldFetch ? `/athlete/${athleteId}/general-availability/by-season/${finalSeasonId}/${roundNumber}?team_id=${team_id}` : null;
+  const key = shouldFetch ? `/athlete/${athleteId}/general-availability/by-season/${finalSeasonId}/${roundNumber}${team_id ? `?team_id=${team_id}` : ''}` : null;
 
   const { data, isLoading } = useSWR(key, () => djangoAthleteService.getRoundAvailabilityReport(
     athleteId,
@@ -20,9 +20,7 @@ export function usePlayerRoundAvailability(athleteId: string, seasonId: string, 
     team_id
   ));
 
-  const firstReport = useMemo(() => {
-    return data;
-  }, [data]);
+  const firstReport = data;
 
   const nextMatch = useMemo<IFixture | undefined>(() => {
     return firstReport?.game;

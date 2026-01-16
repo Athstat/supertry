@@ -58,7 +58,7 @@ export const AthleteProvider: React.FC<{ children: React.ReactNode }> = ({
 
 
   const refreshAthletes = async () => {
-    await mutate(() => djangoAthleteService.getAllAthletes());
+    await mutate(() => fetcher(selectedSeason));
   }
 
   const getAthleteById = (id: string) => {

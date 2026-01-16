@@ -1,6 +1,5 @@
 import { twMerge } from "tailwind-merge"
 import { FantasySeasonRankingItem } from "../../../types/fantasyLeagueGroups"
-import RoundedCard from "../../ui/cards/RoundedCard"
 import { smartRoundUp } from "../../../utils/intUtils"
 import { User } from "lucide-react"
 
@@ -16,8 +15,8 @@ export default function StickyUserRankingCard({ userRanking, onClick }: Props) {
 
     return (
         <div className="fixed p-4 bottom-14 left-0 w-full" >
-            <RoundedCard onClick={onClick} className={twMerge(
-                "w-full bg-blue-500 dark:shadow-lg text-white shadow-black dark:bg-blue-600 cursor-pointer p-4 flex flex-col gap-2",
+            <div onClick={onClick} className={twMerge(
+                "w-full rounded-xl bg-blue-500 dark:shadow-lg text-white shadow-black dark:bg-blue-600 cursor-pointer p-4 flex flex-col gap-2",
             )} >
 
                 <div className="flex flex-row items-center gap-2 justify-between" >
@@ -40,7 +39,7 @@ export default function StickyUserRankingCard({ userRanking, onClick }: Props) {
                         <p className="" >{pointsDisplay}</p>
                     </div>
                 </div>
-            </RoundedCard>
+            </div>
         </div>
     )
 }

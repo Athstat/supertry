@@ -25,11 +25,6 @@ export function useSeasonTeams() {
         });
 
         const sameCompetitionTeam = athleteTeams.find((t) => {
-
-            if (t.team_id === '61552296-5035-5cb3-a375-8950f993045c') {   
-                console.log("Comparing ", t.competition_id, "and", selectedSeason?.competition_id)
-            }
-            
             return t.competition_id === selectedSeason?.competition_id;
         });
 
