@@ -6,7 +6,6 @@ import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 import { Activity } from 'react';
 import AutoJoinLeagueModal from '../../components/fantasy-leagues/AutoJoinLeagueModal';
-import EditFantasyClubCTA from '../../components/fantasy_clubs/EditFantasyClubCTA';
 
 /** Renders the Fantasy/League Screen */
 export function FantasyScreen() {
@@ -25,9 +24,7 @@ export function FantasyScreen() {
         <h1 className="font-bold text-xl">Fantasy</h1>
       </div>
 
-      <div className='px-4' >
-        <EditFantasyClubCTA />
-      </div>
+
 
       <Activity mode={showLoading ? "visible" : "hidden"} >
         <LoadingIndicator />

@@ -4,6 +4,7 @@ import ManageTeamCTA from '../fantasy-leagues/ManageTeamCTA';
 import { useFeaturedLeague } from '../../hooks/leagues/useFeaturedLeague';
 import LeagueAndStandingsSection from '../fantasy-leagues/other_leagues_section/LeagueAndStandingsSection';
 import RoundedCard from '../ui/cards/RoundedCard';
+import EditFantasyClubCTA from '../fantasy_clubs/EditFantasyClubCTA';
 
 type Props = {
   fantasySeason: IFantasySeason
@@ -25,7 +26,11 @@ export function FantasySeasonDashboard({ fantasySeason }: Props) {
   }
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
+
+      <div className='px-4' >
+        <EditFantasyClubCTA />
+      </div>
 
       {featuredGroup && (
         <div className='px-4' >
