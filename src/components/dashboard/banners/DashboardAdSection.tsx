@@ -84,7 +84,7 @@ export default function DashboardAdSection() {
                 {currentAd.ctaButton && (
                     <button
                         onClick={() => navigate('/leagues')}
-                        className="px-3 py-3 mt-2 rounded-md bg-transparent border border-white dark:border-white font-semibold text-xs text-white dark:text-white uppercase shadow-md transition-colors hover:bg-[#011E5C] hover:text-white dark:hover:bg-white dark:hover:text-[#011E5C] whitespace-nowrap flex-shrink-0"
+                        className="px-3 py-3 mt-2 rounded-md bg-transparent border border-white dark:border-white font-semibold text-xs text-white dark:text-white uppercase shadow-md transition-colors hover:bg-white hover:text-[#D94204E5] dark:hover:bg-white dark:hover:text-[#011E5C] whitespace-nowrap flex-shrink-0"
                     >
                         Play Now
                     </button>
