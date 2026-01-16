@@ -10,6 +10,7 @@ import { queryParamKeys } from '../../../types/constants';
 import RoundedCard from '../../ui/cards/RoundedCard';
 import { useFantasyPointsRankings } from '../../../hooks/athletes/useFantasyPointsRankings';
 import { getRankingBorderColor } from '../../../utils/fantasy/rankingUtils';
+import FantasyTopPlayersCard from './FantasyTopPlayersCard';
 
 type Props = {
   className?: string
@@ -47,7 +48,7 @@ export default function FantasyTopPerformersCard({className} : Props) {
   }
 
   if (rankings.length === 0) {
-    return null;
+    return <FantasyTopPlayersCard className={className} />;
   }
 
   return (
