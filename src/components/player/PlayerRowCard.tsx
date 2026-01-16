@@ -9,6 +9,7 @@ import { stripCountryName } from "../../utils/stringUtils"
 import { useInView } from "react-intersection-observer"
 import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams"
 
+
 type Props = {
     player: IProAthlete,
     onClick?: (player: IProAthlete) => void
@@ -42,7 +43,6 @@ export default function PlayerRowCard({ player, onClick }: Props) {
                     <div className="flex flex-row items-center gap-2" >
                         <div>
                             <SmartPlayerMugshot
-                                url={player.image_url}
                                 teamId={seasonTeam?.athstat_id}
                                 playerImageClassName="bg-transparent"
                             />
