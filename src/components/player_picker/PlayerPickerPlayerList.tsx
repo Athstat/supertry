@@ -274,7 +274,6 @@ type PlayerListItemProps = {
 
 function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer }: PlayerListItemProps) {
 
-    // const infoButtonRef = useRef<HTMLDivElement | null>(null);
     const { remainingBudget } = usePlayerPicker();
     const { inView, ref } = useInView({ triggerOnce: true });
     const { seasonTeam } = usePlayerSeasonTeam(player);
@@ -295,7 +294,6 @@ function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer }: PlayerL
 
         if (onSelectPlayer) {
             onSelectPlayer(player);
-            console.log("Player Selected");
         }
     }, [onSelectPlayer, player, isAffordable]);
 

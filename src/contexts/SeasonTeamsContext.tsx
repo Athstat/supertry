@@ -2,11 +2,11 @@
 import { createContext, ReactNode, useCallback, useMemo } from "react"
 import { IProTeam } from "../types/team"
 import useSWR from "swr";
-import { seasonService } from "../services/seasonsService";
 import { useFantasySeasons } from "../hooks/dashboard/useFantasySeasons";
 import ScrummyLoadingState from "../components/ui/ScrummyLoadingState";
 import { CACHING_CONFIG } from "../types/constants";
 import { IProSeason } from "../types/season";
+import { competitionService } from "../services/competitionsService";
 
 type ContextProps = {
     teams: IProTeam[],
@@ -28,7 +28,7 @@ export default function SeasonTeamsProvider({children} : ProviderProps) {
     const activeSeason = selectedSeason || currentSeason;
     const seasonTeamsKey = activeSeason ? `seasons-teams/${activeSeason.id}` : null;
     
-    const { data, isLoading, mutate, error } = useSWR(seasonTeamsKey, () => seasonService.getSeasonTeams(activeSeason?.id ?? ""), {
+    const { data, isLoading, mutate, error } = useSWR(seasonTeamsKey, () => competitionService.getTeams(activeSeason?.competition_id ?? ""), {
         revalidateOnFocus: false,
         revalidateIfStale: true,
         dedupingInterval: CACHING_CONFIG.seasonTeamsCachePeriod
