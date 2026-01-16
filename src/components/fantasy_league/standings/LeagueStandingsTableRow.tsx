@@ -9,11 +9,12 @@ type StandingsProps = {
     index: number;
     isUser?: boolean;
     hideUserScore?: boolean;
-    onClick?: (member: FantasySeasonRankingItem) => void
+    onClick?: (member: FantasySeasonRankingItem) => void,
+    showBadges?: boolean
 };
 
 /** Renders a league standing table row */
-export function LeagueStandingsTableRow({ ranking, isUser, hideUserScore, index, onClick }: StandingsProps) {
+export function LeagueStandingsTableRow({ ranking, isUser, hideUserScore, index, onClick, showBadges }: StandingsProps) {
 
     const rank = ranking.league_rank ?? index + 1;
     const shouldHideScore = (isUser && hideUserScore) || !ranking.total_score
@@ -69,7 +70,7 @@ export function LeagueStandingsTableRow({ ranking, isUser, hideUserScore, index,
                         )}
                     </div>
 
-                    <RankingCrown isUser={isUser} ranking={ranking} />
+                    {showBadges && <RankingCrown isUser={isUser} ranking={ranking} />}
                 </div>
 
                 <div className="text-right">

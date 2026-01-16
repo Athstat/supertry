@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { ErrorState } from '../../ui/ErrorState';
 import { LeagueStandingsTableRow } from './LeagueStandingsTableRow';
 import StickyUserRankingCard from './StickyUserRankingCard';
+import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
 
 type Props = {
   round?: IFantasyLeagueRound
@@ -102,6 +103,8 @@ export default function LeagueStandingsTable({
     }
   }
 
+  const isRoundLocked = selectedRound && isLeagueRoundLocked(selectedRound);
+
   if (error) {
     return (
       <div>
@@ -167,6 +170,7 @@ export default function LeagueStandingsTable({
                 isUser={isUser}
                 hideUserScore={hideUserScore}
                 onClick={handleSelectMember}
+                showBadges={isRoundLocked}
               />
             </div>
           );
