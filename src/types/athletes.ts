@@ -97,5 +97,6 @@ export type IAthleteTeam = {
   team_id: string,
   season_id: string,
   player_image_url?: string,
-  registered_position?: string
+  registered_position?: string,
+  competition_id?: string
 }

@@ -22,6 +22,7 @@ import PageView from '../../components/ui/containers/PageView';
 import ErrorCard from '../../components/ui/cards/ErrorCard';
 import { Activity } from 'react';
 import PlayerFixtureModal from '../../components/fixture/player_fixture_modal/PlayerFixtureModal';
+import { preloadGameRosters } from '../../hooks/fixtures/useGameRosters';
 
 export default function FixtureDetailScreen() {
 
@@ -47,6 +48,8 @@ function Content() {
   const { data: sportActions, isLoading: loadingSportsActions } = useSWR(sportsActionsKey, () =>
     boxScoreService.getSportActionsByGameId(fixtureId ?? '')
   );
+
+  preloadGameRosters(fixture);
 
   useHideBottomNavBar();
 

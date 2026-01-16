@@ -98,7 +98,6 @@ function RosterBenchItem({ item }: RosterItemProps) {
         >
 
             <SmartPlayerMugshot
-                url={athlete.image_url}
                 teamId={athlete.team_id}
                 className="hover:bg-transparent"
                 playerImageClassName="hover:bg-white dark:hover:bg-slate-700 dark:bg-slate-600"

@@ -1,33 +1,43 @@
 import { useCallback, useContext, useMemo } from "react";
 import { SeasonTeamsContext } from "../../contexts/SeasonTeamsContext";
 import { IAthleteTeam, IProAthlete } from "../../types/athletes";
+import { useFantasySeasons } from "../dashboard/useFantasySeasons";
 
 export function useSeasonTeams() {
 
+    const {selectedSeason} = useFantasySeasons();
     const context = useContext(SeasonTeamsContext);
 
     if (context === null) {
         throw Error("useSeasonTeams() hook must be mounted inside the SeasonTeamsProvider");
     }
 
-    const { teams, isLoading, refresh: mutate, error, season } = context;
+    const { teams, isLoading, refresh: mutate, error } = context;
 
     const getTeamById = useCallback((teamId: string) => {
         return teams.find((t) => t.athstat_id === teamId);
     }, [teams]);
 
-    /** Function that takes an array of an athlete teams and picks up the right team based on the current season */
     const getAthleteSeasonTeam = useCallback((athleteTeams: IAthleteTeam[]) => {
+        
         const athleteSeasonTeam = athleteTeams.find((t) => {
-            return t.season_id === season?.id;
+            return t.season_id === selectedSeason?.id;
+        });
+
+        const sameCompetitionTeam = athleteTeams.find((t) => {
+            return t.competition_id === selectedSeason?.competition_id;
         });
 
         if (athleteSeasonTeam) {
             return getTeamById(athleteSeasonTeam.team_id);
         }
 
+        if (sameCompetitionTeam) {
+            return getTeamById(sameCompetitionTeam.team_id);
+        }
+
         return undefined;
-    }, [getTeamById, season?.id])
+    }, [getTeamById, selectedSeason]);
 
     return {
         teams,
@@ -36,28 +46,30 @@ export function useSeasonTeams() {
         error,
         getTeamById,
         getAthleteSeasonTeam,
-        season
+        season: selectedSeason
     }
 }
 
 
 /** Hook that gets an athletes season team */
 export function usePlayerSeasonTeam(player?: IProAthlete) {
-    const { getAthleteSeasonTeam, season } = useSeasonTeams();
-    const seasonTeam = getAthleteSeasonTeam(player?.athlete_teams || []) || player?.team;
+
+    const { getAthleteSeasonTeam } = useSeasonTeams();
 
     const athleteTeams = useMemo(() => {
         return player?.athlete_teams || [];
     }, [player?.athlete_teams]);
 
-    const athleteSeasonTeam = useMemo(() => {
+    const seasonTeam = getAthleteSeasonTeam(player?.athlete_teams || []) || player?.team;
+
+    const athleteSeasonTeamRecord = useMemo(() => {
         return athleteTeams.find((t) => {
-            return t.season_id === season?.id;
+            return t.team_id === seasonTeam?.athstat_id
         });
-    }, [athleteTeams, season?.id]);
+    }, [athleteTeams, seasonTeam?.athstat_id]);
 
     return {
         seasonTeam: seasonTeam || player?.team,
-        playerImageUrl: athleteSeasonTeam?.player_image_url || player?.image_url
+        playerImageUrl: athleteSeasonTeamRecord?.player_image_url || player?.image_url
     }
 }

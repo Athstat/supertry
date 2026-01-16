@@ -1,6 +1,5 @@
 import { IProAthlete } from '../../../types/athletes';
 import TeamJersey from '../../player/TeamJersey';
-import PlayerMugshot from '../../player/PlayerMugshot';
 import SecondaryText from '../../ui/typography/SecondaryText';
 import RankNumberCard from '../../ui/cards/RankNumberCard';
 import { usePlayerSeasonTeam } from '../../../hooks/seasons/useSeasonTeams';
@@ -37,19 +36,11 @@ export function PlayerRankingCard({ rank, onClick, player, value, borderColor = 
         />
 
         <div className="flex flex-row items-center gap-2 flex-shrink-0">
-          {player.image_url && (
-            <PlayerMugshot
-              teamId={player.team?.athstat_id}
-              className="w-10 h-10 !border-0 bg-[#DDE5ED] dark:bg-gray-700"
-              url={player.image_url}
-            />
-          )}
-
-          {!player.image_url && (
+          {seasonTeam && (
             <div className="w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-full flex flex-col items-center justify-center">
               <TeamJersey
                 useBaseClasses={false}
-                teamId={player.team?.athstat_id}
+                teamId={seasonTeam.athstat_id}
                 className="h-8"
               />
             </div>

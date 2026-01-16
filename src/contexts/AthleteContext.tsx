@@ -8,6 +8,7 @@ import { getAthletesSummary } from "../utils/athleteUtils";
 import { useFantasySeasons } from "../hooks/dashboard/useFantasySeasons";
 import { IProSeason } from "../types/season";
 import { seasonService } from "../services/seasonsService";
+import { competitionService } from "../services/competitionsService";
 
 interface AthleteContextType {
   athletes: IProAthlete[];
@@ -57,7 +58,7 @@ export const AthleteProvider: React.FC<{ children: React.ReactNode }> = ({
 
 
   const refreshAthletes = async () => {
-    await mutate(() => djangoAthleteService.getAllAthletes());
+    await mutate(() => fetcher(selectedSeason));
   }
 
   const getAthleteById = (id: string) => {
@@ -96,6 +97,13 @@ export const useAthletes = () => {
 
 async function fetcher(season?: IProSeason) {
   if (season) {
+
+    const SIX_NATIONS_SEASON_ID = 'a51dc32a-99cb-5df8-bbc4-4c7557ccccc3';
+
+    if (season.id === SIX_NATIONS_SEASON_ID) {
+      return competitionService.getAthletes(season.competition_id);
+    }
+
     return await seasonService.getSeasonAthletes(season.id);
   }
 

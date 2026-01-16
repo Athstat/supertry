@@ -28,18 +28,23 @@ export function DashboardHeroLoadingSkeleton() {
 }
 
 type DashboardFrameProps = {
-  children?: ReactNode
+  children?: ReactNode,
+  imageUrl?: string,
+  hideBeastImage?: boolean
 }
 
 /** Renders the dashboard frame */
-export function DashboardHeroFrame({ children }: DashboardFrameProps) {
+export function DashboardHeroFrame({ children, imageUrl, hideBeastImage = false }: DashboardFrameProps) {
+
+  const finalImageUrl = imageUrl || '/images/dashboard/hero-background.jpg';
+
   return (
     <div className="relative w-full overflow-hidden shadow-md">
 
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: 'url(/images/dashboard/hero-background.jpg)',
+          backgroundImage: `url(${finalImageUrl})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
@@ -48,9 +53,9 @@ export function DashboardHeroFrame({ children }: DashboardFrameProps) {
       {/* Blue Gradient Overlay */}
       <div
         className="absolute inset-0 opacity-90"
-        style={{
+        style={!imageUrl ? {
           background: 'linear-gradient(47deg, #1196F5 0%, #011E5C 100%)',
-        }}
+        } : undefined}
       />
 
       {/* Content */}
@@ -58,19 +63,23 @@ export function DashboardHeroFrame({ children }: DashboardFrameProps) {
         {children}
       </div>
 
-      <div className='z-[20] max-h-32 overflow-clip sm:max-h-32  absolute bottom-0 left-0 px-0.5' >
+      {!hideBeastImage && <div className='z-[20] max-h-32 overflow-clip sm:max-h-32  absolute bottom-0 left-0 px-0.5' >
         <img
           src='/images/dashboard/beast_screeming.png'
           className='h-32 sm:h-32 object-contain'
         />
-      </div>
+      </div>}
 
     </div>
   )
 }
 
+type HeroProps = {
+  title?: string
+}
+
 /** Renders the DashboardBoardHero.Header */
-export function DashboardHeroHeader() {
+export function DashboardHeroHeader({title} : HeroProps) {
 
   const navigate = useNavigate();
   const { authUser } = useAuth();
@@ -90,10 +99,16 @@ export function DashboardHeroHeader() {
 
       {/* Title */}
       <h1
-        className="text-center font-normal text-md leading-6 text-white"
+        className="text-center font-normal text-lg leading-6 text-white"
         style={{ fontFamily: "'Race Sport', sans-serif" }}
       >
-        PLAY {selectedSeason?.name ? `${trimSeasonYear(selectedSeason.name)}` : 'URC'} FANTASY
+        {
+          title ? 
+          (<>{title}</>)
+          :
+          (<>PLAY {selectedSeason?.name ? `${trimSeasonYear(selectedSeason.name)}` : 'URC'} FANTASY</>)
+        }
+        
         <br />
         {/* {abbreviateSeasonName(season.name).toUpperCase()} CHALLENGE */}
       </h1>
@@ -102,10 +117,11 @@ export function DashboardHeroHeader() {
 }
 
 type ScoreProps = {
-  roundTeam?: IFantasyLeagueTeam
+  roundTeam?: IFantasyLeagueTeam,
+  children?: ReactNode
 }
 
-export function DashboardHeroScoreSection({ roundTeam }: ScoreProps) {
+export function DashboardHeroScoreSection({ roundTeam, children }: ScoreProps) {
 
   const { scoringRound } = useFantasyLeagueGroup();
 
@@ -116,6 +132,12 @@ export function DashboardHeroScoreSection({ roundTeam }: ScoreProps) {
     return (
       <Fragment>
       </Fragment>
+    )
+  }
+
+  if (children) {
+    return (
+      <>{children}</>
     )
   }
 
@@ -171,10 +193,10 @@ export function DashboardHeroScoreSection({ roundTeam }: ScoreProps) {
 
 type CTASectionProps = {
   roundTeam?: IFantasyLeagueTeam,
-
+  deadlineText?: string
 }
 
-export function DashboardHeroCTASection({ roundTeam }: CTASectionProps) {
+export function DashboardHeroCTASection({ roundTeam, deadlineText }: CTASectionProps) {
 
   const navigate = useNavigate();
   const [showHelpModal, setShowHelpModal] = useState(false);
@@ -224,10 +246,10 @@ export function DashboardHeroCTASection({ roundTeam }: CTASectionProps) {
       <Fragment>
         {nextDeadline && nextDeadlineRound && (
           <>
-            <div className="w-[80%] max-w-sm border-t border-white/50"></div>
-            <p className="text-sm text-white text-center">
-              Next Deadline: Round {(nextDeadlineRound?.start_round || 0)}<br />
-              <span className="font-bold">{formatCountdown(nextDeadline)}</span>
+            <div className="w-[80%] max-w-sm border border-white/50"></div>
+            <p className="text-sm text-white text-center font-bold">
+              {deadlineText ? deadlineText : <>Next Deadline: Round {(nextDeadlineRound?.start_round || 0)}</>}<br />
+              <span className="font-normal">{formatCountdown(nextDeadline)}</span>
             </p>
           </>
         )}
@@ -270,10 +292,10 @@ export function DashboardHeroCTASection({ roundTeam }: CTASectionProps) {
     <Fragment>
       {nextDeadline && nextDeadlineRound && (
         <>
-          <div className="w-[80%] max-w-sm border-t border-white/50"></div>
-          <p className="text-sm text-white text-center">
-            Next Deadline: Round {(nextDeadlineRound?.start_round || 0)}<br />
-            <span className="font-bold">{formatCountdown(nextDeadline)}</span>
+          <div className="w-[80%] max-w-sm border-t-2 border-white/50"></div>
+          <p className="text-sm text-white text-center font-bold">
+            {deadlineText ? deadlineText : <>Next Deadline: Round {(nextDeadlineRound?.start_round || 0)}</>}<br />
+            <span className="font-normal">{formatCountdown(nextDeadline)}</span>
           </p>
         </>
       )}

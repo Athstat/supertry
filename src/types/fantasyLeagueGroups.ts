@@ -19,6 +19,8 @@ export type FantasyLeagueGroup = {
   start_date?: Date;
   end_date?: Date;
   season: IProSeason;
+  banner?: string,
+  logo?: string
 };
 
 export type FantasyLeagueGroupMember = {
@@ -107,8 +109,8 @@ export type PlayerPointsHistoryItem = {
   total_score: number
 }
 
-/** Type that represents a fantasy season overall ranking */
-export type FantasySeasonOverallRanking = {
+/** Type that represents a fantasy season ranking item */
+export type FantasySeasonRankingItem = {
   user_id: string,
   first_name?: string,
   last_name?: string,
@@ -120,6 +122,8 @@ export type FantasySeasonOverallRanking = {
   updated_at?: Date
 }
 
-export type FantasySeasonWeeklyRanking = FantasySeasonOverallRanking & {
+export type FantasySeasonOverallRanking = FantasyPointsScoredRankingItem;
+
+export type FantasySeasonWeeklyRanking = FantasySeasonRankingItem & {
   round_number: number
 }

@@ -12,7 +12,7 @@ export default function RankNumberCard({ value, className }: Props) {
 
     return (
         <div className={twMerge(
-            "flex-shrink-0 w-8 h-8 bg-[#DDE5ED] dark:bg-gray-700 rounded-md flex flex-row items-center justify-center",
+            "flex-shrink-0 w-8 h-8 bg-[#DDE5ED] dark:bg-gray-700 rounded-full flex flex-row items-center justify-center",
             className
         )}>
             <p

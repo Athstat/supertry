@@ -50,9 +50,10 @@ export function usePlayerSquadReport(teamId: string | number, trackingId: string
 }
 
 /** Gets general Player Availability outside rosters */
-export function useGeneralPlayerAvailability(athleteId: string) {
-  const key = `/athlete/${athleteId}/general-availability`;
-  const { data: list, isLoading } = useSWR(key, () => djangoAthleteService.getAthleteAvailabilityReport(athleteId));
+export function useGeneralPlayerAvailability(athleteId: string, specific_team_id?: string) {
+
+  const key = `/athlete/${athleteId}/general-availability${specific_team_id ? `?specific_team_id=${specific_team_id}` : ''}`;
+  const { data: list, isLoading } = useSWR(key, () => djangoAthleteService.getAthleteAvailabilityReport(athleteId, specific_team_id));
 
   const firstReport = useMemo(() => {
     if (list && list?.length > 0) {

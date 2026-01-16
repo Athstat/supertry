@@ -5,8 +5,7 @@ import { fixtureAtom } from "../../../../state/fixtures/fixture.atoms";
 import { IRosterItem } from "../../../../types/games";
 import TeamJersey from "../../../player/TeamJersey";
 import { SmallMatchPrCard } from "../../../rankings/MatchPrCard";
-import PlayerMugshot from "../../../player/PlayerMugshot";
-import { Activity, useMemo } from "react";
+import { useMemo } from "react";
 import { twMerge } from "tailwind-merge";
 
 type RosterItemProps = {
@@ -17,9 +16,9 @@ type RosterItemProps = {
 /** Renders pitch view, roster starter item */
 export function RosterStarterItem({ item, className }: RosterItemProps) {
 
-    const {openPlayerMatchModal} = useFixtureScreen();
+    const { openPlayerMatchModal } = useFixtureScreen();
     const fixture = useAtomValue(fixtureAtom);
-    const {pr} = useAthleteMatchPr(item?.athlete.tracking_id, fixture?.game_id);
+    const { pr } = useAthleteMatchPr(item?.athlete.tracking_id, fixture?.game_id);
 
     const onClick = () => {
         if (item?.athlete) {
@@ -32,11 +31,11 @@ export function RosterStarterItem({ item, className }: RosterItemProps) {
             return '';
         }
 
-        const {athlete} = item;
+        const { athlete } = item;
 
         if (athlete) {
-            const {athstat_lastname} = athlete;
-            return athstat_lastname || ""; 
+            const { athstat_lastname } = athlete;
+            return athstat_lastname || "";
         }
     }, [item]);
 
@@ -51,36 +50,24 @@ export function RosterStarterItem({ item, className }: RosterItemProps) {
                 className
             )} >
 
-                <Activity mode={item.athlete.image_url ? "visible" : "hidden"} >
-                    <PlayerMugshot
-                        url={item.athlete.image_url}
-                        teamId={item.team_id}
-                        className="border-2 border-green-500 dark:border-green-500/40 bg-green-800 dark:bg-green-600 lg:w-16 lg:h-16 hover:bg-green-400"
-                        useBaseClassNameForJersey={false}
-                        jerseyClassName="border-2 border-green-500 dark:border-green-500/40 bg-green-800 dark:bg-green-600 lg:w-20 lg:h-20 hover:bg-green-400"
-                        
-                    />
-                </Activity>
 
-                <Activity mode={item.athlete.image_url ? "hidden" : "visible"} >
-                    <div className="max-w-16 bg-green-800 dark:bg-green-600 max-h-16 min-w-16 min-h-16 flex flex-col items-center rounded-full overflow-hidden border-2 border-green-200/40 dark:border-green-500/20 " >
-                        <TeamJersey
-                            teamId={item.athlete.team_id}
-                            className="mt-4 object-contain"
-                            width={50}
-                            height={50}
-                            useBaseClasses={false}
-                            hideFade
-                        />
-                    </div>
-                </Activity>
+                <div className="max-w-16 bg-green-800 dark:bg-green-600 max-h-16 min-w-16 min-h-16 flex flex-col items-center rounded-full overflow-hidden border-2 border-green-200/40 dark:border-green-500/20 " >
+                    <TeamJersey
+                        teamId={item.athlete.team_id}
+                        className="mt-4 object-contain"
+                        width={50}
+                        height={50}
+                        useBaseClasses={false}
+                        hideFade
+                    />
+                </div>
 
                 <p className="text-[10px] text-white font-medium max-w-[100px] truncate" >{item.player_number}. {playerFullName}</p>
 
                 {pr && (
                     <div className="absolute top-0 -right-2" >
-                        <SmallMatchPrCard 
-                        pr={pr.updated_power_ranking}
+                        <SmallMatchPrCard
+                            pr={pr.updated_power_ranking}
                         />
                     </div>
                 )}

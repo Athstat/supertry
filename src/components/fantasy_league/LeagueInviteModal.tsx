@@ -1,16 +1,13 @@
-import { X, Share2, CopyIcon, Trophy } from "lucide-react";
+import { X, Share2, CopyIcon } from "lucide-react";
 import CircleButton from "../ui/buttons/BackButton";
 import BottomSheetView from "../ui/modals/BottomSheetView";
 import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
 import { InfoCard } from "../ui/cards/StatCard";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import SecondaryText from "../ui/typography/SecondaryText";
-
-import { useShareLeague } from "../../hooks/leagues/useShareLeague";
-import { QRCodeCanvas } from 'qrcode.react';
-import { useCanvas } from "../../hooks/web/useCanvas";
 import { Toast } from "../ui/Toast";
 import { useState } from "react";
+import { useShareLeague } from "../../hooks/leagues/useShareLeague";
 
 
 type Props = {
@@ -25,8 +22,8 @@ export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [successMessage, setSuccessMessage] = useState<string>();
 
-  const { inviteLink, handleShare: handleShareJoinLink } = useShareLeague(league);
-  const { ref: qrRef, copyAsImage } = useCanvas(setErrorMessage, setSuccessMessage);
+  const { handleShare: handleShareJoinLink } = useShareLeague(league);
+  // const { ref: qrRef, copyAsImage } = useCanvas(setErrorMessage, setSuccessMessage);
 
   const clearMessages = () => {
     setSuccessMessage(undefined);
@@ -59,30 +56,33 @@ export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
         </CircleButton>
       </div>
 
-      <section className="flex mt-6 border-b border-slate-200 dark:border-slate-600 pb-6 flex-col gap-4 items-center justify-center" >
+      {/* <section className="flex mt-6 border-slate-200 dark:border-slate-600 pb-6 flex-col gap-4 items-center justify-center" >
 
         <div className="flex flex-row cursor-pointer hover:px-4 transition-all ease-in items-center gap-2 bg-blue-600 dark:bg-blue-600 text-white dark:text-white px-3 py-1 rounded-full" >
-          <Trophy  className="w-4 h-4" />
+          <Trophy className="w-4 h-4" />
           <p className="font-semibold" >{league?.title}</p>
         </div>
-        <SecondaryText className="max-w-[60%] text-center" >Copy this QR-code and share it with your friends to join the league</SecondaryText>
 
-        <QRCodeCanvas
-          ref={qrRef}
-          value={inviteLink || ''}
-          title={`You have been invited to join ${league?.title}`}
-          level='L'
-          bgColor="black"
-          fgColor="white"
-          className="rounded-xl"
-          size={190}
-        />
+        <div className="flex flex-col items-center justify-center gap-4" >
+          <SecondaryText className="max-w-[60%] text-center" >Copy this QR-code and share it with your friends to join the league</SecondaryText>
 
-        <PrimaryButton onClick={copyAsImage} className="w-fit" >
-          Copy QR-code
-        </PrimaryButton>
+          <QRCodeCanvas
+            ref={qrRef}
+            value={inviteLink || ''}
+            title={`You have been invited to join ${league?.title}`}
+            level='L'
+            bgColor="black"
+            fgColor="white"
+            className="rounded-xl"
+            size={190}
+          />
 
-      </section>
+          <PrimaryButton onClick={copyAsImage} className="w-fit" >
+            Copy QR-code
+          </PrimaryButton>
+        </div>
+
+      </section> */}
 
 
       <section className="flex flex-col gap-2 border-b border-slate-200 dark:border-slate-600 py-6">

@@ -49,7 +49,8 @@ const currentTheme: AppTheme = getAppTheme();
 export const AppColours = {
   BLUE_BACKGROUND: 'bg-[#1196F5] dark:bg-[#1196F5]',
   BACKGROUND: currentTheme.backgroundCN,
-  CARD_BACKGROUND: currentTheme.cardBackgroundCN
+  CARD_BACKGROUND: currentTheme.cardBackgroundCN,
+  BACKGROUND_GRADIENT: currentTheme.backgroundGradient
 }
 
 

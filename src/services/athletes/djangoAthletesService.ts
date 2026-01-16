@@ -199,10 +199,11 @@ export const djangoAthleteService = {
   },
 
   /** Gets a list of availability reports for season rounds that a player is eligible for */
-  getAthleteAvailabilityReport: async (athleteId: string): Promise<AthleteRoundAvailabilityReport[]> => {
+  getAthleteAvailabilityReport: async (athleteId: string, specific_team_id?: string): Promise<AthleteRoundAvailabilityReport[]> => {
 
     try {
-      const uri = getUri(`/api/v1/athletes/${athleteId}/availability`);
+      const params = specific_team_id ? `?specific_team_id=${specific_team_id}` : ''
+      const uri = getUri(`/api/v1/athletes/${athleteId}/availability${params}`);
       const res = await fetch(uri, {
         headers: getAuthHeader()
       });
@@ -218,10 +219,11 @@ export const djangoAthleteService = {
 
   },
 
-  getRoundAvailabilityReport: async (athleteId: string, seasonId: string, roundNumber: number): Promise<AthleteRoundAvailabilityReport | undefined> => {
+  getRoundAvailabilityReport: async (athleteId: string, seasonId: string, roundNumber: number, specific_team_id?: string): Promise<AthleteRoundAvailabilityReport | undefined> => {
 
     try {
-      const uri = getUri(`/api/v1/athletes/${athleteId}/availability/by-season/${seasonId}/${roundNumber}`);
+      const params = specific_team_id ? `?specific_team_id=${specific_team_id}` : ''
+      const uri = getUri(`/api/v1/athletes/${athleteId}/availability/by-season/${seasonId}/${roundNumber}${params}`);
       const res = await fetch(uri, {
         headers: getAuthHeader()
       });

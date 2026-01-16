@@ -7,13 +7,17 @@ import React from 'react'
 import { Link } from "react-router-dom";
 import SecondaryText from "../ui/typography/SecondaryText";
 import RoundedCard from "../ui/cards/RoundedCard";
+import NoContentCard from "../ui/typography/NoContentMessage";
 
 type Props = {
-    leagues: FantasyLeagueGroup[]
+    leagues: FantasyLeagueGroup[],
+    emptyMessage?: string
 }
 
 /** Renders a table of Fantasy League Groups */
-export default function LeagueGroupsTable({ leagues }: Props) {
+export default function LeagueGroupsTable({ leagues, emptyMessage }: Props) {
+
+    const noLeagues = leagues.length === 0;
 
     const getLeagueLink = (league: FantasyLeagueGroup) => {
         return `/league/${league.id}/standings`;
@@ -36,6 +40,12 @@ export default function LeagueGroupsTable({ leagues }: Props) {
                     </Link>
                 )
             })}
+
+            {noLeagues && (
+                <NoContentCard 
+                    message={emptyMessage || 'No leagues were found'}
+                />
+            )}
         </div>
     )
 }
@@ -73,11 +83,13 @@ function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
     return (
         <RoundedCard
             onClick={handleOnClick}
-            className="py-2 cursor-pointer px-4 bg-slate-100 border-none flex flex-row items-center justify-between"
+            className="py-2 cursor-pointer rounded-md px-4 bg-slate-100 border-none flex flex-row items-center justify-between"
         >
 
 
+
             <div className="flex flex-row items-center gap-2" >
+                {/* <LeagueGroupLogo className="w-6 h-6" league={leagueGroup} /> */}
                 <h3 className="text-sm font-medium text-gray-900 dark:text-white truncate">
                     {leagueGroup.title}
                 </h3>

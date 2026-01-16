@@ -1,37 +1,68 @@
-import { User } from 'lucide-react';
-import { twMerge } from 'tailwind-merge';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
 import {
-  FantasyLeagueGroupMember,
-  FantasySeasonOverallRanking,
+  FantasySeasonRankingItem,
 } from '../../../types/fantasyLeagueGroups';
 import SecondaryText from '../../ui/typography/SecondaryText';
-import { useMemo } from 'react';
-import { useLeagueRoundStandingsFilter } from '../../../hooks/fantasy/useLeagueRoundStandingsFilter';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
-import { smartRoundUp } from '../../../utils/intUtils';
 import RoundedCard from '../../ui/cards/RoundedCard';
+import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
+import { useOfficialLeagueGroup } from '../../../hooks/fantasy/scouting/seasons/useOfficialLeagueGroup';
+import { useLeagueGroupStandings } from '../../../hooks/fantasy/standings/useLeagueGroupOverallStandings';
+import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
+import { useNavigate } from 'react-router-dom';
+import { ErrorState } from '../../ui/ErrorState';
+import { LeagueStandingsTableRow } from './LeagueStandingsTableRow';
+import StickyUserRankingCard from './StickyUserRankingCard';
+import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
 
 type Props = {
-  isLoading?: boolean;
-  standings: FantasySeasonOverallRanking[];
-  handleSelectMember: (m: FantasyLeagueGroupMember) => void;
+  round?: IFantasyLeagueRound
   hideUserScore?: boolean;
 };
 
-/** Renders a league standings table component */
+/** Renders a league standings table component for a given round */
 export default function LeagueStandingsTable({
-  isLoading,
-  standings,
-  handleSelectMember,
   hideUserScore,
+  round: selectedRound
 }: Props) {
 
-  const {authUser} = useAuth();
-  const { selectedRound } = useLeagueRoundStandingsFilter();
+  const userRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
-  const { members } = useFantasyLeagueGroup();
-  
+  const { authUser } = useAuth();
+  const { members, league, currentRound } = useFantasyLeagueGroup();
+
+  const { standings, isLoading: loadingStandings, error } = useLeagueGroupStandings(league?.id, {
+    round_number: selectedRound?.start_round || undefined
+  });
+
+  const { featuredLeague, isLoading: loadingOfficialLeague } = useOfficialLeagueGroup(league?.season_id)
+
+  useEffect(() => {
+    fantasyAnalytics.trackViewedStandingsTab();
+  }, []);
+
+  const handleSelectMember = useCallback((member: FantasySeasonRankingItem) => {
+
+    fantasyAnalytics.trackClickedRowOnLeagueStandings();
+
+    const roundFilterId = selectedRound?.id || 'overall';
+    const roundNumber = roundFilterId === "overall" ? currentRound?.start_round : selectedRound?.start_round;
+    const queryParams = roundNumber ? `?round_number=${roundNumber}` : "";
+
+    if (featuredLeague) {
+      if (member.user_id === authUser?.kc_id) {
+        navigate(`/league/${featuredLeague.id}${queryParams}`);
+        return;
+      }
+
+      navigate(`/league/${featuredLeague.id}/member/${member.user_id}${queryParams}`);
+    }
+
+  }, [authUser, currentRound, featuredLeague, navigate, selectedRound])
+
+
   const exclude_ids = standings.map((s) => {
     return s.user_id;
   })
@@ -40,9 +71,10 @@ export default function LeagueStandingsTable({
     return !exclude_ids.includes(m.user_id);
   })
 
-  const completeStandings: (FantasySeasonOverallRanking)[] = useMemo(() => {
+  const completeStandings: (FantasySeasonRankingItem)[] = useMemo(() => {
     const base = [...standings];
-    const membersWhoDidntScorePoints = leftOutMembers.map<(FantasySeasonOverallRanking)>((m) => {
+    const lastRanking = standings.length;
+    const membersWhoDidntScorePoints = leftOutMembers.map<(FantasySeasonRankingItem)>((m, index) => {
       return {
         user_id: m.user_id,
         first_name: m.user.first_name,
@@ -50,14 +82,39 @@ export default function LeagueStandingsTable({
         username: m.user.username,
         total_score: 0,
         rank: undefined,
-        league_rank: undefined,
+        league_rank: lastRanking + index + 1,
         created_at: new Date(),
         updated_at: new Date()
       }
     });
 
     return [...base, ...membersWhoDidntScorePoints];
-  }, [leftOutMembers, standings])
+  }, [leftOutMembers, standings]);
+
+  const userRanking = completeStandings.find((r) => {
+    return r.user_id === authUser?.kc_id;
+  })
+
+  const isLoading = loadingOfficialLeague || loadingStandings;
+
+  const handleScrollToUser = () => {
+    if (userRef.current) {
+      userRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  const isRoundLocked = selectedRound && isLeagueRoundLocked(selectedRound);
+
+  if (error) {
+    return (
+      <div>
+        <ErrorState
+          error="Whoops, Failed to load league standings"
+          message="Something wen't wrong please try again"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="overflow-y-auto rounded-xl bg-slate-100 dark:bg-slate-800/40">
@@ -93,92 +150,36 @@ export default function LeagueStandingsTable({
         </div>
       )}
 
+      <StickyUserRankingCard
+        userRanking={userRanking}
+        onClick={handleScrollToUser}
+      />
+
       {!isLoading && <div className="divide-y dark:divide-slate-700/20 divide-slate-300/40">
         {completeStandings.map((ranking, index) => {
+
+          const isUser = authUser?.kc_id === ranking.user_id
+
           return (
             <div
+              ref={isUser ? userRef : undefined}
               key={ranking.user_id}
             >
-              <LeagueStandingsRow
+              <LeagueStandingsTableRow
                 ranking={ranking}
-                key={ranking.user_id}
                 index={index}
-                isUser={authUser?.kc_id === ranking.user_id}
+                isUser={isUser}
                 hideUserScore={hideUserScore}
                 onClick={handleSelectMember}
+                showBadges={isRoundLocked}
               />
             </div>
           );
+
         })}
       </div>}
-    </div>
-  );
-}
 
-type StandingsProps = {
-  ranking: FantasySeasonOverallRanking;
-  index: number;
-  isUser?: boolean;
-  hideUserScore?: boolean;
-  onClick?: (member: FantasyLeagueGroupMember) => void
-};
 
-function LeagueStandingsRow({ ranking, isUser, hideUserScore, index, onClick }: StandingsProps) {
-  const { members } = useFantasyLeagueGroup();
-  const memberRecord = members.find(m => m.user_id === ranking.user_id);
-
-  const rank = ranking.league_rank ?? index + 1;
-
-  const shouldHideScore = (isUser && hideUserScore) || !ranking.total_score 
-
-  const pointsDisplay =  shouldHideScore ? '-' :  smartRoundUp(ranking.total_score);
-
-  const handleClick = () => {
-    if (onClick && memberRecord) {
-      onClick(memberRecord);
-    }
-  }
-
-  return (
-    <div
-      className={twMerge(
-        'flex flex-row  cursor-pointer hover:bg-slate-200 hover:dark:bg-slate-800/60  p-3 items-center gap-2 justify-between',
-        isUser && 'bg-blue-500 text-white'
-      )}
-
-      onClick={handleClick}
-    >
-      <div className="flex flex-row items-center gap-2">
-        <div className="flex flex-row">
-          {/* {badge && <div className='text-sm' >{badge}</div>} */}
-          <SecondaryText className={twMerge(
-            "w-10",
-            isUser && "text-white dark:text-white"
-          )}>
-            {/* {rank} {badge}{' '} */}
-            {rank}
-          </SecondaryText>
-        </div>
-
-        {isUser && (
-          <div className=" w-6 h-6 bg-blue-500 rounded-xl flex flex-col items-center justify-center">
-            <User className="w-4 h-4 text-white" />
-          </div>
-        )}
-
-        <div className="flex flex-col">
-          <p>{memberRecord?.user.username ?? ranking.username ?? ranking.first_name}</p>
-          {isUser && hideUserScore && (
-            <p className={twMerge('text-xs', isUser ? 'text-white/80' : 'text-gray-500')}>
-              Claim account to see your points
-            </p>
-          )}
-        </div>
-      </div>
-
-      <div className="text-right">
-        <p>{pointsDisplay}</p>
-      </div>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { Trophy } from "lucide-react"
+import { Plus, Trophy } from "lucide-react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import SuggestedLeaguesSections from "./SuggestedLeaguesSection"
@@ -7,10 +7,10 @@ import { IFantasySeason } from "../../../types/fantasy/fantasySeason"
 import { FantasyLeagueGroup } from "../../../types/fantasyLeagueGroups"
 import PrimaryButton from "../../ui/buttons/PrimaryButton"
 import NoContentCard from "../../ui/typography/NoContentMessage"
-import SecondaryText from "../../ui/typography/SecondaryText"
 import CreateLeagueModal from "../create_league_modal/CreateLeagueModal"
-import LeagueGroupsTable from "../LeagueGroupsTable"
 import RoundedCard from "../../ui/cards/RoundedCard"
+import { useAuth } from "../../../contexts/AuthContext"
+import LeagueGroupsSection from "../LeagueGroupsSection"
 
 type Props = {
     fantasySeason: IFantasySeason
@@ -21,19 +21,30 @@ type Props = {
 export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
 
     const navigate = useNavigate();
+
+    const { authUser } = useAuth();
     const { leagues, isLoading } = useJoinedLeagues(fantasySeason.id);
 
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [initTab, setInitTab] = useState<"join" | "create">("create");
     const toggle = () => setShowCreateModal(prev => !prev);
 
+    const officialLeagues = leagues.filter((l) => {
+        return l.type === 'official_league';
+    });
+
+    const myLeagues = leagues.filter((l) => {
+        return l.creator_id === authUser?.kc_id;
+    })
+
+    const joinedLeagues = leagues.filter((l) => {
+        const notOfficial = l.type !== 'official_league';
+        const notMine = l.creator_id !== authUser?.kc_id;
+        return notMine && notOfficial;
+    })
+
     const openCreateModal = () => {
         setInitTab("create");
-        toggle();
-    }
-
-    const openJoinModal = () => {
-        setInitTab("join");
         toggle();
     }
 
@@ -43,45 +54,77 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
 
     if (isLoading) {
         return (
-            <RoundedCard
-                className="w-full border-none h-[280px] animate-pulse"
-            />
+            <div>
+                <div className='flex flex-col gap-4 px-4' >
+                    <RoundedCard className='w-[200px] h-[35px] border-none rounded-xl animate-pulse' />
+                    <RoundedCard className='w-full h-[45px] border-none rounded-xl animate-pulse' />
+                </div>
+
+                <div className='flex flex-col gap-3' >
+                    <RoundedCard className='w-full h-[150px] mt-5 border-none rounded-none animate-pulse' />
+                    <RoundedCard className='w-full h-[150px] border-none rounded-none animate-pulse' />
+                    <RoundedCard className='w-full h-[150px] border-none rounded-none animate-pulse' />
+                    <RoundedCard className='w-full h-[150px] border-none rounded-none animate-pulse' />
+                </div>
+            </div>
         )
     }
 
     return (
         <div className="flex flex-col gap-4 dark:border-none" >
-            <div className="flex flex-row items-center justify-between" >
+
+            <div className="flex flex-row items-center justify-between px-4" >
 
                 <div className="flex flex-row items-center gap-2" >
                     <Trophy className="w-4 h-4" />
-                    <p className="text-lg font-bold" >My Leagues & Standings</p>
+                    <p className="text-lg font-bold" >Leagues & Standings</p>
                     {/* <GamePlayHelpButton className="" iconHw="w-4 h-4" /> */}
                 </div>
             </div>
 
-            <div className="flex flex-row items-center justify-between gap-2" >
+            <div className="flex flex-row items-center justify-between gap-2 px-4" >
                 <PrimaryButton onClick={openCreateModal} className="flex-1" >
-                    <p>Create League</p>
-                </PrimaryButton>
-
-                <PrimaryButton onClick={openJoinModal} className="flex-1" >
-                    <p>Join League</p>
+                    <Plus className="w-4 h-4" />
+                    <p>Join or Create League</p>
                 </PrimaryButton>
             </div>
 
 
-            <div>
+            {/* <div>
                 <SecondaryText>Click on a league to view it's standings</SecondaryText>
+            </div> */}
+
+            <div className="flex flex-col gap-4 mt-4" >
+
+                <LeagueGroupsSection
+                    title="Official Leagues"
+                    description="Leagues created by SCRUMMY"
+                    emptyMessage="No Official leagues were found"
+                    leagues={officialLeagues}
+                    isVerified
+                />
+
+                <LeagueGroupsSection
+                    title="My Leagues"
+                    description="Leagues created by you"
+                    emptyMessage="You have not created any leagues yet"
+                    leagues={myLeagues}
+                />
+
+                <LeagueGroupsSection
+                    title="Joined Leagues"
+                    description="Other leagues you are apart of, created by others"
+                    emptyMessage="You have not joined any leagues yet"
+                    leagues={joinedLeagues}
+                />
+
+                <SuggestedLeaguesSections
+                    fantasySeason={fantasySeason}
+                />
+
             </div>
 
-            <LeagueGroupsTable 
-                leagues={leagues}
-            />
 
-            <SuggestedLeaguesSections
-                fantasySeason={fantasySeason}
-            />
 
             {leagues.length === 0 && (
                 <NoContentCard

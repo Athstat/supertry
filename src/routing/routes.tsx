@@ -16,7 +16,7 @@ import InviteFriendsScreen from "../screens/auth/InviteFriendsScreen";
 import { UserProfileScreen } from "../screens/auth/UserProfileScreen";
 import VerifyEmailScreen from "../screens/auth/VerifyEmailScreen";
 import LeagueMemberTeamScreen from "../screens/fantasy_leagues/LeagueMemberTeamScreen";
-import LeagueStandingsScreen from "../screens/fantasy_leagues/LeagueStandingsScreen";
+import FantasyLeagueScreen from "../screens/fantasy_leagues/FantasyLeagueScreen";
 import CompetitionsScreen from "../screens/fantasy_seasons/CompetitionsScreen";
 import SeasonScreen from "../screens/fantasy_seasons/SeasonScreen";
 import FixtureDetailScreen from "../screens/fixtures/FixtureDetailScreen";
@@ -128,7 +128,7 @@ export const dataRouter = createBrowserRouter([
                 element: (
                     <ProtectedRoute>
                         <MainAppLayout>
-                            <LeagueStandingsScreen />
+                            <FantasyLeagueScreen />
                         </MainAppLayout>
                     </ProtectedRoute>
                 )

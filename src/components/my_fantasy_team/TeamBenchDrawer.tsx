@@ -13,6 +13,7 @@ import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
 import { sanitizeStat } from "../../utils/stringUtils";
 import PlayerMugshot from "../player/PlayerMugshot";
 import SecondaryText from "../ui/typography/SecondaryText";
+import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams";
 
 
 type Props = {
@@ -100,12 +101,14 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
 
   const { position_class } = player;
   const { league } = useFantasyLeagueGroup();
-  const isLocked = isLeagueRoundLocked(round);
+
+  const {seasonTeam} = usePlayerSeasonTeam(player.athlete);
 
   const { isNotAvailable, isTeamNotPlaying } = usePlayerRoundAvailability(
     player.tracking_id,
     league?.season_id ?? "",
     round?.start_round ?? 0,
+    seasonTeam?.athstat_id
   );
 
   const showAvailabilityWarning = (isNotAvailable || isTeamNotPlaying);
@@ -123,7 +126,7 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
 
         <div className="flex fle-row items-center gap-2" >
 
-          {showAvailabilityWarning && (
+          {/* {showAvailabilityWarning && (
             <div className="" >
               <div className={twMerge(
                 " dark:bg-yellow-400 bg-yellow-400 hover:bg-yellow-400  border-yellow-500 dark:border-yellow-500 w-6 h-6 rounded-md flex flex-col items-center justify-center",
@@ -133,7 +136,7 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
                 )} />
               </div>
             </div>
-          )}
+          )} */}
 
           {<PlayerMugshot
             url={player.image_url}
@@ -147,9 +150,9 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
 
           <div className="flex flex-row items-center gap-1" >
             <SecondaryText className="text-xs" >{position_class ? formatPosition(position_class) : 'Substitute'}</SecondaryText>
-            {showAvailabilityWarning && !isLocked && (
+            {/* {showAvailabilityWarning && !isLocked && (
               <p className="text-[10px] text-yellow-500" >- Not Playing ⚠️</p>
-            )}
+            )} */}
           </div>
 
         </div>
@@ -201,10 +204,12 @@ function SubPlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
     const isLoading = loadingScore;
 
+    const {seasonTeam} = usePlayerSeasonTeam(player.athlete)
     const { isNotAvailable, isTeamNotPlaying, nextMatch } = usePlayerRoundAvailability(
         player.tracking_id,
         league?.season_id ?? "",
         round?.start_round ?? 0,
+        seasonTeam?.athstat_id
     );
 
     const [homeOrAway, opponent] = useMemo(() => {

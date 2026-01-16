@@ -2,7 +2,7 @@ import { ChevronRight } from "lucide-react";
 import { FixtureListViewMode, IFixture } from "../../../types/games";
 import NoContentCard from "../../ui/typography/NoContentMessage";
 import GroupedFixturesList from "../GroupedFixturesList";
-import { TabSwitchOption } from "../../ui/buttons/TabSwitchOption";
+import { TabSwitchContainer, TabSwitchOption } from "../../ui/buttons/TabSwitchOption";
 import { Activity, useCallback, useState } from "react";
 import ProPickemLeaderboard from "../../pickem/ProPickemLeaderboard";
 
@@ -26,7 +26,7 @@ export default function FixturesProPickemView({ displayFixtures, hasAnyFixtures,
     onMoveNextWeek();
   };
 
-  const handleChaneLocalView = useCallback((val?: string) => {
+  const handleChangeLocalView = useCallback((val?: string) => {
     if (val) {
       setLocalView(val as LocalViewMode);
     }
@@ -50,12 +50,12 @@ export default function FixturesProPickemView({ displayFixtures, hasAnyFixtures,
         </div>
       )}
 
-      <div className="bg-slate-200 border dark:border-slate-700/50 dark:bg-slate-800 overflow-clip p-1 w-full h-[45px] rounded-xl flex flex-row items-center justify-between" >
+      <TabSwitchContainer >
         <TabSwitchOption
           label="Predict"
           value="predict"
           current={localView}
-          onSelect={handleChaneLocalView}
+          onSelect={handleChangeLocalView}
           className="text-sm font-semibold"
         />
 
@@ -63,10 +63,10 @@ export default function FixturesProPickemView({ displayFixtures, hasAnyFixtures,
           label="Leaderboard"
           value="leaderboard"
           current={localView}
-          onSelect={handleChaneLocalView}
+          onSelect={handleChangeLocalView}
           className="text-sm font-semibold"
         />
-      </div>
+      </TabSwitchContainer>
 
       <Activity mode={localView === "predict" ? "visible" : "hidden"} >
         <GroupedFixturesList
