@@ -23,7 +23,7 @@ export function FantasyLeagueStandingsTab() {
   const { selectedRound, currentOption, setRoundFilterId } = useLeagueRoundStandingsFilter();
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 pb-32">
 
       {userMemberRecord && <div className='px-4' >
         <ClaimAccountNoticeCard reasonNum={2} />
