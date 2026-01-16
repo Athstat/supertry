@@ -46,6 +46,8 @@ export default function AutoJoinLeagueModal() {
         })
     }, [qs.JOIN_CODE, qs.LEAGUE_ID, qs.USER_ID, setSearchParams])
 
+    const isLoading = loadingUser;
+
     if (!isOpen) {
         return null;
     }
@@ -53,7 +55,7 @@ export default function AutoJoinLeagueModal() {
     return (
         <BottomSheetView
             hideHandle
-            className="p-4 max-h-[80vh]"
+            className="p-4 max-h-[80vh] min-h-[32vh]"
             onClickOutside={handleClose}
         >
             <FantasyLeagueGroupDataProvider
@@ -61,13 +63,17 @@ export default function AutoJoinLeagueModal() {
                 loadingFallback={<LoadingIndicator />}
             >
 
-                {!loadingUser && <Content
+                {!isLoading && <Content
                     joinCode={joinCode || undefined}
                     inviter={inviter}
                     onClose={handleClose}
                 />}
 
-                {loadingUser && <LoadingIndicator />}
+                {isLoading && (
+                    <div className="flex flex-col items-center justify-center h-[30vh]" >
+                        <LoadingIndicator className="min-h-[40px] pt-0" />
+                    </div>
+                )}
             </FantasyLeagueGroupDataProvider>
         </BottomSheetView>
     )
