@@ -1,6 +1,6 @@
 import { ChevronDown } from 'lucide-react';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
-import { abbreviateSeasonName } from '../../utils/stringUtils';
+import { abbreviateSeasonName, trimSeasonYear } from '../../utils/stringUtils';
 import RoundedCard from '../ui/cards/RoundedCard';
 
 
@@ -30,7 +30,7 @@ export default function CompetitionSelector() {
         className='rounded-md cursor-pointer px-2 py-1 flex flex-row items-center gap-1 justify-between'
         onClick={toggleShowOptions}
       >
-        <p>{abbreviateSeasonName(selectedSeason?.name || '')}</p>
+        <p>{trimSeasonYear(abbreviateSeasonName(selectedSeason?.name || ''))}</p>
         <div>
           <ChevronDown className='w-5 h-5' />
         </div>

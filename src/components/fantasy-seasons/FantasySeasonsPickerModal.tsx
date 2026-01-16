@@ -7,7 +7,7 @@ import RoundedCard from "../ui/cards/RoundedCard";
 import { twMerge } from "tailwind-merge";
 
 /** Renders a fantasy seasons drawer */
-export function FantasySeasonsDrawer() {
+export function FantasySeasonsPickerModal() {
 
     const { selectedSeason, fantasySeasons, setSelectedSeason, showDrawer, setShowDrawer } = useFantasySeasons();
 
@@ -74,7 +74,7 @@ function OptionItem({ onClick, isSelected, season }: OptionProp) {
                 isSelected && "bg-blue-500 dark:bg-blue-500 hover:bg-blue-600 dark:hover:bg-blue-600 text-white dark:text-white"
             )}
         >
-            <p>{season.name}</p>
+            <p>{season?.competition_name || season.name}</p>
         </RoundedCard>
     )
 }
