@@ -17,7 +17,7 @@ export default function FantasySeasonOptionsList() {
     const { fantasySeasons } = useFantasyLeaguesScreen();
 
     return (
-        <div className="flex flex-col gap-2" >
+        <div className="flex flex-col gap-2 px-4" >
             <div>
                 <h1 className="font-bold text-lg" >Competitons</h1>
             </div>

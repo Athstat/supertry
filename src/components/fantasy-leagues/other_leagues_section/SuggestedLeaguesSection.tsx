@@ -26,8 +26,12 @@ export default function SuggestedLeaguesSections({ fantasySeason }: Props) {
         )
     }
 
+    if (leagues.length === 0) {
+        return;
+    }
+
     return (
-        <div className='flex flex-col gap-2' >
+        <div className='flex flex-col gap-2 px-4' >
             <div className="flex flex-col" >
                 <p className="font-semibold" >Discover More Leagues</p>
                 <SecondaryText>Public Leagues that you can join</SecondaryText>

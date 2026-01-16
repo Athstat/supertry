@@ -12,7 +12,7 @@ type Props = {
 /** Serves a dashboard for a fantasy season */
 export function FantasySeasonDashboard({ fantasySeason }: Props) {
 
-  const {featuredLeague: featuredGroup, isLoading} = useFeaturedLeague();
+  const { featuredLeague: featuredGroup, isLoading } = useFeaturedLeague();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -27,9 +27,13 @@ export function FantasySeasonDashboard({ fantasySeason }: Props) {
   return (
     <div className="flex flex-col gap-8">
 
-      {featuredGroup && <ManageTeamCTA
-        leagueGroup={featuredGroup}
-      />}
+      {featuredGroup && (
+        <div className='px-4' >
+          <ManageTeamCTA
+            leagueGroup={featuredGroup}
+          />
+        </div>
+      )}
 
       <LeagueAndStandingsSection
         fantasySeason={fantasySeason}
