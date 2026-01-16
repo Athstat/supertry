@@ -128,8 +128,8 @@ function SliderIndicator({ length, currentIndex, onClick }: SliderIndicatorProps
                         onClick={handleClick}
 
                         className={twMerge(
-                            'bg-white/40 cursor-pointer w-2 h-2 rounded-full',
-                            currentIndex === index && 'bg-[#011E5C]'
+                            'bg-[#011E5C] opacity-30 cursor-pointer w-2 h-2 rounded-full',
+                            currentIndex === index && 'bg-[#011E5C] opacity-100'
                         )}
                     >
 
