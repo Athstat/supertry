@@ -23,12 +23,12 @@ export function EditLeagueBannerModal({ isOpen, onClose }: EditLeagueBannerProps
 
     const {league, mutateLeague} = useFantasyLeagueGroup();
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         if (onClose) {
             setFiles([]);
             onClose();
         }
-    }
+    }, [onClose])
 
     const handleUpload = useCallback(async () => {
         try {
@@ -57,7 +57,7 @@ export function EditLeagueBannerModal({ isOpen, onClose }: EditLeagueBannerProps
             setUploading(false);
         }
 
-    }, [league, files, handleClose]);
+    }, [files, league, mutateLeague, handleClose]);
 
     if (!isOpen) {
         return null;
