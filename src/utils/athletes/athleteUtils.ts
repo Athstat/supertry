@@ -1,13 +1,13 @@
 // import { PointsBreakdownItem } from "../services/athletes/athleteService";
-import { IProAthlete, IAthleteSeasonStarRatings } from '../types/athletes';
-import { IFantasyTeamAthlete } from '../types/fantasyTeamAthlete';
-import { SortField, SortDirection } from '../types/playerSorting';
-import { PlayerForm } from '../types/rugbyPlayer';
-import { IProTeam } from '../types/team';
-import { IComparePlayerStats, ICompareStarRatingsStats } from '../types/comparePlayers';
-import { getPlayerAggregatedStat, PlayerAggregateStatAction } from '../types/sports_actions';
-import { FantasyLeagueTeamWithAthletes, IFantasyLeagueTeam } from '../types/fantasyLeague';
-import { positionsTooltipMap } from '../types/constants';
+import { IProAthlete, IAthleteSeasonStarRatings } from '../../types/athletes';
+import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
+import { SortField, SortDirection } from '../../types/playerSorting';
+import { PlayerForm } from '../../types/rugbyPlayer';
+import { IProTeam } from '../../types/team';
+import { IComparePlayerStats, ICompareStarRatingsStats } from '../../types/comparePlayers';
+import { getPlayerAggregatedStat, PlayerAggregateStatAction } from '../../types/sports_actions';
+import { FantasyLeagueTeamWithAthletes, IFantasyLeagueTeam } from '../../types/fantasyLeague';
+import { positionsTooltipMap } from '../../types/constants';
 
 /** Formats a position by removing any `-` and capitalising the first letter in each word */
 export const formatPosition = (inStr?: string) => {

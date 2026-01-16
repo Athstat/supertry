@@ -2,7 +2,7 @@ import { Search } from 'lucide-react';
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
 import { usePlayerPicker } from '../../hooks/playerPicker/usePlayerPicker';
-import { formatPosition } from '../../utils/athleteUtils';
+import { formatPosition } from '../../utils/athletes/athleteUtils';
 
 interface SearchBarProps {
   searchQuery?: string;

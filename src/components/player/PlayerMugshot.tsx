@@ -2,7 +2,7 @@ import { ReactNode, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { CardTier } from '../../types/cardTiers';
 import ScrummyLogo from '../branding/scrummy_logo';
-import { getTeamJerseyImage } from '../../utils/athleteUtils';
+import { getTeamJerseyImage } from '../../utils/athletes/athleteUtils';
 
 type Props = {
   url?: string;

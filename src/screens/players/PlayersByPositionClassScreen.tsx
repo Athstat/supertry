@@ -2,7 +2,7 @@ import { ArrowLeft, ChevronDown } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom'
 import PageView from '../../components/ui/containers/PageView';
 import RoundedCard from "../../components/ui/cards/RoundedCard";
-import { formatPosition } from '../../utils/athleteUtils';
+import { formatPosition } from '../../utils/athletes/athleteUtils';
 import CircleButton from '../../components/ui/buttons/BackButton';
 import PlayersPositionsSheet from '../../components/players/positioning/PlayersPositionsSheet';
 import { useMemo, useState } from 'react';

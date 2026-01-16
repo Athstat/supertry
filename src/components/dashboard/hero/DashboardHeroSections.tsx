@@ -79,12 +79,12 @@ type HeroProps = {
 }
 
 /** Renders the DashboardBoardHero.Header */
-export function DashboardHeroHeader({title} : HeroProps) {
+export function DashboardHeroHeader({ title }: HeroProps) {
 
   const navigate = useNavigate();
   const { authUser } = useAuth();
 
-  const {selectedSeason} = useFantasySeasons();
+  const { selectedSeason } = useFantasySeasons();
 
   const handleClick = () => {
     navigate('/profile');
@@ -103,12 +103,12 @@ export function DashboardHeroHeader({title} : HeroProps) {
         style={{ fontFamily: "'Race Sport', sans-serif" }}
       >
         {
-          title ? 
-          (<>{title}</>)
-          :
-          (<>PLAY {selectedSeason?.name ? `${trimSeasonYear(selectedSeason.name)}` : 'URC'} FANTASY</>)
+          title ?
+            (<>{title}</>)
+            :
+            (<>PLAY {selectedSeason?.name ? `${trimSeasonYear(selectedSeason.name)}` : 'URC'} FANTASY</>)
         }
-        
+
         <br />
         {/* {abbreviateSeasonName(season.name).toUpperCase()} CHALLENGE */}
       </h1>
@@ -128,6 +128,13 @@ export function DashboardHeroScoreSection({ roundTeam, children }: ScoreProps) {
   const { userScore, averagePointsScored, highestPointsScored } = useRoundScoringSummary(scoringRound);
   const isFirstTime = roundTeam === undefined;
 
+  if (children) {
+    return (
+      <>{children}</>
+    )
+  }
+
+
   if (isFirstTime) {
     return (
       <Fragment>
@@ -135,11 +142,6 @@ export function DashboardHeroScoreSection({ roundTeam, children }: ScoreProps) {
     )
   }
 
-  if (children) {
-    return (
-      <>{children}</>
-    )
-  }
 
   return (
     <div

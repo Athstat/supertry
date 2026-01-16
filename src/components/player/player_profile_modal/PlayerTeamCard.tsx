@@ -1,5 +1,5 @@
 import { IProAthlete } from '../../../types/athletes';
-import { formatPosition, getPositionTooltip } from '../../../utils/athleteUtils';
+import { formatPosition, getPositionTooltip } from '../../../utils/athletes/athleteUtils';
 import FormIndicator from '../FormIndicator';
 import SecondaryText from '../../ui/typography/SecondaryText';
 import TeamLogo from '../../team/TeamLogo';

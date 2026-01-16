@@ -3,7 +3,7 @@ import { twMerge } from 'tailwind-merge';
 import { CardTier } from '../../../types/athletes';
 import { ScrummyDarkModeLogo } from '../../branding/scrummy_logo';
 import { CircleDollarSign, X } from 'lucide-react';
-import { getTeamJerseyImage } from '../../../utils/athleteUtils';
+import { getTeamJerseyImage } from '../../../utils/athletes/athleteUtils';
 import { usePlayerData } from '../../../providers/PlayerDataProvider';
 import CircleButton from '../../ui/buttons/BackButton';
 import { usePlayerSeasonTeam } from '../../../hooks/seasons/useSeasonTeams';

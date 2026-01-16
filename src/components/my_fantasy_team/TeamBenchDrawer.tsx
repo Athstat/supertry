@@ -8,7 +8,7 @@ import { useAthleteRoundScore } from "../../hooks/fantasy/useAthleteRoundScore";
 import { AppColours } from "../../types/constants";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
-import { formatPosition } from "../../utils/athleteUtils";
+import { formatPosition } from "../../utils/athletes/athleteUtils";
 import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
 import { sanitizeStat } from "../../utils/stringUtils";
 import PlayerMugshot from "../player/PlayerMugshot";

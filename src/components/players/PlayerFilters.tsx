@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { IProTeam } from '../../types/team';
 import TeamLogo from '../team/TeamLogo';
 import { twMerge } from 'tailwind-merge';
-import { formatPosition } from '../../utils/athleteUtils';
+import { formatPosition } from '../../utils/athletes/athleteUtils';
 import { athleteAnalytics } from '../../services/analytics/athleteAnalytics';
 
 interface PlayerFiltersProps {

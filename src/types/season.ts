@@ -12,7 +12,8 @@ export type IProSeason = {
     web_supported?: boolean,
     competition_id: number,
     fantasy_supported?: boolean,
-    priority?: number
+    priority?: number,
+    competition_name?: string
 }
 
 /** Represents the response from the team season record api */

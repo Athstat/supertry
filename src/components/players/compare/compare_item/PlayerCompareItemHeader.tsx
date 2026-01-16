@@ -1,6 +1,6 @@
 import { IProAthlete } from '../../../../types/athletes';
 import { X, ChevronLeft, ChevronRight, Coins } from 'lucide-react';
-import { formatPosition } from '../../../../utils/athleteUtils';
+import { formatPosition } from '../../../../utils/athletes/athleteUtils';
 import SecondaryText from '../../../ui/typography/SecondaryText';
 import { twMerge } from 'tailwind-merge';
 import { usePlayerCompareActions } from '../../../../hooks/usePlayerCompare';

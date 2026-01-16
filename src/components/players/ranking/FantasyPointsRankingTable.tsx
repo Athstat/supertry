@@ -6,7 +6,7 @@ import { SortField, SortDirection } from "../../../types/playerSorting";
 import SecondaryText from "../../ui/typography/SecondaryText";
 import { EmptyPlayerSearchState } from "../EmptyPlayerSearchState";
 import { FantasyPointsScoredRankingItem } from "../../../types/fantasyLeagueGroups";
-import { formatPosition } from "../../../utils/athleteUtils";
+import { formatPosition } from "../../../utils/athletes/athleteUtils";
 import { stripCountryName } from "../../../utils/stringUtils";
 import { getCountryEmojiFlag } from "../../../utils/svrUtils";
 import SmartPlayerMugshot from "../../player/SmartPlayerMugshot";

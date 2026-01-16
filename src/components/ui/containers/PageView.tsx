@@ -13,10 +13,15 @@ type Props = {
 
 export default function PageView({ children, className }: Props) {
   return (
-    <div className={twMerge(
-      "w-full py-0 dark:text-white h-full flex flex-col items-center justify-start lg:py-8",
-      AppColours.BACKGROUND
-    )}>
+    <div
+
+      className={twMerge(
+        "w-full py-0 dark:text-white h-full flex flex-col items-center justify-start lg:py-8",
+        AppColours.BACKGROUND
+      )}
+
+      style={{ fontFamily: 'Roboto' }}
+    >
       <div className={twMerge('w-full lg:w-[50%]', className)}>{children}</div>
     </div>
   );

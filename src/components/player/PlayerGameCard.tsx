@@ -1,4 +1,4 @@
-import { getPositionFrameBackground, getTeamJerseyImage } from '../../utils/athleteUtils';
+import { getPositionFrameBackground, getTeamJerseyImage } from '../../utils/athletes/athleteUtils';
 import { IProAthlete } from '../../types/athletes';
 import { twMerge } from 'tailwind-merge';
 import TeamLogo from '../team/TeamLogo';

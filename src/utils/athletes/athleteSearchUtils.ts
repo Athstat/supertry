@@ -1,4 +1,4 @@
-import { athleteNameSearchPredicate } from "../athleteUtils";
+import { athleteNameSearchPredicate } from "./athleteUtils";
 
 export type SearchMatch = {
     score: number;        // 0 - 100

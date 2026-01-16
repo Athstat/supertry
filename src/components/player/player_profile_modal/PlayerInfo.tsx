@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatPosition } from '../../../utils/athleteUtils';
+import { formatPosition } from '../../../utils/athletes/athleteUtils';
 import FormIndicator from '../FormIndicator';
 import { IProAthlete } from '../../../types/athletes';
 

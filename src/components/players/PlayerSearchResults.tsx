@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { IProAthlete } from "../../types/athletes";
 import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
-import { athleteNameSearchPredicate } from "../../utils/athleteUtils";
+import { athleteNameSearchPredicate } from "../../utils/athletes/athleteUtils";
 import PlayerProfileModal from "../player/PlayerProfileModal";
 import { LoadingIndicator } from "../ui/LoadingIndicator";
 import SecondaryText from "../ui/typography/SecondaryText";

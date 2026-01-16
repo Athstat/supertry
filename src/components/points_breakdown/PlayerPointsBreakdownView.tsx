@@ -1,6 +1,6 @@
 import { IProAthlete } from "../../types/athletes"
 import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound, IFantasyLeagueTeam } from "../../types/fantasyLeague"
-import { formatPosition } from "../../utils/athleteUtils"
+import { formatPosition } from "../../utils/athletes/athleteUtils"
 import PlayerMugshot from "../player/PlayerMugshot"
 import SecondaryText from "../ui/typography/SecondaryText"
 import { useAthletePointsBreakdown } from "../../hooks/fantasy/useAthletePointsBreakdown"

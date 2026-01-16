@@ -8,7 +8,7 @@ import { MAX_TEAM_BUDGET } from "../../types/constants";
 import { IFantasyLeagueTeamSlot, defaultFantasyPositions } from "../../types/fantasyLeagueTeam";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { Position } from "../../types/position";
-import { sortFantasyTeamAthletes, hashFantasyTeamAthletes } from "../../utils/athleteUtils";
+import { sortFantasyTeamAthletes, hashFantasyTeamAthletes } from "../../utils/athletes/athleteUtils";
 
 /** Hook for accessing data about a fantasy league team */
 export function useFantasyTeam() {
