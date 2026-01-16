@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCallback, useEffect, useState } from 'react';
 import { createEmptyArray } from '../../../utils/fixtureUtils';
 import { twMerge } from 'tailwind-merge';
+import { useFantasySeasons } from '../../../hooks/dashboard/useFantasySeasons';
 
 type AdItem = {
     title?: string,
@@ -16,6 +17,7 @@ type AdItem = {
 export default function DashboardAdSection() {
 
     const navigate = useNavigate();
+    const {fantasySeasons, setSelectedSeason} = useFantasySeasons();
 
     const AD_INTERVAL = 1000 * 10;
     const [currentAdIndex, setCurrentAdIndex] = useState<number>(0);
@@ -45,6 +47,18 @@ export default function DashboardAdSection() {
 
     const handleChangeIndex = (newIndex: number) => {
         setCurrentAdIndex(newIndex);
+    }
+
+    const handlePlaySixNations = () => {
+        const sixNations = fantasySeasons.find((s) => {
+            return s.name === "Six Nations 2026";
+        });
+
+        if (sixNations) {
+            setSelectedSeason(sixNations);
+        }
+
+        navigate('/leagues');
     }
 
     if (!currentAd) {
@@ -83,7 +97,7 @@ export default function DashboardAdSection() {
 
                 {currentAd.ctaButton && (
                     <button
-                        onClick={() => navigate('/leagues')}
+                        onClick={handlePlaySixNations}
                         className="px-3 py-3 mt-2 rounded-md bg-transparent border border-white dark:border-white font-semibold text-xs text-white dark:text-white uppercase shadow-md transition-colors hover:bg-white hover:text-[#D94204E5] dark:hover:bg-white dark:hover:text-[#011E5C] whitespace-nowrap flex-shrink-0"
                     >
                         Play Now
