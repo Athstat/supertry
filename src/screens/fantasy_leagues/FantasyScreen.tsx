@@ -24,8 +24,6 @@ export function FantasyScreen() {
         <h1 className="font-bold text-xl">Fantasy</h1>
       </div>
 
-
-
       <Activity mode={showLoading ? "visible" : "hidden"} >
         <LoadingIndicator />
       </Activity>
