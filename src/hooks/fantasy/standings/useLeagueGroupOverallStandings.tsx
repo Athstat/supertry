@@ -13,7 +13,9 @@ export function useLeagueGroupStandings(leagueGroupId?: string, options?: League
   const shouldFetch = Boolean(leagueGroupId);
   const round_number = options?.round_number;
 
-  const key = shouldFetch ? `/fantasy-league-groups/${leagueGroupId}/standings/overall${round_number ? `/weekly/${round_number}` : ""}` : null;
+  const isWeekly = round_number && round_number !== 'overall';
+
+  const key = shouldFetch ? `/fantasy-league-groups/${leagueGroupId}/standings/overall${isWeekly ? `/weekly/${round_number}` : ""}` : null;
   const { data, isLoading, error } = useSWR(key, () => {
     return leagueStandingsFetcher(leagueGroupId || '', round_number);
   }, {
