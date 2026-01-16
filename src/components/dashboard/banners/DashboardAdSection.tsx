@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useCallback, useEffect, useState } from 'react';
+import { createEmptyArray } from '../../../utils/fixtureUtils';
+import { twMerge } from 'tailwind-merge';
 
 type AdItem = {
     title?: string,
@@ -18,8 +20,10 @@ export default function DashboardAdSection() {
     const [currentAdIndex, setCurrentAdIndex] = useState<number>(0);
 
     const adList = [sixNationsAd, sbrAd];
+    const adListLength = adList.length;
+
     const currentAd = adList.at(currentAdIndex);
-    const maxIndex = adList.length - 1;
+    const maxIndex = adListLength - 1;
 
     const moveIndex = useCallback(() => {
         const nextIndex = currentAdIndex === maxIndex ?
@@ -31,12 +35,16 @@ export default function DashboardAdSection() {
     useEffect(() => {
         const interval = setInterval(() => {
             moveIndex();
-        }, 10000);
+        }, 20000);
 
         return () => {
             clearInterval(interval);
         }
     }, [moveIndex]);
+
+    const handleChangeIndex = (newIndex: number) => {
+        setCurrentAdIndex(newIndex);
+    }
 
     if (!currentAd) {
         return null;
@@ -75,16 +83,61 @@ export default function DashboardAdSection() {
                 {currentAd.ctaButton && (
                     <button
                         onClick={() => navigate('/leagues')}
-                        className="px-3 py-3.5 mt-2 rounded-md bg-transparent border border-white dark:border-white font-semibold text-xs text-white dark:text-white uppercase shadow-md transition-colors hover:bg-[#011E5C] hover:text-white dark:hover:bg-white dark:hover:text-[#011E5C] whitespace-nowrap flex-shrink-0"
+                        className="px-3 py-3 mt-2 rounded-md bg-transparent border border-white dark:border-white font-semibold text-xs text-white dark:text-white uppercase shadow-md transition-colors hover:bg-[#011E5C] hover:text-white dark:hover:bg-white dark:hover:text-[#011E5C] whitespace-nowrap flex-shrink-0"
                     >
                         Play Now
                     </button>
                 )}
             </div>
 
+            <SliderIndicator
+                length={adListLength}
+                currentIndex={currentAdIndex}
+                onClick={handleChangeIndex}
+            />
+
 
         </div>
     );
+}
+
+type SliderIndicatorProps = {
+    length: number,
+    currentIndex?: number,
+    onClick?: (newIndex: number) => void
+}
+
+function SliderIndicator({ length, currentIndex, onClick }: SliderIndicatorProps) {
+
+    const items = createEmptyArray(length, 0);
+
+
+    return (
+        <div className='absolute flex flex-row items-center justify-center gap-1 bottom-0 left-0 w-full h-[20px]' >
+            {items.map((_, index) => {
+
+                const handleClick = () => {
+                    if (onClick) {
+                        onClick(index);
+                    }
+                }
+
+                return (
+                    <div
+                        key={index}
+                        onClick={handleClick}
+
+                        className={twMerge(
+                            'bg-white/40 cursor-pointer w-2 h-2 rounded-full',
+                            currentIndex === index && 'bg-[#011E5C]'
+                        )}
+                    >
+
+                    </div>
+                )
+            })}
+        </div>
+    )
 }
 
 
