@@ -8,7 +8,7 @@ import { X } from "lucide-react";
 import { BudgetIndicator } from "./BudgetIndicator";
 
 
-// TODO: Delete
+
 export default function PlayerPickerTeamFilterRow() {
 
     const { availbleTeams, filterTeams, setFilterTeams, remainingBudget } = usePlayerPicker();
@@ -31,7 +31,7 @@ export default function PlayerPickerTeamFilterRow() {
                     <SecondaryText>Filter By Team: </SecondaryText>
                     {len >= 1 && (
                         <button onClick={handleClearFilter} className={twMerge(
-                            'bg-blue-500 dark:bg-blue-600 rounded-full px-3 py-1 text-[10px] flex flex-col items-center justify-center',
+                            'bg-blue-500 text-white dark:bg-blue-600 rounded-full px-3 py-1 text-[10px] flex flex-col items-center justify-center',
                             'flex flex-row items-center gap-1'
                         )} >
                             <p>Clear ({len})</p>
