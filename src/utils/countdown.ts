@@ -22,8 +22,8 @@ export function formatCountdown(targetDate: Date | string): string {
     parts.push(`${days.toString().padStart(2, '0')} day${days !== 1 ? 's' : ''}`);
   }
 
-  parts.push(`${hours.toString().padStart(2, '0')}hrs`);
-  parts.push(`${minutes.toString().padStart(2, '0')}mins`);
+  parts.push(`${hours.toString().padStart(2, '0')} hrs`);
+  parts.push(`${minutes.toString().padStart(2, '0')} mins`);
 
   return parts.join(' ');
 }
