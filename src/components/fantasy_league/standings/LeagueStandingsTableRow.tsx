@@ -33,7 +33,7 @@ export function LeagueStandingsTableRow({ ranking, isUser, hideUserScore, index,
             id={isUser ? 'user-ranking' : undefined}
             className={twMerge(
                 'cursor-pointer flex flex-col gap-2 hover:bg-slate-200 hover:dark:bg-slate-800/60 p-2',
-                isUser && 'bg-slate-300 text-white && hover:bg-slate-300 dark:bg-slate-700 hover:dark:bg-slate-700/90',
+                isUser && 'bg-slate-300 dark:text-white && hover:bg-slate-300 dark:bg-slate-700 hover:dark:bg-slate-700/90',
                 isPointsKing && ' rounded-xl'
             )}
 
@@ -47,7 +47,7 @@ export function LeagueStandingsTableRow({ ranking, isUser, hideUserScore, index,
                     <div className="flex flex-row">
                         <SecondaryText className={twMerge(
                             "w-10",
-                            isUser && "text-white dark:text-white"
+                            isUser && "text-black dark:text-white"
                         )}>
                             {/* {rank} {badge}{' '} */}
                             {rank}
@@ -63,6 +63,7 @@ export function LeagueStandingsTableRow({ ranking, isUser, hideUserScore, index,
 
                     <div className="flex flex-col">
                         <p>{ranking.username ?? ranking.first_name}</p>
+
                         {isUser && hideUserScore && (
                             <p className={twMerge('text-xs', isUser ? 'text-white/80' : 'text-gray-500')}>
                                 Claim account to see your points

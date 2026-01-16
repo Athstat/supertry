@@ -93,7 +93,7 @@ function LoadingSkeleton() {
 
     return (
         <PageView className="flex flex-col gap-4" >
-            <div className="flex px-4 relative min-h-[150px] flex-col w-full bg-slate-100 dark:bg-slate-700/30" >
+            <div className="flex px-4 relative flex-col w-full min-h-[50px]" >
 
                 <div className="flex p-4 absolute top-0 left-0 w-full flex-row items-center justify-between gap-2 " >
                     <div className="flex flex-row items-center gap-2" >
@@ -109,8 +109,6 @@ function LoadingSkeleton() {
                         <RoundedCard className="w-[120px] h-[40px] animate-pulse border-none" ></RoundedCard>
                     </div>
                 </div>
-
-                <RoundedCard className="" />
             </div>
 
             <div className="flex flex-col gap-4 px-4 " >
