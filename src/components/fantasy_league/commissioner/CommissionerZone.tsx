@@ -5,7 +5,6 @@ import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGr
 import RoundedCard from '../../ui/cards/RoundedCard'
 import { ShieldUser } from 'lucide-react'
 import { useAuth } from '../../../contexts/AuthContext'
-import { Image } from 'lucide-react'
 import { EditLeagueInfoModal } from './EditLeagueInfoModal'
 
 export default function CommissionerZone() {
@@ -16,12 +15,12 @@ export default function CommissionerZone() {
     const isCommissioner = authUser?.kc_id === league?.creator_id;
 
     const [showEditInfo, setShowEditInfo] = useState(false);
-    const [, setShowEditBanner] = useState(false);
-    const [, setShowEditLogo] = useState(false);
+    // const [, setShowEditBanner] = useState(false);
+    // const [, setShowEditLogo] = useState(false);
 
     const toggleShowEditInfo = () => setShowEditInfo(prev => !prev);
-    const toggleEditBanner = () => setShowEditBanner(prev => !prev);
-    const toggleEditLogo = () => setShowEditLogo(prev => !prev);
+    // const toggleEditBanner = () => setShowEditBanner(prev => !prev);
+    // const toggleEditLogo = () => setShowEditLogo(prev => !prev);
 
     if (!isCommissioner) {
         return;
@@ -66,7 +65,7 @@ export default function CommissionerZone() {
 
                 </RoundedCard>
 
-                <RoundedCard
+                {/* <RoundedCard
                     className='py-2 px-4 cursor-pointer flex flex-col gap-1'
                     onClick={toggleEditBanner}
                 >
@@ -85,10 +84,10 @@ export default function CommissionerZone() {
                         </div>
                     </div>
 
-                </RoundedCard>
+                </RoundedCard> */}
 
 
-                <RoundedCard
+                {/* <RoundedCard
                     className='py-2 px-4 cursor-pointer flex flex-col gap-1'
                     onClick={toggleEditLogo}
                 >
@@ -107,7 +106,7 @@ export default function CommissionerZone() {
                         </div>
                     </div>
 
-                </RoundedCard>
+                </RoundedCard> */}
             </div>
 
 
