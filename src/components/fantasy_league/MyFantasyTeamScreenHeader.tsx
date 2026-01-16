@@ -1,5 +1,4 @@
 import { ArrowLeft } from 'lucide-react'
-import { JoinOrInviteButton } from './buttons/JoinLeagueButton'
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import CircleButton from '../ui/buttons/BackButton';
 import { useNavigateBack } from '../../hooks/web/useNavigateBack';
@@ -38,9 +37,9 @@ export default function MyFantasyTeamScreenHeader() {
                     <p className="font-semibold text-md">My Team</p>
                 </div>
 
-                <div className='absolute right-0' >
+                {/* <div className='absolute right-0' >
                     <JoinOrInviteButton />
-                </div>
+                </div> */}
             </div>
 
         </div>
