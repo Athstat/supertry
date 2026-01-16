@@ -17,6 +17,7 @@ export default function DashboardAdSection() {
 
     const navigate = useNavigate();
 
+    const AD_INTERVAL = 1000 * 10;
     const [currentAdIndex, setCurrentAdIndex] = useState<number>(0);
 
     const adList = [sixNationsAd, sbrAd];
@@ -35,12 +36,12 @@ export default function DashboardAdSection() {
     useEffect(() => {
         const interval = setInterval(() => {
             moveIndex();
-        }, 20000);
+        }, AD_INTERVAL);
 
         return () => {
             clearInterval(interval);
         }
-    }, [moveIndex]);
+    }, [AD_INTERVAL, moveIndex]);
 
     const handleChangeIndex = (newIndex: number) => {
         setCurrentAdIndex(newIndex);
