@@ -53,30 +53,21 @@ export function FantasySeasonDashboard({ fantasySeason }: Props) {
 function LoadingSkeleton() {
   return (
     <div className='flex flex-col gap-6' >
-      <div className='flex flex-row items-center justify-between' >
-        <div className='flex flex-col gap-1' >
-          <RoundedCard className='w-[100px] h-[25px] rounded-xl border-none' />
-          <RoundedCard className='w-[60px] h-[20px] rounded-xl border-none' />
-        </div>
 
-        <div>
-          <RoundedCard className='w-[40px] h-[30px] border-none rounded-xl animate-pulse' />
-        </div>
+      <div className='flex flex-col gap-2 px-4' >
+        <RoundedCard className='w-full h-[140px] border-none rounded-xl animate-pulse' />
       </div>
 
-      <div className='flex flex-col gap-2' >
-        <RoundedCard className='w-full h-[100px] border-none rounded-xl animate-pulse' />
+      <div className='flex flex-col gap-4 px-4' >
+        <RoundedCard className='w-[200px] h-[35px] border-none rounded-xl animate-pulse' />
+        <RoundedCard className='w-full h-[45px] border-none rounded-xl animate-pulse' />
       </div>
 
       <div className='flex flex-col gap-3' >
-        <div className='flex flex-row items-center justify-between' >
-          <RoundedCard className='w-[100px] h-[30px] border-none rounded-xl animate-pulse' />
-          <RoundedCard className='w-[100px] h-[30px] border-none rounded-xl animate-pulse' />
-        </div>
-        <RoundedCard className='w-full h-[60px] mt-5 border-none rounded-xl animate-pulse' />
-        <RoundedCard className='w-full h-[60px] border-none rounded-xl animate-pulse' />
-        <RoundedCard className='w-full h-[60px] border-none rounded-xl animate-pulse' />
-        <RoundedCard className='w-full h-[60px] border-none rounded-xl animate-pulse' />
+        <RoundedCard className='w-full h-[150px] mt-5 border-none rounded-none animate-pulse' />
+        <RoundedCard className='w-full h-[150px] border-none rounded-none animate-pulse' />
+        <RoundedCard className='w-full h-[150px] border-none rounded-none animate-pulse' />
+        <RoundedCard className='w-full h-[150px] border-none rounded-none animate-pulse' />
       </div>
     </div>
   )

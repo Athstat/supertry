@@ -54,9 +54,19 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
 
     if (isLoading) {
         return (
-            <RoundedCard
-                className="w-full border-none h-[280px] animate-pulse"
-            />
+            <div>
+                <div className='flex flex-col gap-4 px-4' >
+                    <RoundedCard className='w-[200px] h-[35px] border-none rounded-xl animate-pulse' />
+                    <RoundedCard className='w-full h-[45px] border-none rounded-xl animate-pulse' />
+                </div>
+
+                <div className='flex flex-col gap-3' >
+                    <RoundedCard className='w-full h-[150px] mt-5 border-none rounded-none animate-pulse' />
+                    <RoundedCard className='w-full h-[150px] border-none rounded-none animate-pulse' />
+                    <RoundedCard className='w-full h-[150px] border-none rounded-none animate-pulse' />
+                    <RoundedCard className='w-full h-[150px] border-none rounded-none animate-pulse' />
+                </div>
+            </div>
         )
     }
 
