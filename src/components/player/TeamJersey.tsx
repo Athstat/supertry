@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { getTeamJerseyImage } from '../../utils/athleteUtils'
+import { getTeamJerseyImage } from '../../utils/athletes/athleteUtils'
 import { twMerge } from 'tailwind-merge';
 import { ScrummyDarkModeLogo } from '../branding/scrummy_logo';
 

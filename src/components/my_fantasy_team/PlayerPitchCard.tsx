@@ -2,7 +2,7 @@ import { twMerge } from "tailwind-merge";
 import { useAthleteRoundScore } from "../../hooks/fantasy/useAthleteRoundScore";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
-import { formatPosition } from "../../utils/athleteUtils";
+import { formatPosition } from "../../utils/athletes/athleteUtils";
 import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
 import { Activity, useMemo } from "react";
 import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";

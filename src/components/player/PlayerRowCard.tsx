@@ -1,5 +1,5 @@
 import { IProAthlete } from "../../types/athletes"
-import { formatPosition } from "../../utils/athleteUtils"
+import { formatPosition } from "../../utils/athletes/athleteUtils"
 import { getCountryEmojiFlag } from "../../utils/svrUtils"
 import MatchPrCard from "../rankings/MatchPrCard"
 import SecondaryText from "../ui/typography/SecondaryText"

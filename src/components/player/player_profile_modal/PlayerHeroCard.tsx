@@ -1,5 +1,5 @@
 import { IProAthlete } from '../../../types/athletes';
-import { formatPosition } from '../../../utils/athleteUtils';
+import { formatPosition } from '../../../utils/athletes/athleteUtils';
 import { DollarSign } from 'lucide-react';
 
 type Props = {

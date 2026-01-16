@@ -12,7 +12,7 @@ import SecondaryText from '../../ui/typography/SecondaryText';
 import { ArrowRight } from 'lucide-react';
 import { useTabView } from '../../ui/tabs/TabView';
 import { useNavigate } from 'react-router-dom';
-import { getTeamJerseyImage } from '../../../utils/athleteUtils';
+import { getTeamJerseyImage } from '../../../utils/athletes/athleteUtils';
 import DialogModal from '../../ui/modals/DialogModal';
 
 type Props = {

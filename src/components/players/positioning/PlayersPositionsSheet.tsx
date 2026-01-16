@@ -4,7 +4,7 @@ import CircleButton from "../../ui/buttons/BackButton"
 import { X } from "lucide-react"
 import PositionCard from "./PositionCard"
 import { PositionClass } from "../../../types/athletes"
-import { formatPosition } from "../../../utils/athleteUtils"
+import { formatPosition } from "../../../utils/athletes/athleteUtils"
 import { useNavigate, useParams } from "react-router-dom"
 import BottomSheetView from "../../ui/modals/BottomSheetView"
 

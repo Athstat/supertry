@@ -1,5 +1,5 @@
 import SecondaryText from '../../ui/typography/SecondaryText';
-import { formatPosition } from '../../../utils/athleteUtils';
+import { formatPosition } from '../../../utils/athletes/athleteUtils';
 import FormIndicator from '../FormIndicator';
 
 import AvailabilityIcon from '../../players/availability/AvailabilityIcon';

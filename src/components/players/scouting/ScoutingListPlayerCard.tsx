@@ -1,5 +1,5 @@
 import { ScoutingListPlayer } from "../../../types/fantasy/scouting";
-import { formatPosition } from "../../../utils/athleteUtils";
+import { formatPosition } from "../../../utils/athletes/athleteUtils";
 import SmartPlayerMugshot from "../../player/SmartPlayerMugshot";
 import MatchPrCard from "../../rankings/MatchPrCard";
 import RoundedCard from "../../ui/cards/RoundedCard";

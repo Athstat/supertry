@@ -2,7 +2,7 @@ import { Activity, useCallback, useMemo, useState } from "react";
 import { usePlayerPicker } from "../../hooks/playerPicker/usePlayerPicker";
 import { IProAthlete } from "../../types/athletes";
 import SecondaryText from "../ui/typography/SecondaryText";
-import { athleteSearchPredicate } from "../../utils/athleteUtils";
+import { athleteSearchPredicate } from "../../utils/athletes/athleteUtils";
 import TeamJersey from "../player/TeamJersey";
 import { twMerge } from "tailwind-merge";
 import { useInView } from "react-intersection-observer";

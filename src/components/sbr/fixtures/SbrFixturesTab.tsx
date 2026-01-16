@@ -3,7 +3,7 @@ import GroupedSbrFixturesList from "./GroupSbrFixtureList";
 import { ISbrFixture } from "../../../types/sbr";
 import PillBar, { PillBarItems } from "../../ui/bars/PillTabBar";
 import { useQueryState } from "../../../hooks/web/useQueryState";
-import { formatPosition } from "../../../utils/athleteUtils";
+import { formatPosition } from "../../../utils/athletes/athleteUtils";
 
 type Props = {
     fixtures: ISbrFixture[],

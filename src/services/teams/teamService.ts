@@ -59,9 +59,9 @@ export const teamService = {
         return [];
     },
 
-    getAthletes: async (teamId: string, seasonId?: string) : Promise<IProAthlete[]> => {
+    getAthletes: async (teamId: string, competitionId?: string | number) : Promise<IProAthlete[]> => {
         try {
-            const searchParams = seasonId ? `?season_id=${seasonId}` : '';
+            const searchParams = competitionId ? `?competition_id=${competitionId}` : '';
             const uri = getUri(`/api/v1/teams/${teamId}/athletes${searchParams}`);
 
             const res = await fetch(uri, {
@@ -79,3 +79,4 @@ export const teamService = {
         return [];
     }
 }
+

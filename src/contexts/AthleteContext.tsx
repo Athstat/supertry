@@ -4,7 +4,7 @@ import { swrFetchKeys } from "../utils/swrKeys";
 import { djangoAthleteService } from "../services/athletes/djangoAthletesService";
 import { IProTeam } from "../types/team";
 import { IProAthlete } from "../types/athletes";
-import { getAthletesSummary } from "../utils/athleteUtils";
+import { getAthletesSummary } from "../utils/athletes/athleteUtils";
 import { useFantasySeasons } from "../hooks/dashboard/useFantasySeasons";
 import { IProSeason } from "../types/season";
 import { seasonService } from "../services/seasonsService";

@@ -11,7 +11,7 @@ import SecondaryText from "../../../components/ui/typography/SecondaryText";
 import { useSupportedAthletes } from "../../../hooks/athletes/useSupportedAthletes";
 import { IProAthlete } from "../../../types/athletes";
 import SmartPlayerMugshot from "../../../components/player/SmartPlayerMugshot";
-import { formatPosition } from "../../../utils/athleteUtils";
+import { formatPosition } from "../../../utils/athletes/athleteUtils";
 import PrimaryButton from "../../../components/ui/buttons/PrimaryButton";
 import { useHideTopNavBar } from "../../../hooks/navigation/useNavigationBars";
 import { ScoutingListPlayerCard } from "../../../components/players/scouting/ScoutingListPlayerCard";

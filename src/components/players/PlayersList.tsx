@@ -9,7 +9,7 @@ import { comparePlayersAtomGroup } from "../../state/comparePlayers.atoms";
 import { IProAthlete } from "../../types/athletes"
 import { SortField, SortDirection } from "../../types/playerSorting";
 import { IProTeam } from "../../types/team";
-import { getAthletesSummary } from "../../utils/athleteUtils";
+import { getAthletesSummary } from "../../utils/athletes/athleteUtils";
 import PlayerProfileModal from "../player/PlayerProfileModal";
 import SecondaryText from "../ui/typography/SecondaryText";
 import TeamLogo from "../team/TeamLogo";

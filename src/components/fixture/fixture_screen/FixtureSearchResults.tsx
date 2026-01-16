@@ -2,7 +2,7 @@ import { useState } from "react";
 import useSWR from "swr";
 import { djangoAthleteService } from "../../../services/athletes/djangoAthletesService";
 import { IFixture } from "../../../types/games";
-import { athleteNameSearchPredicate, formatPosition } from "../../../utils/athleteUtils";
+import { athleteNameSearchPredicate, formatPosition } from "../../../utils/athletes/athleteUtils";
 import PlayerMugshot from "../../player/PlayerMugshot";
 import { GameSportAction } from "../../../types/boxScore";
 

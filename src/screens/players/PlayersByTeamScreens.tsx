@@ -5,7 +5,7 @@ import RoundedCard from "../../components/ui/cards/RoundedCard";
 import { AppColours } from "../../types/constants";
 import PageView from "../../components/ui/containers/PageView";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useProTeam, useProTeamAthletes } from "../../hooks/teams/useProTeam";
 import TeamLogo from "../../components/team/TeamLogo";
 import PlayersList from "../../components/players/PlayersList";
@@ -22,16 +22,10 @@ export default function PlayersByTeamScreens() {
     useHideTopNavBar();
 
     const { team, isLoading: loadingTeam } = useProTeam(teamId);
-    const {athletes, isLoading: loadingAthletes} = useProTeamAthletes(teamId);
+    const {athletes: teamAthletes, isLoading: loadingAthletes} = useProTeamAthletes(teamId);
 
     const [showModal, setShowModal] = useState(false);
     const toggle = () => setShowModal(prev => !prev);
-
-    const teamAthletes = useMemo(() => {
-        return [...athletes].filter((a) => {
-            return a.team?.athstat_id === team?.athstat_id;
-        })
-    }, [team, athletes]);
 
 
     const handleBack = () => {
