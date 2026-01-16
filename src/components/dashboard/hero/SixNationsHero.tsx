@@ -45,7 +45,7 @@ function Content() {
             imageUrl={'/images/dashboard/6nations_banner_bg.png'}
             hideBeastImage
         >
-            <DashboardHeroHeader title='PLAY 6NATIONS FANTASY' />
+            <DashboardHeroHeader title='PLAY SIX NATIONS FANTASY' />
             <DashboardHeroScoreSection
                 roundTeam={roundTeam}
             >
