@@ -131,10 +131,14 @@ type RoundProps = Props & {
 export function RoundAvailabilityText({ athlete, className, round }: RoundProps) {
 
     const { league } = useFantasyLeagueGroup();
+
+    const {seasonTeam} = usePlayerSeasonTeam(athlete);
+
     const { report, isLoading, isNotAvailable, isTeamNotPlaying } = usePlayerRoundAvailability(
         athlete.tracking_id,
         league?.season_id ?? "",
-        round.start_round ?? 0
+        round.start_round ?? 0,
+        seasonTeam?.athstat_id
     );
 
     const opposition = useMemo<IProTeam | undefined>(() => {
