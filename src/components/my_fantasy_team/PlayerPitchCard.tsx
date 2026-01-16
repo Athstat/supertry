@@ -29,13 +29,14 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
 
     const {seasonTeam} = usePlayerSeasonTeam(player.athlete);
 
-    const { isNotAvailable, isTeamNotPlaying } = usePlayerRoundAvailability(
+    const { isNotAvailable, isTeamNotPlaying, isPending } = usePlayerRoundAvailability(
         player.tracking_id,
         league?.season_id ?? "",
         round?.start_round ?? 0,
+        seasonTeam?.athstat_id
     );
 
-    const showAvailabilityWarning = isNotAvailable || isTeamNotPlaying;
+    const showAvailabilityWarning = ( isNotAvailable || isTeamNotPlaying ) && !isPending;
 
     const handleClick = () => {
         if (onClick) {
@@ -138,18 +139,23 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
     const isLoading = loadingScore;
 
+    const {seasonTeam} = usePlayerSeasonTeam(player.athlete);
+
     const { isNotAvailable, isTeamNotPlaying, nextMatch } = usePlayerRoundAvailability(
         player.tracking_id,
         league?.season_id ?? "",
         round?.start_round ?? 0,
+        seasonTeam?.athstat_id
     );
 
+
     const [homeOrAway, opponent] = useMemo(() => {
+
         if (!nextMatch) {
             return [undefined, undefined];
         }
 
-        const playerTeamId = player.athlete_team_id;
+        const playerTeamId = seasonTeam?.athstat_id;
 
         if (playerTeamId === nextMatch.team?.athstat_id) {
             return ["(H)", nextMatch.opposition_team];
@@ -161,7 +167,7 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
         return [undefined, undefined];
 
-    }, [nextMatch, player.athlete_team_id]);
+    }, [nextMatch, seasonTeam?.athstat_id]);
 
     const showScore = !isLoading && isLocked;
 

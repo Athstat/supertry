@@ -1,8 +1,6 @@
 import { TriangleAlert } from "lucide-react"
 import { useGeneralPlayerAvailability } from "../../../hooks/fantasy/usePlayerSquadReport"
 import { IProAthlete } from "../../../types/athletes"
-import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete"
-import { IFantasyAthlete } from "../../../types/rugbyPlayer"
 import WarningCard from "../../ui/cards/WarningCard"
 import { useMemo } from "react"
 import { IProTeam } from "../../../types/team"
@@ -11,9 +9,10 @@ import { twMerge } from "tailwind-merge"
 import { IFantasyLeagueRound } from "../../../types/fantasyLeague"
 import { usePlayerRoundAvailability } from "../../../hooks/fantasy/usePlayerRoundAvailability"
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup"
+import { usePlayerSeasonTeam } from "../../../hooks/seasons/useSeasonTeams"
 
 type Props = {
-    athlete: IProAthlete | IFantasyAthlete | IFantasyTeamAthlete,
+    athlete: IProAthlete,
     iconClassName?: string,
     className?: string
 }
@@ -21,7 +20,8 @@ type Props = {
 /** Renders an Availability Indicator Icon, usually to be placed on top of a card */
 export default function AvailabilityIcon({ athlete, className, iconClassName }: Props) {
 
-    const { report, isLoading } = useGeneralPlayerAvailability(athlete.tracking_id);
+    const {seasonTeam} = usePlayerSeasonTeam(athlete);
+    const { report, isLoading } = useGeneralPlayerAvailability(athlete.tracking_id, seasonTeam?.athstat_id);
 
     if (isLoading) {
         return;
@@ -59,7 +59,8 @@ export default function AvailabilityIcon({ athlete, className, iconClassName }: 
 /** Renders an Availability Text Report explaining the absense, usually to be placed on top of a card */
 export function AvailabilityText({ athlete, className }: Props) {
 
-    const { report, isLoading } = useGeneralPlayerAvailability(athlete.tracking_id);
+    const {seasonTeam} = usePlayerSeasonTeam(athlete);
+    const { report, isLoading } = useGeneralPlayerAvailability(athlete.tracking_id, seasonTeam?.athstat_id);
 
     const opposition = useMemo<IProTeam | undefined>(() => {
 
@@ -169,6 +170,8 @@ export function RoundAvailabilityText({ athlete, className, round }: RoundProps)
     //     navigate(`/fixtures/${report.game?.game_id}`);
     // }
 
+    console.log(report);
+
     return (
         <WarningCard className={twMerge(
             'text-xs',
@@ -186,11 +189,6 @@ export function RoundAvailabilityText({ athlete, className, round }: RoundProps)
             </p>)}
 
             {report.status == "TEAM_NOT_PLAYING" && (<p className="text-xs" >
-                {athlete.player_name}'s {isPast ? 'was' : 'is'} team is not playing in this round
-                {!isPast && ' Consider taking action if he is in your team'}
-            </p>)}
-
-            {isTeamNotPlaying && (<p className="text-xs" >
                 {athlete.player_name}'s {isPast ? 'was' : 'is'} team is not playing in this round
                 {!isPast && ' Consider taking action if he is in your team'}
             </p>)}

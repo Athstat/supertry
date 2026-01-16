@@ -34,7 +34,7 @@ export function PlayerActionModal({
   league
 }: PlayerActionModalProps) {
 
-  const {seasonTeam} = usePlayerSeasonTeam(player.athlete);
+  const { seasonTeam } = usePlayerSeasonTeam(player.athlete);
 
   const { initiateSwap, removePlayerAtSlot, setTeamCaptainAtSlot, slots, teamCaptain, isReadOnly } = useFantasyTeam();
   const isSub = !player.is_starting;
@@ -98,9 +98,9 @@ export function PlayerActionModal({
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-row items-center gap-2" >
 
-            <AvailabilityIcon
-              athlete={player}
-            />
+            {player.athlete && <AvailabilityIcon
+              athlete={player.athlete}
+            />}
 
             <p className="text-lg font-bold text-nowrap truncate" >{player.player_name}</p>
 
@@ -160,10 +160,10 @@ export function PlayerActionModal({
 
       </div>
 
-      {league && (
+      {league && player.athlete && (
         <RoundAvailabilityText
           round={league}
-          athlete={player}
+          athlete={player.athlete}
         />
       )}
 
