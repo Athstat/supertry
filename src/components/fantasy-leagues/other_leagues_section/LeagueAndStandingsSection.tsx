@@ -97,7 +97,7 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
                 <LeagueGroupsSection
                     title="My Leagues"
                     description="Leagues created by you"
-                    emptyMessage="You have not created any leagues yet. Create one to get started!"
+                    emptyMessage="You have not created any leagues yet"
                     leagues={myLeagues}
                 />
 
