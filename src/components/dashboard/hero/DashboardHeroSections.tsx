@@ -117,10 +117,11 @@ export function DashboardHeroHeader({title} : HeroProps) {
 }
 
 type ScoreProps = {
-  roundTeam?: IFantasyLeagueTeam
+  roundTeam?: IFantasyLeagueTeam,
+  children?: ReactNode
 }
 
-export function DashboardHeroScoreSection({ roundTeam }: ScoreProps) {
+export function DashboardHeroScoreSection({ roundTeam, children }: ScoreProps) {
 
   const { scoringRound } = useFantasyLeagueGroup();
 
@@ -131,6 +132,12 @@ export function DashboardHeroScoreSection({ roundTeam }: ScoreProps) {
     return (
       <Fragment>
       </Fragment>
+    )
+  }
+
+  if (children) {
+    return (
+      <>{children}</>
     )
   }
 
@@ -239,10 +246,10 @@ export function DashboardHeroCTASection({ roundTeam, deadlineText }: CTASectionP
       <Fragment>
         {nextDeadline && nextDeadlineRound && (
           <>
-            <div className="w-[80%] max-w-sm border-t border-white/50"></div>
-            <p className="text-sm text-white text-center">
-              {deadlineText ?? "Next Deadline: Round"} {(nextDeadlineRound?.start_round || 0)}<br />
-              <span className="font-bold">{formatCountdown(nextDeadline)}</span>
+            <div className="w-[80%] max-w-sm border border-white/50"></div>
+            <p className="text-sm text-white text-center font-bold">
+              {deadlineText ? deadlineText : <>Next Deadline: Round {(nextDeadlineRound?.start_round || 0)}</>}<br />
+              <span className="font-normal">{formatCountdown(nextDeadline)}</span>
             </p>
           </>
         )}
@@ -285,10 +292,10 @@ export function DashboardHeroCTASection({ roundTeam, deadlineText }: CTASectionP
     <Fragment>
       {nextDeadline && nextDeadlineRound && (
         <>
-          <div className="w-[80%] max-w-sm border-t border-white/50"></div>
-          <p className="text-sm text-white text-center">
-            Next Deadline: Round {(nextDeadlineRound?.start_round || 0)}<br />
-            <span className="font-bold">{formatCountdown(nextDeadline)}</span>
+          <div className="w-[80%] max-w-sm border-t-2 border-white/50"></div>
+          <p className="text-sm text-white text-center font-bold">
+            {deadlineText ? deadlineText : <>Next Deadline: Round {(nextDeadlineRound?.start_round || 0)}</>}<br />
+            <span className="font-normal">{formatCountdown(nextDeadline)}</span>
           </p>
         </>
       )}
