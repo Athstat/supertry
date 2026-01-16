@@ -46,6 +46,10 @@ export default function FantasyTopPerformersCard({className} : Props) {
     );
   }
 
+  if (rankings.length === 0) {
+    return null;
+  }
+
   return (
     <Fragment>
       <RoundedCard className={twMerge(
