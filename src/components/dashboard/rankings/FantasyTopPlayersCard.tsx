@@ -130,7 +130,7 @@ function PlayerItem({ rank, onClick, player, borderColor = '#1196F5' }: PlayerRa
   };
 
   return (
-    <div className="flex flex-col w-full shadow-slate-300 shadow-sm overflow-hidden">
+    <div className="flex flex-col w-full shadow-slate-300 dark:shadow-none  shadow-sm overflow-hidden">
       <div
         onClick={handleOnClick}
         className="flex cursor-pointer  flex-row items-center gap-4 overflow-hidden border-l-4 pl-2 py-2"
