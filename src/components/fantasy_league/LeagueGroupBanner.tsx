@@ -16,14 +16,14 @@ export default function LeagueGroupBanner({league} : Props) {
           onError={() => setError(true)}
           src={league.banner}
           alt={`${league.title} Banner`}
-          className="w-full h-fit object-fill"
+          className="w-full h-full object-right"
         />
       </div>
     )
   }
 
   return (
-    <div className="w-full h-[150px]  bg-slate-100 dark:bg-slate-700" >
+    <div className="w-full h-[150px]  bg-slate-200 dark:bg-slate-700" >
       
     </div>
   )

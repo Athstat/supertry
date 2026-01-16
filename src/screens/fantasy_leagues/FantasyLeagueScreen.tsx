@@ -93,7 +93,7 @@ function LoadingSkeleton() {
 
     return (
         <PageView className="flex flex-col gap-4" >
-            <div className="flex px-4 relative min-h-[150px] flex-col w-full bg-slate-700/30" >
+            <div className="flex px-4 relative min-h-[150px] flex-col w-full bg-slate-100 dark:bg-slate-700/30" >
 
                 <div className="flex p-4 absolute top-0 left-0 w-full flex-row items-center justify-between gap-2 " >
                     <div className="flex flex-row items-center gap-2" >

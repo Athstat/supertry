@@ -17,7 +17,7 @@ export default function StickyUserRankingCard({ userRanking, onClick }: Props) {
     return (
         <div className="fixed p-4 bottom-14 left-0 w-full" >
             <RoundedCard onClick={onClick} className={twMerge(
-                "w-full dark:bg-blue-500 shadow-lg shadow-black hover:dark:bg-blue-600 cursor-pointer p-4 flex flex-col gap-2",
+                "w-full bg-blue-500 dark:shadow-lg text-white shadow-black dark:bg-blue-600 cursor-pointer p-4 flex flex-col gap-2",
             )} >
 
                 <div className="flex flex-row items-center gap-2 justify-between" >
