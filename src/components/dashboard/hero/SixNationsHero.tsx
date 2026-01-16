@@ -55,7 +55,7 @@ function Content() {
                     </div>
 
                     <div>
-                        <p className='text-lg' style={{ fontFamily: 'Oswald, sans-serif' }} >
+                        <p className='text-lg text-white font-light text-center' style={{ fontFamily: 'Oswald, sans-serif' }} >
                             <strong className='text-[#D94204] font-normal ' >Win 2 Tickets</strong> to EPRC Champions Cup Final (2026)
                         </p>
                     </div>

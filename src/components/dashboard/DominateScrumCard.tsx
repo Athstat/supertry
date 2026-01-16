@@ -1,6 +1,8 @@
 import { twMerge } from 'tailwind-merge'
 import { useNavigate } from 'react-router-dom'
 import RoundedCard from '../ui/cards/RoundedCard';
+import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
+import SixNationsGameRules from './SixNationsGameRules';
 
 type Props = {
     className?: string
@@ -9,11 +11,18 @@ type Props = {
 /** Renders dominate scrum card component */
 export default function DominateScrumCard({className } : Props) {
     
+    const {selectedSeason} = useFantasySeasons();
     const navigate = useNavigate();
 
 
     const handleClick = () => {
         navigate('/leagues');
+    }
+
+    if (selectedSeason?.name.includes('Six Nations 2026')) {
+        return (
+            <SixNationsGameRules className={className} />
+        )
     }
     
     return (
