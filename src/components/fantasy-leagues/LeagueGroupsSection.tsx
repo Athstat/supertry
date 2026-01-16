@@ -7,10 +7,11 @@ type Props = {
     title?: string,
     description?: string,
     leagues: FantasyLeagueGroup[],
-    isVerified?: boolean
+    isVerified?: boolean,
+    emptyMessage?: string
 }
 
-export default function LeagueGroupsSection({leagues, title, description, isVerified} : Props) {
+export default function LeagueGroupsSection({leagues, title, description, isVerified, emptyMessage} : Props) {
     return (
         <section className="flex flex-col gap-2 py-6 rounded-none px-4 bg-slate-50 dark:bg-dark-800/40 border-none" >
 
@@ -26,6 +27,7 @@ export default function LeagueGroupsSection({leagues, title, description, isVeri
 
             <LeagueGroupsTable
                 leagues={leagues}
+                emptyMessage={emptyMessage}
             />
 
         </section>

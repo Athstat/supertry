@@ -89,6 +89,7 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
                 <LeagueGroupsSection
                     title="Official Leagues"
                     description="Leagues created by SCRUMMY"
+                    emptyMessage="No Official leagues were found"
                     leagues={officialLeagues}
                     isVerified
                 />
@@ -96,12 +97,14 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
                 <LeagueGroupsSection
                     title="My Leagues"
                     description="Leagues created by you"
+                    emptyMessage="You have not created any leagues yet. Create one to get started!"
                     leagues={myLeagues}
                 />
 
                 <LeagueGroupsSection
                     title="Joined Leagues"
                     description="Other leagues you are apart of, created by others"
+                    emptyMessage="You have not joined any leagues yet"
                     leagues={joinedLeagues}
                 />
 
