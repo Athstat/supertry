@@ -25,6 +25,7 @@ export default function LeagueGroupLogo({ league, className }: Props) {
                     onError={() => setError(true)}
                     src={imageUrl}
                     className="object-scale-down"
+                    alt='league_logo'
                 />
             </div>
         )
@@ -39,6 +40,7 @@ export default function LeagueGroupLogo({ league, className }: Props) {
             <img
                 src={defaultImageUrl}
                 className="object-scale-down"
+                alt='league_logo'
             />
         </div>
     )

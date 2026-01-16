@@ -62,7 +62,7 @@ export function usePlayerSeasonTeam(player?: IProAthlete) {
 
     const seasonTeam = getAthleteSeasonTeam(player?.athlete_teams || []) || player?.team;
 
-    const athleteSeasonTeam = useMemo(() => {
+    const athleteSeasonTeamRecord = useMemo(() => {
         return athleteTeams.find((t) => {
             return t.team_id === seasonTeam?.athstat_id
         });
@@ -70,6 +70,6 @@ export function usePlayerSeasonTeam(player?: IProAthlete) {
 
     return {
         seasonTeam: seasonTeam || player?.team,
-        playerImageUrl: athleteSeasonTeam?.player_image_url || player?.image_url
+        playerImageUrl: athleteSeasonTeamRecord?.player_image_url || player?.image_url
     }
 }

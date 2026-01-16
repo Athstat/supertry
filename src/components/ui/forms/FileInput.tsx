@@ -89,6 +89,7 @@ function ImageFilePreview({file, size} : FilePreviewProps) {
                 className="rounded-xl"
                 width={size}
                 height={size}
+                alt="preview"
             />
         </div>
     )

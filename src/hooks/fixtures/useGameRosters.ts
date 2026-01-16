@@ -33,5 +33,9 @@ export function preloadGameRosters(fixture?: IFixture) {
     const fixtureId = fixture?.game_id;
     const rostersKey = fixtureId ? `fixtures/${fixtureId}/rosters` : null;
 
+    if (rostersKey == null) {
+        return;
+    }
+    
     preload(rostersKey, () => gamesService.getGameRostersById(fixtureId ?? ""));
 }
