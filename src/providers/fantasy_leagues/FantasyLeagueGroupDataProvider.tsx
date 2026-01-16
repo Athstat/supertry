@@ -127,7 +127,7 @@ function Fetcher({ children, leagueId, loadingFallback, skipCache, fetchMembers 
     setLoadingState(isLoading);
   }, [isLoading, setLoadingState]);
 
-  if (!debouncedLoading) {
+  if (debouncedLoading) {
     return (
       <Fragment>
         {loadingFallback ? <Fragment>{loadingFallback}</Fragment> : <LoadingIndicator />}
