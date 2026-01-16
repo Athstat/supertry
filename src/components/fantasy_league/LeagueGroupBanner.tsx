@@ -2,7 +2,7 @@ import { useState } from "react"
 import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups"
 
 type Props = {
-    league?: FantasyLeagueGroup
+  league?: FantasyLeagueGroup
 }
 
 export default function LeagueGroupBanner({league} : Props) {
@@ -23,7 +23,7 @@ export default function LeagueGroupBanner({league} : Props) {
   }
 
   return (
-    <div className="w-full h-[150px]  bg-slate-300 dark:bg-slate-700" >
+    <div className="w-full h-[150px]  bg-slate-100 dark:bg-slate-700" >
       
     </div>
   )
