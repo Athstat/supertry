@@ -86,7 +86,7 @@ export function PlayerActionModal({
   return (
     <BottomSheetView
       className={twMerge(
-        "max-h-[640px] min-h-[400px] py-4 px-6",
+        "max-h-[640px] min-h-[400px] py-4 px-6 border-t dark:border-slate-700",
         isReadOnly && "max-h-[300px] min-h-[260px]"
       )}
       hideHandle
