@@ -17,6 +17,9 @@ export default function EditFantasyClubCTA({className} : Props) {
         navigate(`/fantasy/my-club`);
     }
 
+    // Hide component for now, not functional yet
+    return null;
+
     return (
         <RoundedCard 
             onClick={handleClick}
