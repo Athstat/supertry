@@ -12,7 +12,7 @@ export default function DashboardHero() {
   
   const { selectedSeason } = useFantasySeasons();
 
-  if (selectedSeason?.name.includes('Six Nations 2026')) {
+  if (selectedSeason?.name?.includes('Six Nations 2026')) {
     return (
       <SixNationsHero />
     )

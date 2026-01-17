@@ -43,7 +43,7 @@ function Content() {
     return (
         <DashboardHeroFrame
             imageUrl={'/images/dashboard/6nations_banner_bg.png'}
-            cornerImageUrl='/public/images/dashboard/rugby_ball.png'
+            cornerImageUrl='/images/dashboard/rugby_ball.png'
             cornerImageClassName='w-fit h-28'
         >
             <DashboardHeroHeader title='PLAY SIX NATIONS FANTASY' />

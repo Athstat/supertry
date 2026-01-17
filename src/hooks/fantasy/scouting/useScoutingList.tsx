@@ -71,13 +71,12 @@ export function useScoutingList() {
             setMessage("Removed Player from scouting list");
 
             if (callback) callback();
-
             mutateList();
         } catch (err) {
             logger.error("Error adding player ", err);
             setError("Something wen't wrong");
         } finally {
-            setIsAdding(false);
+            setIsRemoving(false);
         }
 
     }, [mutateList, seasonId]);
