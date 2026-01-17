@@ -1,17 +1,17 @@
 import useSWR from "swr";
-import { gamesService } from "../../services/gamesService";
 import { useMemo } from "react";
 import { useFantasySeasons } from "../dashboard/useFantasySeasons";
+import { competitionService } from "../../services/competitionsService";
 
 /** Hook that fetches pro fixtures */
 export function useProFixtures() {
 
     const {selectedSeason} = useFantasySeasons();
 
-    const leagueId = selectedSeason?.id;
+    const competitionId = selectedSeason?.competition_id;
+    const key = competitionId ? `/competitions/${competitionId}/games` : null;
 
-    const key = `/pro/fixtures${leagueId ? `/leagues/${leagueId}` : ''}`;
-    const { data, isLoading, error, mutate } = useSWR(key, () => gamesService.getAllSupportedGames(leagueId));
+    const { data, isLoading, error, mutate } = useSWR(key, () => competitionService.getFixtures(competitionId || ''));
 
     const fixtures = useMemo(() => {
         return data || [];
