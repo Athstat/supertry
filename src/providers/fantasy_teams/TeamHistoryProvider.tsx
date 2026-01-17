@@ -6,7 +6,6 @@ import { Fragment, ReactNode, useEffect } from "react";
 import { useUserRoundTeam } from "../../hooks/fantasy/useUserRoundTeam";
 import { DjangoUserMinimal } from "../../types/auth";
 import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
-import { useDebounced } from "../../hooks/web/useDebounced";
 import { useQueryState } from "../../hooks/web/useQueryState";
 import { queryParamKeys } from "../../types/constants";
 import { AnimatePresence } from "framer-motion";
@@ -29,7 +28,7 @@ export default function TeamHistoryProvider({ children, user, loadingFallback }:
     ]
 
     return (
-        <ScopeProvider
+    <ScopeProvider
             atoms={atoms}
         >
             <InnerProvider
@@ -105,7 +104,7 @@ function RoundTeamProvider({ loadingFallback, children }: Props) {
 
     const { roundTeam, isLoading: loadingTeam } = useUserRoundTeam(round?.id, manager?.kc_id, shouldFetch);
 
-    const isLoading = useDebounced(loadingTeam, 2000);
+    const isLoading = loadingTeam;
 
     useEffect(() => {
         if (roundTeam) {

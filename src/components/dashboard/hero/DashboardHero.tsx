@@ -9,9 +9,8 @@ import SixNationsHero from './SixNationsHero';
 
 /** Renders the dashboard hero */
 export default function DashboardHero() {
-
-  const {selectedSeason} = useFantasySeasons();
-  const {featuredLeague} = useFeaturedLeague();
+  
+  const { selectedSeason } = useFantasySeasons();
 
   if (selectedSeason?.name.includes('Six Nations 2026')) {
     return (
@@ -20,12 +19,20 @@ export default function DashboardHero() {
   }
 
   return (
+    <DefaultHero />
+  )
+}
+
+function DefaultHero() {
+  const { featuredLeague } = useFeaturedLeague(); 
+
+  return (
     <FantasyLeagueGroupDataProvider
       leagueId={featuredLeague?.id}
       loadingFallback={<DashboardHeroLoadingSkeleton />}
       fetchMembers={false}
     >
-      <Content/>
+      <Content />
     </FantasyLeagueGroupDataProvider>
   )
 }
@@ -33,7 +40,7 @@ export default function DashboardHero() {
 function Content() {
   const { authUser } = useAuth();
 
-  const {  league, currentRound: currentGameweek, isLoading: loadingGroup } = useFantasyLeagueGroup();
+  const { league, currentRound: currentGameweek, isLoading: loadingGroup } = useFantasyLeagueGroup();
 
   const { roundTeam, isLoading: loadingRoundTeam } = useUserRoundTeam(currentGameweek?.id, authUser?.kc_id);
   const isLoading = loadingGroup || loadingRoundTeam;
