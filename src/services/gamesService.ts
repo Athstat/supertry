@@ -175,8 +175,10 @@ export const gamesService = {
     return [];
   },
 
-  getAllSupportedGames: async (): Promise<IFixture[]> => {
-    const uri = getUri(`/api/v1/games/`);
+  getAllSupportedGames: async (leagueId?: string): Promise<IFixture[]> => {
+    
+    const params = leagueId ? `?league=${leagueId}` : '';
+    const uri = getUri(`/api/v1/games${params}`);
 
     try {
       const res = await fetch(uri, {
