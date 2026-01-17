@@ -35,7 +35,7 @@ export default function ProMatchCenterHeader({
             <div className="flex flex-row items-center justify-between gap-4">
                 <div className="flex flex-row items-center gap-2">
                     <Calendar />
-                    <p className="font-bold text-xl">Pro Rugby</p>
+                    <p className="font-bold text-xl">Pro Fixtures</p>
                 </div>
                 <SegmentedControl
                     options={[
