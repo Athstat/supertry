@@ -3,12 +3,17 @@ import { logger } from "../../../services/logger";
 import { scoutingService } from "../../../services/fantasy/scoutingService";
 import useSWR from "swr";
 import { ScoutingListPlayer } from "../../../types/fantasy/scouting";
+import { useFantasySeasons } from "../../dashboard/useFantasySeasons";
 
 /** API for getting a users scouting list and manipulating it */
 export function useScoutingList() {
 
-    const key = `/fantasy/scouting/my-list`;
-    const {data, isLoading: loadingList, mutate: mutateList} = useSWR(key, () => scoutingService.getUserList());
+    const {selectedSeason} = useFantasySeasons();
+
+    const seasonId = selectedSeason?.id;
+
+    const key = seasonId ? `/fantasy/scouting/my-list/seasons/${seasonId}` : null;
+    const {data, isLoading: loadingList, mutate: mutateList} = useSWR(key, () => scoutingService.getUserList(seasonId));
 
     const [isAdding, setIsAdding] = useState(false);
     const [isRemoving, setIsRemoving] = useState(false);
@@ -38,7 +43,7 @@ export function useScoutingList() {
         } 
 
         try {
-            const res = await scoutingService.addPlayer(athleteId);
+            const res = await scoutingService.addPlayer(athleteId, seasonId);
 
             if (res) {
                 setMessage("Player Added to Scouting List");
@@ -53,7 +58,7 @@ export function useScoutingList() {
             setIsAdding(false);
         }
 
-    }, [list.length, mutateList]);
+    }, [list.length, mutateList, seasonId]);
 
     const removePlayer = useCallback(async (athleteId: string, callback?: () => void) => {
 
@@ -62,7 +67,7 @@ export function useScoutingList() {
         setError(undefined)
 
         try {
-            await scoutingService.removePlayer(athleteId);
+            await scoutingService.removePlayer(athleteId, seasonId);
             setMessage("Removed Player from scouting list");
 
             if (callback) callback();
@@ -75,7 +80,7 @@ export function useScoutingList() {
             setIsAdding(false);
         }
 
-    }, [mutateList]);
+    }, [mutateList, seasonId]);
 
     const clearError = () => {
         setError(undefined);
@@ -84,6 +89,14 @@ export function useScoutingList() {
     const clearMessage = () => {
         setMessage(undefined);
     }
+
+    const checkPlayerIsOnList = useCallback((athleteId?: string) => {
+        const matches = list.filter((s) => {
+            return s.athlete.tracking_id === athleteId;
+        });
+
+        return matches.length >= 1;
+    }, [list])
 
     return {
         addPlayer,
@@ -94,6 +107,7 @@ export function useScoutingList() {
         message,
         clearError,
         clearMessage,
-        list,loadingList, mutateList
+        list,loadingList, mutateList,
+        checkPlayerIsOnList,
     }
 }
