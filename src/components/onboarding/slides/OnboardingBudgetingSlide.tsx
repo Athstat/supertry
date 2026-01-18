@@ -1,13 +1,13 @@
 import ScrummyLogo from "../../branding/scrummy_logo";
 import SecondaryText from "../../ui/typography/SecondaryText";
 
-export function OnboardingBudgetingSlide() {
+export function OnboardingMyTeamSlide() {
   return (
     <div className="flex flex-col gap-4 h-full overflow-y-auto items-center justify-start">
       <ScrummyLogo className="w-32 h-32" />
 
       <div>
-        <img src={'/images/onboarding/Compare Players.png'} className="rounded-xl" />
+        <img src={'https://dp7xhssw324ru.cloudfront.net/onboarding_1.png'} className="rounded-xl" />
       </div>
 
       {/* Coins Floating Glowings in Yellow */}
@@ -15,7 +15,7 @@ export function OnboardingBudgetingSlide() {
 
       <div className="">
         <h1 className="text-lg text-center font-extrabold">
-          Use your SCRUMMY coins to pick your favorite players!
+          Build your dream fantasy squad of 6 players
         </h1>
       </div>
 

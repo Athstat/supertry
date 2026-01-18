@@ -3,12 +3,14 @@ import PrimaryButton from '../../components/ui/buttons/PrimaryButton';
 import TabProgressDots from '../../components/ui/bars/TabProgressDots';
 import { AnimatePresence, motion } from 'framer-motion';
 import ScrummyMatrixBackground from '../../components/ui/containers/ScrummyMatrixBackground';
-import { OnboardingBudgetingSlide } from '../../components/onboarding/slides/OnboardingBudgetingSlide';
+import { OnboardingMyTeamSlide } from '../../components/onboarding/slides/OnboardingBudgetingSlide';
 import { OnboardingCTASlide } from '../../components/onboarding/slides/OnboardingCTASlide';
 import { OnboardingFriendsSlide } from '../../components/onboarding/slides/OnboardingFriendsSlide';
 import { OnboardingWelcomeSlide } from '../../components/onboarding/slides/OnboardingWelcomeSlide';
 import OnboardingFavouriteTeamSlide from '../../components/onboarding/slides/OnboardingFavouriteTeamSlide';
 import OnboardingProvider from '../../contexts/OnboardingContext';
+import { OnboardingFixturesSlide } from '../../components/onboarding/slides/OnboardingFixturesSlide';
+import { OnboardingPickemSlide } from '../../components/onboarding/slides/OnboardingPickemSlide';
 
 
 /** Renders the onboarding screen */
@@ -29,8 +31,10 @@ function Content() {
   const onboardingSlides: ReactNode[] = [
     <OnboardingWelcomeSlide />,
     <OnboardingFavouriteTeamSlide />,
-    <OnboardingBudgetingSlide />,
+    <OnboardingMyTeamSlide />,
     <OnboardingFriendsSlide />,
+    <OnboardingFixturesSlide />,
+    <OnboardingPickemSlide />,
     <OnboardingCTASlide />
   ]
 
