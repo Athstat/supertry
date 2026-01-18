@@ -64,7 +64,7 @@ function Content() {
             </DashboardHeroScoreSection>
             <DashboardHeroCTASection
                 roundTeam={roundTeam}
-                deadlineText='Game Starts In:'
+                deadlineText='Week 1 Deadline:'
                 hideVerboseInstructions
             />
         </DashboardHeroFrame>
