@@ -8,11 +8,22 @@ import { OnboardingCTASlide } from '../../components/onboarding/slides/Onboardin
 import { OnboardingFriendsSlide } from '../../components/onboarding/slides/OnboardingFriendsSlide';
 import { OnboardingWelcomeSlide } from '../../components/onboarding/slides/OnboardingWelcomeSlide';
 import OnboardingFavouriteTeamSlide from '../../components/onboarding/slides/OnboardingFavouriteTeamSlide';
+import OnboardingProvider from '../../contexts/OnboardingContext';
 
 
 /** Renders the onboarding screen */
 export default function OnBoardingScreen() {
 
+  return (
+    <OnboardingProvider>
+      <Content />
+    </OnboardingProvider>
+  )
+
+}
+
+
+function Content() {
   const [currIndex, setCurrentIndex] = useState<number>(0);
 
   const onboardingSlides: ReactNode[] = [
