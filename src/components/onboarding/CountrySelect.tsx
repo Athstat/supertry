@@ -56,7 +56,7 @@ export function CountrySelect({ value, onChange }: CountrySelectProps) {
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 w-full mt-2 bg-white dark:bg-dark-850 rounded-xl shadow-lg border border-gray-200 dark:border-dark-600">
+        <div className="w-full mt-2 bg-white dark:bg-dark-850 rounded-xl shadow-lg border border-gray-200 dark:border-dark-600">
           <div className="p-2">
             <div className="relative">
               <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />

@@ -7,6 +7,7 @@ import { OnboardingBudgetingSlide } from '../../components/onboarding/slides/Onb
 import { OnboardingCTASlide } from '../../components/onboarding/slides/OnboardingCTASlide';
 import { OnboardingFriendsSlide } from '../../components/onboarding/slides/OnboardingFriendsSlide';
 import { OnboardingWelcomeSlide } from '../../components/onboarding/slides/OnboardingWelcomeSlide';
+import OnboardingFavouriteTeamSlide from '../../components/onboarding/slides/OnboardingFavouriteTeamSlide';
 
 
 /** Renders the onboarding screen */
@@ -16,6 +17,7 @@ export default function OnBoardingScreen() {
 
   const onboardingSlides: ReactNode[] = [
     <OnboardingWelcomeSlide />,
+    <OnboardingFavouriteTeamSlide />,
     <OnboardingBudgetingSlide />,
     <OnboardingFriendsSlide />,
     <OnboardingCTASlide />
