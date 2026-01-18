@@ -7,6 +7,7 @@ import ScrummyLoadingState from "../components/ui/ScrummyLoadingState";
 import { CACHING_CONFIG } from "../types/constants";
 import { IProSeason } from "../types/season";
 import { competitionService } from "../services/competitionsService";
+import { swrFetchKeys } from "../utils/swrKeys";
 
 type ContextProps = {
     teams: IProTeam[],
@@ -26,7 +27,7 @@ export default function SeasonTeamsProvider({children} : ProviderProps) {
 
     const { selectedSeason, currentSeason} = useFantasySeasons();
     const activeSeason = selectedSeason || currentSeason;
-    const seasonTeamsKey = activeSeason ? `seasons-teams/${activeSeason.id}` : null;
+    const seasonTeamsKey = swrFetchKeys.getSeasonTeams(activeSeason?.id);
     
     const { data, isLoading, mutate, error } = useSWR(seasonTeamsKey, () => competitionService.getTeams(activeSeason?.competition_id ?? ""), {
         revalidateOnFocus: false,

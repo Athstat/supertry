@@ -188,5 +188,10 @@ export const swrFetchKeys = {
 
   getFantasySeasonFeaturedGroup: (fantasySeasonId: string) => {
     return `/api/v1/fantasy-seasons/${fantasySeasonId}/fantasy-league-groups/featured`;
+  },
+
+  getSeasonTeams: (seasonId?: string) => {
+    const seasonTeamsKey = seasonId ? `seasons-teams/${seasonId}` : null;
+    return seasonTeamsKey;
   }
 };

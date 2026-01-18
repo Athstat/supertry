@@ -16,8 +16,8 @@ export default function OnBoardingScreen() {
   const [currIndex, setCurrentIndex] = useState<number>(0);
 
   const onboardingSlides: ReactNode[] = [
-    <OnboardingWelcomeSlide />,
     <OnboardingFavouriteTeamSlide />,
+    <OnboardingWelcomeSlide />,
     <OnboardingBudgetingSlide />,
     <OnboardingFriendsSlide />,
     <OnboardingCTASlide />
