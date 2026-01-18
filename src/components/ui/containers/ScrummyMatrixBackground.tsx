@@ -1,6 +1,7 @@
 import { ReactNode } from "react"
 import { twMerge } from "tailwind-merge";
 import { useTheme } from "../../../contexts/ThemeContext";
+import { AppColours } from "../../../types/constants";
 
 type Props = {
     children?: ReactNode,
@@ -17,9 +18,14 @@ export default function ScrummyMatrixBackground({ children, className }: Props) 
 
     return (
         <div className={twMerge(
-            "relative min-h-screen w-full overflow-hidden bg-slate-50 dark:bg-dark-950",
-            className
+            "relative min-h-screen w-full overflow-hidden bg-white dark:bg-dark-950",
+            className, AppColours.BACKGROUND
         )}>
+            <div className={twMerge(
+                "absolute z-[10] top-0 left-0 w-full h-[40px] bg-gradient-to-b from-white to-transparent",
+                AppColours.BACKGROUND_GRADIENT
+            )} />
+
             {/* Very subtle grid pattern background */}
             <div className="absolute inset-0 opacity-30 dark:opacity-30">
                 <div
