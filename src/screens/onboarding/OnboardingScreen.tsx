@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import PrimaryButton from '../../components/ui/buttons/PrimaryButton';
 import TabProgressDots from '../../components/ui/bars/TabProgressDots';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -29,12 +29,7 @@ export default function OnBoardingScreen() {
 function Content() {
   const [currIndex, setCurrentIndex] = useState<number>(0);
 
-  // preloading images
-  preload('https://dp7xhssw324ru.cloudfront.net/onboarding_1.png', {'as': 'image'});
-  preload('https://dp7xhssw324ru.cloudfront.net/onboarding_2.png', {'as': 'image'});
-  preload('https://dp7xhssw324ru.cloudfront.net/onboarding_3.png', {'as': 'image'});
-  preload('https://dp7xhssw324ru.cloudfront.net/onboarding_3.png', {'as': 'image'});
-  preload('https://dp7xhssw324ru.cloudfront.net/onboarding_4.png', {'as': 'image'});
+
 
   const onboardingSlides: ReactNode[] = [
     <OnboardingWelcomeSlide />,
@@ -56,7 +51,12 @@ function Content() {
     setCurrentIndex(index);
   }
 
-  
+  useEffect(() => {
+    preload('https://dp7xhssw324ru.cloudfront.net/onboarding_1.png', { 'as': 'image' });
+    preload('https://dp7xhssw324ru.cloudfront.net/onboarding_2.png', { 'as': 'image' });
+    preload('https://dp7xhssw324ru.cloudfront.net/onboarding_3.png', { 'as': 'image' });
+    preload('https://dp7xhssw324ru.cloudfront.net/onboarding_4.png', { 'as': 'image' });
+  }, []);
 
   return (
     <ScrummyMatrixBackground>
