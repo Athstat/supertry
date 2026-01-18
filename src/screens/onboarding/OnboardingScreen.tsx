@@ -11,6 +11,7 @@ import OnboardingFavouriteTeamSlide from '../../components/onboarding/slides/Onb
 import OnboardingProvider from '../../contexts/OnboardingContext';
 import { OnboardingFixturesSlide } from '../../components/onboarding/slides/OnboardingFixturesSlide';
 import { OnboardingPickemSlide } from '../../components/onboarding/slides/OnboardingPickemSlide';
+import { preload } from 'react-dom';
 
 
 /** Renders the onboarding screen */
@@ -27,6 +28,13 @@ export default function OnBoardingScreen() {
 
 function Content() {
   const [currIndex, setCurrentIndex] = useState<number>(0);
+
+  // preloading images
+  preload('https://dp7xhssw324ru.cloudfront.net/onboarding_1.png', {'as': 'image'});
+  preload('https://dp7xhssw324ru.cloudfront.net/onboarding_2.png', {'as': 'image'});
+  preload('https://dp7xhssw324ru.cloudfront.net/onboarding_3.png', {'as': 'image'});
+  preload('https://dp7xhssw324ru.cloudfront.net/onboarding_3.png', {'as': 'image'});
+  preload('https://dp7xhssw324ru.cloudfront.net/onboarding_4.png', {'as': 'image'});
 
   const onboardingSlides: ReactNode[] = [
     <OnboardingWelcomeSlide />,
@@ -47,6 +55,8 @@ function Content() {
   const handleJumpToIndex = (index: number) => {
     setCurrentIndex(index);
   }
+
+  
 
   return (
     <ScrummyMatrixBackground>
