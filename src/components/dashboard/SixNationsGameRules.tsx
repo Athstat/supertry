@@ -21,9 +21,9 @@ export default function SixNationsGameRules({ className }: Props) {
             "flex bg-[#F0F3F7] flex-col gap-4 pt-5 pb-5 pl-3 pr-3",
             className
         )}>
-            <h1 className="font-[510] text-[20px] text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>SCRUMMY M6N Fantasy</h1>
+            <h1 className="font-[510] text-[20px] text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>Rules and Prizes</h1>
             
-            <SecondaryText>Compete for glory and exclusive rewards in this year's M6N Fantasy challenge. Build your roster, track the leaderboard, and win big.</SecondaryText>
+            <SecondaryText>Compete for glory and exclusive rewards in this year’s M6N Fantasy challenge. Build your roster, track the leaderboard, triumph over all.</SecondaryText>
             
             {showGameRules && <div className='flex flex-col gap-4' >
                 <div>
@@ -51,7 +51,7 @@ export default function SixNationsGameRules({ className }: Props) {
                 onClick={toggleShowGameRules}
                 className="px-2 py-2.5 w-fit rounded-md bg-transparent border border-[#011E5C] dark:border-white font-semibold text-xs text-[#011E5C] dark:text-white uppercase shadow-md transition-colors hover:bg-[#011E5C] hover:text-white dark:hover:bg-white dark:hover:text-[#011E5C] whitespace-nowrap flex-shrink-0"
             >
-                {showGameRules ? "Hide Game Rules" : "Game Rules" }
+                {showGameRules ? "Hide Game Rules" : "SEE WHAT’S AT STAKE." }
             </button>
         </RoundedCard>
     )
