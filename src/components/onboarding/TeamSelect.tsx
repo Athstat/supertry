@@ -8,6 +8,7 @@ import { competitionService } from "../../services/competitionsService";
 import { IProTeam } from "../../types/team";
 import SecondaryText from "../ui/typography/SecondaryText";
 import TeamLogo from "../team/TeamLogo";
+import NoContentCard from "../ui/typography/NoContentMessage";
 
 interface TeamSelectProps {
   value: IProTeam[];
@@ -61,6 +62,25 @@ function SeasonTeamsList({ season, value, onChange, searchQuery }: SeasonTeamsLi
 
   const teams = data || [];
 
+  const filteredTeams = teams.filter((t) => {
+    if (searchQuery) {
+      const teamName = (t.athstat_name || '').toLowerCase();
+      const matchesTeamName = teamName.startsWith(searchQuery.toLowerCase());
+      const teamNameParts = teamName.split(' ');
+
+      const matchesParts = teamNameParts.reduce((prevFlag, value) => {
+        const matchesPartOfName = value.startsWith(searchQuery.toLowerCase());
+        return prevFlag || matchesPartOfName;
+      }, false);
+
+      return matchesTeamName || matchesParts;
+    }
+
+    return true;
+  });
+
+  const isEmpty = filteredTeams.length === 0;
+
   const getIsTeamSelected = (team: IProTeam) => {
     return Boolean(value.find((t) => t.athstat_id === team.athstat_id));
   }
@@ -92,7 +112,7 @@ function SeasonTeamsList({ season, value, onChange, searchQuery }: SeasonTeamsLi
       </div>
 
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
-        {teams.map((team) => (
+        {filteredTeams.map((team) => (
           <TeamCard
             team={team}
             onClick={handleClickTeam}
@@ -101,6 +121,12 @@ function SeasonTeamsList({ season, value, onChange, searchQuery }: SeasonTeamsLi
           />
         ))}
       </div>
+
+      {isEmpty && (
+        <NoContentCard 
+          message={searchQuery ? `No team found for '${searchQuery}' ` : "Whoops! We couldn't find any teams"}
+        />
+      )}
     </div>
   )
 }
