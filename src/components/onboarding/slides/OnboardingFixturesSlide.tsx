@@ -20,7 +20,7 @@ export function OnboardingFixturesSlide() {
       <div className="flex flex-col items-center text-center justify-center">
         {/* <p className='font-bold' >Use your SCRUMMY coins to pick your players</p> */}
         <SecondaryText className="text-lg text-center">
-          SCRUMMY offers idepth fixture scores and stats, from boxscores, individual player statistics to power rankings. Never miss a beat with fixture notifications
+          SCRUMMY gives you scores, stats, and in depth player analytics. Never miss a try with our notifications and updates.
         </SecondaryText>
       </div>
     </div>

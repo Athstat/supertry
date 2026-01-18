@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { analytics } from "../../../services/analytics/anayticsService";
 import ScrummyLogo from "../../branding/scrummy_logo";
 import PrimaryButton from "../../ui/buttons/PrimaryButton";
-import SecondaryText from "../../ui/typography/SecondaryText";
 import { useInternalUserProfile } from "../../../hooks/auth/useInternalUserProfile";
 import { useOnboarding } from "../../../hooks/onboarding/useOnboarding";
 import { UpdatedUserInternalProfileReq } from "../../../types/auth";
@@ -43,12 +42,12 @@ export function OnboardingCTASlide() {
 
         <div className="flex flex-col gap-4">
           <h1 className="text-3xl font-black text-center dark:text-white">
-            Bootcamp completed!
+            You are now ready to go!
           </h1>
 
-          <div className="flex flex-col items-center text-center font-semibold text-md">
+          {/* <div className="flex flex-col items-center text-center font-semibold text-md">
             <SecondaryText className="text-md">You are now ready to go!</SecondaryText>
-          </div>
+          </div> */}
         </div>
 
         <div className="flex flex-col items-center justify-center">

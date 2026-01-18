@@ -21,7 +21,7 @@ export function OnboardingFriendsSlide() {
         {/* <p className='font-bold' >Use your SCRUMMY coins to pick your players</p> */}
         <SecondaryText className="text-lg text-center">
           Create your own league, invite friends, and compete for bragging rights. SCRUMMY has
-          in-depth player analytics, live updates, and everything you need for fantasy rugby
+          in-depth player analytics, live updates, and everything you need for fantasy rugby.
         </SecondaryText>
       </div>
     </div>
