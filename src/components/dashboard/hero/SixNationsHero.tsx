@@ -42,7 +42,7 @@ function Content() {
 
     return (
         <DashboardHeroFrame
-            imageUrl={'https://dp7xhssw324ru.cloudfront.net/6nations_banner_bg.png.png'}
+            imageUrl={'pro_6_nations_banner_bg.png'}
             cornerImageUrl='/images/dashboard/rugby_ball.png'
             cornerImageClassName='w-28 h-28'
         >
