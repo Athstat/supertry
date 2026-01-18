@@ -2,6 +2,7 @@ import { createContext, ReactNode, useState } from "react"
 import { Country, countryFlags } from "../types/countries"
 import { OnboardingFavouriteTeam } from "../types/onboarding"
 import { useGeoLocation } from "../hooks/web/useGeoLocation"
+import { useInternalUserProfile } from "../hooks/auth/useInternalUserProfile"
 
 type OnboardingContextType = {
     favouriteTeams: OnboardingFavouriteTeam[],
@@ -20,12 +21,17 @@ type ProviderProps = {
 export default function OnboardingProvider({ children }: ProviderProps) {
     
     const { userLocation } = useGeoLocation();
+    const {internalProfile} = useInternalUserProfile();
+
+    const previousCountry = countryFlags.find((c) => {
+        return c.name === internalProfile?.country;
+    });
 
     const defaultCountry: Country | undefined = countryFlags.find((c) => {
         return c.code === userLocation?.country_code;
     })
 
-    const [country, setCountry] = useState<Country | undefined>(defaultCountry);
+    const [country, setCountry] = useState<Country | undefined>(previousCountry || defaultCountry);
     const [favouriteTeams, setFavouriteTeams] = useState<OnboardingFavouriteTeam[]>([]);
 
     return (
