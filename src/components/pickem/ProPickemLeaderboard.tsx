@@ -34,7 +34,7 @@ export default function ProPickemLeaderboard() {
           borderCollapse: 'separate'
         }}
 
-        title={`${selectedSeason?.name} Leaderboard`}
+        title={`${selectedSeason?.competition_name} PICK'EM Leaderboard`}
       >
 
         <Table.Header>

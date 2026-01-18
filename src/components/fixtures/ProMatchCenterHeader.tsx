@@ -40,7 +40,7 @@ export default function ProMatchCenterHeader({
                 <SegmentedControl
                     options={[
                         { value: 'fixtures', label: 'Fixtures' },
-                        { value: 'pickem', label: "Pick'Em" },
+                        { value: 'pickem', label: "PICK'EM" },
                     ]}
                     value={viewMode}
                     onChange={handleChangeViewMode}
