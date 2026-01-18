@@ -7,9 +7,9 @@ import { useAuth } from "../../contexts/AuthContext";
 
 export function useInternalUserProfile() {
 
-    const localstorageKey = `USER_ATTEMPTED_ONBOARDING`;
-
     const {authUser} = useAuth();
+    const localstorageKey = `USER_ATTEMPTED_ONBOARDING/${authUser?.kc_id}`;
+
     const context = useContext(InternalUserProfileContext);
 
     const [isLoading, setIsLoading] = useState(false);
