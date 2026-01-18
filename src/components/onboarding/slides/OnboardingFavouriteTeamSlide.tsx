@@ -1,22 +1,12 @@
-import { useState } from "react";
 import { CountrySelect } from "../CountrySelect";
-import { Country, countryFlags } from "../../../types/countries";
 import { TeamSelect } from "../TeamSelect";
-import { IProTeam } from "../../../types/team";
-import { useGeoLocation } from "../../../hooks/web/useGeoLocation";
+import { useOnboarding } from "../../../hooks/onboarding/useOnboarding";
 
 
 /** Renders the slide for the user to pick their favourite team */
 export default function OnboardingFavouriteTeamSlide() {
 
-  const {userLocation} = useGeoLocation();
-
-  const defaultCountry: Country | undefined = countryFlags.find((c) => {
-    return c.code === userLocation?.country_code;
-  })
-
-  const [country, setCountry] = useState<Country | undefined>(defaultCountry);
-  const [selectedTeams, setSelectedTeams] = useState<IProTeam[]>([]);
+  const {country, setCountry, favouriteTeams, setFavouriteTeams} = useOnboarding();
 
   return (
     <div className="flex flex-col items-start justify-start w-full gap-8" >
@@ -43,8 +33,8 @@ export default function OnboardingFavouriteTeamSlide() {
         </div>
 
         <TeamSelect 
-          value={selectedTeams}
-          onChange={setSelectedTeams}
+          value={favouriteTeams}
+          onChange={setFavouriteTeams}
         />
       </div>
 

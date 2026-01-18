@@ -10,10 +10,11 @@ import SecondaryText from "../ui/typography/SecondaryText";
 import TeamLogo from "../team/TeamLogo";
 import NoContentCard from "../ui/typography/NoContentMessage";
 import { LoadingIndicator } from "../ui/LoadingIndicator";
+import { OnboardingFavouriteTeam } from "../../types/onboarding";
 
 interface TeamSelectProps {
-  value: IProTeam[];
-  onChange: (team: IProTeam[]) => void;
+  value: OnboardingFavouriteTeam[];
+  onChange: (team: OnboardingFavouriteTeam[]) => void;
 }
 
 export function TeamSelect({ value, onChange }: TeamSelectProps) {
@@ -51,8 +52,8 @@ export function TeamSelect({ value, onChange }: TeamSelectProps) {
 
 type SeasonTeamsListProps = {
   season: IProSeason,
-  value: IProTeam[],
-  onChange?: (team: IProTeam[]) => void,
+  value: OnboardingFavouriteTeam[],
+  onChange?: (team: OnboardingFavouriteTeam[]) => void,
   searchQuery?: string
 }
 
@@ -84,7 +85,7 @@ function SeasonTeamsList({ season, value, onChange, searchQuery }: SeasonTeamsLi
   const isEmpty = filteredTeams.length === 0;
 
   const getIsTeamSelected = (team: IProTeam) => {
-    return Boolean(value.find((t) => t.athstat_id === team.athstat_id));
+    return Boolean(value.find((t) => t.team.athstat_id === team.athstat_id));
   }
 
 
@@ -96,17 +97,17 @@ function SeasonTeamsList({ season, value, onChange, searchQuery }: SeasonTeamsLi
 
       if (isInList) {
 
-        const newList = [...value].filter((t) => t.athstat_id !== team.athstat_id);
+        const newList = [...value].filter((t) => t.team.athstat_id !== team.athstat_id);
         onChange(newList);
 
       } else {
 
         let newList = [...value].filter((v) => {
           // Remove other selected teams from the same season so only one is selected
-          return !teams.find((t) => v.athstat_id === t.athstat_id)
+          return !teams.find((t) => v.team.athstat_id === t.athstat_id)
         });
 
-        newList = [...newList, team];
+        newList = [...newList, {team, seasonId: season.id}];
         onChange(newList);
       }
 

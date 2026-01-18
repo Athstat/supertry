@@ -44,8 +44,6 @@ function Content() {
     setCurrentIndex(index);
   }
 
-
-
   return (
     <ScrummyMatrixBackground>
       <div className="flex flex-col w-full p-2 lg:px-[30%] h-[100vh] overflow-y-hidden white">
