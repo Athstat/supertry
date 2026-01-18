@@ -9,6 +9,7 @@ import { IProTeam } from "../../types/team";
 import SecondaryText from "../ui/typography/SecondaryText";
 import TeamLogo from "../team/TeamLogo";
 import NoContentCard from "../ui/typography/NoContentMessage";
+import { LoadingIndicator } from "../ui/LoadingIndicator";
 
 interface TeamSelectProps {
   value: IProTeam[];
@@ -62,6 +63,7 @@ function SeasonTeamsList({ season, value, onChange, searchQuery }: SeasonTeamsLi
 
   const teams = data || [];
 
+
   const filteredTeams = teams.filter((t) => {
     if (searchQuery) {
       const teamName = (t.athstat_name || '').toLowerCase();
@@ -86,14 +88,25 @@ function SeasonTeamsList({ season, value, onChange, searchQuery }: SeasonTeamsLi
   }
 
 
+
   const handleClickTeam = (team: IProTeam) => {
     if (onChange) {
+
       const isInList = getIsTeamSelected(team);
+
       if (isInList) {
+
         const newList = [...value].filter((t) => t.athstat_id !== team.athstat_id);
         onChange(newList);
+
       } else {
-        const newList = [...value, team];
+
+        let newList = [...value].filter((v) => {
+          // Remove other selected teams from the same season so only one is selected
+          return !teams.find((t) => v.athstat_id === t.athstat_id)
+        });
+
+        newList = [...newList, team];
         onChange(newList);
       }
 
@@ -111,6 +124,10 @@ function SeasonTeamsList({ season, value, onChange, searchQuery }: SeasonTeamsLi
         <SecondaryText>Select one team for each competition</SecondaryText>
       </div>
 
+      {isLoading && (
+        <LoadingIndicator />
+      )}
+
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
         {filteredTeams.map((team) => (
           <TeamCard
@@ -122,8 +139,8 @@ function SeasonTeamsList({ season, value, onChange, searchQuery }: SeasonTeamsLi
         ))}
       </div>
 
-      {isEmpty && (
-        <NoContentCard 
+      {isEmpty && !isLoading && (
+        <NoContentCard
           message={searchQuery ? `No team found for '${searchQuery}' ` : "Whoops! We couldn't find any teams"}
         />
       )}
