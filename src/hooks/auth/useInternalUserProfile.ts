@@ -7,8 +7,8 @@ import { useAuth } from "../../contexts/AuthContext";
 
 export function useInternalUserProfile() {
 
-    const {authUser} = useAuth();
-    const localstorageKey = `USER_ATTEMPTED_ONBOARDING/${authUser?.kc_id}`;
+    const { authUser } = useAuth();
+    const localstorageKey = `USER_ATTEMPTED_ONBOARDING/${authUser?.kc_id || 'default'}`;
 
     const context = useContext(InternalUserProfileContext);
 
@@ -23,14 +23,14 @@ export function useInternalUserProfile() {
     const shouldForceOnboarding = !hasUserAttempted && !isOnboardingCompleted;
 
     const updateProfile = useCallback(async (data: UpdatedUserInternalProfileReq) => {
+
+        if (!authUser) {
+            return;
+        }
+
+        setIsLoading(true);
         
         try {
-
-            if (!authUser) {
-                return;
-            }
-
-            setIsLoading(true);
 
             const profile = await userService.updateInternalProfle(authUser?.kc_id, data);
 
@@ -38,7 +38,7 @@ export function useInternalUserProfile() {
                 context.refresh(profile);
             }
 
-        } catch(err) {
+        } catch (err) {
             logger.error("Error updating user internal profile ", err);
         } finally {
             setIsLoading(false);
