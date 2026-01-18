@@ -18,6 +18,7 @@ import TooltipProvider from "./providers/ui/TooltipProvider";
 import SeasonTeamsProvider from "./contexts/SeasonTeamsContext";
 import { FantasySeasonsPickerModal } from "./components/fantasy-seasons/FantasySeasonsPickerModal";
 import GeoLocationProvider from "./contexts/GeoLocationContext";
+import InternalUserProfileProvider from "./contexts/InternalUserProfileContext";
 
 type Props = {
     children?: ReactNode
@@ -61,7 +62,9 @@ function AuthenticationLayer({ children }: Props) {
             <AuthTokenProvider>
                 <AuthProvider>
                     <DeviceIdSync />
-                    {children}
+                    <InternalUserProfileProvider>
+                        {children}
+                    </InternalUserProfileProvider>
                 </AuthProvider>
             </AuthTokenProvider>
         </GoogleOAuthProvider>

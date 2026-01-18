@@ -11,6 +11,7 @@ import DominateScrumCard from '../components/dashboard/DominateScrumCard';
 import PickemCtaCard from '../components/dashboard/PickemCtaCard';
 import { DashboardHeroLoadingSkeleton } from '../components/dashboard/hero/DashboardHeroSections';
 import RoundedCard from '../components/ui/cards/RoundedCard';
+import OnboardingChecker from '../components/dashboard/OnboardingChecker';
 
 
 export function DashboardScreen() {
@@ -44,6 +45,8 @@ export function DashboardScreen() {
           <FantasyTopPerformersCard className='px-2 m-4' />
 
           <PickemCtaCard className='p-4 m-4' />
+
+          <OnboardingChecker />
 
         </PageView>
       </Activity>
