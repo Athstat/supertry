@@ -1,4 +1,4 @@
-import { DjangoAuthUser, DjangoUserMinimal, UpdateUserProfileReq } from "../types/auth";
+import { DjangoAuthUser, DjangoUserMinimal, InternalUserProfile, UpdatedUserInternalProfileReq, UpdateUserProfileReq } from "../types/auth";
 import { getAuthHeader, getUri } from "../utils/backendUtils";
 import { logger } from "./logger";
 
@@ -56,6 +56,44 @@ export const userService = {
             }
         } catch (err) {
             logger.error("Error fetching user by id ", err);
+        }
+
+        return undefined;
+    },
+
+    getInternalProfile: async (userId: string) : Promise<InternalUserProfile | undefined> => {
+        try {
+            
+            const uri = getUri(`/api/v1/users/${userId}/internal-profile`);
+            const res = await fetch(uri, {
+                headers:getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as InternalUserProfile;
+            }
+
+        } catch (err) {
+            logger.error('Erro fetching user internal profile ', err);
+        }
+
+        return undefined;
+    },
+
+    updateInternalProfle: async (userId: string, data: UpdatedUserInternalProfileReq) : Promise<InternalUserProfile | undefined> => {
+        try {
+            const uri = getUri(`/api/v1/users/${userId}/internal-profile`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader(),
+                method: 'PUT',
+                body: JSON.stringify(data)
+            });
+
+            if (res.ok) {
+                return (await res.json()) as InternalUserProfile;
+            }
+        } catch (err) {
+            logger.error("Error updating user internal profile ", err);
         }
 
         return undefined;

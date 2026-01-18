@@ -186,7 +186,7 @@ export type UpdateUserProfileReq = {
 
 export type DjangoUserMinimal = {
   kc_id: string,
-  email: string ,
+  email: string,
   first_name?: string,
   last_name?: string,
   username?: string,
@@ -194,3 +194,29 @@ export type DjangoUserMinimal = {
 }
 
 export type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated';
+
+export type UserFavouriteTeam = {
+  user_id: string,
+  team_id: string,
+  season_id: string
+}
+
+export type InternalUserProfile = {
+  user_id: string,
+  birth_date?: Date,
+  is_email_verified: boolean,
+  device_id?: string,
+  onesignal_id?: string,
+  is_device_account?: boolean,
+  created_at?: Date,
+  updated_at?: Date,
+  country?: string,
+  completed_onboarding?: boolean,
+  favourite_teams: UserFavouriteTeam[]
+}
+
+export type UpdatedUserInternalProfileReq = {
+  country?: string,
+  completed_onboarding?: boolean,
+  favourite_teams: UserFavouriteTeam[]
+}

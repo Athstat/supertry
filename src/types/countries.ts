@@ -975,9 +975,8 @@ export const countryFlags: Country[] = [
         "name": "Saudi Arabia",
         "flag": "🇸🇦"
     },
-
     {
-        "code": "SC",
+        "code": "GB-SCT",
         "name": "Scotland",
         "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿"
     },

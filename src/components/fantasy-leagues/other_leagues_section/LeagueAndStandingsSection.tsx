@@ -30,7 +30,7 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
     const toggle = () => setShowCreateModal(prev => !prev);
 
     const officialLeagues = leagues.filter((l) => {
-        return l.type === 'official_league';
+        return l.type === 'official_league' || l.type === 'system_created';
     });
 
     const myLeagues = leagues.filter((l) => {
@@ -38,7 +38,7 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
     })
 
     const joinedLeagues = leagues.filter((l) => {
-        const notOfficial = l.type !== 'official_league';
+        const notOfficial = l.type !== 'official_league' && l.type !== 'system_created';
         const notMine = l.creator_id !== authUser?.kc_id;
         return notMine && notOfficial;
     })

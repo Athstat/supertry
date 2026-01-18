@@ -12,7 +12,8 @@ export function useJoinedLeagues(fantasySeasonId?: string) {
 
     const { data: fetchedLeagues, isLoading: loadingUserLeagues, error } = useSWR(
         key, () => fantasyLeagueGroupsFetcher(fantasySeasonId || ""), {
-        revalidateOnFocus: false
+        revalidateOnFocus: false,
+        revalidateIfStale: true
     });
 
     const leagues = useMemo(() => (fetchedLeagues ?? []), [fetchedLeagues]);
