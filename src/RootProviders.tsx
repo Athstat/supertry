@@ -17,6 +17,7 @@ import AppErrorFallback from "./components/ui/navigation/AppErrorFallback";
 import TooltipProvider from "./providers/ui/TooltipProvider";
 import SeasonTeamsProvider from "./contexts/SeasonTeamsContext";
 import { FantasySeasonsPickerModal } from "./components/fantasy-seasons/FantasySeasonsPickerModal";
+import GeoLocationProvider from "./contexts/GeoLocationContext";
 
 type Props = {
     children?: ReactNode
@@ -108,15 +109,17 @@ function AppStateLayer({ children }: Props) {
     return (
         <NetworkStatusProvider>
             <AppStateProvider>
-                <ErrorBoundary
-                    onError={handleError}
-                    fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
-                >
-                    <TooltipProvider>
-                        <FantasySeasonsPickerModal />
-                        {children}
-                    </TooltipProvider>
-                </ErrorBoundary>
+                <GeoLocationProvider>
+                    <ErrorBoundary
+                        onError={handleError}
+                        fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
+                    >
+                        <TooltipProvider>
+                            <FantasySeasonsPickerModal />
+                            {children}
+                        </TooltipProvider>
+                    </ErrorBoundary>
+                </GeoLocationProvider>
             </AppStateProvider>
         </NetworkStatusProvider>
     )
