@@ -19,7 +19,6 @@ import SeasonTeamsProvider from "./contexts/SeasonTeamsContext";
 import { FantasySeasonsPickerModal } from "./components/fantasy-seasons/FantasySeasonsPickerModal";
 import GeoLocationProvider from "./contexts/GeoLocationContext";
 import InternalUserProfileProvider from "./contexts/InternalUserProfileContext";
-import { preload } from "react-dom";
 
 type Props = {
     children?: ReactNode
@@ -104,9 +103,6 @@ function DataLayer({ children }: Props) {
 function AppStateLayer({ children }: Props) {
 
     const [, setError] = useState<Error>();
-
-    // preload dashboard banner
-    preload('https://dp7xhssw324ru.cloudfront.net/6nations_banner_bg.png.png', {as: 'image'})
 
     const handleError = (err: Error, errorInfo: ErrorInfo) => {
         console.error('Root level error caught:', err, errorInfo);

@@ -44,7 +44,7 @@ function Content() {
   const isWelcomeComplete = currIndex > onboardingSlides.length - 2;
 
   const handleNextSlide = () => {
-    setCurrentIndex(prev => prev + 1);
+    setCurrentIndex(prev => Math.min(prev + 1, onboardingSlides.length - 1));
   }
 
   const handleJumpToIndex = (index: number) => {

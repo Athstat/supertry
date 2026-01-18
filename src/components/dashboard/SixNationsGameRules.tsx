@@ -35,7 +35,7 @@ export default function SixNationsGameRules({ className }: Props) {
                 </div>
 
                 <div>
-                    <SecondaryText>2. <strong>Prizes:</strong> Top 10 on the leaderboard by Mar 15, 11:59 PM BST win.</SecondaryText>
+                    <SecondaryText>3. <strong>Prizes:</strong> Top 10 on the leaderboard by Mar 15, 11:59 PM BST win.</SecondaryText>
                 </div>
 
                 <div className='pl-4 flex flex-col gap-2' >
