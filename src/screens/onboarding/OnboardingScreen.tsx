@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import PrimaryButton from '../../components/ui/buttons/PrimaryButton';
 import TabProgressDots from '../../components/ui/bars/TabProgressDots';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -11,6 +11,7 @@ import OnboardingFavouriteTeamSlide from '../../components/onboarding/slides/Onb
 import OnboardingProvider from '../../contexts/OnboardingContext';
 import { OnboardingFixturesSlide } from '../../components/onboarding/slides/OnboardingFixturesSlide';
 import { OnboardingPickemSlide } from '../../components/onboarding/slides/OnboardingPickemSlide';
+import { preload } from 'react-dom';
 
 
 /** Renders the onboarding screen */
@@ -28,6 +29,8 @@ export default function OnBoardingScreen() {
 function Content() {
   const [currIndex, setCurrentIndex] = useState<number>(0);
 
+
+
   const onboardingSlides: ReactNode[] = [
     <OnboardingWelcomeSlide />,
     <OnboardingFavouriteTeamSlide />,
@@ -41,12 +44,19 @@ function Content() {
   const isWelcomeComplete = currIndex > onboardingSlides.length - 2;
 
   const handleNextSlide = () => {
-    setCurrentIndex(prev => prev + 1);
+    setCurrentIndex(prev => Math.min(prev + 1, onboardingSlides.length - 1));
   }
 
   const handleJumpToIndex = (index: number) => {
     setCurrentIndex(index);
   }
+
+  useEffect(() => {
+    preload('https://dp7xhssw324ru.cloudfront.net/onboarding_1.png', { 'as': 'image' });
+    preload('https://dp7xhssw324ru.cloudfront.net/onboarding_2.png', { 'as': 'image' });
+    preload('https://dp7xhssw324ru.cloudfront.net/onboarding_3.png', { 'as': 'image' });
+    preload('https://dp7xhssw324ru.cloudfront.net/onboarding_4.png', { 'as': 'image' });
+  }, []);
 
   return (
     <ScrummyMatrixBackground>

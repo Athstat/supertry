@@ -34,7 +34,7 @@ export default function ProPickemLeaderboard() {
           borderCollapse: 'separate'
         }}
 
-        title={`${selectedSeason?.name} Leaderboard`}
+        title={`${selectedSeason?.competition_name} PICK'EM Leaderboard`}
       >
 
         <Table.Header>
@@ -63,7 +63,7 @@ export default function ProPickemLeaderboard() {
 
       {emptyRankings && (
         <NoContentCard
-          message="Opps! Pick'em Leaderboard Rankings are currently unavailable"
+          message="Oops! Pick'em Leaderboard Rankings are currently unavailable"
         />
       )}
     </div>
