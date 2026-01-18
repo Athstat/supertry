@@ -1,6 +1,7 @@
 import { CountrySelect } from "../CountrySelect";
 import { TeamSelect } from "../TeamSelect";
 import { useOnboarding } from "../../../hooks/onboarding/useOnboarding";
+import SecondaryText from "../../ui/typography/SecondaryText";
 
 
 /** Renders the slide for the user to pick their favourite team */
@@ -11,7 +12,7 @@ export default function OnboardingFavouriteTeamSlide() {
   return (
     <div className="flex flex-col items-start justify-start w-full gap-8" >
       <div className="flex flex-col items-center justify-center w-full" >
-        <p className="font-bold text-2xl" >Lets get you locked in!</p>
+        <p className="font-bold text-2xl" >Let's get you locked in!</p>
       </div>
 
       <div className="flex flex-col gap-3 w-full" >
@@ -29,12 +30,14 @@ export default function OnboardingFavouriteTeamSlide() {
 
       <div className="flex flex-col gap-3 w-full" >
         <div>
-          <p>Whats your favourite rugby team?</p>
+          <p>Pcik your favourite team</p>
+          <SecondaryText>Choose your favorite Six Nations Team and URC Club, or press Continue to keep going.</SecondaryText>
         </div>
 
         <TeamSelect 
           value={favouriteTeams}
           onChange={setFavouriteTeams}
+          hideSearchbar
         />
       </div>
 

@@ -20,7 +20,7 @@ export function OnboardingPickemSlide() {
       <div className="flex flex-col items-center text-center justify-center">
         {/* <p className='font-bold' >Use your SCRUMMY coins to pick your players</p> */}
         <SecondaryText className="text-lg text-center">
-          Predict match results in the pickem league. Rank against other users on the global Pickem leaderboard!
+          Predict match results in the PICK'EM league. Rank against other users on the global Pickem leaderboard!
         </SecondaryText>
       </div>
     </div>

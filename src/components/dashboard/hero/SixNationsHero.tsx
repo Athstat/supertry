@@ -42,7 +42,7 @@ function Content() {
 
     return (
         <DashboardHeroFrame
-            imageUrl={'/images/dashboard/6nations_banner_bg.png'}
+            imageUrl={'https://dp7xhssw324ru.cloudfront.net/6nations_banner_bg.png.png'}
             cornerImageUrl='/images/dashboard/rugby_ball.png'
             cornerImageClassName='w-28 h-28'
         >
@@ -55,16 +55,16 @@ function Content() {
                         <TrophyStartIcon width='30' height='30' />
                     </div>
 
-                    <div>
-                        <p className='text-lg text-white font-light text-center' style={{ fontFamily: 'Oswald, sans-serif' }} >
-                            <strong className='text-[#D94204] font-normal ' >Win 2 Tickets</strong> to EPRC Champions Cup Final (2026)
+                    <div className='w-full items-center justify-center flex flex-row' >
+                        <p className='text-lg text-white max-w-[80%] font-light text-center' style={{ fontFamily: 'Oswald, sans-serif' }} >
+                            <strong className='text-[#D94204] font-normal ' >Win Tickets</strong> to the EPRC Champions Cup Final (2026) in Bilbao, Spain
                         </p>
                     </div>
                 </div>
             </DashboardHeroScoreSection>
             <DashboardHeroCTASection
                 roundTeam={roundTeam}
-                deadlineText='Competiton Deadline:'
+                deadlineText='Week 1 Deadline:'
                 hideVerboseInstructions
             />
         </DashboardHeroFrame>
