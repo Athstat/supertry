@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import { Check, ChevronDown, Search } from "lucide-react";
 import { countryFlags, Country } from "../../types/countries";
 import { twMerge } from "tailwind-merge";
-import RoundedCard from "../ui/cards/RoundedCard";
 
 interface CountrySelectProps {
   value?: Country;
