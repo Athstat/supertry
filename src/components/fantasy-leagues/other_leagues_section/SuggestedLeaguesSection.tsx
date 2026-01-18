@@ -17,7 +17,9 @@ export default function SuggestedLeaguesSections({ fantasySeason }: Props) {
     const { joinableLeagues: leagues, isLoading } = useSuggestedLeagues(fantasySeason.id);
 
     const trimmedList = useMemo(() => {
-        return [...leagues].slice(0, 5);
+        return [...leagues].filter((l) => {
+            return l.type !== 'system_created';
+        }).slice(0, 5);
     }, [leagues]);
 
     if (isLoading) {
