@@ -15,6 +15,7 @@ import { useFantasySeasons } from "../../../hooks/dashboard/useFantasySeasons";
 import { smartRoundUp } from "../../../utils/intUtils";
 import RoundedCard from "../../ui/cards/RoundedCard";
 import { trimSeasonYear } from "../../../utils/stringUtils";
+import { twMerge } from "tailwind-merge";
 
 
 export function DashboardHeroLoadingSkeleton() {
@@ -30,11 +31,12 @@ export function DashboardHeroLoadingSkeleton() {
 type DashboardFrameProps = {
   children?: ReactNode,
   imageUrl?: string,
-  hideBeastImage?: boolean
+  cornerImageUrl?: string,
+  cornerImageClassName?: string
 }
 
 /** Renders the dashboard frame */
-export function DashboardHeroFrame({ children, imageUrl, hideBeastImage = false }: DashboardFrameProps) {
+export function DashboardHeroFrame({ children, imageUrl, cornerImageUrl = '/images/dashboard/beast_screeming.png', cornerImageClassName}: DashboardFrameProps) {
 
   const finalImageUrl = imageUrl || '/images/dashboard/hero-background.jpg';
 
@@ -63,10 +65,13 @@ export function DashboardHeroFrame({ children, imageUrl, hideBeastImage = false 
         {children}
       </div>
 
-      {!hideBeastImage && <div className='z-[20] max-h-32 overflow-clip sm:max-h-32  absolute bottom-0 left-0 px-0.5' >
+      {<div className='z-[20] max-h-32 overflow-clip sm:max-h-32  absolute bottom-0 left-0 px-0.5' >
         <img
-          src='/images/dashboard/beast_screeming.png'
-          className='h-32 sm:h-32 object-contain'
+          src={cornerImageUrl}
+          className={twMerge(
+            'h-32 sm:h-32 object-contain',
+            cornerImageClassName
+          )}
         />
       </div>}
 

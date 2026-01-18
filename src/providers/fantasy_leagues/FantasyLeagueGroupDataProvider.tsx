@@ -36,10 +36,10 @@ export default function FantasyLeagueGroupDataProvider({
 
   return (
     <ScopeProvider atoms={atoms}>
-      <Fetcher 
+      <Fetcher
         leagueId={leagueId}
         loadingFallback={loadingFallback}
-        skipCache={skipCache} 
+        skipCache={skipCache}
         fetchMembers={fetchMembers}
       >
         {children}
@@ -49,8 +49,6 @@ export default function FantasyLeagueGroupDataProvider({
 }
 
 function Fetcher({ children, leagueId, loadingFallback, skipCache, fetchMembers = true }: Props) {
-
-  
 
   const [leagueGroup, setFantasyLeagueGroup] = useAtom(fantasyLeagueGroupAtom);
   const setFantasyLeagueMembers = useSetAtom(fantasyLeagueGroupMembersAtom);
@@ -67,28 +65,18 @@ function Fetcher({ children, leagueId, loadingFallback, skipCache, fetchMembers 
   }, [skipCache]);
 
   const key = leagueId ? (swrFetchKeys.getFantasyLeagueGroupById(leagueId) + `${datePart}`) : null;
-  const { data: league, isLoading: loadingLeague } = useSWR(key, () =>
-    fantasyLeagueGroupsService.getGroupById(leagueId ?? '')
-  );
-
-  const shouldFetchMembers = leagueId && fetchMembers;
-  const membersKey = shouldFetchMembers ? swrFetchKeys.getLeagueGroupMembers(leagueId) : null;
-  
-  const {
-    data: members,
-    isLoading: loadingMembers,
-    mutate,
-  } = useSWR(membersKey, () => fantasyLeagueGroupsService.getGroupMembers(leagueId ?? ''), {
-    revalidateIfStale: true
+  const { data: leagueData, isLoading: loadingLeague, mutate: refreshLeague } = useSWR(key, () =>
+    fetcher(leagueId ?? '', fetchMembers)
+  , {
+    revalidateOnFocus: false
   });
 
-  const roundsKey = leagueId ? swrFetchKeys.getLeagueGroupRounds(leagueId) : null;
-  const { data: rounds, isLoading: loadingRounds } = useSWR(roundsKey, () =>
-    fantasyLeagueGroupsService.getGroupRounds(leagueId ?? '')
-  );
+  const league = leagueData?.league;
+  const members = useMemo(() => leagueData?.members || [], [leagueData]);
+  const rounds = useMemo(() => leagueData?.rounds || [], [leagueData]);
 
   const [isMutating, setMutate] = useState<boolean>(false);
-  const isLoading = loadingLeague || loadingMembers || loadingRounds || isMutating || loadingConfig;
+  const isLoading = loadingLeague || isMutating || loadingConfig;
 
   const debouncedLoading = useDebounced(isLoading, 500);
 
@@ -109,13 +97,13 @@ function Fetcher({ children, leagueId, loadingFallback, skipCache, fetchMembers 
     const reloadMembers = async () => {
       if (state?.reloadApp === true) {
         setMutate(true);
-        await mutate(() => fantasyLeagueGroupsService.getGroupMembers(leagueId ?? ''));
+        await refreshLeague(() => fetcher(leagueId ?? ''));
         setMutate(false);
       }
     };
 
     reloadMembers();
-  }, [leagueId, mutate, state]);
+  }, [leagueId, refreshLeague, state]);
 
   useEffect(() => {
     if (leagueConfig) {
@@ -136,4 +124,26 @@ function Fetcher({ children, leagueId, loadingFallback, skipCache, fetchMembers 
   }
 
   return <>{children}</>;
+}
+
+
+async function fetcher(leagueId?: string, fetchMembers?: boolean)  {
+
+  const league = await fantasyLeagueGroupsService.getGroupById(leagueId ?? '');
+
+  const shouldFetchMembers = leagueId && fetchMembers;
+
+  const members = shouldFetchMembers ?
+     await fantasyLeagueGroupsService.getGroupMembers(leagueId || '')
+     : [];
+
+  const rounds = leagueId ? 
+    await fantasyLeagueGroupsService.getGroupRounds(leagueId ?? '')
+    : [];
+
+    return {
+      league,
+      members,
+      rounds
+    }
 }

@@ -16,7 +16,8 @@ export function Header() {
   const pathsToShowCompetitionSelector = [
     '/dashboard',
     '/league',
-    '/players'
+    '/players',
+    '/fixtures'
   ]
 
   const showCompetitionSelector = pathsToShowCompetitionSelector.find((p) => {

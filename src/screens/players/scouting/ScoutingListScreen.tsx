@@ -16,6 +16,7 @@ import PrimaryButton from "../../../components/ui/buttons/PrimaryButton";
 import { useHideTopNavBar } from "../../../hooks/navigation/useNavigationBars";
 import { ScoutingListPlayerCard } from "../../../components/players/scouting/ScoutingListPlayerCard";
 import ScoutingListPlayerModal from "../../../components/players/scouting/ScoutingListPlayerModal";
+import { usePlayerSeasonTeam } from "../../../hooks/seasons/useSeasonTeams";
 
 /** Renders scouting list screen */
 export default function ScoutingListScreen() {
@@ -103,7 +104,7 @@ export default function ScoutingListScreen() {
 
             <div>
                 <SecondaryText>
-                    You can only scout up to 5 players at time
+                    You can only scout up to 5 players at time, per each competition
                 </SecondaryText>
             </div>
 
@@ -202,6 +203,8 @@ type SuggestedPlayerCardProps = {
 
 function SuggestedPlayerCard({ player, onAdd, onViewProfile, isAdding }: SuggestedPlayerCardProps) {
 
+    const {seasonTeam} = usePlayerSeasonTeam(player);
+
     const handleAddPlayer = () => {
         if (onAdd) {
             onAdd(player);
@@ -222,8 +225,7 @@ function SuggestedPlayerCard({ player, onAdd, onViewProfile, isAdding }: Suggest
                 onClick={handleViewProfile}
             >
                 <SmartPlayerMugshot
-                    url={player.image_url}
-                    teamId={player.team_id}
+                    teamId={seasonTeam?.athstat_id}
                 />
 
                 <div>

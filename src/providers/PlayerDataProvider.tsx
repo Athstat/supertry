@@ -36,6 +36,8 @@ export default function PlayerDataProvider({ children, player, onClose, loadingF
 }
 
 function ProviderInner({ children, player, loadingFallback, errorFallback, shouldRefetch: shouldRefetchPlayer }: Props) {
+
+  
   const setPlayer = useSetAtom(playerAtom);
   const setSeasons = useSetAtom(playerSeasonsAtom);
 
@@ -98,10 +100,14 @@ export function usePlayerData() {
     return [...seasons].sort((a, b) => {
       const aEnd = new Date(a.end_date);
       const bEnd = new Date(b.end_date);
-
       return bEnd.valueOf() - aEnd.valueOf();
+    }).sort((a, b) => {
+      const aScore = (a.id === selectedSeason?.id ? 10 : 0) + (a.competition_id === selectedSeason?.competition_id ? 5 : 0);
+      const bScore = (b.id === selectedSeason?.id ? 10 : 0) + (b.competition_id === selectedSeason?.competition_id ? 5 : 0);
+
+      return bScore - aScore;
     });
-  }, [seasons]);
+  }, [seasons, selectedSeason?.competition_id, selectedSeason?.id]);
 
   return {
     player, seasons, currentSeason: selectedSeason || currentSeason,

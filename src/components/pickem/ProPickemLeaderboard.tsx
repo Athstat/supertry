@@ -28,13 +28,13 @@ export default function ProPickemLeaderboard() {
     <div className="flex flex-col gap-3" >
 
       <Table.Root
-        className="px-4 p"
+        className="px-4"
         style={{
           borderSpacing: '0px 5px',
           borderCollapse: 'separate'
         }}
 
-        title="Overall Leaderboard"
+        title={`${selectedSeason?.name} Leaderboard`}
       >
 
         <Table.Header>

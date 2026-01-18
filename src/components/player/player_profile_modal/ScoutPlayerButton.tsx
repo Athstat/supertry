@@ -1,15 +1,12 @@
-import useSWR from "swr";
 import { IProAthlete } from "../../../types/athletes"
-import { scoutingService } from "../../../services/fantasy/scoutingService";
 import { useScoutingList } from "../../../hooks/fantasy/scouting/useScoutingList";
 import { Binoculars } from "lucide-react";
 import PrimaryButton from "../../ui/buttons/PrimaryButton";
-import { Activity, Fragment, useMemo } from "react";
-import { ScoutingListPlayer } from "../../../types/fantasy/scouting";
+import { Activity, Fragment } from "react";
 import { Toast } from "../../ui/Toast";
-import { swrFetchKeys } from "../../../utils/swrKeys";
 import { usePlayerData } from "../../../providers/PlayerDataProvider";
 import RoundedCard from "../../ui/cards/RoundedCard";
+import { ScoutingListPlayer } from "../../../types/fantasy/scouting";
 
 type Props = {
     player: IProAthlete
@@ -18,26 +15,18 @@ type Props = {
 /** Renders Button to scout player */
 export default function ScoutPlayerButton({ player }: Props) {
 
-    // We need to know if player is currently being scouted!
-    const key = swrFetchKeys.getScoutingListPlayer(player.tracking_id);
-    const { data: scoutingListPlayer, isLoading, mutate } = useSWR(key, () => scoutingService.getScoutingListPlayer(player.tracking_id));
-
     const {setShowScoutingActionModal} = usePlayerData();
 
-    const isOnScoutingList = useMemo(() => {
-        
-        if (scoutingListPlayer?.athlete.tracking_id) {
-            console.log("Athlete Value ", scoutingListPlayer.athlete);
-            return true;
-        }
+    const { 
+        addPlayer, isAdding, error,
+        clearError, mutateList, loadingList: isLoading,
+        checkPlayerIsOnList, list
+    } = useScoutingList();
 
-        return false;
-    }, [scoutingListPlayer]);
-
-    const { addPlayer, isAdding, error, clearError } = useScoutingList();
+    const isOnScoutingList = checkPlayerIsOnList(player.tracking_id)
 
     const handleSuccess = async (res: ScoutingListPlayer) => {
-        await mutate(res);
+        await mutateList([...list, res]);
     }
 
     const handleClick = () => {

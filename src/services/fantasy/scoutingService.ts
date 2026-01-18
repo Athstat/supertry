@@ -3,9 +3,11 @@ import { getAuthHeader, getUri } from "../../utils/backendUtils";
 import { logger } from "../logger"
 
 export const scoutingService = {
-    getUserList: async (): Promise<ScoutingListPlayer[]> => {
+    getUserList: async (seasonId?: string): Promise<ScoutingListPlayer[]> => {
         try {
-            const uri = getUri(`/api/v1/fantasy/scouting/my-list`);
+            const params = seasonId ? `?season_id=${seasonId}` : '';
+
+            const uri = getUri(`/api/v1/fantasy/scouting/my-list${params}`);
             const res = await fetch(uri, {
                 headers: getAuthHeader()
             });
@@ -40,9 +42,11 @@ export const scoutingService = {
         return undefined
     },
 
-    removePlayer: async (athleteId: string): Promise<void> => {
+    removePlayer: async (athleteId: string, seasonId?: string): Promise<void> => {
         try {
-            const uri = getUri(`/api/v1/fantasy/scouting/my-list/${athleteId}`);
+            const params = seasonId ? `?season_id=${seasonId}` : null;
+            const uri = getUri(`/api/v1/fantasy/scouting/my-list/${athleteId}${params}`);
+
             await fetch(uri, {
                 headers: getAuthHeader(),
                 method: "DELETE"
@@ -52,13 +56,14 @@ export const scoutingService = {
         }
     },
 
-    addPlayer: async (athleteId: string): Promise<ScoutingListPlayer | undefined> => {
+    addPlayer: async (athleteId: string, seasonId?: string): Promise<ScoutingListPlayer | undefined> => {
         try {
             const uri = getUri(`/api/v1/fantasy/scouting/my-list`);
             const res = await fetch(uri, {
                 headers: getAuthHeader(),
                 body: JSON.stringify({
-                    athlete_id: athleteId
+                    athlete_id: athleteId,
+                    season_id: seasonId
                 }),
                 method: 'POST'
             });

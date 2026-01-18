@@ -1,4 +1,5 @@
 import { IProAthlete } from "../types/athletes";
+import { IFixture } from "../types/games";
 import { IProTeam } from "../types/team";
 import { getAuthHeader, getUri } from "../utils/backendUtils";
 import { logger } from "./logger"
@@ -39,6 +40,25 @@ export const competitionService = {
 
         } catch (err) {
             logger.error("Error fetching competitions ", err);
+        }
+
+        return [];
+    },
+
+    getFixtures: async (competitionId: string | number) : Promise<IFixture[]> => {
+        try {
+            
+            const uri = getUri(`/api/v1/competitions/${competitionId}/games`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as IFixture[];
+            }
+
+        } catch (err) {
+            logger.error('Error fetching competition games ', err);
         }
 
         return [];
