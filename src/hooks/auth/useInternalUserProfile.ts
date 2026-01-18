@@ -1,4 +1,4 @@
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useState } from "react";
 import { InternalUserProfileContext } from "../../contexts/InternalUserProfileContext";
 import { UpdatedUserInternalProfileReq } from "../../types/auth";
 import { logger } from "../../services/logger";
@@ -6,21 +6,31 @@ import { userService } from "../../services/userService";
 import { useAuth } from "../../contexts/AuthContext";
 
 export function useInternalUserProfile() {
+
+    const localstorageKey = `USER_ATTEMPTED_ONBOARDING`;
+
     const {authUser} = useAuth();
     const context = useContext(InternalUserProfileContext);
+
+    const [isLoading, setIsLoading] = useState(false);
 
     if (context === null) {
         throw Error('useInternalUserProfile() is used outside the InternalUserProfileContext');
     }
 
-    const isOnboardingCompleted = context.internalProfile?.completed_onboarding;
+    const hasUserAttempted = localStorage.getItem(localstorageKey) !== null;
+    const isOnboardingCompleted = context.internalProfile ? context.internalProfile?.completed_onboarding : true;
+    const shouldForceOnboarding = !hasUserAttempted && !isOnboardingCompleted;
 
     const updateProfile = useCallback(async (data: UpdatedUserInternalProfileReq) => {
+        
         try {
 
             if (!authUser) {
                 return;
             }
+
+            setIsLoading(true);
 
             const profile = await userService.updateInternalProfle(authUser?.kc_id, data);
 
@@ -30,13 +40,18 @@ export function useInternalUserProfile() {
 
         } catch(err) {
             logger.error("Error updating user internal profile ", err);
+        } finally {
+            setIsLoading(false);
+            localStorage.setItem(localstorageKey, 'true')
         }
 
-    }, [authUser, context])
+    }, [authUser, context, localstorageKey]);
+
 
     return {
         ...context,
-        isOnboardingCompleted,
-        updateProfile
+        shouldForceOnboarding,
+        updateProfile,
+        isLoading
     }
 }
