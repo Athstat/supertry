@@ -134,6 +134,8 @@ export const djangoAthleteService = {
         headers: getAuthHeader(),
       });
 
+      console.log("Res ", res);
+
       if (res.ok) {
         return (await res.json()) as SportAction[];
       }

@@ -23,6 +23,8 @@ type Props = {
 // Renders a sheet view with a player season stats
 function Root({ season, player, children }: Props) {
 
+  console.log("Season ", season)
+
   const shouldFetch = Boolean(season?.id) || Boolean(player?.tracking_id);
   const key = shouldFetch ? swrFetchKeys.getAthleteSeasonStats(player.tracking_id, season.id) : null;
   const { data, isLoading } = useSWR(key, () => djangoAthleteService.getAthleteSeasonStats(player.tracking_id, season.id));
