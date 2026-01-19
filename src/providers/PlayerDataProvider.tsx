@@ -3,7 +3,7 @@ import useSWR from 'swr';
 import { ScopeProvider } from 'jotai-scope';
 import { IProAthlete } from '../types/athletes';
 import { swrFetchKeys } from '../utils/swrKeys';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { Fragment, ReactNode, useEffect, useMemo } from 'react';
 import { IFantasyTeamAthlete } from '../types/fantasyTeamAthlete';
 import { djangoAthleteService } from '../services/athletes/djangoAthletesService';
@@ -92,7 +92,6 @@ export function usePlayerData() {
 
   const [player] = useAtom(playerAtom);
   const [seasons] = useAtom(playerSeasonsAtom);
-  const currentSeason = useAtomValue(playerCurrentSeasonAtom);
   const [selectedFixture, setSelectedFixture] = useAtom(playerSelectedFixtureAtom);
   const [showScoutingActionModal, setShowScoutingActionModal] = useAtom(showPlayerScoutingActionsModalAtom);
 
@@ -109,8 +108,16 @@ export function usePlayerData() {
     });
   }, [seasons, selectedSeason?.competition_id, selectedSeason?.id]);
 
+  const defaultSeason = useMemo(() => {
+    if (sortedSeasons.length > 0) {
+      return sortedSeasons[0];
+    }
+
+    return undefined;
+  }, [sortedSeasons])
+
   return {
-    player, seasons, currentSeason: selectedSeason || currentSeason,
+    player, seasons, currentSeason: defaultSeason,
     sortedSeasons, selectedFixture, setSelectedFixture,
     showScoutingActionModal, setShowScoutingActionModal
   };

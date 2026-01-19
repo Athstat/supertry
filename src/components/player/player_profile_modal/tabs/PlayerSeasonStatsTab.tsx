@@ -37,7 +37,6 @@ export default function PlayerSeasonStatsTab({ player }: Props) {
     }
 
     const displaySeason = selectedSeason || currentSeason;
-    console.log("Display Season", displaySeason);
 
     return (
         <div className="pb-[200px]" >
@@ -84,13 +83,11 @@ export default function PlayerSeasonStatsTab({ player }: Props) {
                             <PlayerSeasonStatsList.Category
                                 categoryName="defense"
                                 label="Defense"
-                                initiallyOpened={false}
                             />
 
                             <PlayerSeasonStatsList.Category
                                 categoryName="discipline"
                                 label="Discipline"
-                                initiallyOpened={false}
                             />
 
                         </PlayerSeasonStatsList.Root>

@@ -23,8 +23,6 @@ type Props = {
 // Renders a sheet view with a player season stats
 function Root({ season, player, children }: Props) {
 
-  console.log("Season ", season)
-
   const shouldFetch = Boolean(season?.id) || Boolean(player?.tracking_id);
   const key = shouldFetch ? swrFetchKeys.getAthleteSeasonStats(player.tracking_id, season.id) : null;
   const { data, isLoading } = useSWR(key, () => djangoAthleteService.getAthleteSeasonStats(player.tracking_id, season.id));
@@ -187,7 +185,7 @@ function Category({ categoryName, label, initiallyOpened = true, skeletonItemCou
             return (
               <SportActionCard
                 sportAction={s}
-                className="py-2 px-4 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 cursor-pointer"
+                className="py-2 px-4 rounded-lg cursor-pointer"
                 labelClassName="text-sm text-slate-700 dark:text-slate-200"
               />
             )
