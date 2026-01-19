@@ -185,7 +185,7 @@ function Category({ categoryName, label, initiallyOpened = true, skeletonItemCou
             return (
               <SportActionCard
                 sportAction={s}
-                className="py-2 px-4 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 cursor-pointer"
+                className="py-2 px-4 rounded-lg cursor-pointer"
                 labelClassName="text-sm text-slate-700 dark:text-slate-200"
               />
             )

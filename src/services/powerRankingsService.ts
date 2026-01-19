@@ -17,11 +17,9 @@ export const powerRankingsService = {
       });
 
       const json = (await res.json()) as SingleMatchPowerRanking[];
-      console.log('Past Matches ', json);
 
       return json;
     } catch (error) {
-      console.log('Error fetching past match prs ', error);
       logger.error('Error fetching athlete matchs power rankings ', error);
       return [];
     }

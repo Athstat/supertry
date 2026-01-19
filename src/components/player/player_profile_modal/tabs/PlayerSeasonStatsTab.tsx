@@ -13,10 +13,10 @@ type Props = {
     player: IProAthlete
 }
 
+/** Renders season stats tab */
 export default function PlayerSeasonStatsTab({ player }: Props) {
 
     const { sortedSeasons, currentSeason } = usePlayerData();
-
     const [selectedSeason, setSelectedSeason] = useState<IProSeason | undefined>(currentSeason);
 
     const dropdownOptions: DropdownOption[] = useMemo(() => {
@@ -37,8 +37,6 @@ export default function PlayerSeasonStatsTab({ player }: Props) {
     }
 
     const displaySeason = selectedSeason || currentSeason;
-
-    console.log("Selected Season ", selectedSeason);
 
     return (
         <div className="pb-[200px]" >
@@ -64,7 +62,7 @@ export default function PlayerSeasonStatsTab({ player }: Props) {
                         </div>
                     </div>
 
-                    {(displaySeason) && (
+                    {displaySeason !== undefined && (
                         <PlayerSeasonStatsList.Root
                             season={displaySeason}
                             player={player}
@@ -85,13 +83,11 @@ export default function PlayerSeasonStatsTab({ player }: Props) {
                             <PlayerSeasonStatsList.Category
                                 categoryName="defense"
                                 label="Defense"
-                                initiallyOpened={false}
                             />
 
                             <PlayerSeasonStatsList.Category
                                 categoryName="discipline"
                                 label="Discipline"
-                                initiallyOpened={false}
                             />
 
                         </PlayerSeasonStatsList.Root>
