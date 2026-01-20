@@ -1,8 +1,10 @@
+import { preload } from "react-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useUserOverallStandings } from "../../hooks/fantasy/standings/useUserOverallStandings";
 import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
 import LeagueGroupLogo from "../fantasy_league/LeagueGroupLogo";
 import RoundedCard from "../ui/cards/RoundedCard";
+import { useEffect } from "react";
 
 type CardProps = {
     leagueGroup: FantasyLeagueGroup,
@@ -14,7 +16,7 @@ type CardProps = {
 export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
 
     const { authUser } = useAuth();
-    const { userRanking, isLoading } = useUserOverallStandings(authUser?.kc_id, leagueGroup.id)
+    const { userRanking, isLoading } = useUserOverallStandings(authUser?.kc_id, leagueGroup.id);
 
     const getStatusBadge = () => {
         const isPrivate = leagueGroup.is_private;
@@ -32,17 +34,25 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
         }
     }
 
+    useEffect(() => {
+        const prefetchBanner = () => {
+            if (leagueGroup.banner) {
+                preload(leagueGroup.banner, { as: 'image' });
+                console.log("Prefetched League Banner at ", leagueGroup.banner);
+            }
+        }
+
+        prefetchBanner();
+    }, [leagueGroup.banner]);
+
     return (
         <RoundedCard
             onClick={handleOnClick}
             className="py-2 cursor-pointer rounded-md px-4 bg-slate-100 border-none flex flex-row items-center justify-between"
         >
-
-
-
             <div className="flex flex-row items-center gap-2" >
                 <LeagueGroupLogo className="w-6 h-6" league={leagueGroup} />
-                
+
                 <h3 className="text-sm font-medium text-gray-900 dark:text-white truncate">
                     {leagueGroup.title}
                 </h3>
@@ -62,7 +72,7 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
 
                 {/* <button onClick={handleOnClick} >
                     <ChevronRight className="w-4 h-4" />
-                </button> */}
+                    </button> */}
             </div>
 
         </RoundedCard>
