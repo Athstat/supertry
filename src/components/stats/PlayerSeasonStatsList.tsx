@@ -1,4 +1,3 @@
- 
 import useSWR from "swr";
 import { IProAthlete } from "../../types/athletes"
 import { IProSeason } from "../../types/season"
