@@ -7,12 +7,13 @@ import { djangoAthleteService } from "../../services/athletes/djangoAthletesServ
 import { ReactNode, useContext, useMemo, useState } from "react";
 import PlayerSeasonStatsProvider, { PlayerSeasonStatsContext } from "../../contexts/PlayerSeasonStatsContext";
 import { StatCard2 } from "../ui/cards/StatCard";
-import { Target, Trophy } from "lucide-react";
+import { Target } from "lucide-react";
 import { ClockFading } from "lucide-react";
 import RoundedCard from "../ui/cards/RoundedCard";
 import Collapsable from "../ui/containers/Collapsable";
 import SportActionCard from "./SportActionCard";
 import { useSportActions } from "../../hooks/useSportActions";
+import { MdSportsRugby } from "react-icons/md";
 
 type Props = {
   season: IProSeason,
@@ -101,7 +102,7 @@ function Header() {
         value={triesScored?.action_count || 0}
         label="Tries Scored"
         className="flex-1 bg-white border border-slate-200"
-        icon={<Trophy className="text-yellow-500" />}
+        icon={<MdSportsRugby className="text-yellow-500 w-7 h-7" />}
         definition={triesScored?.definition}
         actionName={'tries'}
       />
