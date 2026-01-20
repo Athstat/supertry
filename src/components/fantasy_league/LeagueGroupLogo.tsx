@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups"
 import { twMerge } from "tailwind-merge";
+import { Country, countryFlags } from "../../types/countries";
 
 type Props = {
     league?: FantasyLeagueGroup,
@@ -11,14 +12,15 @@ type Props = {
 export default function LeagueGroupLogo({ league, className }: Props) {
 
     const defaultImageUrl = "https://dp7xhssw324ru.cloudfront.net/default_trophy_logo.png";
+    const countryLogo = getLogoUrlForCountryLeague(league);
 
     const [error, setError] = useState(false);
-    const imageUrl = league?.logo;
+    const imageUrl = league?.logo || countryLogo;
 
     if (imageUrl && !error) {
         return (
             <div className={twMerge(
-                "w-10 h-10 overflow-clip",
+                "min-w-9 min-h-9 overflow-clip flex flex-col items-center justify-center",
                 className
             )} >
                 <img
@@ -34,7 +36,7 @@ export default function LeagueGroupLogo({ league, className }: Props) {
     // Just return default again as a placeholder
     return (
         <div className={twMerge(
-            "w-10 h-10 overflow-clip",
+            "min-w-8 min-h-8 overflow-clip",
             className
         )} >
             <img
@@ -44,4 +46,19 @@ export default function LeagueGroupLogo({ league, className }: Props) {
             />
         </div>
     )
+}
+
+
+function getLogoUrlForCountryLeague(leagueGroup?: FantasyLeagueGroup) {
+    const leagueName = leagueGroup?.title;
+    
+    const country: Country | undefined = countryFlags.find((c) => {
+        return c?.name === leagueName;
+    });
+
+    if (country) {
+        return `https://dp7xhssw324ru.cloudfront.net/${country.code.toLowerCase()}.png`
+    }
+
+    return undefined;
 }
