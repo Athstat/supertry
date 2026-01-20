@@ -25,8 +25,8 @@ export default function ImageFileInput({ files, setFiles, previewSize, accept = 
     const [error, setError] = useState<string>();
 
     const onDrop = useCallback(<T extends File>(acceptedFiles: T[]) => {
-        setError(undefined);
         setFiles(acceptedFiles);
+        setError(undefined);
     }, [setFiles]);
 
     const handleRejectedFiles = (fileRejections: FileRejection[]) => {
