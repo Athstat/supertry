@@ -15,7 +15,7 @@ type Props = {
 
 const defaultAccept = {
     'image/png': ['.png'],
-    'image/jpeg': ['.jpeg', 'jpg'],
+    'image/jpeg': ['.jpeg', '.jpg'],
     'image/webp': ['.webp']
 }
 
@@ -25,6 +25,7 @@ export default function ImageFileInput({ files, setFiles, previewSize, accept = 
     const [error, setError] = useState<string>();
 
     const onDrop = useCallback(<T extends File>(acceptedFiles: T[]) => {
+        setError(undefined);
         setFiles(acceptedFiles);
     }, [setFiles]);
 

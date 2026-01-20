@@ -31,6 +31,7 @@ const [files, setFiles] = useState<File[]>([]);
     const handleUpload = useCallback(async () => {
         try {
 
+            setError(undefined);
             
             if (files.length === 0 || !league?.id) {
                 return;
@@ -48,11 +49,11 @@ const [files, setFiles] = useState<File[]>([]);
                 return;
             }
 
-            setError("Something wen't wrong uploading the image")
+            setError("Something went wrong uploading the image")
 
         } catch (err) {
             logger.error("Error handling upload ", err);
-            setError("Something wen't wrong uploading banner");
+            setError("Something went wrong uploading banner");
         } finally {
             setUploading(false);
         }

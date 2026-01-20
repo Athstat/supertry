@@ -33,7 +33,8 @@ export function EditLeagueBannerModal({ isOpen, onClose }: EditLeagueBannerProps
     const handleUpload = useCallback(async () => {
         try {
 
-            
+            setError(undefined);
+
             if (files.length === 0 || !league?.id) {
                 return;
             }
@@ -50,9 +51,11 @@ export function EditLeagueBannerModal({ isOpen, onClose }: EditLeagueBannerProps
                 return;
             }
 
+            setError("Something went wrong uploading banner");
+
         } catch (err) {
             logger.error("Error handling upload ", err);
-            setError("Something wen't wrong uploading banner");
+            setError("Something went wrong uploading banner");
         } finally {
             setUploading(false);
         }

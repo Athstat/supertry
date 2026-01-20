@@ -27,10 +27,9 @@ export default function LeagueGroupsTable({ leagues, emptyMessage }: Props) {
 
             {leagues.map((l) => {
                 return (
-                    <Link to={getLeagueLink(l)} >
+                    <Link key={l.id} to={getLeagueLink(l)} >
                         <LeagueGroupCard
                             leagueGroup={l}
-                            key={l.id}
                         />
                     </Link>
                 )
