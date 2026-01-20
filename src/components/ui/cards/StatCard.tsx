@@ -111,7 +111,7 @@ export function StatCard2({ label, value, icon, valueClassName, className, defin
   return (
     <RoundedCard
       className={twMerge(
-        "bg-gray-200  cursor-pointer border-slate-300 dark:border-slate-700 rounded-2xl px-4 py-4",
+        "bg-gray-200  cursor-pointer border-slate-300 dark:border-slate-700 rounded-2xl px-4 py-4 flex flex-col items-center justify-center",
         className
       )}
 
@@ -120,12 +120,10 @@ export function StatCard2({ label, value, icon, valueClassName, className, defin
 
       <div className="flex flex-col items-center justify-center text-center gap-1 mb-0">
 
-        <div>
-          {icon}
-        </div>
+        {icon}
 
-        <div className="flex items-center">
-          <div className={twMerge("text-lg font-bold dark:text-gray-100 mr-2", valueClassName)}>
+        <div className="flex items-center flex-col justify-center w-full">
+          <div className={twMerge("text-lg font-bold dark:text-gray-100", valueClassName)}>
             {value}
           </div>
         </div>

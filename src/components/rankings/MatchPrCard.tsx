@@ -39,7 +39,7 @@ export default function MatchPrCard({ pr, className}: Props) {
 
     return (
         <div className={twMerge(
-            "w-8 h-8 text-sm font-semibold  dark:bg-slate-600 flex flex-col items-center justify-center",
+            "w-8 h-8 text-sm font-semibold text-white dark:bg-slate-600 flex flex-col items-center justify-center",
             tier === "purple" && "bg-purple-500 dark:bg-purple-500",
             tier === "green" && "bg-green-500 dark:bg-green-600",
             tier === "yellow" && "bg-yellow-500 dark:bg-yellow-600",

@@ -1,45 +1,89 @@
-import { useCallback, useEffect, useMemo } from "react"
-import {useDropzone} from 'react-dropzone';
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { FileRejection, useDropzone } from 'react-dropzone';
 import SecondaryText from "../typography/SecondaryText";
 import { ImagePlus } from "lucide-react";
+import { Toast } from "../Toast";
+import { SIZE_5_MEGABYTES } from "../../../types/constants";
 
 type Props = {
     files: File[],
     setFiles: (files: File[]) => void,
-    previewSize?: number
+    previewSize?: number,
+    accept?: Record<string, string[]>,
+    maxSize?: number
 }
 
+const defaultAccept = {
+    'image/png': ['.png'],
+    'image/jpeg': ['.jpeg', '.jpg'],
+    'image/webp': ['.webp']
+}
 
 /** Renders a file input component */
-export default function ImageFileInput({files, setFiles, previewSize} : Props) {
+export default function ImageFileInput({ files, setFiles, previewSize, accept = defaultAccept, maxSize = SIZE_5_MEGABYTES }: Props) {
+
+    const [error, setError] = useState<string>();
 
     const onDrop = useCallback(<T extends File>(acceptedFiles: T[]) => {
         setFiles(acceptedFiles);
+        setError(undefined);
     }, [setFiles]);
-    
+
+    const handleRejectedFiles = (fileRejections: FileRejection[]) => {
+        const firstRejection = fileRejections.at(0);
+        if (!firstRejection) {
+            return;
+        }
+
+        const firstError = firstRejection.errors.at(0);
+
+        if (!firstError) {
+            return;
+        }
+
+        setError(firstError.message);
+    }
+
+    const handleClearErrors = () => {
+        setError(undefined);
+    }
+
     const {
         getRootProps,
         getInputProps,
         isDragActive,
-        
-    } = useDropzone({onDrop, useFsAccessApi: false})
+    } = useDropzone({
+        onDrop, useFsAccessApi: false,
+        accept, maxSize, onDropRejected: handleRejectedFiles
+    });
 
     return (
-        <div className="flex flex-col gap-4" {...getRootProps()} >
-            <input {...getInputProps()} />
+        <>
+            <div className="flex flex-col gap-4" {...getRootProps()} >
+                <input {...getInputProps()} />
 
-            {isDragActive && files.length === 0 && (
-                <DropzoneCardActive />
+                {isDragActive && files.length === 0 && (
+                    <DropzoneCardActive />
+                )}
+
+                {!isDragActive && files.length === 0 && (
+                    <DropzoneCard />
+                )}
+
+                {files.map((f, index) => {
+                    return <ImageFilePreview size={previewSize} file={f} key={index + f.name} />
+                })}
+            </div>
+
+            {error && (
+                <Toast
+                    message={error}
+                    type="error"
+                    onClose={handleClearErrors}
+                    isVisible={Boolean(error)}
+                />
             )}
-
-            {!isDragActive && files.length === 0 &&  (
-                <DropzoneCard />
-            )}
-
-            {files.map((f, index) => {
-                return <ImageFilePreview size={previewSize} file={f} key={index + f.name} />
-            })}
-        </div>
+        </>
     )
 }
 
@@ -70,8 +114,8 @@ type FilePreviewProps = {
     size?: number
 }
 
-function ImageFilePreview({file, size} : FilePreviewProps) {
-    
+function ImageFilePreview({ file, size }: FilePreviewProps) {
+
     const previewUrl = useMemo(() => {
         return URL.createObjectURL(file)
     }, [file]);
@@ -81,10 +125,10 @@ function ImageFilePreview({file, size} : FilePreviewProps) {
             URL.revokeObjectURL(previewUrl)
         }
     }, [previewUrl]);
-    
+
     return (
         <div className="flex flex-row items-center justify-center" >
-            <img 
+            <img
                 src={previewUrl}
                 className="rounded-xl"
                 width={size}

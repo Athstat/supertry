@@ -4,7 +4,6 @@ import { useAtom, useSetAtom } from 'jotai';
 import useSWR from 'swr';
 import { useLocation } from 'react-router-dom';
 import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
-import { useDebounced } from '../../hooks/web/useDebounced';
 import { useLeagueConfig } from '../../hooks/useLeagueConfig';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
 import { fantasyLeagueGroupAtom, fantasyLeagueGroupMembersAtom, fantasyLeagueGroupRoundsAtom, currGroupMemberAtom, fantasyLeagueConfigAtom, fantasyLeagueGroupLoadingAtom } from '../../state/fantasy/fantasyLeagueGroup.atoms';
@@ -78,8 +77,6 @@ function Fetcher({ children, leagueId, loadingFallback, skipCache, fetchMembers 
   const [isMutating, setMutate] = useState<boolean>(false);
   const isLoading = loadingLeague || isMutating || loadingConfig;
 
-  const debouncedLoading = useDebounced(isLoading, 500);
-
   useEffect(() => {
     if (league) setFantasyLeagueGroup(league);
     if (members) setFantasyLeagueMembers(members);
@@ -97,13 +94,13 @@ function Fetcher({ children, leagueId, loadingFallback, skipCache, fetchMembers 
     const reloadMembers = async () => {
       if (state?.reloadApp === true) {
         setMutate(true);
-        await refreshLeague(() => fetcher(leagueId ?? ''));
+        await refreshLeague(() => fetcher(leagueId ?? '', fetchMembers));
         setMutate(false);
       }
     };
 
     reloadMembers();
-  }, [leagueId, refreshLeague, state]);
+  }, [fetchMembers, leagueId, refreshLeague, state]);
 
   useEffect(() => {
     if (leagueConfig) {
@@ -115,7 +112,7 @@ function Fetcher({ children, leagueId, loadingFallback, skipCache, fetchMembers 
     setLoadingState(isLoading);
   }, [isLoading, setLoadingState]);
 
-  if (debouncedLoading) {
+  if (isLoading) {
     return (
       <Fragment>
         {loadingFallback ? <Fragment>{loadingFallback}</Fragment> : <LoadingIndicator />}

@@ -30,6 +30,7 @@ export default function FantasySeasonOptionsList() {
                         <FantasySeasonCard
                             fantasySeason={s}
                             index={index}
+                            key={s.id}
                         />
                     )
                 })}
