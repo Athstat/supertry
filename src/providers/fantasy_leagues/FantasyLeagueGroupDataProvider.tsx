@@ -94,13 +94,13 @@ function Fetcher({ children, leagueId, loadingFallback, skipCache, fetchMembers 
     const reloadMembers = async () => {
       if (state?.reloadApp === true) {
         setMutate(true);
-        await refreshLeague(() => fetcher(leagueId ?? ''));
+        await refreshLeague(() => fetcher(leagueId ?? '', fetchMembers));
         setMutate(false);
       }
     };
 
     reloadMembers();
-  }, [leagueId, refreshLeague, state]);
+  }, [fetchMembers, leagueId, refreshLeague, state]);
 
   useEffect(() => {
     if (leagueConfig) {

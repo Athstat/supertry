@@ -49,11 +49,11 @@ const [files, setFiles] = useState<File[]>([]);
                 return;
             }
 
-            setError("Something went wrong uploading the image")
+            setError("Something went wrong uploading the logo")
 
         } catch (err) {
             logger.error("Error handling upload ", err);
-            setError("Something went wrong uploading banner");
+            setError("Something went wrong uploading logo");
         } finally {
             setUploading(false);
         }
