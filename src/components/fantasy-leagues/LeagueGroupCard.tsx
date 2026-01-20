@@ -5,6 +5,7 @@ import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
 import LeagueGroupLogo from "../fantasy_league/LeagueGroupLogo";
 import RoundedCard from "../ui/cards/RoundedCard";
 import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 
 type CardProps = {
     leagueGroup: FantasyLeagueGroup,
@@ -17,6 +18,7 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
 
     const { authUser } = useAuth();
     const { userRanking, isLoading } = useUserOverallStandings(authUser?.kc_id, leagueGroup.id);
+    const { ref, inView } = useInView({ triggerOnce: true });
 
     const getStatusBadge = () => {
         const isPrivate = leagueGroup.is_private;
@@ -36,46 +38,49 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
 
     useEffect(() => {
         const prefetchBanner = () => {
-            if (leagueGroup.banner) {
+            if (leagueGroup.banner && inView) {
                 preload(leagueGroup.banner, { as: 'image' });
                 console.log("Prefetched League Banner at ", leagueGroup.banner);
             }
         }
 
         prefetchBanner();
-    }, [leagueGroup.banner]);
+    }, [inView, leagueGroup.banner]);
 
     return (
-        <RoundedCard
-            onClick={handleOnClick}
-            className="py-2 cursor-pointer rounded-md px-4 bg-slate-100 border-none flex flex-row items-center justify-between"
-        >
-            <div className="flex flex-row items-center gap-2" >
-                <LeagueGroupLogo className="w-6 h-6" league={leagueGroup} />
+        <div ref={ref} >
 
-                <h3 className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                    {leagueGroup.title}
-                </h3>
-                {getStatusBadge()}
-            </div>
+            <RoundedCard
+                onClick={handleOnClick}
+                className="py-2 cursor-pointer rounded-md px-4 bg-slate-100 border-none flex flex-row items-center justify-between"
+            >
+                <div className="flex flex-row items-center gap-2" >
+                    <LeagueGroupLogo className="w-6 h-6" league={leagueGroup} />
+
+                    <h3 className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                        {leagueGroup.title}
+                    </h3>
+                    {getStatusBadge()}
+                </div>
 
 
-            <div className="" >
+                <div className="" >
 
-                {!isLoading && <div className="text-slate-600 dark:text-slate-200 font-semibold text-sm" >
-                    <p>{userRanking?.league_rank}</p>
-                </div>}
+                    {!isLoading && <div className="text-slate-600 dark:text-slate-200 font-semibold text-sm" >
+                        <p>{userRanking?.league_rank}</p>
+                    </div>}
 
-                {isLoading && <div className="text-slate-600 animate-pulse dark:text-slate-200 font-semibold text-sm" >
-                    <div className="w-4 h-4 rounded-xl bg-slate-200 dark:bg-slate-600" ></div>
-                </div>}
+                    {isLoading && <div className="text-slate-600 animate-pulse dark:text-slate-200 font-semibold text-sm" >
+                        <div className="w-4 h-4 rounded-xl bg-slate-200 dark:bg-slate-600" ></div>
+                    </div>}
 
-                {/* <button onClick={handleOnClick} >
+                    {/* <button onClick={handleOnClick} >
                     <ChevronRight className="w-4 h-4" />
                     </button> */}
-            </div>
+                </div>
 
-        </RoundedCard>
+            </RoundedCard>
+        </div>
     );
 }
 
