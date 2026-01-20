@@ -11,7 +11,6 @@ type Props = {
 /** Renders a league group logo */
 export default function LeagueGroupLogo({ league, className }: Props) {
 
-    // const defaultImageUrl = "https://dp7xhssw324ru.cloudfront.net/default_trophy_logo.png";
     const defaultImageUrl = "/images/leagues/default_league_group_logo.png";
     const countryLogo = getLogoUrlForCountryLeague(league);
 
