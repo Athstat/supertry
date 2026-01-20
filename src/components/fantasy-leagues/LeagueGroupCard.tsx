@@ -38,14 +38,20 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
 
     useEffect(() => {
         const prefetchBanner = () => {
-            if (leagueGroup.banner && inView) {
-                preload(leagueGroup.banner, { as: 'image' });
-                console.log("Prefetched League Banner at ", leagueGroup.banner);
+            if (leagueGroup && inView) {
+
+                if (leagueGroup.banner) {
+                    preload(leagueGroup.banner, { as: 'image' });
+                }
+
+                if (leagueGroup.logo) {
+                    preload(leagueGroup.logo, { as: 'image' });
+                }
             }
         }
 
         prefetchBanner();
-    }, [inView, leagueGroup.banner]);
+    }, [inView, leagueGroup]);
 
     return (
         <div ref={ref} >
