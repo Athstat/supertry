@@ -6,12 +6,17 @@ import { ImagePlus } from "lucide-react";
 type Props = {
     files: File[],
     setFiles: (files: File[]) => void,
-    previewSize?: number
+    previewSize?: number,
+    accept?: Record<string, string[]>
 }
 
+const defaultAccept = {
+    'image/png': ['.png'],
+    'image/jpeg': ['.jpeg', 'jpg']
+}
 
 /** Renders a file input component */
-export default function ImageFileInput({files, setFiles, previewSize} : Props) {
+export default function ImageFileInput({files, setFiles, previewSize, accept = defaultAccept} : Props) {
 
     const onDrop = useCallback(<T extends File>(acceptedFiles: T[]) => {
         setFiles(acceptedFiles);
@@ -22,7 +27,7 @@ export default function ImageFileInput({files, setFiles, previewSize} : Props) {
         getInputProps,
         isDragActive,
         
-    } = useDropzone({onDrop, useFsAccessApi: false})
+    } = useDropzone({onDrop, useFsAccessApi: false, accept})
 
     return (
         <div className="flex flex-col gap-4" {...getRootProps()} >
