@@ -12,7 +12,8 @@ type Props = {
 
 const defaultAccept = {
     'image/png': ['.png'],
-    'image/jpeg': ['.jpeg', 'jpg']
+    'image/jpeg': ['.jpeg', 'jpg'],
+    'image/webp': ['.webp']
 }
 
 /** Renders a file input component */
