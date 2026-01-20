@@ -7,7 +7,8 @@ type Props = {
     files: File[],
     setFiles: (files: File[]) => void,
     previewSize?: number,
-    accept?: Record<string, string[]>
+    accept?: Record<string, string[]>,
+    maxSize?: number
 }
 
 const defaultAccept = {
@@ -17,7 +18,7 @@ const defaultAccept = {
 }
 
 /** Renders a file input component */
-export default function ImageFileInput({files, setFiles, previewSize, accept = defaultAccept} : Props) {
+export default function ImageFileInput({files, setFiles, previewSize, accept = defaultAccept, maxSize = 5242880} : Props) {
 
     const onDrop = useCallback(<T extends File>(acceptedFiles: T[]) => {
         setFiles(acceptedFiles);
@@ -28,7 +29,10 @@ export default function ImageFileInput({files, setFiles, previewSize, accept = d
         getInputProps,
         isDragActive,
         
-    } = useDropzone({onDrop, useFsAccessApi: false, accept})
+    } = useDropzone({
+        onDrop, useFsAccessApi: false,
+        accept, maxSize
+    });
 
     return (
         <div className="flex flex-col gap-4" {...getRootProps()} >

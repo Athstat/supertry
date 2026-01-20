@@ -48,6 +48,8 @@ const [files, setFiles] = useState<File[]>([]);
                 return;
             }
 
+            setError("Something wen't wrong uploading the image")
+
         } catch (err) {
             logger.error("Error handling upload ", err);
             setError("Something wen't wrong uploading banner");
