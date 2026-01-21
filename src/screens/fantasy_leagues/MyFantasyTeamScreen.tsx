@@ -1,4 +1,3 @@
-import { useParams } from 'react-router-dom';
 import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import PageView from '../../components/ui/containers/PageView';
 import MyTeamModeSelector from '../../components/my_fantasy_team/MyTeamModeSelector';
@@ -11,26 +10,18 @@ import { twMerge } from 'tailwind-merge';
 import { AppColours } from '../../types/constants';
 import TeamHistoryProvider from '../../providers/fantasy_teams/TeamHistoryProvider';
 import { useAuth } from '../../contexts/AuthContext';
-import FantasyLeagueGroupDataProvider from '../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider';
 import PitchViewLoadingSkeleton from '../../components/my_fantasy_team/PitchViewLoadingSkeleton';
 import RoundedCard from '../../components/ui/cards/RoundedCard';
 import ErrorCard from '../../components/ui/cards/ErrorCard';
 
 /** Renders my fantasy team screen */
 export function MyFantasyTeamScreen() {
-  const { leagueId } = useParams();
   const { authUser } = useAuth();
 
   return (
-    <FantasyLeagueGroupDataProvider
-      loadingFallback={<LeagueScreenLoadingSkeleton />}
-      leagueId={leagueId}
-      fetchMembers={false}
-    >
-      <TeamHistoryProvider user={authUser} loadingFallback={<LeagueScreenLoadingSkeleton />} >
-        <Content />
-      </TeamHistoryProvider>
-    </FantasyLeagueGroupDataProvider>
+    <TeamHistoryProvider user={authUser} loadingFallback={<LeagueScreenLoadingSkeleton />} >
+      <Content />
+    </TeamHistoryProvider>
   );
 }
 

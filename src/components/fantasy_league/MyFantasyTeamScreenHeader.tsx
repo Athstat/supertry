@@ -37,9 +37,6 @@ export default function MyFantasyTeamScreenHeader() {
                     <p className="font-semibold text-md">My Team</p>
                 </div>
 
-                {/* <div className='absolute right-0' >
-                    <JoinOrInviteButton />
-                </div> */}
             </div>
 
         </div>
