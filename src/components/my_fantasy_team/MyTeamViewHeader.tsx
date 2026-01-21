@@ -1,15 +1,11 @@
-import { twMerge } from 'tailwind-merge';
 import SaveTeamBar from './SaveTeamBar';
-import { Coins, Lock } from 'lucide-react';
+import { Coins } from 'lucide-react';
 import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
 import { useRoundScoringSummaryV2 } from '../../hooks/fantasy/useRoundScoringSummary';
-import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { smartRoundUp } from '../../utils/intUtils';
-import { isLeagueRoundLocked, isSeasonRoundLocked } from '../../utils/leaguesUtils';
+import { isSeasonRoundLocked } from '../../utils/leaguesUtils';
 import SecondaryText from '../ui/typography/SecondaryText';
 import { Activity } from 'react';
-import { useMyTeamView } from './MyTeamStateProvider';
-import RoundedCard from '../ui/cards/RoundedCard';
 import { useLeagueConfig } from '../../hooks/useLeagueConfig';
 import { ISeasonRound } from '../../types/fantasy/fantasySeason';
 import { LeagueRoundCountdown2 } from '../fantasy_league/LeagueCountdown';
@@ -20,6 +16,7 @@ type Props = {
 
 /** Renders My Team View Header */
 export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
+
   const { leagueConfig } = useLeagueConfig();
   const { totalSpent, selectedCount, leagueRound } = useFantasyTeam();
 
@@ -72,50 +69,6 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
       />}
 
     </div>
-  );
-}
-
-type ViewSwitcherProps = {
-  leagueRound: IFantasyLeagueRound;
-};
-
-export function ViewSwitcher({ leagueRound }: ViewSwitcherProps) {
-
-  const isLocked = isLeagueRoundLocked(leagueRound);
-  const { navigate: setViewMode, viewMode } = useMyTeamView();
-  const { changesDetected } = useFantasyTeam();
-
-
-  return (
-    <Activity mode={changesDetected ? 'hidden' : 'visible'}>
-      <RoundedCard className="flex p-1.5 bg-gray-50 border-slate-200  w-full justify-between flex-row items-center gap-2">
-        <button
-          type="button"
-          onClick={() => setViewMode('edit')}
-          // disabled={isLocked}
-          className={twMerge(
-            'flex-1 h-[35px] rounded-lg text-sm flex text-center flex-row items-center justify-center gap-2 font-medium text-slate-500`',
-            viewMode === 'edit' && 'bg-blue-600 text-white dark:bg-blue-600'
-          )}
-        >
-          <p>Edit</p>
-          {isLocked && <Lock className="w-4 h-4" />}
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setViewMode('pitch')}
-          // disabled={isLocked}
-          className={twMerge(
-            'flex-1 h-[35px] rounded-lg text-sm flex text-center flex-row items-center  justify-center gap-2 font-medium text-slate-500`',
-            viewMode === 'pitch' && 'bg-blue-600 text-white dark:bg-blue-600 '
-          )}
-        >
-          <p>Pitch</p>
-          {isLocked && <Lock className="w-4 h-4" />}
-        </button>
-      </RoundedCard>
-    </Activity>
   );
 }
 

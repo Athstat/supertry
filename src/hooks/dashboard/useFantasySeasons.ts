@@ -1,5 +1,5 @@
 import { useAtom, useAtomValue } from "jotai";
-import { fantasySeasonsAtoms } from "../../state/dashboard/dashboard.atoms";
+import { fantasySeasonsAtoms } from "../../state/dashboard/fantasySeasons.atoms";
 import { fantasySeasonsAtom } from "../../state/fantasy/fantasyLeagueScreen.atoms";
 import { useCallback, useMemo } from "react";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";

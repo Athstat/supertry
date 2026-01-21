@@ -1,6 +1,6 @@
 import { Fragment, ReactNode, useEffect } from 'react';
 import { fantasySeasonsAtom } from '../../state/fantasy/fantasyLeagueScreen.atoms';
-import { fantasySeasonsAtoms } from '../../state/dashboard/dashboard.atoms';
+import { fantasySeasonsAtoms } from '../../state/dashboard/fantasySeasons.atoms';
 import { ScopeProvider } from 'jotai-scope';
 import { useAtom, useSetAtom } from 'jotai';
 import { fantasySeasonsService } from '../../services/fantasy/fantasySeasonsService';
