@@ -1,4 +1,4 @@
-import { IFantasyLeagueTeam } from "../../types/fantasyLeague";
+import { IFantasyLeagueScoringOverview, IFantasyLeagueTeam } from "../../types/fantasyLeague";
 import { UpdateFantasyLeagueTeam } from "../../types/fantasyLeagueTeam";
 import { getAuthHeader, getUri } from "../../utils/backendUtils";
 import { logger } from "../logger"
@@ -58,6 +58,25 @@ export const fantasySeasonTeamService = {
 
         } catch (err) {
             logger.error("Error updating user fantasy round team ", err);
+        }
+
+        return undefined;
+    },
+
+    getRoundScoringSummary: async (seasonId: string, userId: string, roundNumber: string | number) => {
+        try {
+            const uri = getUri(`/api/v1/fantasy-seasons/${seasonId}/users/${userId}/teams/${roundNumber}/scoring/overview`);
+            
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as IFantasyLeagueScoringOverview;
+            }
+
+        } catch (err) {
+            logger.error("Error fetching round scoring summary ", err);
         }
 
         return undefined;
