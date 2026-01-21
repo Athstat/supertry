@@ -209,7 +209,7 @@ export function DashboardHeroCTASection({ roundTeam, deadlineText, hideVerboseIn
   const navigate = useNavigate();
   const [showHelpModal, setShowHelpModal] = useState(false);
 
-  const { nextDeadlineRound, currentRound, league } = useFantasyLeagueGroup();
+  const { nextDeadlineRound, currentRound } = useFantasyLeagueGroup();
   const isFirstTime = roundTeam === undefined;
 
   const nextDeadline = useMemo(() => {
@@ -219,18 +219,7 @@ export function DashboardHeroCTASection({ roundTeam, deadlineText, hideVerboseIn
 
   const isGameweekOpen = currentRound && !isLeagueRoundLocked(currentRound);
 
-  const teamUrl = useMemo(() => {
-    const leagueGroupId = league?.id;
-
-    if (!leagueGroupId) return '/leagues';
-    const url = `/league/${leagueGroupId}`;
-    const params = new URLSearchParams();
-    if (currentRound) {
-      params.append('round_filter', currentRound.id);
-    }
-    params.append('tab', 'my-team');
-    return `${url}?${params.toString()}`;
-  }, [league?.id, currentRound]);
+  const teamUrl = `/my-team`;
 
   const handlePickTeam = () => {
     navigate(teamUrl);

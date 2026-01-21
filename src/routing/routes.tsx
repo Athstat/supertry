@@ -124,6 +124,17 @@ export const dataRouter = createBrowserRouter([
             },
 
             {
+                path: "/my-team",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <MyFantasyTeamScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
+
+            {
                 path: "/league/:leagueId/standings",
                 element: (
                     <ProtectedRoute>
