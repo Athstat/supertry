@@ -4,7 +4,6 @@ import { AnimatePresence } from 'framer-motion';
 import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
 import { useHideBottomNavBar } from '../../hooks/navigation/useNavigationBars';
 import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
-import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import PlayerProfileModal from '../player/PlayerProfileModal';
 import PointsBreakdownModal from '../points_breakdown/PointsBreakdownModal';
