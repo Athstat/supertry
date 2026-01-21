@@ -43,6 +43,7 @@ export function FantasySeasonsPickerModal() {
                             season={fs}
                             isSelected={selectedSeason?.id === fs.id}
                             onClick={handleOnClick}
+                            key={fs.id}
                         />
                     )
                 })}

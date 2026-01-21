@@ -18,10 +18,37 @@ type Props = {
 }
 
 /** Renders a fantasy team view, with editor capabilities */
-export default function FantasyTeamView({ onTeamUpdated,leagueRound }: Props) {
+export default function FantasyTeamView({ onTeamUpdated, leagueRound }: Props) {
 
   const { cancelSwap, slots, swapState, completeSwap, swapPlayer, budgetRemaining } =
     useFantasyTeam();
+
+  const exludePlayers = slots
+    .filter(s => Boolean(s.athlete))
+    .map(s => {
+      return { tracking_id: s.athlete?.tracking_id ?? '' };
+    })
+
+  const isPlayerPickerOpen = swapState.open && swapState.slot != null && Boolean(swapState.position);
+
+  const handleOnEnable = async () => {
+    try {
+      await requestPushPermissions();
+    } catch (e) {
+      console.error('Push permission error:', e);
+    } finally {
+      setShowPushModal(false);
+    }
+  }
+
+  const handleOnNotNow = () => {
+    try {
+      localStorage.setItem('push_optin_dismissed', 'true');
+    } catch (err) {
+      console.log('Local Storage error ', err);
+    }
+    setShowPushModal(false);
+  }
 
   // Push opt-in prompt state
   const [showPushModal, setShowPushModal] = useState(false);
@@ -35,14 +62,10 @@ export default function FantasyTeamView({ onTeamUpdated,leagueRound }: Props) {
       <MyTeamPitchView />
 
       <PlayerPicker
-        isOpen={swapState.open && swapState.slot != null && Boolean(swapState.position)}
+        isOpen={isPlayerPickerOpen}
         positionPool={swapState?.position?.positionClass as PositionClass}
         remainingBudget={budgetRemaining + (swapPlayer?.purchase_price || 0)}
-        excludePlayers={slots
-          .filter(s => Boolean(s.athlete))
-          .map(s => {
-            return { tracking_id: s.athlete?.tracking_id ?? '' };
-          })}
+        excludePlayers={exludePlayers}
         onSelectPlayer={completeSwap}
         onClose={cancelSwap}
         targetLeagueRound={leagueRound}
@@ -51,23 +74,8 @@ export default function FantasyTeamView({ onTeamUpdated,leagueRound }: Props) {
 
       <PushOptInModal
         visible={showPushModal}
-        onEnable={async () => {
-          try {
-            await requestPushPermissions();
-          } catch (e) {
-            console.error('Push permission error:', e);
-          } finally {
-            setShowPushModal(false);
-          }
-        }}
-        onNotNow={() => {
-          try {
-            localStorage.setItem('push_optin_dismissed', 'true');
-          } catch (err) {
-            console.log('Local Storage error ', err);
-          }
-          setShowPushModal(false);
-        }}
+        onEnable={handleOnEnable}
+        onNotNow={handleOnNotNow}
       />
     </div>
   );
