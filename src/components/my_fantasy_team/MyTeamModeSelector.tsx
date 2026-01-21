@@ -85,6 +85,8 @@ function MyTeamModeSelector2() {
     return <PitchViewLoadingSkeleton />;
   }
 
+  console.log("Round ", round);
+
   return (
     <Fragment>
       <TeamHistoryBar lock={false} />

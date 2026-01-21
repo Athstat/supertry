@@ -1,5 +1,4 @@
 import { ArrowLeft } from 'lucide-react'
-import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import CircleButton from '../ui/buttons/BackButton';
 import { useNavigateBack } from '../../hooks/web/useNavigateBack';
 
@@ -9,15 +8,9 @@ export default function MyFantasyTeamScreenHeader() {
 
     const {hardPop} = useNavigateBack();
 
-    const { league } = useFantasyLeagueGroup();
-
     const handleBackToLeagues = () => {
         // navigate("/leagues");
         hardPop("/leagues");
-    }
-
-    if (!league) {
-        return;
     }
 
     return (

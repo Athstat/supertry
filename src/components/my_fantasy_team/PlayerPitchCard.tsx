@@ -1,9 +1,8 @@
 import { twMerge } from "tailwind-merge";
 import { useAthleteRoundScore } from "../../hooks/fantasy/useAthleteRoundScore";
-import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { formatPosition } from "../../utils/athletes/athleteUtils";
-import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
+import { isSeasonRoundLocked } from "../../utils/leaguesUtils";
 import { Activity, useMemo } from "react";
 import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
 import { CirclePlus, TriangleAlert } from "lucide-react";
@@ -19,20 +18,19 @@ import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams";
 type PlayerPitchCardProps = {
     player: IFantasyTeamAthlete;
     onClick?: (player: IFantasyTeamAthlete) => void;
-    round: IFantasyLeagueRound;
 };
 
-export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps) {
+export function PlayerPitchCard({ player, onClick }: PlayerPitchCardProps) {
     const { viewMode } = useMyTeamView();
     const { league } = useFantasyLeagueGroup();
-    const { teamCaptain } = useFantasyTeam();
+    const { teamCaptain, leagueRound } = useFantasyTeam();
 
     const {seasonTeam} = usePlayerSeasonTeam(player.athlete);
 
     const { isNotAvailable, isTeamNotPlaying, isPending } = usePlayerRoundAvailability(
         player.tracking_id,
         league?.season_id ?? "",
-        round?.start_round ?? 0,
+        leagueRound?.round_number ?? 0,
         seasonTeam?.athstat_id
     );
 
@@ -110,7 +108,6 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
                         <Activity mode={viewMode === "pitch" ? "visible" : "hidden"} >
                             <PlayerScoreIndicator
                                 player={player}
-                                round={round}
                             />
                         </Activity>
                     </div>
@@ -127,14 +124,15 @@ export function PlayerPitchCard({ player, onClick, round }: PlayerPitchCardProps
 }
 
 type PlayerPointsScoreProps = {
-    round: IFantasyLeagueRound,
     player: IFantasyTeamAthlete,
 }
 
-function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
+function PlayerScoreIndicator({ player }: PlayerPointsScoreProps) {
 
-    const isLocked = isLeagueRoundLocked(round);
-    const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, round.season_id, round?.start_round ?? 0);
+    const {leagueRound} = useFantasyTeam();
+
+    const isLocked = leagueRound && isSeasonRoundLocked(leagueRound);
+    const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, leagueRound?.season || '', leagueRound?.round_number ?? 0);
     const { league } = useFantasyLeagueGroup();
 
     const isLoading = loadingScore;
@@ -144,10 +142,9 @@ function PlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
     const { isNotAvailable, isTeamNotPlaying, nextMatch } = usePlayerRoundAvailability(
         player.tracking_id,
         league?.season_id ?? "",
-        round?.start_round ?? 0,
+        leagueRound?.round_number ?? 0,
         seasonTeam?.athstat_id
     );
-
 
     const [homeOrAway, opponent] = useMemo(() => {
 

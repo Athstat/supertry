@@ -2,16 +2,16 @@ import { twMerge } from 'tailwind-merge';
 import SaveTeamBar from './SaveTeamBar';
 import { Coins, Lock } from 'lucide-react';
 import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
-import { useRoundScoringSummary } from '../../hooks/fantasy/useRoundScoringSummary';
-import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
+import { useRoundScoringSummaryV2 } from '../../hooks/fantasy/useRoundScoringSummary';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { smartRoundUp } from '../../utils/intUtils';
-import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
-import { LeagueRoundCountdown2 } from '../fantasy_league/LeagueCountdown';
+import { isLeagueRoundLocked, isSeasonRoundLocked } from '../../utils/leaguesUtils';
 import SecondaryText from '../ui/typography/SecondaryText';
 import { Activity } from 'react';
 import { useMyTeamView } from './MyTeamStateProvider';
 import RoundedCard from '../ui/cards/RoundedCard';
+import { useLeagueConfig } from '../../hooks/useLeagueConfig';
+import { ISeasonRound } from '../../types/fantasy/fantasySeason';
 
 type Props = {
   onTeamUpdated?: () => Promise<void>;
@@ -19,17 +19,13 @@ type Props = {
 
 /** Renders My Team View Header */
 export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
-  const { leagueConfig } = useFantasyLeagueGroup();
+  const { leagueConfig } = useLeagueConfig();
   const { totalSpent, selectedCount, leagueRound } = useFantasyTeam();
 
   const handleTeamUpdated = async () => {
     if (onTeamUpdated) {
       await onTeamUpdated();
     }
-  }
-
-  if (!leagueRound || !leagueConfig) {
-    return;
   }
 
 
@@ -50,9 +46,9 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
 
         <div className="flex flex-row items-center justify-center text-center gap-1">
 
-          <TeamPointsCard
+          {leagueRound && <TeamPointsCard
             leagueRound={leagueRound}
-          />
+          />}
 
         </div>
 
@@ -125,15 +121,15 @@ export function ViewSwitcher({ leagueRound }: ViewSwitcherProps) {
 }
 
 type TeamPointsProps = {
-  leagueRound: IFantasyLeagueRound;
+  leagueRound: ISeasonRound;
 };
 
 function TeamPointsCard({ leagueRound }: TeamPointsProps) {
 
   const { isReadOnly, team } = useFantasyTeam();
-  const isLocked = isLeagueRoundLocked(leagueRound);
+  const isLocked = isSeasonRoundLocked(leagueRound);
   const { highestPointsScored, averagePointsScored, isLoading } =
-    useRoundScoringSummary(leagueRound);
+    useRoundScoringSummaryV2(leagueRound);
 
   const showScore = !isLoading && isLocked
 
@@ -165,11 +161,11 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
 
       <Activity mode={!isLocked && !isReadOnly ? "visible" : "hidden"} >
         <div className='flex flex-row w-full items-center justify-center' >
-            <LeagueRoundCountdown2
+          {/* <LeagueRoundCountdown2
               leagueRound={leagueRound}
               className='flex-col'
               leagueTitleClassName='font-normal text-xs'
-            />
+            /> */}
         </div>
       </Activity>
 

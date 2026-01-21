@@ -77,9 +77,9 @@ function InnerProvider({ team, children, leagueRound, readOnly }: Props) {
 
         }
 
-        // if (leagueRound) {
-        //     setLeagueRound(leagueRound);
-        // }
+        if (leagueRound) {
+            setLeagueRound(leagueRound);
+        }
 
         if (readOnly !== undefined) {
             setReadOnly(readOnly);

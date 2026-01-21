@@ -8,15 +8,15 @@ import { useNavigationGuard } from "../../hooks/web/useNavigationGuard";
 import { fantasyAnalytics } from "../../services/analytics/fantasyAnalytics";
 import { fantasyTeamService } from "../../services/fantasyTeamService";
 import { AppColours } from "../../types/constants";
-import { IFantasyLeagueRound } from "../../types/fantasyLeague";
-import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
+import { isSeasonRoundLocked } from "../../utils/leaguesUtils";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import { Toast } from "../ui/Toast";
 import UnsavedChangesWarningModal from "../ui/modals/UnsavedChangesModal";
+import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 
 type Props = {
     onTeamUpdated: () => Promise<void>,
-    leagueRound: IFantasyLeagueRound
+    leagueRound: ISeasonRound
 }
 
 /** Renders Save Team Bar */
@@ -25,7 +25,7 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
     const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState<boolean>(false);
     const [isSaving, setIsSaving] = useState(false);
     const [saveError, setSaveError] = useState<string | undefined>(undefined);
-    const isLocked = isLeagueRoundLocked(leagueRound);
+    const isLocked = isSeasonRoundLocked(leagueRound);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     const { setRoundTeam } = useTeamHistory();
@@ -142,7 +142,7 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
                     </button>
                     <PrimaryButton
                         className="w-[150px] text-xs"
-                        disabled={isSaving || !leagueRound?.is_open || !isTeamFull}
+                        disabled={isSaving || isLocked || !isTeamFull}
                         onClick={buildPayloadAndSave}
                     >
                         {isSaving ? 'Saving...' : 'Save Changes'}
@@ -173,7 +173,7 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
                                 </div>
                                 <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Team Updated!</h2>
                                 <p className="text-gray-600 dark:text-gray-400 mb-6">
-                                    Your team changes have been saved for {leagueRound?.title}
+                                    Your team changes have been saved for {leagueRound.round_title}
                                 </p>
                                 <PrimaryButton
                                     className="w-full"

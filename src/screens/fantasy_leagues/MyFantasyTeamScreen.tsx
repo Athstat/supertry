@@ -1,9 +1,6 @@
-import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import PageView from '../../components/ui/containers/PageView';
 import MyTeamModeSelector from '../../components/my_fantasy_team/MyTeamModeSelector';
-import { useEffect } from 'react';
 import LearnScrummyNoticeCard from '../../components/branding/help/LearnScrummyNoticeCard';
-import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
 import { useHideBottomNavBar, useHideTopNavBar } from '../../hooks/navigation/useNavigationBars';
 import MyFantasyTeamScreenHeader from '../../components/fantasy_league/MyFantasyTeamScreenHeader';
 import { twMerge } from 'tailwind-merge';
@@ -12,7 +9,6 @@ import TeamHistoryProvider from '../../providers/fantasy_teams/TeamHistoryProvid
 import { useAuth } from '../../contexts/AuthContext';
 import PitchViewLoadingSkeleton from '../../components/my_fantasy_team/PitchViewLoadingSkeleton';
 import RoundedCard from '../../components/ui/cards/RoundedCard';
-import ErrorCard from '../../components/ui/cards/ErrorCard';
 
 /** Renders my fantasy team screen */
 export function MyFantasyTeamScreen() {
@@ -28,23 +24,21 @@ export function MyFantasyTeamScreen() {
 function Content() {
 
   /** Auto Hides Top Bar to Maximise screen space */
-  useHideTopNavBar();
-  useHideBottomNavBar();
+  // useHideTopNavBar();
+  // useHideBottomNavBar();
 
-  const { league, isLoading } = useFantasyLeagueGroup();
+  // useEffect(() => {
+  //   fantasyAnalytics.trackVisitedLeagueScreen(league?.id);
+  // }, [league?.id]);
 
-  useEffect(() => {
-    fantasyAnalytics.trackVisitedLeagueScreen(league?.id);
-  }, [league?.id]);
-
-  if (!isLoading && !league) {
-    return (
-      <ErrorCard
-        title="Whoops"
-        message="Fantasy League was not found"
-      />
-    )
-  }
+  // if () {
+  //   return (
+  //     <ErrorCard
+  //       title="Whoops"
+  //       message="Fantasy League was not found"
+  //     />
+  //   )
+  // }
 
   return (
     <PageView className={twMerge(
