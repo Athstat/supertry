@@ -6,10 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { Fragment } from "react/jsx-runtime";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useRoundScoringSummaryV2 } from "../../../hooks/fantasy/useRoundScoringSummary";
-import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
 import { IFantasyLeagueTeam } from "../../../types/fantasyLeague";
 import { formatCountdown } from "../../../utils/countdown";
-import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";
+import { getSeasonRoundDeadline, isSeasonRoundLocked } from "../../../utils/leaguesUtils";
 import ScrummyGamePlayModal from "../../branding/help/ScrummyGamePlayModal";
 import { useFantasySeasons } from "../../../hooks/dashboard/useFantasySeasons";
 import { smartRoundUp } from "../../../utils/intUtils";
@@ -209,15 +208,15 @@ export function DashboardHeroCTASection({ roundTeam, deadlineText, hideVerboseIn
   const navigate = useNavigate();
   const [showHelpModal, setShowHelpModal] = useState(false);
 
-  const { nextDeadlineRound, currentRound } = useFantasyLeagueGroup();
+  const { nextDeadlineRound, currentRound } = useFantasySeasons()
   const isFirstTime = roundTeam === undefined;
 
   const nextDeadline = useMemo(() => {
-    const deadline = nextDeadlineRound?.join_deadline;
+    const deadline = nextDeadlineRound ? getSeasonRoundDeadline(nextDeadlineRound) : undefined;
     return deadline ? new Date(deadline) : undefined;
-  }, [nextDeadlineRound?.join_deadline]);
+  }, [nextDeadlineRound]);
 
-  const isGameweekOpen = currentRound && !isLeagueRoundLocked(currentRound);
+  const isGameweekOpen = currentRound && !isSeasonRoundLocked(currentRound);
 
   const teamUrl = `/my-team`;
 
@@ -245,7 +244,7 @@ export function DashboardHeroCTASection({ roundTeam, deadlineText, hideVerboseIn
           <>
             <div className="w-[80%] max-w-sm border border-white/50"></div>
             <p className="text-sm text-white text-center font-bold">
-              {deadlineText ? deadlineText : <>Next Deadline: Round {(nextDeadlineRound?.start_round || 0)}</>}<br />
+              {deadlineText ? deadlineText : <>Next Deadline: Round {(nextDeadlineRound?.round_number || 0)}</>}<br />
               <span className="font-normal">{formatCountdown(nextDeadline)}</span>
             </p>
           </>
@@ -291,7 +290,7 @@ export function DashboardHeroCTASection({ roundTeam, deadlineText, hideVerboseIn
         <>
           <div className="w-[80%] max-w-sm border-t-2 border-white/50"></div>
           <p className="text-sm text-white text-center font-bold">
-            {deadlineText ? deadlineText : <>Next Deadline: Round {(nextDeadlineRound?.start_round || 0)}</>}<br />
+            {deadlineText ? deadlineText : <>Next Deadline: Round {(nextDeadlineRound?.round_number || 0)}</>}<br />
             <span className="font-normal">{formatCountdown(nextDeadline)}</span>
           </p>
         </>

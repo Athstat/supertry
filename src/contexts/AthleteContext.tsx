@@ -27,10 +27,10 @@ export const AthleteProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
 
-  const {selectedSeason} = useFantasySeasons();
+  const { selectedSeason } = useFantasySeasons();
   const key = swrFetchKeys.getAllProAthletesKey(selectedSeason);
 
-  const { data: fetchedAthletes, isLoading: loadingAthletes, mutate, error } = 
+  const { data: fetchedAthletes, isLoading: loadingAthletes, mutate, error } =
     useSWR(key, () => fetcher(selectedSeason), {
       revalidateOnFocus: false,
       revalidateIfStale: true
@@ -39,7 +39,7 @@ export const AthleteProvider: React.FC<{ children: React.ReactNode }> = ({
   const athletes = useMemo(() => {
     return fetchedAthletes ?? []
   }, [fetchedAthletes]);
-  
+
   const isLoading = loadingAthletes;
 
   const [teams, setTeams] = useState<IProTeam[]>([]);
@@ -101,11 +101,17 @@ async function fetcher(season?: IProSeason) {
     const SIX_NATIONS_SEASON_ID = 'a51dc32a-99cb-5df8-bbc4-4c7557ccccc3';
 
     if (season.id === SIX_NATIONS_SEASON_ID) {
-      return competitionService.getAthletes(season.competition_id);
+      return (await competitionService.getAthletes(season.competition_id)).filter((a) => {
+        return (a.power_rank_rating || 0) > 0;
+      });
     }
 
-    return await seasonService.getSeasonAthletes(season.id);
+    return (await seasonService.getSeasonAthletes(season.id)).filter((a) => {
+      return (a.power_rank_rating || 0) > 0;
+    });;
   }
 
-  return await djangoAthleteService.getAllAthletes()
+  return (await djangoAthleteService.getAllAthletes()).filter((a) => {
+    return (a.power_rank_rating || 0) > 0;
+  });
 }
