@@ -24,8 +24,8 @@ export function MyFantasyTeamScreen() {
 function Content() {
 
   /** Auto Hides Top Bar to Maximise screen space */
-  // useHideTopNavBar();
-  // useHideBottomNavBar();
+  useHideTopNavBar();
+  useHideBottomNavBar();
 
   // useEffect(() => {
   //   fantasyAnalytics.trackVisitedLeagueScreen(league?.id);
