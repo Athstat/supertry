@@ -1,31 +1,28 @@
-import { ArrowLeft } from "lucide-react";
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { Fragment } from "react/jsx-runtime";
 import useSWR from "swr";
-import NoTeamCreatedFallback from "../../components/fantasy-leagues/NoTeamCreatedFallback";
-import FantasyTeamView from "../../components/my_fantasy_team/FantasyTeamView";
-import PitchViewLoadingSkeleton from "../../components/my_fantasy_team/PitchViewLoadingSkeleton";
-import TeamHistoryBar from "../../components/my_fantasy_team/TeamHistoryBar";
-import CircleButton from "../../components/ui/buttons/BackButton";
-import RoundedCard from "../../components/ui/cards/RoundedCard";
-import PageView from "../../components/ui/containers/PageView";
-import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
-import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
-import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
-import { useNavigateBack } from "../../hooks/web/useNavigateBack";
-import FantasyLeagueGroupDataProvider from "../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider";
-import TeamHistoryProvider from "../../providers/fantasy_teams/TeamHistoryProvider";
-import { userService } from "../../services/userService";
-import { IFantasyLeagueRound } from "../../types/fantasyLeague";
+import { ArrowLeft } from "lucide-react";
+import { useParams } from "react-router-dom";
 import { swrFetchKeys } from "../../utils/swrKeys";
+import { userService } from "../../services/userService";
+import PageView from "../../components/ui/containers/PageView";
+import RoundedCard from "../../components/ui/cards/RoundedCard";
+import CircleButton from "../../components/ui/buttons/BackButton";
+import { useNavigateBack } from "../../hooks/web/useNavigateBack";
+import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
+import { useUserRoundTeamV2 } from "../../hooks/fantasy/useUserRoundTeam";
+import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
+import TeamHistoryBar from "../../components/my_fantasy_team/TeamHistoryBar";
+import FantasyTeamView from "../../components/my_fantasy_team/FantasyTeamView";
+import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
+import TeamHistoryProvider from "../../providers/fantasy_teams/TeamHistoryProvider";
 import FantasyTeamProvider from "../../providers/fantasy_teams/FantasyTeamProvider";
+import NoTeamCreatedFallback from "../../components/fantasy-leagues/NoTeamCreatedFallback";
+import PitchViewLoadingSkeleton from "../../components/my_fantasy_team/PitchViewLoadingSkeleton";
 
 
 export default function LeagueMemberTeamScreen() {
 
     useHideTopNavBar();
-    const { leagueId, userId } = useParams<{ leagueId?: string, userId?: string }>();
+    const { userId } = useParams<{ leagueId?: string, userId?: string }>();
 
     const key = userId ? swrFetchKeys.getUserById(userId) : null;
     const { data: manager, isLoading } = useSWR(key, () => userService.getUserById(userId ?? ""));
@@ -37,59 +34,27 @@ export default function LeagueMemberTeamScreen() {
     }
 
     return (
-        <Fragment>
-            <FantasyLeagueGroupDataProvider
-                leagueId={leagueId}
-                loadingFallback={<LoadingFallback />}
-                fetchMembers={false}
-            >
-                <TeamHistoryProvider
-                    loadingFallback={<LoadingFallback />}
-                    user={manager}
-                >
-                    <Content />
-                </TeamHistoryProvider>
-            </FantasyLeagueGroupDataProvider>
-        </Fragment>
+        <TeamHistoryProvider
+            loadingFallback={<LoadingFallback />}
+            user={manager}
+        >
+            <Content />
+        </TeamHistoryProvider>
     )
 }
 
 
 function Content() {
 
-    const {hardPop} = useNavigateBack();
-    const { round, roundTeam, manager } = useTeamHistory();
+    const { hardPop } = useNavigateBack();
+    const { round, manager } = useTeamHistory();
     const { leagueConfig } = useFantasyLeagueGroup();
-    const [isDelaying, setDelaying] = useState<boolean>(false);
 
-    const [visitedRounds, setVistedRounds] = useState<IFantasyLeagueRound[]>([]);
+    const { roundTeam, isLoading } = useUserRoundTeamV2(manager?.kc_id, round?.round_number);
 
     const handleBack = () => {
         hardPop('/leagues');
     }
-
-    useEffect(() => {
-
-        const hasVistedRound = visitedRounds.find((r) => {
-            return r.id === round?.id
-        });
-
-        if (hasVistedRound || !round) {
-            return;
-        }
-
-        setDelaying(true);
-
-        const timer = setTimeout(() => {
-            setDelaying(false);
-            setVistedRounds(prev => [...prev, round])
-        }, 2000);
-
-        return () => {
-            clearTimeout(timer);
-            setDelaying(false);
-        }
-    }, [round, visitedRounds]);
 
     return (
         <PageView className="flex flex-col gap-4 py-4 " >
@@ -109,32 +74,28 @@ function Content() {
 
             <TeamHistoryBar
             />
-            
-            {roundTeam && !isDelaying && (
+
+            {roundTeam && (
                 <FantasyTeamProvider
-                    leagueRound={round}
                     team={roundTeam}
                     readOnly
                 >
                     <FantasyTeamView
                         leagueConfig={leagueConfig}
-                        leagueRound={round}
                         onTeamUpdated={async () => { }}
                         onBack={() => { }}
                     />
                 </FantasyTeamProvider>
             )}
 
-
-
-            {!roundTeam && !isDelaying && (
+            {!roundTeam && !isLoading && (
                 <NoTeamCreatedFallback
                     hideViewStandingsOption
                     perspective="third-person"
                 />
             )}
 
-            {isDelaying && (
+            {isLoading && (
                 <PitchViewLoadingSkeleton />
             )}
         </PageView>
