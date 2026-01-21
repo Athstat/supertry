@@ -13,7 +13,7 @@ type TeamHistoryContextProps = {
     manager?: DjangoUserMinimal
 }
 
-const TeamHistoryContext = createContext<TeamHistoryContextProps | null>(null);
+export const TeamHistoryContext = createContext<TeamHistoryContextProps | null>(null);
 
 type Props = {
     children?: ReactNode,
