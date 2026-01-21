@@ -50,7 +50,7 @@ export default function MyTeamModeSelector() {
 
   return (
     <Fragment>
-      <TeamHistoryBar lock={false} />
+      {<TeamHistoryBar lock={viewMode === 'create-team'} />}
 
       {isLoading && (
         <PitchViewLoadingSkeleton hideHistoryBar />
