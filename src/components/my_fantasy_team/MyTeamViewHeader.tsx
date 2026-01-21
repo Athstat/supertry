@@ -12,6 +12,7 @@ import { useMyTeamView } from './MyTeamStateProvider';
 import RoundedCard from '../ui/cards/RoundedCard';
 import { useLeagueConfig } from '../../hooks/useLeagueConfig';
 import { ISeasonRound } from '../../types/fantasy/fantasySeason';
+import { LeagueRoundCountdown2 } from '../fantasy_league/LeagueCountdown';
 
 type Props = {
   onTeamUpdated?: () => Promise<void>;
@@ -69,8 +70,6 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
         leagueRound={leagueRound}
         onTeamUpdated={handleTeamUpdated}
       />}
-
-
 
     </div>
   );
@@ -161,11 +160,11 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
 
       <Activity mode={!isLocked && !isReadOnly ? "visible" : "hidden"} >
         <div className='flex flex-row w-full items-center justify-center' >
-          {/* <LeagueRoundCountdown2
+          <LeagueRoundCountdown2
               leagueRound={leagueRound}
               className='flex-col'
               leagueTitleClassName='font-normal text-xs'
-            /> */}
+            />
         </div>
       </Activity>
 

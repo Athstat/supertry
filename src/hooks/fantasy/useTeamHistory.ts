@@ -42,7 +42,7 @@ export function useTeamHistory() {
     const currentRoundIndex = useMemo(() => {
         if (currentRound) {
             return sortedRounds.findIndex((r) => {
-                return r.id === currentRound.id
+                return r.round_number === currentRound.round_number
             });
         }
 
