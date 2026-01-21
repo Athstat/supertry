@@ -27,9 +27,6 @@ export function useTeamHistory() {
 
     const currentRound = useMemo(() => {
 
-        // TODO: Come back and fix this
-        return seasonCurrentRound;
-
         if (!roundId) {
             return seasonCurrentRound;
         }

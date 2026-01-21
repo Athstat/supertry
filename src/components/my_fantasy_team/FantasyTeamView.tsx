@@ -32,7 +32,7 @@ export default function FantasyTeamView({ onTeamUpdated,leagueRound }: Props) {
         onTeamUpdated={onTeamUpdated}
       />
 
-      {leagueRound && <MyTeamPitchView leagueRound={leagueRound} />}
+      <MyTeamPitchView />
 
       <PlayerPicker
         isOpen={swapState.open && swapState.slot != null && Boolean(swapState.position)}

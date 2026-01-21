@@ -22,7 +22,7 @@ export default function TeamHistoryBar({lock}: Props) {
             </CircleButton>}
 
             <div>
-                <p>{round?.title}</p>
+                <p>{round?.round_title}</p>
             </div>
 
             {!lock && <CircleButton onClick={moveNextRound} >

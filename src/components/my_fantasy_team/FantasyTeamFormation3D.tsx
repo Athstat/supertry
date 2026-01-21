@@ -25,6 +25,7 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN }: TeamFormatio
     { x: 80, y: 50, slot: 5 },
   ]
 
+
   return (
     <div className="relative w-full mt-10  flex flex-col justify-center">
 
@@ -69,7 +70,7 @@ type SlotCardProps = {
   position: SlotCardPosition
 }
 
-function SlotCard({ slot, onPlayerClick, round, position }: SlotCardProps) {
+function SlotCard({ slot, onPlayerClick, position }: SlotCardProps) {
 
   const { athlete } = slot;
 
@@ -89,10 +90,6 @@ function SlotCard({ slot, onPlayerClick, round, position }: SlotCardProps) {
       </div>
     )
   };
-
-  if (!round) {
-    return null;
-  }
 
 
   return (
