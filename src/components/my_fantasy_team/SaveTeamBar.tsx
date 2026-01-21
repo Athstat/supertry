@@ -101,8 +101,6 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
                     is_captain: boolean;
                 }[];
 
-            console.log('athletesPayload: ', athletesPayload);
-
             const updatedTeam = await fantasyTeamService.updateFantasyTeam(team.id, { athletes: athletesPayload });
 
             // Apply optimistic update
