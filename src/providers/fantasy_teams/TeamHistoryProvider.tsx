@@ -9,7 +9,7 @@ type TeamHistoryContextProps = {
     round?: ISeasonRound,
     setRound: (r: ISeasonRound) => void,
     moveNextRound: () => void,
-    movePrevRound: () => void,
+    movePreviousRound: () => void,
     manager?: DjangoUserMinimal
 }
 
@@ -59,7 +59,7 @@ export default function TeamHistoryProvider({ children, user }: Props) {
         
     }, [maxIndex, roundNumber, seasonRounds, setRoundNumber]);
 
-    const movePrevRound = useCallback(() => {
+    const movePreviousRound = useCallback(() => {
         
         const currentIndex = seasonRounds.findIndex((r) => r.round_number === roundNumber);
 
@@ -75,7 +75,7 @@ export default function TeamHistoryProvider({ children, user }: Props) {
     return (
         <TeamHistoryContext.Provider
             value={{
-                round, setRound, moveNextRound, movePrevRound, manager: user
+                round, setRound, moveNextRound, movePreviousRound, manager: user
             }}
         >
             {children}
