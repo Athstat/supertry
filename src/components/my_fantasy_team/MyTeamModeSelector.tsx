@@ -10,7 +10,7 @@ import TeamHistoryBar from './TeamHistoryBar';
 import CreateFantasyTeamView from './CreateTeamView';
 import { useLeagueConfig } from '../../hooks/useLeagueConfig';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
-import { useUserRoundTeamV2 } from '../../hooks/fantasy/useUserRoundTeam';
+import { useUserRoundTeam } from '../../hooks/fantasy/useUserRoundTeam';
 
 // The Activity Component has been added to the latest release
 // of react 19.2.0, please check the docs https://react.dev/reference/react/Activity
@@ -29,7 +29,7 @@ export default function MyTeamModeSelector() {
 
   // const [visitedRounds, setVistedRounds] = useState<ISeasonRound[]>([]);
 
-  const {roundTeam, isLoading} = useUserRoundTeamV2(manager?.kc_id, round?.round_number);
+  const {roundTeam, isLoading} = useUserRoundTeam(manager?.kc_id, round?.round_number);
 
   // useEffect(() => {
   //   const hasVistedRound = visitedRounds.find(r => {

@@ -8,7 +8,7 @@ import RoundedCard from "../../components/ui/cards/RoundedCard";
 import CircleButton from "../../components/ui/buttons/BackButton";
 import { useNavigateBack } from "../../hooks/web/useNavigateBack";
 import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
-import { useUserRoundTeamV2 } from "../../hooks/fantasy/useUserRoundTeam";
+import { useUserRoundTeam } from "../../hooks/fantasy/useUserRoundTeam";
 import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
 import TeamHistoryBar from "../../components/my_fantasy_team/TeamHistoryBar";
 import FantasyTeamView from "../../components/my_fantasy_team/FantasyTeamView";
@@ -50,7 +50,7 @@ function Content() {
     const { round, manager } = useTeamHistory();
     const { leagueConfig } = useFantasyLeagueGroup();
 
-    const { roundTeam, isLoading } = useUserRoundTeamV2(manager?.kc_id, round?.round_number);
+    const { roundTeam, isLoading } = useUserRoundTeam(manager?.kc_id, round?.round_number);
 
     const handleBack = () => {
         hardPop('/leagues');

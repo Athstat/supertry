@@ -40,9 +40,10 @@ function DefaultHero() {
 function Content() {
   const { authUser } = useAuth();
 
-  const { league, currentRound: currentGameweek, isLoading: loadingGroup } = useFantasyLeagueGroup();
+  const { league, isLoading: loadingGroup } = useFantasyLeagueGroup();
+  const {currentRound} = useFantasySeasons();
 
-  const { roundTeam, isLoading: loadingRoundTeam } = useUserRoundTeam(currentGameweek?.id, authUser?.kc_id);
+  const { roundTeam, isLoading: loadingRoundTeam } = useUserRoundTeam(authUser?.kc_id, currentRound?.round_number);
   const isLoading = loadingGroup || loadingRoundTeam;
 
   if (isLoading) {

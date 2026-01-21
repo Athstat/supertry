@@ -12,7 +12,7 @@ import { LeagueRoundCountdown2 } from '../fantasy_league/LeagueCountdown';
 import { TranslucentButton } from '../ui/buttons/PrimaryButton';
 import { smartRoundUp } from '../../utils/intUtils';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
-import { useUserRoundTeamV2 } from '../../hooks/fantasy/useUserRoundTeam';
+import { useUserRoundTeam } from '../../hooks/fantasy/useUserRoundTeam';
 import { ISeasonRound } from '../../types/fantasy/fantasySeason';
 
 type Props = {
@@ -31,7 +31,7 @@ function Content({ leagueGroup: league }: Props) {
   const { authUser } = useAuth();
   const { currentRound, previousRound } = useFantasySeasons();
 
-  const { roundTeam: userTeam, isLoading } = useUserRoundTeamV2(authUser?.kc_id, currentRound?.round_number);
+  const { roundTeam: userTeam, isLoading } = useUserRoundTeam(authUser?.kc_id, currentRound?.round_number);
 
   const scoreRound = useMemo(() => {
     if (currentRound && isSeasonRoundLocked(currentRound)) {

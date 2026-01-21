@@ -5,6 +5,7 @@ import { DashboardHeroLoadingSkeleton, DashboardHeroFrame, DashboardHeroHeader, 
 import { useFeaturedLeague } from '../../../hooks/leagues/useFeaturedLeague';
 import FantasyLeagueGroupDataProvider from '../../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider';
 import TrophyStartIcon from '../../ui/icons/TrophyStartIcon';
+import { useFantasySeasons } from '../../../hooks/dashboard/useFantasySeasons';
 
 /** Renders the dashboard hero */
 export default function DashboardHero() {
@@ -25,9 +26,10 @@ export default function DashboardHero() {
 function Content() {
     const { authUser } = useAuth();
 
-    const { league, currentRound: currentGameweek, isLoading: loadingGroup } = useFantasyLeagueGroup();
+    const { league, isLoading: loadingGroup } = useFantasyLeagueGroup();
+    const {currentRound} = useFantasySeasons();
 
-    const { roundTeam, isLoading: loadingRoundTeam } = useUserRoundTeam(currentGameweek?.id, authUser?.kc_id);
+    const { roundTeam, isLoading: loadingRoundTeam } = useUserRoundTeam(authUser?.kc_id, currentRound?.round_number);
     const isLoading = loadingGroup || loadingRoundTeam;
 
     if (isLoading) {
