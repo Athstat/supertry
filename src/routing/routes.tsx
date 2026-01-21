@@ -7,7 +7,6 @@ import ResetPasswordScreen from "../screens/auth/ResetPasswordScreen";
 import { ProtectedRoute } from "../components/auth/layouts/ProtectedRoute";
 import { DashboardScreen } from "../screens/DashboardScreen";
 import { FantasyScreen } from "../screens/fantasy_leagues/FantasyScreen";
-import JoinGroupScreen from "../screens/fantasy_leagues/JoinGroupScreen";
 import { MyFantasyTeamScreen } from "../screens/fantasy_leagues/MyFantasyTeamScreen";
 import SBRChatScreen from "../components/sbr/SBRChatScreen";
 import OnboardingDataProvider from "../providers/OnboardingDataProvider";
@@ -99,15 +98,6 @@ export const dataRouter = createBrowserRouter([
                         <MainAppLayout>
                             <FantasyScreen />
                         </MainAppLayout>
-                    </ProtectedRoute>
-                )
-            },
-
-            {
-                path: "/league/:leagueId/join",
-                element: (
-                    <ProtectedRoute>
-                        <JoinGroupScreen />
                     </ProtectedRoute>
                 )
             },
