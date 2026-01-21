@@ -1,5 +1,5 @@
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { ErrorInfo, ReactNode, useState } from "react"
+import { ErrorInfo, ReactNode, useEffect, useState } from "react"
 import ErrorBoundary, { FallbackProps } from "./components/ui/navigation/ErrorBoundary";
 import NetworkStatusProvider from "./components/network/NetworkStatusProvider";
 import SportActionsDefinitionsProvider from "./providers/SportActionsDefinitionsProvider";
@@ -19,6 +19,7 @@ import SeasonTeamsProvider from "./contexts/SeasonTeamsContext";
 import { FantasySeasonsPickerModal } from "./components/fantasy-seasons/FantasySeasonsPickerModal";
 import GeoLocationProvider from "./contexts/GeoLocationContext";
 import InternalUserProfileProvider from "./contexts/InternalUserProfileContext";
+import { preloadRugbyPitches } from "./components/ui/containers/RugbyPitch";
 
 type Props = {
     children?: ReactNode
@@ -108,6 +109,10 @@ function AppStateLayer({ children }: Props) {
         console.error('Root level error caught:', err, errorInfo);
         setError(err);
     }
+
+    useEffect(() => {
+        preloadRugbyPitches();
+    }, []);
 
     return (
         <NetworkStatusProvider>
