@@ -48,7 +48,7 @@ export default function TeamHistoryProvider({ children, user }: Props) {
     }, [setRoundNumber]);
 
     const moveNextRound = useCallback(() => {
-        const currentIndex = seasonRounds.findIndex((r) => r.round_number === roundNumber);
+        const currentIndex = seasonRounds.findIndex((r) => r.round_number.toString() === roundNumber);
 
         if (!maxIndex || currentIndex >= maxIndex ) {
             return;
@@ -61,7 +61,7 @@ export default function TeamHistoryProvider({ children, user }: Props) {
 
     const movePreviousRound = useCallback(() => {
         
-        const currentIndex = seasonRounds.findIndex((r) => r.round_number === roundNumber);
+        const currentIndex = seasonRounds.findIndex((r) => r.round_number.toString() === roundNumber);
 
         if (currentIndex <= minIndex) {
             return;

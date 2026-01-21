@@ -74,17 +74,19 @@ export default function MyTeamModeSelector() {
   }, [isLocked, round, roundTeam]);
 
   // Wait for leagueConfig to load to prevent error flash
-  if (isLoading) {
-    return <PitchViewLoadingSkeleton />;
-  }
-
-  console.log("Round ", round);
+  // if (isLoading) {
+  //   return <PitchViewLoadingSkeleton hideHistoryBar />;
+  // }
 
   return (
     <Fragment>
       <TeamHistoryBar lock={false} />
 
-      <Activity mode={viewMode === 'pitch-view' ? 'visible' : 'hidden'}>
+      {isLoading && (
+        <PitchViewLoadingSkeleton hideHistoryBar />
+      )}
+
+      {!isLoading && <Activity mode={viewMode === 'pitch-view' ? 'visible' : 'hidden'}>
         {roundTeam && (
           <FantasyTeamProvider team={roundTeam}>
             <FantasyTeamView
@@ -94,19 +96,19 @@ export default function MyTeamModeSelector() {
             />
           </FantasyTeamProvider>
         )}
-      </Activity>
+      </Activity>}
 
-      <Activity mode={viewMode === 'create-team' ? 'visible' : 'hidden'}>
+      {!isLoading && <Activity mode={viewMode === 'create-team' ? 'visible' : 'hidden'}>
         {round && (
           <CreateFantasyTeamProvider leagueRound={round}>
             <CreateFantasyTeamView />
           </CreateFantasyTeamProvider>
         )}
-      </Activity>
+      </Activity>}
 
-      <Activity mode={viewMode === 'no-team-locked' ? 'visible' : 'hidden'}>
+      {!isLoading && <Activity mode={viewMode === 'no-team-locked' ? 'visible' : 'hidden'}>
         <NoTeamCreatedFallback />
-      </Activity>
+      </Activity>}
     </Fragment>
   );
 }

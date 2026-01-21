@@ -1,5 +1,5 @@
+import { useFantasySeasons } from "../../hooks/dashboard/useFantasySeasons";
 import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
-import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import PitchViewLoadingSkeleton from "../my_fantasy_team/PitchViewLoadingSkeleton";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import { useTabView } from "../ui/tabs/TabView";
@@ -14,14 +14,14 @@ type Props = {
 /** Renders a list of rounds */
 export default function NoTeamCreatedFallback({perspective = "first-person", hideViewStandingsOption} : Props) {
 
-    const { round, jumpToRound, manager } = useTeamHistory();
-    const { currentRound } = useFantasyLeagueGroup();
+    const { round, setRound: jumpToRound, manager } = useTeamHistory();
+    const {currentRound} = useFantasySeasons();
 
     const {navigate} = useTabView();
     const managerAlias = manager?.username || manager?.first_name || manager?.last_name || "User";
 
-    const isOldLeague = round && currentRound && ((round?.start_round ?? 0) < (currentRound?.start_round ?? 0));
-    const missedDeadline = round && currentRound && (round?.id === currentRound?.id);
+    const isOldLeague = round && currentRound && ((round?.round_number ?? 0) < (currentRound?.round_number ?? 0));
+    const missedDeadline = round && currentRound && (round?.round_number === currentRound?.round_number);
 
     const jumpToCurrentRound = () => {
         if (isOldLeague) {
@@ -34,11 +34,11 @@ export default function NoTeamCreatedFallback({perspective = "first-person", hid
     }
 
     const oldLeagueDidNotCreateTeamWording = perspective === "first-person" ?
-        `You didn't create a team for ${round?.title}` : `${managerAlias} didn't create a team for ${round?.title}`
+        `You didn't create a team for ${round?.round_title}` : `${managerAlias} didn't create a team for ${round?.round_title}`
 
     const missedDeadlineWording = perspective === "first-person" ?
-        `You missed the deadline for ${round?.title}. You can pick your team on the next round` :
-        `${managerAlias} didn't create a team for ${round?.title}`;
+        `You missed the deadline for ${round?.round_title}. You can pick your team on the next round` :
+        `${managerAlias} didn't create a team for ${round?.round_title}`;
 
     return (
         <div className="relative flex overflow-hidden flex-col items-center justify-center w-full h-full" >
@@ -53,7 +53,7 @@ export default function NoTeamCreatedFallback({perspective = "first-person", hid
 
                     {isOldLeague && (
                         <div>
-                            <PrimaryButton onClick={jumpToCurrentRound} >Jump to {currentRound.title}</PrimaryButton>
+                            <PrimaryButton onClick={jumpToCurrentRound} >Jump to {currentRound.round_title}</PrimaryButton>
                         </div>
                     )}
                 </div>}
