@@ -11,10 +11,8 @@ import CreateFantasyTeamView from './CreateTeamView';
 import { useLeagueConfig } from '../../hooks/useLeagueConfig';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 import { useUserRoundTeam } from '../../hooks/fantasy/useUserRoundTeam';
+import MyTeamScreenProvider from '../../contexts/MyTeamScreenContext';
 
-// The Activity Component has been added to the latest release
-// of react 19.2.0, please check the docs https://react.dev/reference/react/Activity
-// AI will hallucinate that this component doesn't exists
 
 /** Renders the right team view based on the view mode  */
 
@@ -24,34 +22,10 @@ type ViewMode = 'create-team' | 'pitch-view' | 'no-team-locked' | 'error';
 export default function MyTeamModeSelector() {
 
   const { round, manager } = useTeamHistory();
-  const {selectedSeason} = useFantasySeasons();
+  const { selectedSeason } = useFantasySeasons();
   const { leagueConfig } = useLeagueConfig(selectedSeason?.id);
 
-  // const [visitedRounds, setVistedRounds] = useState<ISeasonRound[]>([]);
-
-  const {roundTeam, isLoading} = useUserRoundTeam(manager?.kc_id, round?.round_number);
-
-  // useEffect(() => {
-  //   const hasVistedRound = visitedRounds.find(r => {
-  //     return r.id === round?.id;
-  //   });
-
-  //   if (hasVistedRound || !round) {
-  //     return;
-  //   }
-
-  //   setLoading(true);
-
-  //   const timer = setTimeout(() => {
-  //     setLoading(false);
-  //     setVistedRounds(prev => [...prev, round]);
-  //   }, 1000);
-
-  //   return () => {
-  //     clearTimeout(timer);
-  //     setLoading(false);
-  //   };
-  // }, [round, visitedRounds]);
+  const { roundTeam, isLoading, mutate } = useUserRoundTeam(manager?.kc_id, round?.round_number);
 
   const isLocked = useMemo(() => {
     return round && isSeasonRoundLocked(round);
@@ -73,10 +47,6 @@ export default function MyTeamModeSelector() {
     return 'error';
   }, [isLocked, round, roundTeam]);
 
-  // Wait for leagueConfig to load to prevent error flash
-  // if (isLoading) {
-  //   return <PitchViewLoadingSkeleton hideHistoryBar />;
-  // }
 
   return (
     <Fragment>
@@ -86,29 +56,31 @@ export default function MyTeamModeSelector() {
         <PitchViewLoadingSkeleton hideHistoryBar />
       )}
 
-      {!isLoading && <Activity mode={viewMode === 'pitch-view' ? 'visible' : 'hidden'}>
-        {roundTeam && (
-          <FantasyTeamProvider team={roundTeam}>
-            <FantasyTeamView
-              leagueConfig={leagueConfig}
-              onTeamUpdated={async () => { }}
-              onBack={() => { }}
-            />
-          </FantasyTeamProvider>
-        )}
-      </Activity>}
+      <MyTeamScreenProvider onUpdateTeam={mutate} >
+        {!isLoading && <Activity mode={viewMode === 'pitch-view' ? 'visible' : 'hidden'}>
+          {roundTeam && (
+            <FantasyTeamProvider team={roundTeam}>
+              <FantasyTeamView
+                leagueConfig={leagueConfig}
+                onTeamUpdated={async () => { await mutate() }}
+                onBack={() => { }}
+              />
+            </FantasyTeamProvider>
+          )}
+        </Activity>}
 
-      {!isLoading && <Activity mode={viewMode === 'create-team' ? 'visible' : 'hidden'}>
-        {round && (
-          <CreateFantasyTeamProvider leagueRound={round}>
-            <CreateFantasyTeamView />
-          </CreateFantasyTeamProvider>
-        )}
-      </Activity>}
+        {!isLoading && <Activity mode={viewMode === 'create-team' ? 'visible' : 'hidden'}>
+          {round && (
+            <CreateFantasyTeamProvider leagueRound={round}>
+              <CreateFantasyTeamView />
+            </CreateFantasyTeamProvider>
+          )}
+        </Activity>}
 
-      {!isLoading && <Activity mode={viewMode === 'no-team-locked' ? 'visible' : 'hidden'}>
-        <NoTeamCreatedFallback />
-      </Activity>}
+        {!isLoading && <Activity mode={viewMode === 'no-team-locked' ? 'visible' : 'hidden'}>
+          <NoTeamCreatedFallback />
+        </Activity>}
+      </MyTeamScreenProvider>
     </Fragment>
   );
 }

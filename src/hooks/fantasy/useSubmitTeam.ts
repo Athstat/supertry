@@ -6,9 +6,12 @@ import { ICreateFantasyTeamAthleteItem } from "../../types/fantasyTeamAthlete";
 import { useCreateFantasyTeam } from "./useCreateFantasyTeam";
 import { fantasySeasonTeamService } from '../../services/fantasy/fantasySeasonTeamService';
 import { useLeagueConfig } from '../useLeagueConfig';
+import { useMyTeamScreen } from '../../contexts/MyTeamScreenContext';
 
 /** Hook for submitting a fantasy league team */
 export function useSubmitTeam(onSuccess?: (createdTeam:IFantasyLeagueTeam) => void) {
+
+    const {onUpdateTeam} = useMyTeamScreen();
 
     const { leagueConfig } = useLeagueConfig();
     const { leagueRound, teamCaptain, slots } = useCreateFantasyTeam();
@@ -67,8 +70,12 @@ export function useSubmitTeam(onSuccess?: (createdTeam:IFantasyLeagueTeam) => vo
                 leagueRound.season,
                 authUser.kc_id,
                 leagueRound.round_number,
-                {athletes}
+                {athletes, user_id: authUser.kc_id || ''}
             );
+
+            if (createdTeam) {
+                onUpdateTeam(createdTeam);
+            }
 
             // Show success modal
             if (onSuccess && createdTeam) {
@@ -86,7 +93,7 @@ export function useSubmitTeam(onSuccess?: (createdTeam:IFantasyLeagueTeam) => vo
         } finally {
             setIsSaving(false);
         }
-    }, [authUser, leagueConfig, leagueRound, onSuccess, slots, teamCaptain])
+    }, [authUser, leagueConfig, leagueRound, onSuccess, onUpdateTeam, slots, teamCaptain])
 
     return {
         handleSave,

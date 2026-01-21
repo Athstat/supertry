@@ -48,5 +48,6 @@ export type UpdateFantasyTeamAthleteItem = {
 
 /** Represents the JSON req body for updating a fantasy league team athlete */
 export type UpdateFantasyLeagueTeam = {
-    athletes: UpdateFantasyTeamAthleteItem[]
+    athletes: UpdateFantasyTeamAthleteItem[],
+    user_id: string
 }

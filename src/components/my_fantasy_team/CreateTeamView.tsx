@@ -94,7 +94,6 @@ export default function CreateFantasyTeamView() {
   return (
     <div className="w-full flex flex-col">
 
-
       <CreateTeamViewHeader />
 
       <div className='relative' >
