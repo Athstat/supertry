@@ -71,13 +71,13 @@ function InnerProvider({ children, user, loadingFallback }: Props) {
             });
 
             if (matchingRound) {
-                setRoundId(matchingRound.id);
+                setRoundId(matchingRound.round_number.toString());
                 return;
             }
         }
 
         if (!roundId && currentRound) {
-            setRoundId(currentRound.id);
+            setRoundId(currentRound.round_number.toString());
             return;
         }
 

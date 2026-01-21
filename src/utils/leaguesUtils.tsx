@@ -96,6 +96,18 @@ export function isLeagueRoundLocked(leagueRound: IFantasyLeagueRound) {
   return now.valueOf() >= deadline.valueOf();
 }
 
+export function getSeasonRoundDeadline(seasonRound: ISeasonRound) {
+  const { games_start } = seasonRound;
+
+  if (!games_start) return undefined;
+
+  const newGamesStart = new Date(games_start);
+  const thirtyMinutes = 1000 * 60 * 30;
+  const deadline = newGamesStart.valueOf() - thirtyMinutes;
+
+  return new Date(deadline);
+}
+
 export function isSeasonRoundLocked(seasonRound: ISeasonRound) {
   const { games_start } = seasonRound;
 
