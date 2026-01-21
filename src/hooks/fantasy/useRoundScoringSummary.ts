@@ -4,13 +4,17 @@ import { swrFetchKeys } from "../../utils/swrKeys";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 import { fantasySeasonTeamService } from "../../services/fantasy/fantasySeasonTeamService";
 import { useAuth } from "../../contexts/AuthContext";
+import { useFantasySeasons } from "../dashboard/useFantasySeasons";
 
 /** Returns a summary of a user round scoring  */
 export function useRoundScoringSummaryV2(seasonRound?: ISeasonRound) {
 
     const {authUser} = useAuth();
+    const {selectedSeason} = useFantasySeasons();
 
-    const key = seasonRound ? swrFetchKeys.getLeagueRoundScoringOverview(seasonRound?.id) : null;
+    const userId = authUser?.kc_id;
+
+    const key = seasonRound && userId && selectedSeason ? swrFetchKeys.getLeagueRoundScoringOverview(selectedSeason.id, seasonRound.round_number, userId) : null;
     const { data: scoringOverview, isLoading } = useSWR(key, () => fantasySeasonTeamService.getRoundScoringSummary(seasonRound?.season || '',  authUser?.kc_id || '',  seasonRound?.round_number || ""));
     const isLocked = seasonRound && isSeasonRoundLocked(seasonRound);
 

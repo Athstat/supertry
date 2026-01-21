@@ -142,8 +142,8 @@ export const swrFetchKeys = {
     return `/fantasy-league-teams/${teamId}/athletes/${trackingId}/squad-report`;
   },
 
-  getLeagueRoundScoringOverview: (leagueRoundId: string | number) => {
-    return `/fantasy-league-rounds/${leagueRoundId}/scoring-overview`;
+  getLeagueRoundScoringOverview: (seasonId: string, round: string | number, userId?: string) => {
+    return `/fantasy-seasons/${seasonId}/users/${userId}/rounds/${round}/scoring-overview`;
   },
 
   getActiveFantasySeasons: (userId?: string) => {
