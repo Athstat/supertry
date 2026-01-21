@@ -16,9 +16,9 @@ import { useFantasySeasons } from '../../../hooks/dashboard/useFantasySeasons';
 /** Renders fantasy league group standings */
 export function FantasyLeagueStandingsTab() {
 
-  const {seasonRounds} = useFantasySeasons();
-  const { userMemberRecord, sortedRounds, currentRound } = useFantasyLeagueGroup();
-  const currentSeasonRound = seasonRounds.find((s) => s.round_number === currentRound?.start_round);
+  const { currentRound } = useFantasySeasons();
+  const { userMemberRecord } = useFantasyLeagueGroup();
+  const currentSeasonRound = currentRound
 
   const { authUser } = useAuth();
   const isGuest = isGuestUser(authUser);
@@ -43,7 +43,6 @@ export function FantasyLeagueStandingsTab() {
 
       <LeagueStandingsFilter
         currentRound={currentOption}
-        leagueRounds={sortedRounds}
         onChange={setRoundFilterId}
       />
 
