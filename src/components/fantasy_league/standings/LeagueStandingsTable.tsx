@@ -7,7 +7,6 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import RoundedCard from '../../ui/cards/RoundedCard';
 import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
-import { useOfficialLeagueGroup } from '../../../hooks/fantasy/scouting/seasons/useOfficialLeagueGroup';
 import { useLeagueGroupStandings } from '../../../hooks/fantasy/standings/useLeagueGroupOverallStandings';
 import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
 import { useNavigate } from 'react-router-dom';
@@ -37,8 +36,6 @@ export default function LeagueStandingsTable({
     round_number: selectedRound?.start_round || undefined
   });
 
-  const { featuredLeague, isLoading: loadingOfficialLeague } = useOfficialLeagueGroup(league?.season_id)
-
   useEffect(() => {
     fantasyAnalytics.trackViewedStandingsTab();
   }, []);
@@ -51,16 +48,14 @@ export default function LeagueStandingsTable({
     const roundNumber = roundFilterId === "overall" ? currentRound?.start_round : selectedRound?.start_round;
     const queryParams = roundNumber ? `?round_number=${roundNumber}` : "";
 
-    if (featuredLeague) {
-      if (member.user_id === authUser?.kc_id) {
-        navigate(`/league/${featuredLeague.id}${queryParams}`);
-        return;
-      }
-
-      navigate(`/league/${featuredLeague.id}/member/${member.user_id}${queryParams}`);
+    if (member.user_id === authUser?.kc_id) {
+      navigate(`/my-team${queryParams}`);
+      return;
     }
 
-  }, [authUser, currentRound, featuredLeague, navigate, selectedRound])
+    navigate(`/league/${league?.id}/member/${member.user_id}${queryParams}`);
+
+  }, [authUser, currentRound, league, navigate, selectedRound])
 
 
   const exclude_ids = standings.map((s) => {
@@ -95,7 +90,7 @@ export default function LeagueStandingsTable({
     return r.user_id === authUser?.kc_id;
   })
 
-  const isLoading = loadingOfficialLeague || loadingStandings;
+  const isLoading = loadingStandings;
 
   const handleScrollToUser = () => {
     if (userRef.current) {

@@ -8,7 +8,7 @@ type Props = {
     leagueRound: ISeasonRound,
     className?: string,
     leagueTitleClassName?: string,
-    title?: string
+    title?: string,
 }
 
 export default function LeagueRoundCountdown({ leagueRound }: Props) {
