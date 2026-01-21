@@ -3,7 +3,7 @@ import PrimaryButton from '../ui/buttons/PrimaryButton';
 
 import PlayerProfileModal from '../player/PlayerProfileModal';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
-import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
+import { isSeasonRoundLocked } from '../../utils/leaguesUtils';
 import NoContentCard from '../ui/typography/NoContentMessage';
 import { useTabView } from '../ui/tabs/TabView';
 
@@ -44,7 +44,7 @@ export default function CreateFantasyTeamView() {
     cancelSwap();
   }
 
-  const isLocked = leagueRound && isLeagueRoundLocked(leagueRound);
+  const isLocked = leagueRound && isSeasonRoundLocked(leagueRound);
 
   const handleGoToStandings = () => {
     tabNavigate('standings');
@@ -117,7 +117,6 @@ export default function CreateFantasyTeamView() {
         excludePlayers={excludePlayers}
         onSelectPlayer={handleCompleteSwap}
         onClose={onClosePickerModal}
-        targetLeagueRound={leagueRound}
       />}
 
       {actionModalPlayer && <PlayerActionModal

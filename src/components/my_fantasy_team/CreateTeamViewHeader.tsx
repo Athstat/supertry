@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useAtomValue } from "jotai";
 import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
 import { useSubmitTeam } from "../../hooks/fantasy/useSubmitTeam";
-import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
-import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import { isGuestUserAtom } from "../../state/authUser.atoms";
 import { IFantasyLeagueTeam } from "../../types/fantasyLeague";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
@@ -14,14 +12,14 @@ import { useCreateFantasyTeam } from "../../hooks/fantasy/useCreateFantasyTeam";
 import { useNavigateBack } from "../../hooks/web/useNavigateBack";
 import { useNavigationGuard } from "../../hooks/web/useNavigationGuard";
 import UnsavedChangesWarningModal from "../ui/modals/UnsavedChangesModal";
+import { useLeagueConfig } from "../../hooks/useLeagueConfig";
 
 
 /** Renders Create Team View Header */
 export default function CreateTeamViewHeader() {
-    const { leagueConfig } = useFantasyLeagueGroup();
-    const { totalSpent, selectedCount, leagueRound, isTeamFull, resetToOriginalTeam } = useFantasyTeam();
+    const {leagueConfig} = useLeagueConfig();
+    const { totalSpent, selectedCount, leagueRound, isTeamFull, resetToOriginalTeam, setTeam: setRoundTeam } = useFantasyTeam();
 
-    const { setRoundTeam } = useTeamHistory();
     const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
     const [showClaimAccountModal, setShowClaimAccountModal] = useState<boolean>(false);
     const [createdTeam, setCreatedTeam] = useState<IFantasyLeagueTeam>();
@@ -185,7 +183,7 @@ function SuccessModal({ onContinue }: SuccessModalProps) {
                     <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Team Submitted!</h2>
                     <p className="text-gray-600 dark:text-gray-400 mb-6">
                         Your team has been successfully submitted
-                        {leagueRound ? ` to ${leagueRound.title}` : ''}
+                        {leagueRound ? ` to ${leagueRound.season}` : ''}
                     </p>
                     <PrimaryButton
                         className="w-full"
