@@ -3,11 +3,12 @@
  */
 
 import { atom } from "jotai";
-import { IFantasyLeagueRound, IFantasyLeagueTeam } from "../../../types/fantasyLeague";
+import { IFantasyLeagueTeam } from "../../../types/fantasyLeague";
 import { DjangoUserMinimal } from "../../../types/auth";
+import { ISeasonRound } from "../../../types/fantasy/fantasySeason";
 
 /** Holds the current league round atom to fetch team from */
-export const teamHistoryCurrentRoundAtom = atom<IFantasyLeagueRound>();
+export const teamHistoryCurrentRoundAtom = atom<ISeasonRound>();
 
 /** Holds the current league round team to display */
 export const teamHistoryCurrentTeamAtom = atom<IFantasyLeagueTeam>();

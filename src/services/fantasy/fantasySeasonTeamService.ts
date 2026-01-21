@@ -4,7 +4,7 @@ import { getAuthHeader, getUri } from "../../utils/backendUtils";
 import { logger } from "../logger"
 
 export const fantasySeasonTeamService = {
-    getRoundTeam: async (seasonId: string, userId: string, roundNumber: number | number) => {
+    getRoundTeam: async (seasonId: string, userId: string, roundNumber: number | string) => {
         try {
             
             const uri = getUri(`/api/v1/fantasy-seasons/${seasonId}/users/${userId}/teams/${roundNumber}`);

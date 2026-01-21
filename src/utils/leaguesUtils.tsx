@@ -2,6 +2,7 @@ import { IFantasyLeagueRound } from '../types/fantasyLeague';
 import { leagueService } from '../services/leagueService';
 import { dateComparator } from './dateUtils';
 import { FantasyLeagueGroup } from '../types/fantasyLeagueGroups';
+import { ISeasonRound } from '../types/fantasy/fantasySeason';
 
 /** Filters to only remain with leagues that seven days away */
 export function activeLeaguesFilter(leagues: FantasyLeagueGroup[]) {
@@ -93,6 +94,19 @@ export function isLeagueRoundLocked(leagueRound: IFantasyLeagueRound) {
   const deadline = new Date(join_deadline);
 
   return now.valueOf() >= deadline.valueOf();
+}
+
+export function isSeasonRoundLocked(seasonRound: ISeasonRound) {
+  const { games_start } = seasonRound;
+
+  if (!games_start) return false;
+
+  const now = new Date();
+  const newGamesStart = new Date(games_start);
+  const thirtyMinutes = 1000 * 60 * 30;
+  const deadline = newGamesStart.valueOf() - thirtyMinutes;
+
+  return now.valueOf() >= deadline;
 }
 
 export function hasLeagueRoundEnded(leagueRound: IFantasyLeagueRound) {

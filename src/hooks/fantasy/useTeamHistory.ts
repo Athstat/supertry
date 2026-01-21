@@ -1,10 +1,10 @@
 import { useAtom, useAtomValue } from "jotai";
 import { teamHistoryCurrentTeamAtom, teamHistoryTeamManagerAtom } from "../../state/fantasy/fantasy-teams/teamHistory.atoms";
-import { useFantasyLeagueGroup } from "../leagues/useFantasyLeagueGroup";
 import { useCallback, useMemo } from "react";
 import { useQueryState } from "../web/useQueryState";
 import { queryParamKeys } from "../../types/constants";
-import { IFantasyLeagueRound } from "../../types/fantasyLeague";
+import { useFantasySeasons } from "../dashboard/useFantasySeasons";
+import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 
 /** 
  * Hook that provides functionality to travel through a teams history.
@@ -14,25 +14,24 @@ import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 export function useTeamHistory() {
 
     
-    const { sortedRounds, currentRound: groupCurrentRound } = useFantasyLeagueGroup();
+    const { seasonRounds: sortedRounds, currentRound: seasonCurrentRound  } = useFantasySeasons();
 
     const [roundId, setRoundId] = useQueryState(queryParamKeys.ROUND_ID_QUERY_KEY);
 
     const [team, setTeam] = useAtom(teamHistoryCurrentTeamAtom);
     const manager = useAtomValue(teamHistoryTeamManagerAtom);
 
-    const setCurrentRound = useCallback((round: IFantasyLeagueRound) => {
-        setRoundId(round.id);
+    const setCurrentRound = useCallback((round: ISeasonRound) => {
+        setRoundId(round.round_number.toString());
     }, [setRoundId]);
 
     const currentRound = useMemo(() => {
         if (!roundId) {
-            return groupCurrentRound;
+            return seasonCurrentRound;
         }
     
-        return sortedRounds.find((r) => r.id.toString() === roundId)
-    }, [groupCurrentRound, roundId, sortedRounds]);
-
+        return sortedRounds.find((r) => r.round_number.toString() === roundId)
+    }, [roundId, seasonCurrentRound, sortedRounds]);
 
 
     const resetTeamForNewRound = useCallback(() => {
@@ -50,15 +49,15 @@ export function useTeamHistory() {
     }, [currentRound, sortedRounds]);
 
     const maxIndex = useMemo<number | undefined>(() => {
-        if (groupCurrentRound) {
+        if (seasonCurrentRound) {
             return sortedRounds.findIndex((r) => {
-                return r.id === groupCurrentRound.id
+                return r.round_number === seasonCurrentRound.round_number
             });
         }
 
         return undefined;
 
-    }, [groupCurrentRound, sortedRounds]);
+    }, [seasonCurrentRound, sortedRounds]);
 
     const moveNextRound = useCallback(() => {
 

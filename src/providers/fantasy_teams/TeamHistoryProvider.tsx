@@ -1,14 +1,14 @@
 import { useAtom, useSetAtom } from "jotai";
-import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup"
 import { teamHistoryCurrentRoundAtom, teamHistoryCurrentTeamAtom, teamHistoryTeamManagerAtom } from "../../state/fantasy/fantasy-teams/teamHistory.atoms";
 import { ScopeProvider } from "jotai-scope";
 import { Fragment, ReactNode, useEffect } from "react";
-import { useUserRoundTeam } from "../../hooks/fantasy/useUserRoundTeam";
+import { useUserRoundTeamV2 } from "../../hooks/fantasy/useUserRoundTeam";
 import { DjangoUserMinimal } from "../../types/auth";
 import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
 import { useQueryState } from "../../hooks/web/useQueryState";
 import { queryParamKeys } from "../../types/constants";
 import { AnimatePresence } from "framer-motion";
+import { useFantasySeasons } from "../../hooks/dashboard/useFantasySeasons";
 
 type Props = {
     children?: ReactNode,
@@ -45,7 +45,7 @@ function InnerProvider({ children, user, loadingFallback }: Props) {
 
     const [roundNumber, setRoundNumber] = useQueryState(queryParamKeys.ROUND_NUMBER_QUERY_KEY);
     const [roundId, setRoundId] = useQueryState(queryParamKeys.ROUND_ID_QUERY_KEY);
-    const { currentRound, sortedRounds } = useFantasyLeagueGroup();
+    const { currentRound, seasonRounds: sortedRounds } = useFantasySeasons();
 
     const setRound = useSetAtom(teamHistoryCurrentRoundAtom);
     const [, setManager] = useAtom(teamHistoryTeamManagerAtom);
@@ -67,7 +67,7 @@ function InnerProvider({ children, user, loadingFallback }: Props) {
         if (!roundId && roundNumber) {
 
             const matchingRound = sortedRounds.find((r) => {
-                return r.start_round?.toString() === (roundNumber || "")
+                return r.round_number?.toString() === (roundNumber || "")
             });
 
             if (matchingRound) {
@@ -102,7 +102,7 @@ function RoundTeamProvider({ loadingFallback, children }: Props) {
     const { round, manager } = useTeamHistory();
     const shouldFetch = Boolean(round) && Boolean(manager);
 
-    const { roundTeam, isLoading: loadingTeam } = useUserRoundTeam(round?.id, manager?.kc_id, shouldFetch);
+    const { roundTeam, isLoading: loadingTeam } = useUserRoundTeamV2(manager?.kc_id, round?.round_number, shouldFetch);
 
     const isLoading = loadingTeam;
 

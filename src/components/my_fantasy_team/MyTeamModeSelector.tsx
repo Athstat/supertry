@@ -1,15 +1,16 @@
 import { Activity, Fragment, useEffect, useMemo, useState } from 'react';
 import NoTeamCreatedFallback from '../fantasy-leagues/NoTeamCreatedFallback';
 import { useTeamHistory } from '../../hooks/fantasy/useTeamHistory';
-import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
-import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
+import { isSeasonRoundLocked } from '../../utils/leaguesUtils';
 import CreateFantasyTeamProvider from '../../providers/fantasy_teams/CreateFantasyTeamProvider';
-import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import FantasyTeamProvider from '../../providers/fantasy_teams/FantasyTeamProvider';
 import FantasyTeamView from './FantasyTeamView';
 import PitchViewLoadingSkeleton from './PitchViewLoadingSkeleton';
 import TeamHistoryBar from './TeamHistoryBar';
 import CreateFantasyTeamView from './CreateTeamView';
+import { ISeasonRound } from '../../types/fantasy/fantasySeason';
+import { useLeagueConfig } from '../../hooks/useLeagueConfig';
+import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 
 // The Activity Component has been added to the latest release
 // of react 19.2.0, please check the docs https://react.dev/reference/react/Activity
@@ -28,10 +29,14 @@ type ViewMode = 'create-team' | 'pitch-view' | 'no-team-locked' | 'error';
 
 /** Component that selects between showing the pitch view or showing the create team view  */
 function MyTeamModeSelector2() {
-  const { round, roundTeam } = useTeamHistory();
-  const { leagueConfig } = useFantasyLeagueGroup();
+
+  const {selectedSeason} = useFantasySeasons();
+
+  const { round, roundTeam, } = useTeamHistory();
+  const { leagueConfig } = useLeagueConfig(selectedSeason?.id);
+
   const [isLoading, setLoading] = useState<boolean>(false);
-  const [visitedRounds, setVistedRounds] = useState<IFantasyLeagueRound[]>([]);
+  const [visitedRounds, setVistedRounds] = useState<ISeasonRound[]>([]);
 
   useEffect(() => {
     const hasVistedRound = visitedRounds.find(r => {
@@ -56,7 +61,7 @@ function MyTeamModeSelector2() {
   }, [round, visitedRounds]);
 
   const isLocked = useMemo(() => {
-    return round && isLeagueRoundLocked(round);
+    return round && isSeasonRoundLocked(round);
   }, [round]);
 
   const viewMode: ViewMode = useMemo<ViewMode>(() => {
@@ -89,7 +94,6 @@ function MyTeamModeSelector2() {
           <FantasyTeamProvider leagueRound={round} team={roundTeam}>
             <FantasyTeamView
               leagueConfig={leagueConfig}
-              leagueRound={round}
               onTeamUpdated={async () => { }}
               onBack={() => { }}
             />

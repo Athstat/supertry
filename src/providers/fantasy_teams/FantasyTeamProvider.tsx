@@ -3,14 +3,15 @@ import { ScopeProvider } from "jotai-scope"
 import { ReactNode, useEffect } from "react";
 import { fantasyLeagueTeamAtom, fantasyTeamSlotsAtom, swapPlayerAtom, swapStateAtom, fantasyLeagueTeamLeagueRoundAtom, readOnlyAtom } from "../../state/fantasy/fantasyLeagueTeam.atoms";
 import { fantasyTeamAthletesAtom } from "../../state/myTeam.atoms";
-import { IFantasyLeagueTeam, IFantasyLeagueRound } from "../../types/fantasyLeague";
+import { IFantasyLeagueTeam } from "../../types/fantasyLeague";
 import { defaultFantasyPositions, IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
+import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 
 type Props = {
     team: IFantasyLeagueTeam,
     children?: ReactNode,
-    leagueRound?: IFantasyLeagueRound,
+    leagueRound?: ISeasonRound,
     readOnly?: boolean
 }
 
@@ -76,9 +77,9 @@ function InnerProvider({ team, children, leagueRound, readOnly }: Props) {
 
         }
 
-        if (leagueRound) {
-            setLeagueRound(leagueRound);
-        }
+        // if (leagueRound) {
+        //     setLeagueRound(leagueRound);
+        // }
 
         if (readOnly !== undefined) {
             setReadOnly(readOnly);
@@ -92,6 +93,3 @@ function InnerProvider({ team, children, leagueRound, readOnly }: Props) {
         </>
     )
 }
-
-// TODO: Move Hook to the right folder
-/** Provides a hook for manipulating a fantasy league team  */
