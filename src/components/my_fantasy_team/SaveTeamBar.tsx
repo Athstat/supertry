@@ -2,11 +2,9 @@ import { useCallback, useMemo, useState } from "react";
 import { Check, Loader } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
-import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
 import { useNavigateBack } from "../../hooks/web/useNavigateBack";
 import { useNavigationGuard } from "../../hooks/web/useNavigationGuard";
 import { fantasyAnalytics } from "../../services/analytics/fantasyAnalytics";
-import { fantasyTeamService } from "../../services/fantasyTeamService";
 import { AppColours } from "../../types/constants";
 import { isSeasonRoundLocked } from "../../utils/leaguesUtils";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
@@ -15,23 +13,23 @@ import UnsavedChangesWarningModal from "../ui/modals/UnsavedChangesModal";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 import { fantasySeasonTeamService } from "../../services/fantasy/fantasySeasonTeamService";
 import { useAuth } from "../../contexts/AuthContext";
+import { useMyTeamScreen } from "../../contexts/MyTeamScreenContext";
 
 type Props = {
-    onTeamUpdated: () => Promise<void>,
+    onTeamUpdated: () => Promise<void>
     leagueRound: ISeasonRound
 }
 
 /** Renders Save Team Bar */
-export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
+export default function SaveTeamBar({ leagueRound }: Props) {
     const {authUser} = useAuth();
+    const {onUpdateTeam} = useMyTeamScreen();
 
     const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState<boolean>(false);
     const [isSaving, setIsSaving] = useState(false);
     const [saveError, setSaveError] = useState<string | undefined>(undefined);
     const isLocked = isSeasonRoundLocked(leagueRound);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
-
-    const { setRoundTeam } = useTeamHistory();
 
     const toggleUnSavedChangesModal = () => {
         setShowUnsavedChangesModal(prev => !prev);
@@ -105,14 +103,14 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
                     is_captain: boolean;
                 }[];
 
-            const updatedTeam = await fantasySeasonTeamService.updateRoundTeam(leagueRound.season, authUser?.kc_id || '', leagueRound.round_number,  { athletes: athletesPayload });
+            const updatedTeam = await fantasySeasonTeamService.updateRoundTeam(leagueRound.season, authUser?.kc_id || '', leagueRound.round_number,  {
+                athletes: athletesPayload, user_id: authUser?.kc_id || '' 
+            });
 
             // Apply optimistic update
             if (updatedTeam) {
-                setRoundTeam(updatedTeam);
+                onUpdateTeam(updatedTeam);
             }
-
-            await onTeamUpdated();
 
             setIsSaving(false);
             setShowSuccessModal(true);
@@ -183,9 +181,6 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
                                     className="w-full"
                                     onClick={() => {
                                         setShowSuccessModal(false);
-                                        if (onTeamUpdated) {
-                                            onTeamUpdated();
-                                        }
                                     }}
                                 >
                                     Great!
