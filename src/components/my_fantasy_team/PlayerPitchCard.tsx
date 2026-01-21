@@ -12,7 +12,6 @@ import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup
 import { CaptainsArmBand } from "../player/CaptainsArmBand";
 import { sanitizeStat } from "../../utils/stringUtils";
 import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
-import { useMyTeamView } from "./MyTeamStateProvider";
 import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams";
 
 type PlayerPitchCardProps = {
@@ -21,7 +20,6 @@ type PlayerPitchCardProps = {
 };
 
 export function PlayerPitchCard({ player, onClick }: PlayerPitchCardProps) {
-    const { viewMode } = useMyTeamView();
     const { league } = useFantasyLeagueGroup();
     const { teamCaptain, leagueRound } = useFantasyTeam();
 
@@ -104,12 +102,9 @@ export function PlayerPitchCard({ player, onClick }: PlayerPitchCardProps) {
                         showAvailabilityWarning && "from-yellow-500 to-yellow-500 text-black",
                         !showAvailabilityWarning && "from-[#011E5C] to-[#011E5C] dark:text-white text-white",
                     )} >
-
-                        <Activity mode={viewMode === "pitch" ? "visible" : "hidden"} >
                             <PlayerScoreIndicator
                                 player={player}
                             />
-                        </Activity>
                     </div>
                 </div>
             </div>
