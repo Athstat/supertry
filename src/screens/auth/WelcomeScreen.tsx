@@ -6,7 +6,7 @@ import { ScrummyDarkModeLogo } from '../../components/branding/scrummy_logo';
 import PrimaryButton from '../../components/ui/buttons/PrimaryButton';
 import GuestLoginBox from '../../components/auth/login/GuestLoginBox';
 import MovingRugbyPitch from '../../components/ui/containers/MovingRugbyPitch';
-import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
+import { athleteService } from '../../services/athletes/athletesService';
 import BetaTag from '../../components/branding/BetaTag';
 import { FEATURED_PLAYER_IDS } from '../../types/constants';
 
@@ -30,7 +30,7 @@ export function WelcomeScreen() {
         const players = await Promise.all(
           ids.map(async id => {
             try {
-              return await djangoAthleteService.getAthleteById(id);
+              return await athleteService.getAthleteById(id);
             } catch {
               return null;
             }

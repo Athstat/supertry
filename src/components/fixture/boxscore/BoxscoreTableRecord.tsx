@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import useSWR from "swr";
 import { twMerge } from "tailwind-merge";
-import { djangoAthleteService } from "../../../services/athletes/djangoAthletesService";
+import { athleteService } from "../../../services/athletes/athletesService";
 import SecondaryText from "../../ui/typography/SecondaryText";
 import { BoxscoreListRecordItem } from "../../../types/boxScore";
 import { useFixtureScreen } from "../../../hooks/fixtures/useFixture";
@@ -17,7 +17,7 @@ export function BoxscoreTableRecord({ record, index, className }: TableRecordPro
 
     const { athleteId } = record;
     const key = `/athletes/${athleteId}`;
-    const { data: info, isLoading: loadingInfo, } = useSWR(key, () => djangoAthleteService.getAthleteById(athleteId), {
+    const { data: info, isLoading: loadingInfo, } = useSWR(key, () => athleteService.getAthleteById(athleteId), {
         revalidateOnFocus: false
     });
 

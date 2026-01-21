@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { IProAthlete } from '../../../types/athletes';
 import { swrFetchKeys } from '../../../utils/swrKeys';
-import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService';
+import { athleteService } from '../../../services/athletes/athletesService';
 import { Users } from 'lucide-react';
 import SecondaryText from '../../ui/typography/SecondaryText';
 import PlayerMugshot from '../PlayerMugshot';
@@ -14,7 +14,7 @@ type Props = {
 export default function RelatedPlayersList({ player }: Props) {
   const teamMatesKey = swrFetchKeys.getAthleteTeamMates(player.tracking_id);
   const { data, isLoading } = useSWR(teamMatesKey, () =>
-    djangoAthleteService.getAthleteTeamMates(player.tracking_id)
+    athleteService.getAthleteTeamMates(player.tracking_id)
   );
 
   const teamMates = [...data ?? []]

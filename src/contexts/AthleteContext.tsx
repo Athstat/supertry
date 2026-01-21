@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useMemo, useState, useTransition } from "react";
 import useSWR from "swr";
 import { swrFetchKeys } from "../utils/swrKeys";
-import { djangoAthleteService } from "../services/athletes/djangoAthletesService";
+import { athleteService } from "../services/athletes/athletesService";
 import { IProTeam } from "../types/team";
 import { IProAthlete } from "../types/athletes";
 import { getAthletesSummary } from "../utils/athletes/athleteUtils";
@@ -111,7 +111,7 @@ async function fetcher(season?: IProSeason) {
     });;
   }
 
-  return (await djangoAthleteService.getAllAthletes()).filter((a) => {
+  return (await athleteService.getAllAthletes()).filter((a) => {
     return (a.power_rank_rating || 0) > 0;
   });
 }

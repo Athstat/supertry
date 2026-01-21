@@ -3,7 +3,7 @@ import { createContext, ReactNode, useMemo, useState } from "react"
 import { IProAthlete } from "../types/athletes"
 import { IProSeason } from "../types/season"
 import useSWR from "swr"
-import { djangoAthleteService } from "../services/athletes/djangoAthletesService"
+import { athleteService } from "../services/athletes/athletesService"
 import { swrFetchKeys } from "../utils/swrKeys"
 import { IFixture } from "../types/games"
 
@@ -31,7 +31,7 @@ export default function PlayerCompareItemProvider({ player, children }: Props) {
 
     const seasonFetchKey = shouldFetchSeason ? swrFetchKeys.getAthleteSeasons(player.tracking_id) : null;
     const { data, isLoading } = useSWR(seasonFetchKey, () =>
-        djangoAthleteService.getAthleteSeasons(player.tracking_id)
+        athleteService.getAthleteSeasons(player.tracking_id)
     );
 
     const seasons = useMemo(() => {

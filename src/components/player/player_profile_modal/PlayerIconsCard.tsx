@@ -2,7 +2,7 @@ import { IProAthlete } from '../../../types/athletes';
 import { getPlayerIcons, PLAYER_ICONS, PlayerIcon } from '../../../utils/playerIcons';
 import PlayerIconComponent from '../../players/compare/PlayerIconComponent';
 import useSWR from 'swr';
-import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService';
+import { athleteService } from '../../../services/athletes/athletesService';
 import { swrFetchKeys } from '../../../utils/swrKeys';
 import { IProSeason } from '../../../types/season';
 import SecondaryText from '../../ui/typography/SecondaryText';
@@ -18,10 +18,10 @@ interface Props {
 export function PlayerIconsCard({ player, season }: Props) {
 
   const statsKey = swrFetchKeys.getAthleteSeasonStats(player.tracking_id, season.id);
-  const { data: actions, isLoading: loadingStats } = useSWR(statsKey, () => djangoAthleteService.getAthleteSeasonStats(player.tracking_id, season.id));
+  const { data: actions, isLoading: loadingStats } = useSWR(statsKey, () => athleteService.getAthleteSeasonStats(player.tracking_id, season.id));
 
   const starsKey = swrFetchKeys.getAthleteSeasonStars(player.tracking_id, season.id);
-  const { data: starRatings, isLoading: loadingStars } = useSWR(starsKey, () => djangoAthleteService.getAthleteSeasonStarRatings(player.tracking_id, season.id));
+  const { data: starRatings, isLoading: loadingStars } = useSWR(starsKey, () => athleteService.getAthleteSeasonStarRatings(player.tracking_id, season.id));
 
   const isLoading = loadingStars || loadingStats;
 

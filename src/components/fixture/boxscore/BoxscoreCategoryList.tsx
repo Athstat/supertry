@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { djangoAthleteService } from '../../../services/athletes/djangoAthletesService';
+import { athleteService } from '../../../services/athletes/athletesService';
 import PlayerMugshot from '../../player/PlayerMugshot';
 import SecondaryText from '../../ui/typography/SecondaryText';
 import { useCallback, useEffect, useState } from 'react';
@@ -102,7 +102,7 @@ function AthleteBoxscoreRecord({ item, onFailRender }: AthleteBoxscoreItemProps)
   const key = `/athletes/${athleteId}`;
   const { data: info, isLoading: loadingInfo } = useSWR(
     key,
-    () => djangoAthleteService.getAthleteById(athleteId),
+    () => athleteService.getAthleteById(athleteId),
     {
       revalidateOnFocus: false,
     }

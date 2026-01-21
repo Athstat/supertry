@@ -1,6 +1,6 @@
 import useSWR from "swr"
 import { IProAthlete } from "../../../types/athletes"
-import { djangoAthleteService } from "../../../services/athletes/djangoAthletesService";
+import { athleteService } from "../../../services/athletes/athletesService";
 import { useMemo } from "react";
 import { BarChartRecord, PlainBarChart } from "../../players/PlainBarChart";
 import RoundedCard from "../../ui/cards/RoundedCard";
@@ -11,7 +11,7 @@ type Props = {
 
 export default function PlayerPriceHistoryCard({ player }: Props) {
     const key = `/players/${player.tracking_id}/price-history`;
-    const { data } = useSWR(key, () => djangoAthleteService.getPriceHistory(player.tracking_id));
+    const { data } = useSWR(key, () => athleteService.getPriceHistory(player.tracking_id));
 
     const history = useMemo(() => {
         return (data ?? []).sort((a, b) => {
