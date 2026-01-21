@@ -162,7 +162,7 @@ function CTAButtons({ leagueRound, userRoundTeam }: CTAButtonProps) {
   const showSorryMessage = isCurrentLocked && !isUserHasTeam;
 
   const handleManageTeam = () => {
-    navigate(`/league/${leagueRound.id}`);
+    navigate(`/my-team`);
   }
 
   return (
