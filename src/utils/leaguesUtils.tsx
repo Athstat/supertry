@@ -1,6 +1,4 @@
 import { IFantasyLeagueRound } from '../types/fantasyLeague';
-import { leagueService } from '../services/leagueService';
-import { dateComparator } from './dateUtils';
 import { FantasyLeagueGroup } from '../types/fantasyLeagueGroups';
 import { ISeasonRound } from '../types/fantasy/fantasySeason';
 
@@ -29,40 +27,6 @@ export function isLeagueOnTheClock(league: IFantasyLeagueRound, targetDiff: numb
   const diff = deadline.valueOf() - today.valueOf();
 
   return diff >= 0 && diff <= targetDiff;
-}
-
-/**
- * Fetches the latest active official league
- * @returns Promise with the latest official league or null if none found
- */
-export async function getLatestOfficialLeague(): Promise<IFantasyLeagueRound | null> {
-  try {
-    // Fetch all leagues
-    const allLeagues = await leagueService.getAllLeagues();
-    // Filter for official leagues that are open or current
-    const officialLeagues = allLeagues.filter(
-      league =>
-        league.type === 'official' && (league.status === 'open' || league.status === 'current')
-    );
-
-    if (officialLeagues.length === 0) {
-      console.error('No active official leagues found');
-      return null;
-    }
-
-    // Sort by created date descending (newest first)
-    const sortedLeagues = officialLeagues.sort((a, b) => {
-      const dateA = new Date(a.created_date || 0);
-      const dateB = new Date(b.created_date || 0);
-      return dateB.getTime() - dateA.getTime();
-    });
-
-    // Return the most recent one
-    return sortedLeagues[0];
-  } catch (error) {
-    console.error('Error fetching latest official league:', error);
-    return null;
-  }
 }
 
 /** Renders a component to show the change in rank for a league */
@@ -150,33 +114,6 @@ export function calculateJoinDeadline(league: IFantasyLeagueRound) {
 export function leagueLockBias(a: IFantasyLeagueRound) {
   const isLocked = isLeagueLocked(a.join_deadline);
   return isLocked ? 0 : 1;
-}
-
-/** Gets the latest league for user to create team for */
-export async function latestLeagueFetcher() {
-  const leagues = await leagueService.getAllLeagues();
-
-  const sortedLeagues = leagues
-    .filter(l => {
-      const deadline = calculateJoinDeadline(l);
-
-      if (!deadline) {
-        return false;
-      }
-
-      const now = new Date();
-      const deadlineEpoch = deadline.valueOf();
-
-      const tolleranceDiff = 1000 * 60 * 60 * 24 * 3;
-
-      const pivot = now.valueOf() - tolleranceDiff;
-
-      return deadlineEpoch > pivot;
-    })
-    .sort((a, b) => dateComparator(a.join_deadline, b.join_deadline));
-
-  if (sortedLeagues.length === 0) return undefined;
-  return sortedLeagues[0];
 }
 
 /** Upcoming Leagues Filter, returns leagues that are more than 7 days away */
