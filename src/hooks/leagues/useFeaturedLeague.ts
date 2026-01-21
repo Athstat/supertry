@@ -10,7 +10,9 @@ export function useFeaturedLeague() {
     const { selectedSeason: season, isLoading: loadingSeasons } = useFantasySeasons();
 
     const key = season ? `fantasy-season/${season.id}/` : null;
-    const { data: featuredLeagues, isLoading: loadingLeague } = useSWR(key, () => fantasySeasonsService.getFeaturedLeagueGroups(season?.id || ''));
+    const { data: featuredLeagues, isLoading: loadingLeague } = useSWR(key, () => fantasySeasonsService.getFeaturedLeagueGroups(season?.id || ''), {
+        revalidateOnFocus: false
+    });
 
     const featuredLeague = useMemo(() => {
         if (featuredLeagues && featuredLeagues.length > 0) {
