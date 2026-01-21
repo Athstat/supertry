@@ -1,132 +1,84 @@
-import { useAtom, useSetAtom } from "jotai";
-import { teamHistoryCurrentRoundAtom, teamHistoryCurrentTeamAtom, teamHistoryTeamManagerAtom } from "../../state/fantasy/fantasy-teams/teamHistory.atoms";
-import { ScopeProvider } from "jotai-scope";
-import { Fragment, ReactNode, useEffect } from "react";
-import { useUserRoundTeamV2 } from "../../hooks/fantasy/useUserRoundTeam";
-import { DjangoUserMinimal } from "../../types/auth";
-import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
+import { createContext, ReactNode, useCallback, useMemo } from "react";
 import { useQueryState } from "../../hooks/web/useQueryState";
 import { queryParamKeys } from "../../types/constants";
-import { AnimatePresence } from "framer-motion";
 import { useFantasySeasons } from "../../hooks/dashboard/useFantasySeasons";
+import { ISeasonRound } from "../../types/fantasy/fantasySeason";
+import { DjangoUserMinimal } from "../../types/auth";
+
+type TeamHistoryContextProps = {
+    round?: ISeasonRound,
+    setRound: (r: ISeasonRound) => void,
+    moveNextRound: () => void,
+    movePrevRound: () => void,
+    manager?: DjangoUserMinimal
+}
+
+const TeamHistoryContext = createContext<TeamHistoryContextProps | null>(null);
 
 type Props = {
     children?: ReactNode,
     user?: DjangoUserMinimal,
-    loadingFallback?: ReactNode
+    loadingFallback?: ReactNode,
 }
 
 /** Component that provides team history to its child components. 
  * Provder depends on the FantasyLeagueGroupProvider
  */
-export default function TeamHistoryProvider({ children, user, loadingFallback }: Props) {
+export default function TeamHistoryProvider({ children, user }: Props) {
+    const {seasonRounds, currentRound} = useFantasySeasons();
 
-    const atoms = [
-        teamHistoryCurrentRoundAtom,
-        teamHistoryCurrentTeamAtom,
-        teamHistoryTeamManagerAtom
-    ]
+    const [roundNumber, setRoundNumber] = useQueryState(queryParamKeys.ROUND_NUMBER_QUERY_KEY, {
+        init: currentRound?.round_number.toString()
+    });
 
-    return (
-    <ScopeProvider
-            atoms={atoms}
-        >
-            <InnerProvider
-                user={user}
-                loadingFallback={loadingFallback}
-            >
-                {children}
-            </InnerProvider>
-        </ScopeProvider>
-    )
-}
+    const maxIndex = useMemo(() => {
+        return seasonRounds.findIndex((r) => {
+            return r.round_number === currentRound?.round_number;
+        });
+    }, [currentRound?.round_number, seasonRounds]);
 
-function InnerProvider({ children, user, loadingFallback }: Props) {
+    const minIndex = 0;
 
-    const [roundNumber, setRoundNumber] = useQueryState(queryParamKeys.ROUND_NUMBER_QUERY_KEY);
-    const [roundId, setRoundId] = useQueryState(queryParamKeys.ROUND_ID_QUERY_KEY);
-    const { currentRound, seasonRounds: sortedRounds } = useFantasySeasons();
+    const round = useMemo(() => {
+        return seasonRounds.find((r) => r.round_number === roundNumber)
+    }, [roundNumber, seasonRounds]);
 
-    const setRound = useSetAtom(teamHistoryCurrentRoundAtom);
-    const [, setManager] = useAtom(teamHistoryTeamManagerAtom);
+    const setRound = useCallback((r: ISeasonRound) => {
+        setRoundNumber(r.round_number.toString());
+    }, [setRoundNumber]);
 
-    useEffect(() => {
-        if (currentRound) {
-            setRound(currentRound);
-        }
-    }, [currentRound, setRound]);
+    const moveNextRound = useCallback(() => {
+        const currentIndex = seasonRounds.findIndex((r) => r.round_number === roundNumber);
 
-    useEffect(() => {
-        if (user) {
-            setManager(user);
-        }
-    }, [user, setManager])
-
-    useEffect(() => {
-
-        if (!roundId && roundNumber) {
-
-            const matchingRound = sortedRounds.find((r) => {
-                return r.round_number?.toString() === (roundNumber || "")
-            });
-
-            if (matchingRound) {
-                setRoundId(matchingRound.round_number.toString());
-                return;
-            }
-        }
-
-        if (!roundId && currentRound) {
-            setRoundId(currentRound.round_number.toString());
+        if (!maxIndex || currentIndex >= maxIndex ) {
             return;
         }
 
-    }, [currentRound, roundId, roundNumber, setRoundId, setRoundNumber, sortedRounds]);
+        const nextIndex = currentIndex + 1;
+        setRoundNumber(seasonRounds[nextIndex].round_number.toString());
+        
+    }, [maxIndex, roundNumber, seasonRounds, setRoundNumber]);
 
-    return (
-        <Fragment>
-            <RoundTeamProvider
-                loadingFallback={loadingFallback}
-                user={user}
-            >
-                {children}
-            </RoundTeamProvider>
-        </Fragment>
-    )
-}
+    const movePrevRound = useCallback(() => {
+        
+        const currentIndex = seasonRounds.findIndex((r) => r.round_number === roundNumber);
 
-
-function RoundTeamProvider({ loadingFallback, children }: Props) {
-    const setRoundTeam = useSetAtom(teamHistoryCurrentTeamAtom);
-
-    const { round, manager } = useTeamHistory();
-    const shouldFetch = Boolean(round) && Boolean(manager);
-
-    const { roundTeam, isLoading: loadingTeam } = useUserRoundTeamV2(manager?.kc_id, round?.round_number, shouldFetch);
-
-    const isLoading = loadingTeam;
-
-    useEffect(() => {
-        if (roundTeam) {
-            setRoundTeam(roundTeam);
+        if (currentIndex <= minIndex) {
+            return;
         }
-    }, [roundTeam, setRoundTeam]);
 
-    if (isLoading) {
-        return (
-            <Fragment>
-                {loadingFallback}
-            </Fragment>
-        )
-    }
+        const nextIndex = currentIndex - 1;
+        setRoundNumber(seasonRounds[nextIndex].round_number.toString());
+    }, [roundNumber, seasonRounds, setRoundNumber]);
 
 
     return (
-        <Fragment>
-            <AnimatePresence >
-                {children}
-            </AnimatePresence>
-        </Fragment>
+        <TeamHistoryContext.Provider
+            value={{
+                round, setRound, moveNextRound, movePrevRound, manager: user
+            }}
+        >
+            {children}
+        </TeamHistoryContext.Provider>
     )
-
 }

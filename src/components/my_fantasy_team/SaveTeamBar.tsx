@@ -13,6 +13,8 @@ import PrimaryButton from "../ui/buttons/PrimaryButton";
 import { Toast } from "../ui/Toast";
 import UnsavedChangesWarningModal from "../ui/modals/UnsavedChangesModal";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
+import { fantasySeasonTeamService } from "../../services/fantasy/fantasySeasonTeamService";
+import { useAuth } from "../../contexts/AuthContext";
 
 type Props = {
     onTeamUpdated: () => Promise<void>,
@@ -21,6 +23,7 @@ type Props = {
 
 /** Renders Save Team Bar */
 export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
+    const {authUser} = useAuth();
 
     const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState<boolean>(false);
     const [isSaving, setIsSaving] = useState(false);
@@ -78,6 +81,7 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
         try {
             setIsSaving(true);
             setSaveError(undefined);
+
             const athletesPayload = slots
                 .filter(s => Boolean(s.athlete))
                 .map((s) => {
@@ -101,7 +105,7 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
                     is_captain: boolean;
                 }[];
 
-            const updatedTeam = await fantasyTeamService.updateFantasyTeam(team.id, { athletes: athletesPayload });
+            const updatedTeam = await fantasySeasonTeamService.updateRoundTeam(leagueRound.season, authUser?.kc_id || '', leagueRound.round_number,  { athletes: athletesPayload });
 
             // Apply optimistic update
             if (updatedTeam) {

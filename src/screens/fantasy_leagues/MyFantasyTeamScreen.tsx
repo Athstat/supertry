@@ -27,19 +27,6 @@ function Content() {
   useHideTopNavBar();
   useHideBottomNavBar();
 
-  // useEffect(() => {
-  //   fantasyAnalytics.trackVisitedLeagueScreen(league?.id);
-  // }, [league?.id]);
-
-  // if () {
-  //   return (
-  //     <ErrorCard
-  //       title="Whoops"
-  //       message="Fantasy League was not found"
-  //     />
-  //   )
-  // }
-
   return (
     <PageView className={twMerge(
       "dark:text-white flex flex-col gap-4",
