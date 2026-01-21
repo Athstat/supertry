@@ -164,6 +164,7 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
               leagueRound={leagueRound}
               className='flex-col'
               leagueTitleClassName='font-normal text-xs'
+              key={leagueRound.round_number}
             />
         </div>
       </Activity>
