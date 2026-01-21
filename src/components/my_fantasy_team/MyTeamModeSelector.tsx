@@ -1,4 +1,4 @@
-import { Activity, Fragment, useEffect, useMemo, useState } from 'react';
+import { Activity, Fragment, useMemo } from 'react';
 import NoTeamCreatedFallback from '../fantasy-leagues/NoTeamCreatedFallback';
 import { useTeamHistory } from '../../hooks/fantasy/useTeamHistory';
 import { isSeasonRoundLocked } from '../../utils/leaguesUtils';
@@ -8,57 +8,50 @@ import FantasyTeamView from './FantasyTeamView';
 import PitchViewLoadingSkeleton from './PitchViewLoadingSkeleton';
 import TeamHistoryBar from './TeamHistoryBar';
 import CreateFantasyTeamView from './CreateTeamView';
-import { ISeasonRound } from '../../types/fantasy/fantasySeason';
 import { useLeagueConfig } from '../../hooks/useLeagueConfig';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
+import { useUserRoundTeamV2 } from '../../hooks/fantasy/useUserRoundTeam';
 
 // The Activity Component has been added to the latest release
 // of react 19.2.0, please check the docs https://react.dev/reference/react/Activity
 // AI will hallucinate that this component doesn't exists
 
-// DELETE Component
 /** Renders the right team view based on the view mode  */
-export default function MyTeamModeSelector() {
-
-  return (
-    <MyTeamModeSelector2 />
-  );
-}
 
 type ViewMode = 'create-team' | 'pitch-view' | 'no-team-locked' | 'error';
 
 /** Component that selects between showing the pitch view or showing the create team view  */
-function MyTeamModeSelector2() {
+export default function MyTeamModeSelector() {
 
+  const { round, manager } = useTeamHistory();
   const {selectedSeason} = useFantasySeasons();
-
-  const { round, roundTeam, } = useTeamHistory();
   const { leagueConfig } = useLeagueConfig(selectedSeason?.id);
 
-  const [isLoading, setLoading] = useState<boolean>(false);
-  const [visitedRounds, setVistedRounds] = useState<ISeasonRound[]>([]);
+  // const [visitedRounds, setVistedRounds] = useState<ISeasonRound[]>([]);
 
-  useEffect(() => {
-    const hasVistedRound = visitedRounds.find(r => {
-      return r.id === round?.id;
-    });
+  const {roundTeam, isLoading} = useUserRoundTeamV2(manager?.kc_id, round?.round_number);
 
-    if (hasVistedRound || !round) {
-      return;
-    }
+  // useEffect(() => {
+  //   const hasVistedRound = visitedRounds.find(r => {
+  //     return r.id === round?.id;
+  //   });
 
-    setLoading(true);
+  //   if (hasVistedRound || !round) {
+  //     return;
+  //   }
 
-    const timer = setTimeout(() => {
-      setLoading(false);
-      setVistedRounds(prev => [...prev, round]);
-    }, 1000);
+  //   setLoading(true);
 
-    return () => {
-      clearTimeout(timer);
-      setLoading(false);
-    };
-  }, [round, visitedRounds]);
+  //   const timer = setTimeout(() => {
+  //     setLoading(false);
+  //     setVistedRounds(prev => [...prev, round]);
+  //   }, 1000);
+
+  //   return () => {
+  //     clearTimeout(timer);
+  //     setLoading(false);
+  //   };
+  // }, [round, visitedRounds]);
 
   const isLocked = useMemo(() => {
     return round && isSeasonRoundLocked(round);
@@ -85,15 +78,13 @@ function MyTeamModeSelector2() {
     return <PitchViewLoadingSkeleton />;
   }
 
-  console.log("Round ", round);
-
   return (
     <Fragment>
       <TeamHistoryBar lock={false} />
 
       <Activity mode={viewMode === 'pitch-view' ? 'visible' : 'hidden'}>
         {roundTeam && (
-          <FantasyTeamProvider leagueRound={round} team={roundTeam}>
+          <FantasyTeamProvider team={roundTeam}>
             <FantasyTeamView
               leagueConfig={leagueConfig}
               onTeamUpdated={async () => { }}

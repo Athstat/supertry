@@ -15,7 +15,10 @@ export function MyFantasyTeamScreen() {
   const { authUser } = useAuth();
 
   return (
-    <TeamHistoryProvider user={authUser} loadingFallback={<LeagueScreenLoadingSkeleton />} >
+    <TeamHistoryProvider 
+      user={authUser}
+      loadingFallback={<LeagueScreenLoadingSkeleton />} 
+    >
       <Content />
     </TeamHistoryProvider>
   );
@@ -32,11 +35,9 @@ function Content() {
       "dark:text-white flex flex-col gap-4",
       AppColours.BACKGROUND
     )}>
-
       <MyFantasyTeamScreenHeader />
       <LearnScrummyNoticeCard />
       <MyTeamModeSelector />
-
     </PageView>
   );
 }
