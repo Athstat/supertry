@@ -30,7 +30,7 @@ export default function OnboardingFavouriteTeamSlide() {
 
       <div className="flex flex-col gap-3 w-full" >
         <div>
-          <p>Pcik your favourite team</p>
+          <p>Pick your favourite team</p>
           <SecondaryText>Choose your favorite Six Nations Team and URC Club, or press Continue to keep going.</SecondaryText>
         </div>
 
