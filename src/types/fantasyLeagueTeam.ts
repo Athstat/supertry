@@ -18,7 +18,7 @@ export const defaultFantasyPositions: IFantasyPosition[] = [
     { name: 'Back Row', position_class: 'back-row', isSpecial: false },
     { name: 'Halfback', position_class: 'half-back', isSpecial: false },
     { name: 'Back', position_class: 'back', isSpecial: false },
-    { name: 'Super Sub', position_class: 'super-sub', isSpecial: true},
+    { name: 'Super Sub', position_class: 'super-sub', isSpecial: true },
 ];
 
 
@@ -36,4 +36,18 @@ export type IFantasyLeagueTeamSlot = {
 export type SlotCardPosition = {
     x: number,
     y: number
+}
+
+export type UpdateFantasyTeamAthleteItem = {
+    athlete_id: string,
+    slot: number,
+    purchase_price: number,
+    is_starting?: boolean,
+    is_captain?: boolean,
+}
+
+/** Represents the JSON req body for updating a fantasy league team athlete */
+export type UpdateFantasyLeagueTeam = {
+    athletes: UpdateFantasyTeamAthleteItem[],
+    user_id: string
 }

@@ -1,4 +1,4 @@
-import { IFantasyLeagueRound } from "../../../types/fantasyLeague";
+import { useFantasySeasons } from "../../../hooks/dashboard/useFantasySeasons";
 import { StandingsFilterItem } from "../../../types/standings";
 import { DropdownOption } from "../../../types/ui";
 import Dropdown from "../../ui/forms/Dropdown";
@@ -6,18 +6,17 @@ import Dropdown from "../../ui/forms/Dropdown";
 type Props = {
     currentRound?: StandingsFilterItem,
     onChange?: (newVal?: string | undefined) => void,
-    leagueRounds: IFantasyLeagueRound[]
 }
 
 /** Renders component responsible for filtering the league standings */
-export default function LeagueStandingsFilter({ currentRound, onChange, leagueRounds }: Props) {
+export default function LeagueStandingsFilter({ currentRound, onChange }: Props) {
 
-    const sortedRounds = leagueRounds;
+    const {seasonRounds} = useFantasySeasons();
 
-    let dropdownOptions: DropdownOption[] = (sortedRounds ?? []).map((r) => {
+    let dropdownOptions: DropdownOption[] = (seasonRounds ?? []).map((r) => {
         return {
-            value: r.id,
-            label: r.title
+            value: r.round_number.toString(),
+            label: r.round_title
         }
     });
 

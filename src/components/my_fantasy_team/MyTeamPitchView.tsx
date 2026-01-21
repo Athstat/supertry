@@ -4,23 +4,18 @@ import { AnimatePresence } from 'framer-motion';
 import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
 import { useHideBottomNavBar } from '../../hooks/navigation/useNavigationBars';
 import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
-import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import PlayerProfileModal from '../player/PlayerProfileModal';
 import PointsBreakdownModal from '../points_breakdown/PointsBreakdownModal';
 import { FantasyTeamFormation3D } from './FantasyTeamFormation3D';
 import { PlayerActionModal } from './PlayerActionModal';
 
-type Props = {
-  leagueRound: IFantasyLeagueRound;
-};
-
 /** Renders my team pitch view */
-export default function MyTeamPitchView({ leagueRound }: Props) {
+export default function MyTeamPitchView() {
 
   useHideBottomNavBar();
 
-  const { slots, team } = useFantasyTeam();
+  const { slots, team, leagueRound } = useFantasyTeam();
   const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete>();
 
   const [showActionModal, setShowActionModal] = useState(false);
@@ -93,8 +88,6 @@ export default function MyTeamPitchView({ leagueRound }: Props) {
 
       </div>
 
-
-
       {selectedPlayer && showActionModal && (
         <AnimatePresence>
           <PlayerActionModal
@@ -102,7 +95,6 @@ export default function MyTeamPitchView({ leagueRound }: Props) {
             onViewPointsBreakdown={handleViewPointsBreakdown}
             onClose={handleCloseActionModal}
             onViewProfile={handleViewProfile}
-            league={leagueRound}
           />
         </AnimatePresence>
       )}
@@ -115,17 +107,14 @@ export default function MyTeamPitchView({ leagueRound }: Props) {
         />
       )}
 
-      {selectedPlayer && showPointsModal && team && (
+      {selectedPlayer?.athlete && showPointsModal && team && (
         <PointsBreakdownModal
           isOpen={showPointsModal}
-          athlete={selectedPlayer}
+          athlete={selectedPlayer.athlete}
           team={team}
-          round={leagueRound}
           onClose={handleClosePointsModal}
         />
       )}
-
-      { }
     </div>
   );
 }

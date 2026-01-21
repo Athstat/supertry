@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import useSWR from 'swr';
 import { fantasyAthleteService } from '../../services/fantasy/fantasyAthleteService';
 import { swrFetchKeys } from '../../utils/swrKeys';
-import { djangoAthleteService } from '../../services/athletes/djangoAthletesService';
+import { athleteService } from '../../services/athletes/athletesService';
 import { checkDaysDiff } from '../../utils/dateUtils';
 import { IFixture } from '../../types/games';
 
@@ -53,7 +53,7 @@ export function usePlayerSquadReport(teamId: string | number, trackingId: string
 export function useGeneralPlayerAvailability(athleteId: string, specific_team_id?: string) {
 
   const key = `/athlete/${athleteId}/general-availability${specific_team_id ? `?specific_team_id=${specific_team_id}` : ''}`;
-  const { data: list, isLoading } = useSWR(key, () => djangoAthleteService.getAthleteAvailabilityReport(athleteId, specific_team_id));
+  const { data: list, isLoading } = useSWR(key, () => athleteService.getAthleteAvailabilityReport(athleteId, specific_team_id));
 
   const firstReport = useMemo(() => {
     if (list && list?.length > 0) {

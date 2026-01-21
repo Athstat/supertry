@@ -21,7 +21,6 @@ export default function FantasyLeagueScreen() {
         <FantasyLeagueGroupDataProvider
             leagueId={leagueId}
             loadingFallback={<LoadingSkeleton />}
-            skipCache
         >
             <Content />
         </FantasyLeagueGroupDataProvider>

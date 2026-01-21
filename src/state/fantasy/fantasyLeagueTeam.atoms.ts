@@ -1,15 +1,16 @@
 import { atom } from "jotai";
-import { IFantasyLeagueRound, IFantasyLeagueTeam } from "../../types/fantasyLeague";
+import { IFantasyLeagueTeam } from "../../types/fantasyLeague";
 import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { Position } from "../../types/position";
+import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 
 /** Holds the fantasy league team */
 export const fantasyLeagueTeamAtom = atom<IFantasyLeagueTeam>();
 
 /** Holds the fantasy league round that a specific fantasy league team
  * belongs to */
-export const fantasyLeagueTeamLeagueRoundAtom = atom<IFantasyLeagueRound>();
+export const fantasyLeagueTeamLeagueRoundAtom = atom<ISeasonRound>();
 
 /** Holds team athletes */
 export const fantasyTeamAthletesAtom = atom<IFantasyTeamAthlete[]>((get) => {

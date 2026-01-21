@@ -1,5 +1,5 @@
 import { useAtom, useAtomValue } from "jotai";
-import { fantasySeasonsAtoms } from "../../state/dashboard/dashboard.atoms";
+import { fantasySeasonsAtoms } from "../../state/dashboard/fantasySeasons.atoms";
 import { fantasySeasonsAtom } from "../../state/fantasy/fantasyLeagueScreen.atoms";
 import { useCallback, useMemo } from "react";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
@@ -81,6 +81,17 @@ export function useFantasySeasons() {
         });
     }, [scoringRound, seasonRounds]);
 
+    const nextDeadlineRound = useMemo(() => {
+
+        if (scoringRound) {
+            const nextRoundNumber = scoringRound?.round_number ? scoringRound.round_number + 1 : -1;
+            return seasonRounds.find((s) => s.round_number === nextRoundNumber);
+        }
+
+        return currentRound;
+
+    }, [currentRound, scoringRound, seasonRounds])
+
     return {
         fantasySeasons,
         currentSeason,
@@ -95,7 +106,8 @@ export function useFantasySeasons() {
         scoringRound,
         pastAndPresentRounds,
         showDrawer, 
-        setShowDrawer
+        setShowDrawer,
+        nextDeadlineRound
     }
 
 }

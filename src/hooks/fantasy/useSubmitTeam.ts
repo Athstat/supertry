@@ -2,15 +2,18 @@ import { IFantasyLeagueTeam } from './../../types/fantasyLeague';
 import { useCallback, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { analytics } from "../../services/analytics/anayticsService";
-import { leagueService } from "../../services/leagueService";
 import { ICreateFantasyTeamAthleteItem } from "../../types/fantasyTeamAthlete";
-import { useFantasyLeagueGroup } from "../leagues/useFantasyLeagueGroup";
 import { useCreateFantasyTeam } from "./useCreateFantasyTeam";
+import { fantasySeasonTeamService } from '../../services/fantasy/fantasySeasonTeamService';
+import { useLeagueConfig } from '../useLeagueConfig';
+import { useMyTeamScreen } from '../../contexts/MyTeamScreenContext';
 
 /** Hook for submitting a fantasy league team */
 export function useSubmitTeam(onSuccess?: (createdTeam:IFantasyLeagueTeam) => void) {
 
-    const { leagueConfig } = useFantasyLeagueGroup();
+    const {onUpdateTeam} = useMyTeamScreen();
+
+    const { leagueConfig } = useLeagueConfig();
     const { leagueRound, teamCaptain, slots } = useCreateFantasyTeam();
     const { authUser } = useAuth();
 
@@ -40,8 +43,6 @@ export function useSubmitTeam(onSuccess?: (createdTeam:IFantasyLeagueTeam) => vo
             setIsSaving(true);
             setSaveError(undefined);
 
-            const teamName = `${authUser.username} - ${leagueRound.title}`;
-
             const athletes: ICreateFantasyTeamAthleteItem[] = slots.map((s, index) => {
                 const slotPlayer = s.athlete;
                 if (!slotPlayer) return;
@@ -65,17 +66,20 @@ export function useSubmitTeam(onSuccess?: (createdTeam:IFantasyLeagueTeam) => vo
                 setIsSaving(false);
             }
 
-            const createdTeam = await leagueService.joinLeague(
-                leagueRound.id,
+            const createdTeam = await fantasySeasonTeamService.createRoundTeam(
+                leagueRound.season,
                 authUser.kc_id,
-                teamName,
-                athletes
+                leagueRound.round_number,
+                {athletes, user_id: authUser.kc_id || ''}
             );
+
+            if (createdTeam) {
+                onUpdateTeam(createdTeam);
+            }
 
             // Show success modal
             if (onSuccess && createdTeam) {
                 clearSaveError();
-                // Perform Optimistic Update
                 onSuccess(createdTeam);
             }
 
@@ -89,7 +93,7 @@ export function useSubmitTeam(onSuccess?: (createdTeam:IFantasyLeagueTeam) => vo
         } finally {
             setIsSaving(false);
         }
-    }, [authUser, leagueConfig, leagueRound, onSuccess, slots, teamCaptain])
+    }, [authUser, leagueConfig, leagueRound, onSuccess, onUpdateTeam, slots, teamCaptain])
 
     return {
         handleSave,

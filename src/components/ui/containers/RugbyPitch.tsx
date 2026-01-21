@@ -1,3 +1,4 @@
+import { preload } from "react-dom";
 import { Fragment } from "react/jsx-runtime";
 import { twMerge } from "tailwind-merge";
 
@@ -91,7 +92,7 @@ export function RugbyPitch3D({className} : PitchProps) {
 export function RugbyPitch3DRaster({className, pitchClassName, hideGoalPost} : PitchProps) {
     
     // const src = "/pitch/pitch_final_8.png";
-    const src = hideGoalPost ? "/pitch/scrummy-pitch-11.png" : "/pitch/scrummy-pitch-12.png";
+    const src = hideGoalPost ? "https://dp7xhssw324ru.cloudfront.net/scrummy-pitch-11.png" : "https://dp7xhssw324ru.cloudfront.net/scrummy-pitch-12.png";
     
     return (
         <div className={twMerge(
@@ -107,4 +108,9 @@ export function RugbyPitch3DRaster({className, pitchClassName, hideGoalPost} : P
 
         </div>
     );
+}
+
+export function preloadRugbyPitches() {
+    preload('https://dp7xhssw324ru.cloudfront.net/scrummy-pitch-11.png', {as: 'image'});
+    preload('https://dp7xhssw324ru.cloudfront.net/scrummy-pitch-12.png', {as: 'image'});
 }

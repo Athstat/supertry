@@ -1,21 +1,19 @@
-import { useFantasyLeagueGroup } from '../../hooks/leagues/useFantasyLeagueGroup';
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
 import LearnScrummyNoticeCard from '../branding/help/LearnScrummyNoticeCard';
-import useSWR from 'swr';
 import { useAuth } from '../../contexts/AuthContext';
-import { leagueService } from '../../services/leagueService';
-import { swrFetchKeys } from '../../utils/swrKeys';
 import { useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
 import BlueGradientCard from '../ui/cards/BlueGradientCard';
 import RoundedCard from '../ui/cards/RoundedCard';
-import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from '../../types/fantasyLeague';
-import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
-import { useRoundScoringSummary } from '../../hooks/fantasy/useRoundScoringSummary';
+import { IFantasyLeagueTeam } from '../../types/fantasyLeague';
+import { isSeasonRoundLocked } from '../../utils/leaguesUtils';
+import { useRoundScoringSummaryV2 } from '../../hooks/fantasy/useRoundScoringSummary';
 import { LeagueRoundCountdown2 } from '../fantasy_league/LeagueCountdown';
 import { TranslucentButton } from '../ui/buttons/PrimaryButton';
 import { smartRoundUp } from '../../utils/intUtils';
-import FantasyLeagueGroupDataProvider from '../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider';
+import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
+import { useUserRoundTeam } from '../../hooks/fantasy/useUserRoundTeam';
+import { ISeasonRound } from '../../types/fantasy/fantasySeason';
 
 type Props = {
   leagueGroup: FantasyLeagueGroup;
@@ -24,41 +22,23 @@ type Props = {
 /** Renders the showcase league section */
 export default function ManageTeamCTA({ leagueGroup }: Props) {
   return (
-    <FantasyLeagueGroupDataProvider
-      loadingFallback={<LoadingSkeleton />}
-      leagueId={leagueGroup.id}
-      fetchMembers={false}
-    >
-      <Content />
-    </FantasyLeagueGroupDataProvider>
+    <Content leagueGroup={leagueGroup} />
   );
 }
 
-function Content() {
-  const { league, currentRound, previousRound } = useFantasyLeagueGroup();
+function Content({ leagueGroup: league }: Props) {
 
   const { authUser } = useAuth();
+  const { currentRound, previousRound } = useFantasySeasons();
 
-  const key = useMemo(() => {
-    return swrFetchKeys.getUserFantasyLeagueRoundTeam(
-      currentRound?.fantasy_league_group_id ?? '',
-      currentRound?.id ?? '',
-      authUser?.kc_id
-    );
-  }, [currentRound, authUser]);
-
-  const { data: userTeam, isLoading } = useSWR(key, () =>
-    leagueService.getUserRoundTeam(currentRound?.id ?? '', authUser?.kc_id ?? ''), {
-      revalidateOnFocus: false
-    }
-  );
+  const { roundTeam: userTeam, isLoading } = useUserRoundTeam(authUser?.kc_id, currentRound?.round_number);
 
   const scoreRound = useMemo(() => {
-    if (currentRound && isLeagueRoundLocked(currentRound)) {
+    if (currentRound && isSeasonRoundLocked(currentRound)) {
       return currentRound;
     }
 
-    if (previousRound && currentRound && !isLeagueRoundLocked(currentRound)) {
+    if (previousRound && currentRound && !isSeasonRoundLocked(currentRound)) {
       return previousRound;
     }
 
@@ -85,7 +65,7 @@ function Content() {
         {currentRound && (
           <LeagueRoundCountdown2
             leagueRound={currentRound}
-            title={`${currentRound.title} Starts in`}
+            title={`${currentRound.round_title} Starts in`}
             leagueTitleClassName='font-normal text-sm'
           />
         )}
@@ -116,24 +96,30 @@ function LoadingSkeleton() {
 }
 
 type RoundScoringProps = {
-  leagueRound: IFantasyLeagueRound,
-  userTeam?: FantasyLeagueTeamWithAthletes
+  leagueRound: ISeasonRound,
+  userTeam?: IFantasyLeagueTeam
   userId: string
 }
 
 function RoundScoringSummary({ leagueRound, userTeam }: RoundScoringProps) {
 
-  const { highestPointsScored, averagePointsScored, userScore, isLoading } = useRoundScoringSummary(leagueRound);
+  const { highestPointsScored, averagePointsScored, userScore, isLoading } = useRoundScoringSummaryV2(leagueRound);
   const hasTeam = Boolean(userTeam);
 
   if (isLoading || !hasTeam) {
-    return null;
+    return (
+      <div className='flex flex-row items-center animate-pulse justify-center w-full gap-2' >
+        <RoundedCard className='h-[40px] w-[100px] bg-white/20 border-none dark:bg-white/20' />
+        <RoundedCard className='h-[40px] w-[100px] bg-white/20 border-none dark:bg-white/20' />
+        <RoundedCard className='h-[40px] w-[100px] bg-white/20 border-none dark:bg-white/20' />
+      </div>
+    );
   }
 
   return (
     <div className='flex flex-col gap-2' >
       <div className='flex flex-col items-center justify-center w-full' >
-        <p className='text-sm' >{leagueRound.title} Score</p>
+        <p className='text-sm' >{leagueRound.round_title} Score</p>
       </div>
 
       <div className='grid grid-cols-3 px-[10%]' >
@@ -158,16 +144,16 @@ function RoundScoringSummary({ leagueRound, userTeam }: RoundScoringProps) {
 }
 
 type CTAButtonProps = {
-  leagueRound: IFantasyLeagueRound,
-  userRoundTeam?: FantasyLeagueTeamWithAthletes,
-  previousRound?: IFantasyLeagueRound
+  leagueRound: ISeasonRound,
+  userRoundTeam?: IFantasyLeagueTeam,
+  previousRound?: ISeasonRound
 }
 
 function CTAButtons({ leagueRound, userRoundTeam }: CTAButtonProps) {
 
   const navigate = useNavigate();
 
-  const isCurrentLocked = isLeagueRoundLocked(leagueRound);
+  const isCurrentLocked = isSeasonRoundLocked(leagueRound);
   const isUserHasTeam = Boolean(userRoundTeam);
 
   const showManageTeam = !isCurrentLocked && isUserHasTeam;
@@ -176,7 +162,7 @@ function CTAButtons({ leagueRound, userRoundTeam }: CTAButtonProps) {
   const showSorryMessage = isCurrentLocked && !isUserHasTeam;
 
   const handleManageTeam = () => {
-    navigate(`/league/${leagueRound.fantasy_league_group_id}`);
+    navigate(`/my-team`);
   }
 
   return (
@@ -202,7 +188,7 @@ function CTAButtons({ leagueRound, userRoundTeam }: CTAButtonProps) {
 
       {showSorryMessage && (
         <TranslucentButton className='text-xs lg:text-sm font-normal text-start' >
-          <p>Whoops! You missed the team deadline for <strong>{leagueRound.title}</strong>. You will have to wait for the next round to create your team</p>
+          <p>Whoops! You missed the team deadline for <strong>{leagueRound.round_title}</strong>. You will have to wait for the next round to create your team</p>
         </TranslucentButton>
       )}
 

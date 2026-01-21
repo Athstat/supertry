@@ -1,18 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
-import { IFantasyLeagueRound } from "../../types/fantasyLeague"
 import { TranslucentButton } from "../ui/buttons/PrimaryButton";
 import { twMerge } from "tailwind-merge";
+import { ISeasonRound } from "../../types/fantasy/fantasySeason";
+import { getSeasonRoundDeadline } from "../../utils/leaguesUtils";
 
 type Props = {
-    leagueRound: IFantasyLeagueRound,
+    leagueRound: ISeasonRound,
     className?: string,
     leagueTitleClassName?: string,
-    title?: string
+    title?: string,
 }
 
 export default function LeagueRoundCountdown({ leagueRound }: Props) {
 
-    const deadlineMillis = new Date(leagueRound.join_deadline ?? new Date()).valueOf();
+    const deadlineMillis = getSeasonRoundDeadline(leagueRound)?.valueOf() || 0;
     const dateNow = new Date().valueOf();
     const startMillis = deadlineMillis - dateNow;
 
@@ -68,7 +69,7 @@ export default function LeagueRoundCountdown({ leagueRound }: Props) {
 
             {/* <p className='font-medium text-lg' >{currentRound?.title} Deadline</p> */}
             <TranslucentButton className="flex hover:bg-blue-100/10 hover:dark:bg-blue-100/10  flex-row items-center p-1 justify-center" >
-                <p>{leagueRound?.title} Team Selection Deadline</p>
+                <p>{leagueRound?.round_title} Team Selection Deadline</p>
             </TranslucentButton>
             <div className="grid grid-cols-4 sm:flex sm:flex-row gap-2 sm:gap-4 items-center justify-start">
                 {timeBlocks.map(block => (
@@ -91,7 +92,7 @@ export default function LeagueRoundCountdown({ leagueRound }: Props) {
 /** Renders a league count down 2 */
 export function LeagueRoundCountdown2({ leagueRound, className, leagueTitleClassName, title }: Props) {
 
-    const deadlineMillis = new Date(leagueRound.join_deadline ?? new Date()).valueOf();
+    const deadlineMillis = getSeasonRoundDeadline(leagueRound)?.valueOf() || 0;
     const dateNow = new Date().valueOf();
     const startMillis = deadlineMillis - dateNow;
 
@@ -145,7 +146,7 @@ export function LeagueRoundCountdown2({ leagueRound, className, leagueTitleClass
                 <p className={twMerge(
                     "font-semibold",
                     leagueTitleClassName
-                )} > {title ? title : `⏰ GW ${leagueRound.start_round} Deadline`}</p>
+                )} > {title ? title : `⏰ GW ${leagueRound.round_title} Deadline`}</p>
             </div>
 
             {isTimeLeft && <div className="flex flex-row items-center gap-2">
@@ -189,4 +190,4 @@ export function LeagueRoundCountdown2({ leagueRound, className, leagueTitleClass
 
         </div>
     )
-}
+} 

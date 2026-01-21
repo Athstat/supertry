@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import useSWR from "swr";
-import { djangoAthleteService } from "../../services/athletes/djangoAthletesService";
+import { athleteService } from "../../services/athletes/athletesService";
 import { IFixture } from "../../types/games";
 import { useFantasySeasons } from "../dashboard/useFantasySeasons";
 
@@ -13,7 +13,7 @@ export function usePlayerRoundAvailability(athleteId: string, seasonId: string, 
   const shouldFetch = (Boolean(athleteId) && Boolean(finalSeasonId)) && (roundNumber > 0);
   const key = shouldFetch ? `/athlete/${athleteId}/general-availability/by-season/${finalSeasonId}/${roundNumber}${team_id ? `?team_id=${team_id}` : ''}` : null;
 
-  const { data, isLoading } = useSWR(key, () => djangoAthleteService.getRoundAvailabilityReport(
+  const { data, isLoading } = useSWR(key, () => athleteService.getRoundAvailabilityReport(
     athleteId,
     finalSeasonId,
     roundNumber,

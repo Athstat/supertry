@@ -6,7 +6,7 @@ import { swrFetchKeys } from '../utils/swrKeys';
 import { useAtom, useSetAtom } from 'jotai';
 import { Fragment, ReactNode, useEffect, useMemo } from 'react';
 import { IFantasyTeamAthlete } from '../types/fantasyTeamAthlete';
-import { djangoAthleteService } from '../services/athletes/djangoAthletesService';
+import { athleteService } from '../services/athletes/athletesService';
 import { playerAtom, playerSeasonsAtom, playerCurrentSeasonAtom, playerSelectedFixtureAtom, showPlayerScoutingActionsModalAtom } from '../state/player.atoms';
 import { useFantasySeasons } from '../hooks/dashboard/useFantasySeasons';
 
@@ -45,12 +45,12 @@ function ProviderInner({ children, player, loadingFallback, errorFallback, shoul
 
   const seasonFetchKey = shouldFetchSeason ? swrFetchKeys.getAthleteSeasons(player.tracking_id) : null;
   const { data: seasons, isLoading: loadingSeasons } = useSWR(seasonFetchKey, () =>
-    djangoAthleteService.getAthleteSeasons(player.tracking_id)
+    athleteService.getAthleteSeasons(player.tracking_id)
   );
 
   const playerKey = shouldRefetchPlayer ? swrFetchKeys.getAthleteById(player.tracking_id) : null;
   const { data: fetchedPlayer, isLoading: loadingPlayer } = useSWR(playerKey, () =>
-    djangoAthleteService.getAthleteById(player.tracking_id)
+    athleteService.getAthleteById(player.tracking_id)
   );
 
   const isLoading = loadingPlayer || loadingSeasons;

@@ -7,7 +7,7 @@ import { mapSportsActionToAthstatName } from '../../utils/sportsActionUtils';
 import { logger } from '../logger';
 
 /** Pro Athlete Service for django API */
-export const djangoAthleteService = {
+export const athleteService = {
   getAthleteById: async (id: string): Promise<IProAthlete | undefined> => {
     try {
       const uri = getUri(`/api/v1/athletes/${id}`);

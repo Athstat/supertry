@@ -2,7 +2,7 @@ import useSWR from "swr";
 import { IProAthlete } from "../../types/athletes"
 import { IProSeason } from "../../types/season"
 import { swrFetchKeys } from "../../utils/swrKeys";
-import { djangoAthleteService } from "../../services/athletes/djangoAthletesService";
+import { athleteService } from "../../services/athletes/athletesService";
 import { ReactNode, useContext, useMemo, useState } from "react";
 import PlayerSeasonStatsProvider, { PlayerSeasonStatsContext } from "../../contexts/PlayerSeasonStatsContext";
 import { StatCard2 } from "../ui/cards/StatCard";
@@ -25,7 +25,7 @@ function Root({ season, player, children }: Props) {
 
   const shouldFetch = Boolean(season?.id) || Boolean(player?.tracking_id);
   const key = shouldFetch ? swrFetchKeys.getAthleteSeasonStats(player.tracking_id, season.id) : null;
-  const { data, isLoading } = useSWR(key, () => djangoAthleteService.getAthleteSeasonStats(player.tracking_id, season.id));
+  const { data, isLoading } = useSWR(key, () => athleteService.getAthleteSeasonStats(player.tracking_id, season.id));
 
   const stats = useMemo(() => {
     return data || [];

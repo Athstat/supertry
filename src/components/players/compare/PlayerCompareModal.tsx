@@ -4,7 +4,6 @@ import { comparePlayersAtom, comparePlayersAtomGroup, comparePlayersStatsAtom, c
 import EmptyPlayerCompareSlot from "./EmptyPlayerCompareSlot";
 import { twMerge } from "tailwind-merge";
 import { usePlayerCompareActions } from "../../../hooks/usePlayerCompare";
-import { useImagePreloader } from "../../../hooks/web/useImagePreloader";
 import { useEffect } from "react";
 import { analytics } from "../../../services/analytics/anayticsService";
 import DialogModal from "../../ui/modals/DialogModal";
@@ -31,9 +30,6 @@ export default function PlayerCompareModal() {
       analytics.trackComparedPlayers(selectedPlayers);
     }
   }, [selectedPlayers]);
-
-  // Preload images when modal is open
-  useImagePreloader({ players: selectedPlayers, enabled: open });
 
   const playerLen = selectedPlayers.length;
   const title = `Comparing ${playerLen} player${playerLen === 1 ? '' : 's'}`;

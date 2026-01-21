@@ -1,15 +1,12 @@
 import { useAuth } from '../../../contexts/AuthContext';
-import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
 import { useUserRoundTeam } from '../../../hooks/fantasy/useUserRoundTeam';
 import { DashboardHeroLoadingSkeleton, DashboardHeroFrame, DashboardHeroHeader, DashboardHeroScoreSection, DashboardHeroCTASection } from './DashboardHeroSections';
-import { useFeaturedLeague } from '../../../hooks/leagues/useFeaturedLeague';
-import FantasyLeagueGroupDataProvider from '../../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider';
 import { useFantasySeasons } from '../../../hooks/dashboard/useFantasySeasons';
 import SixNationsHero from './SixNationsHero';
 
 /** Renders the dashboard hero */
 export default function DashboardHero() {
-  
+
   const { selectedSeason } = useFantasySeasons();
 
   if (selectedSeason?.name?.includes('Six Nations 2026')) {
@@ -24,35 +21,17 @@ export default function DashboardHero() {
 }
 
 function DefaultHero() {
-  const { featuredLeague } = useFeaturedLeague(); 
 
-  return (
-    <FantasyLeagueGroupDataProvider
-      leagueId={featuredLeague?.id}
-      loadingFallback={<DashboardHeroLoadingSkeleton />}
-      fetchMembers={false}
-    >
-      <Content />
-    </FantasyLeagueGroupDataProvider>
-  )
-}
-
-function Content() {
   const { authUser } = useAuth();
+  const { currentRound } = useFantasySeasons();
 
-  const { league, currentRound: currentGameweek, isLoading: loadingGroup } = useFantasyLeagueGroup();
-
-  const { roundTeam, isLoading: loadingRoundTeam } = useUserRoundTeam(currentGameweek?.id, authUser?.kc_id);
-  const isLoading = loadingGroup || loadingRoundTeam;
+  const { roundTeam, isLoading: loadingRoundTeam } = useUserRoundTeam(authUser?.kc_id, currentRound?.round_number);
+  const isLoading = loadingRoundTeam;
 
   if (isLoading) {
     return (
       <DashboardHeroLoadingSkeleton />
     );
-  }
-
-  if (!league) {
-    return <DashboardHeroLoadingSkeleton />;
   }
 
   return (
@@ -63,4 +42,3 @@ function Content() {
     </DashboardHeroFrame>
   )
 }
-

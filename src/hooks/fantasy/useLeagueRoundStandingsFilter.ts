@@ -1,24 +1,24 @@
-import { useCallback, useEffect, useMemo } from "react";
-import { getLeagueStandingsFilterItems } from "../../utils/standingsUtils";
-import { useFantasyLeagueGroup } from "../leagues/useFantasyLeagueGroup";
-import { useQueryState } from "../web/useQueryState";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { fantasyAnalytics } from "../../services/analytics/fantasyAnalytics";
-import { IFantasyLeagueRound } from "../../types/fantasyLeague";
+import { useFantasySeasons } from "../dashboard/useFantasySeasons";
+import { StandingsFilterItem } from "../../types/standings";
+import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 
 /** Hook that provides data and logic for league standings filtering */
 export function useLeagueRoundStandingsFilter() {
 
-    const { sortedRounds, scoringRound } = useFantasyLeagueGroup();
+    const { scoringRound, seasonRounds } = useFantasySeasons();
 
-    const defaultFilterVal = useMemo(() => {
-        return scoringRound?.id || "overall"
-    }, [scoringRound?.id]);
+    const [roundFilterId, setRoundFilterId] = useState<string | undefined>(scoringRound?.round_number.toString() || "overall");
 
-    const [roundFilterId, setRoundFilterId] = useQueryState<string | undefined>('round_filter', { init: defaultFilterVal });
-
-    const options = useMemo(() => {
-        return getLeagueStandingsFilterItems(sortedRounds);
-    }, [sortedRounds]);
+    const options: StandingsFilterItem[] = useMemo(() => {
+        return seasonRounds.map((s) => {
+            return {
+                lable: s.round_title,
+                id: s.round_number.toString()
+            }
+        });
+    }, [seasonRounds]);
 
     const currentOption = useMemo(() => {
         return options.find((p) => p.id?.toString() === roundFilterId);
@@ -35,13 +35,13 @@ export function useLeagueRoundStandingsFilter() {
         fantasyAnalytics.trackStandings_Week_Filter_Applied();
     }, [setRoundFilterId]);
 
-    const selectedRound = useMemo<IFantasyLeagueRound | undefined>(() => {
+    const selectedRound = useMemo<ISeasonRound | undefined>(() => {
 
-        return sortedRounds.find((r) => {
-            return r.id.toString() === roundFilterId;
+        return seasonRounds.find((r) => {
+            return r.round_number.toString() === roundFilterId;
         })
 
-    }, [roundFilterId, sortedRounds]);
+    }, [roundFilterId, seasonRounds]);
 
     useEffect(() => {
         if (roundFilterId === undefined && scoringRound) {
@@ -53,7 +53,6 @@ export function useLeagueRoundStandingsFilter() {
     return {
         currentOption,
         otherOptions,
-        rounds: sortedRounds,
         roundFilterId,
         setRoundFilterId: handleSetRoundFilterId,
         selectedRound

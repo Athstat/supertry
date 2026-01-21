@@ -1,28 +1,30 @@
 import { useEffect } from "react"
 import { IProAthlete } from "../../types/athletes"
 import { IFantasyLeagueTeam, FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from "../../types/fantasyLeague"
-import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete"
 import PlayerPointsBreakdownView from "./PlayerPointsBreakdownView"
 import { athleteAnalytics } from "../../services/analytics/athleteAnalytics"
 import DialogModal from "../ui/modals/DialogModal"
+import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam"
 
 type Props = {
-    athlete: IProAthlete | IFantasyTeamAthlete,
+    athlete: IProAthlete,
     team: IFantasyLeagueTeam | FantasyLeagueTeamWithAthletes,
-    round: IFantasyLeagueRound,
+    round?: IFantasyLeagueRound,
     onClose?: () => void,
     isOpen?: boolean
 }
 
 /** Renders a points breakdown modal */
-export default function PointsBreakdownModal({athlete, team, round, onClose, isOpen} : Props) {
+export default function PointsBreakdownModal({athlete, team, onClose, isOpen} : Props) {
   
+  const {leagueRound: round} = useFantasyTeam();
+
   useEffect(() => {
     
     athleteAnalytics.trackPointsBreakdownViewed(
       athlete.tracking_id,
-      round.official_league_id,
-      round.start_round ?? 0
+      round?.season || '',
+      round?.round_number ?? 0
     );
 
   }, [round, athlete]);

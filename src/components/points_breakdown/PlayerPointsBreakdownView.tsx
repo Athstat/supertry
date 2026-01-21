@@ -1,5 +1,5 @@
 import { IProAthlete } from "../../types/athletes"
-import { FantasyLeagueTeamWithAthletes, IFantasyLeagueRound, IFantasyLeagueTeam } from "../../types/fantasyLeague"
+import { FantasyLeagueTeamWithAthletes, IFantasyLeagueTeam } from "../../types/fantasyLeague"
 import { formatPosition } from "../../utils/athletes/athleteUtils"
 import PlayerMugshot from "../player/PlayerMugshot"
 import SecondaryText from "../ui/typography/SecondaryText"
@@ -12,11 +12,12 @@ import { AvailabilityText } from "../players/availability/AvailabilityIcon"
 import { IFixture } from "../../types/games"
 import RoundedCard from "../ui/cards/RoundedCard"
 import { useSportActions } from "../../hooks/useSportActions"
+import { ISeasonRound } from "../../types/fantasy/fantasySeason"
 
 type Props = {
-    athlete: IProAthlete | IFantasyTeamAthlete,
+    athlete: IProAthlete,
     team?: IFantasyLeagueTeam | FantasyLeagueTeamWithAthletes,
-    round?: IFantasyLeagueRound,
+    round?: ISeasonRound,
     game?: IFixture
     onClose?: () => void,
 
@@ -27,8 +28,8 @@ type Props = {
 
 export default function PlayerPointsBreakdownView({ athlete, round: leagueRound, game, headerTitle, hideSubtitle }: Props) {
 
-    const roundNumber = leagueRound?.start_round || game?.round || 0;
-    const seasonId = leagueRound?.season_id || leagueRound?.official_league_id || game?.league_id || ''
+    const roundNumber = leagueRound?.round_number || game?.round || 0;
+    const seasonId = leagueRound?.season || game?.league_id || ''
     
     const { pointItems, totalPoints, isLoading: loadingPointsBreakdown } = useAthletePointsBreakdown(
         athlete, roundNumber, seasonId

@@ -5,11 +5,10 @@ import { ReactNode, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Fragment } from "react/jsx-runtime";
 import { useAuth } from "../../../contexts/AuthContext";
-import { useRoundScoringSummary } from "../../../hooks/fantasy/useRoundScoringSummary";
-import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
+import { useRoundScoringSummaryV2 } from "../../../hooks/fantasy/useRoundScoringSummary";
 import { IFantasyLeagueTeam } from "../../../types/fantasyLeague";
 import { formatCountdown } from "../../../utils/countdown";
-import { isLeagueRoundLocked } from "../../../utils/leaguesUtils";
+import { getSeasonRoundDeadline, isSeasonRoundLocked } from "../../../utils/leaguesUtils";
 import ScrummyGamePlayModal from "../../branding/help/ScrummyGamePlayModal";
 import { useFantasySeasons } from "../../../hooks/dashboard/useFantasySeasons";
 import { smartRoundUp } from "../../../utils/intUtils";
@@ -128,9 +127,9 @@ type ScoreProps = {
 
 export function DashboardHeroScoreSection({ roundTeam, children }: ScoreProps) {
 
-  const { scoringRound } = useFantasyLeagueGroup();
+  const {scoringRound} = useFantasySeasons();
 
-  const { userScore, averagePointsScored, highestPointsScored } = useRoundScoringSummary(scoringRound);
+  const { userScore, averagePointsScored, highestPointsScored } = useRoundScoringSummaryV2(scoringRound);
   const isFirstTime = roundTeam === undefined;
 
   if (children) {
@@ -178,7 +177,7 @@ export function DashboardHeroScoreSection({ roundTeam, children }: ScoreProps) {
 
           {/* Round Indicator (inside card) - Shows Scoring Round Card */}
           <p className="text-sm font-semibold text-[#1196F5] text-center ">
-            Round {scoringRound?.start_round || '—'}
+            Round {scoringRound?.round_number || '—'}
           </p>
         </div>
       </div>
@@ -209,28 +208,17 @@ export function DashboardHeroCTASection({ roundTeam, deadlineText, hideVerboseIn
   const navigate = useNavigate();
   const [showHelpModal, setShowHelpModal] = useState(false);
 
-  const { nextDeadlineRound, currentRound, league } = useFantasyLeagueGroup();
+  const { nextDeadlineRound, currentRound } = useFantasySeasons()
   const isFirstTime = roundTeam === undefined;
 
   const nextDeadline = useMemo(() => {
-    const deadline = nextDeadlineRound?.join_deadline;
+    const deadline = nextDeadlineRound ? getSeasonRoundDeadline(nextDeadlineRound) : undefined;
     return deadline ? new Date(deadline) : undefined;
-  }, [nextDeadlineRound?.join_deadline]);
+  }, [nextDeadlineRound]);
 
-  const isGameweekOpen = currentRound && !isLeagueRoundLocked(currentRound);
+  const isGameweekOpen = currentRound && !isSeasonRoundLocked(currentRound);
 
-  const teamUrl = useMemo(() => {
-    const leagueGroupId = league?.id;
-
-    if (!leagueGroupId) return '/leagues';
-    const url = `/league/${leagueGroupId}`;
-    const params = new URLSearchParams();
-    if (currentRound) {
-      params.append('round_filter', currentRound.id);
-    }
-    params.append('tab', 'my-team');
-    return `${url}?${params.toString()}`;
-  }, [league?.id, currentRound]);
+  const teamUrl = `/my-team`;
 
   const handlePickTeam = () => {
     navigate(teamUrl);
@@ -256,7 +244,7 @@ export function DashboardHeroCTASection({ roundTeam, deadlineText, hideVerboseIn
           <>
             <div className="w-[80%] max-w-sm border border-white/50"></div>
             <p className="text-sm text-white text-center font-bold">
-              {deadlineText ? deadlineText : <>Next Deadline: Round {(nextDeadlineRound?.start_round || 0)}</>}<br />
+              {deadlineText ? deadlineText : <>Next Deadline: Round {(nextDeadlineRound?.round_number || 0)}</>}<br />
               <span className="font-normal">{formatCountdown(nextDeadline)}</span>
             </p>
           </>
@@ -302,7 +290,7 @@ export function DashboardHeroCTASection({ roundTeam, deadlineText, hideVerboseIn
         <>
           <div className="w-[80%] max-w-sm border-t-2 border-white/50"></div>
           <p className="text-sm text-white text-center font-bold">
-            {deadlineText ? deadlineText : <>Next Deadline: Round {(nextDeadlineRound?.start_round || 0)}</>}<br />
+            {deadlineText ? deadlineText : <>Next Deadline: Round {(nextDeadlineRound?.round_number || 0)}</>}<br />
             <span className="font-normal">{formatCountdown(nextDeadline)}</span>
           </p>
         </>

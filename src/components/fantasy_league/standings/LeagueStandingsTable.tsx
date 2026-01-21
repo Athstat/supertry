@@ -6,18 +6,17 @@ import SecondaryText from '../../ui/typography/SecondaryText';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import RoundedCard from '../../ui/cards/RoundedCard';
-import { IFantasyLeagueRound } from '../../../types/fantasyLeague';
-import { useOfficialLeagueGroup } from '../../../hooks/fantasy/scouting/seasons/useOfficialLeagueGroup';
 import { useLeagueGroupStandings } from '../../../hooks/fantasy/standings/useLeagueGroupOverallStandings';
 import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
 import { useNavigate } from 'react-router-dom';
 import { ErrorState } from '../../ui/ErrorState';
 import { LeagueStandingsTableRow } from './LeagueStandingsTableRow';
 import StickyUserRankingCard from './StickyUserRankingCard';
-import { isLeagueRoundLocked } from '../../../utils/leaguesUtils';
+import { isSeasonRoundLocked } from '../../../utils/leaguesUtils';
+import { ISeasonRound } from '../../../types/fantasy/fantasySeason';
 
 type Props = {
-  round?: IFantasyLeagueRound
+  round?: ISeasonRound
   hideUserScore?: boolean;
 };
 
@@ -34,10 +33,8 @@ export default function LeagueStandingsTable({
   const { members, league, currentRound } = useFantasyLeagueGroup();
 
   const { standings, isLoading: loadingStandings, error } = useLeagueGroupStandings(league?.id, {
-    round_number: selectedRound?.start_round || undefined
+    round_number: selectedRound?.round_number || undefined
   });
-
-  const { featuredLeague, isLoading: loadingOfficialLeague } = useOfficialLeagueGroup(league?.season_id)
 
   useEffect(() => {
     fantasyAnalytics.trackViewedStandingsTab();
@@ -48,19 +45,17 @@ export default function LeagueStandingsTable({
     fantasyAnalytics.trackClickedRowOnLeagueStandings();
 
     const roundFilterId = selectedRound?.id || 'overall';
-    const roundNumber = roundFilterId === "overall" ? currentRound?.start_round : selectedRound?.start_round;
+    const roundNumber = roundFilterId === "overall" ? currentRound?.start_round : selectedRound?.round_number;
     const queryParams = roundNumber ? `?round_number=${roundNumber}` : "";
 
-    if (featuredLeague) {
-      if (member.user_id === authUser?.kc_id) {
-        navigate(`/league/${featuredLeague.id}${queryParams}`);
-        return;
-      }
-
-      navigate(`/league/${featuredLeague.id}/member/${member.user_id}${queryParams}`);
+    if (member.user_id === authUser?.kc_id) {
+      navigate(`/my-team${queryParams}`);
+      return;
     }
 
-  }, [authUser, currentRound, featuredLeague, navigate, selectedRound])
+    navigate(`/league/${league?.id}/member/${member.user_id}${queryParams}`);
+
+  }, [authUser, currentRound, league, navigate, selectedRound])
 
 
   const exclude_ids = standings.map((s) => {
@@ -95,7 +90,7 @@ export default function LeagueStandingsTable({
     return r.user_id === authUser?.kc_id;
   })
 
-  const isLoading = loadingOfficialLeague || loadingStandings;
+  const isLoading = loadingStandings;
 
   const handleScrollToUser = () => {
     if (userRef.current) {
@@ -103,7 +98,7 @@ export default function LeagueStandingsTable({
     }
   }
 
-  const isRoundLocked = selectedRound && isLeagueRoundLocked(selectedRound);
+  const isRoundLocked = selectedRound && isSeasonRoundLocked(selectedRound);
 
   if (error) {
     return (
@@ -125,7 +120,7 @@ export default function LeagueStandingsTable({
         </div>
 
         <div>
-          <SecondaryText className="text-md">{selectedRound ? `${selectedRound.title} Points` : "Points"}</SecondaryText>
+          <SecondaryText className="text-md">{selectedRound ? `${selectedRound.round_title} Points` : "Points"}</SecondaryText>
         </div>
       </div>
 

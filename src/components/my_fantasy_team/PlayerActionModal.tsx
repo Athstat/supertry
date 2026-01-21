@@ -81,8 +81,6 @@ export function PlayerActionModal({
     }
   }
 
-
-
   return (
     <BottomSheetView
       className={twMerge(

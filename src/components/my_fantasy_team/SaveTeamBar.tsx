@@ -2,33 +2,34 @@ import { useCallback, useMemo, useState } from "react";
 import { Check, Loader } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
-import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
 import { useNavigateBack } from "../../hooks/web/useNavigateBack";
 import { useNavigationGuard } from "../../hooks/web/useNavigationGuard";
 import { fantasyAnalytics } from "../../services/analytics/fantasyAnalytics";
-import { fantasyTeamService } from "../../services/fantasyTeamService";
 import { AppColours } from "../../types/constants";
-import { IFantasyLeagueRound } from "../../types/fantasyLeague";
-import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
+import { isSeasonRoundLocked } from "../../utils/leaguesUtils";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import { Toast } from "../ui/Toast";
 import UnsavedChangesWarningModal from "../ui/modals/UnsavedChangesModal";
+import { ISeasonRound } from "../../types/fantasy/fantasySeason";
+import { fantasySeasonTeamService } from "../../services/fantasy/fantasySeasonTeamService";
+import { useAuth } from "../../contexts/AuthContext";
+import { useMyTeamScreen } from "../../contexts/MyTeamScreenContext";
 
 type Props = {
-    onTeamUpdated: () => Promise<void>,
-    leagueRound: IFantasyLeagueRound
+    onTeamUpdated: () => Promise<void>
+    leagueRound: ISeasonRound
 }
 
 /** Renders Save Team Bar */
-export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
+export default function SaveTeamBar({ leagueRound }: Props) {
+    const {authUser} = useAuth();
+    const {onUpdateTeam} = useMyTeamScreen();
 
     const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState<boolean>(false);
     const [isSaving, setIsSaving] = useState(false);
     const [saveError, setSaveError] = useState<string | undefined>(undefined);
-    const isLocked = isLeagueRoundLocked(leagueRound);
+    const isLocked = isSeasonRoundLocked(leagueRound);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
-
-    const { setRoundTeam } = useTeamHistory();
 
     const toggleUnSavedChangesModal = () => {
         setShowUnsavedChangesModal(prev => !prev);
@@ -78,6 +79,7 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
         try {
             setIsSaving(true);
             setSaveError(undefined);
+
             const athletesPayload = slots
                 .filter(s => Boolean(s.athlete))
                 .map((s) => {
@@ -101,16 +103,14 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
                     is_captain: boolean;
                 }[];
 
-            console.log('athletesPayload: ', athletesPayload);
-
-            const updatedTeam = await fantasyTeamService.updateFantasyTeam(team.id, { athletes: athletesPayload });
+            const updatedTeam = await fantasySeasonTeamService.updateRoundTeam(leagueRound.season, authUser?.kc_id || '', leagueRound.round_number,  {
+                athletes: athletesPayload, user_id: authUser?.kc_id || '' 
+            });
 
             // Apply optimistic update
             if (updatedTeam) {
-                setRoundTeam(updatedTeam);
+                onUpdateTeam(updatedTeam);
             }
-
-            await onTeamUpdated();
 
             setIsSaving(false);
             setShowSuccessModal(true);
@@ -144,7 +144,7 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
                     </button>
                     <PrimaryButton
                         className="w-[150px] text-xs"
-                        disabled={isSaving || !leagueRound?.is_open || !isTeamFull}
+                        disabled={isSaving || isLocked || !isTeamFull}
                         onClick={buildPayloadAndSave}
                     >
                         {isSaving ? 'Saving...' : 'Save Changes'}
@@ -175,15 +175,12 @@ export default function SaveTeamBar({ onTeamUpdated, leagueRound }: Props) {
                                 </div>
                                 <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Team Updated!</h2>
                                 <p className="text-gray-600 dark:text-gray-400 mb-6">
-                                    Your team changes have been saved for {leagueRound?.title}
+                                    Your team changes have been saved for {leagueRound.round_title}
                                 </p>
                                 <PrimaryButton
                                     className="w-full"
                                     onClick={() => {
                                         setShowSuccessModal(false);
-                                        if (onTeamUpdated) {
-                                            onTeamUpdated();
-                                        }
                                     }}
                                 >
                                     Great!

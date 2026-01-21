@@ -10,12 +10,15 @@ import PrimaryButton from '../../ui/buttons/PrimaryButton';
 import LeagueStandingsFilter from './StandingsFilter';
 import { LeagueRoundCountdown2 } from '../LeagueCountdown';
 import RoundedCard from '../../ui/cards/RoundedCard';
+import { useFantasySeasons } from '../../../hooks/dashboard/useFantasySeasons';
 
 
 /** Renders fantasy league group standings */
 export function FantasyLeagueStandingsTab() {
 
-  const { userMemberRecord, sortedRounds, currentRound } = useFantasyLeagueGroup();
+  const { currentRound } = useFantasySeasons();
+  const { userMemberRecord } = useFantasyLeagueGroup();
+  const currentSeasonRound = currentRound
 
   const { authUser } = useAuth();
   const isGuest = isGuestUser(authUser);
@@ -29,15 +32,17 @@ export function FantasyLeagueStandingsTab() {
         <ClaimAccountNoticeCard reasonNum={2} />
       </div>}
 
-      {currentRound && (
+      {currentSeasonRound && (
         <RoundedCard className='p-2 mx-4' >
-          <LeagueRoundCountdown2 leagueRound={currentRound} />
+          <LeagueRoundCountdown2 
+            leagueRound={currentSeasonRound} 
+            key={currentSeasonRound.id}
+          />
         </RoundedCard>
       )}
 
       <LeagueStandingsFilter
         currentRound={currentOption}
-        leagueRounds={sortedRounds}
         onChange={setRoundFilterId}
       />
 

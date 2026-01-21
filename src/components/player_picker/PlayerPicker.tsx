@@ -32,9 +32,8 @@ type Props = {
 /** Renders player picker version 2, with improved stability */
 export default function PlayerPicker({
   playerToBeReplaced, positionPool,
-  onSelectPlayer, targetLeagueRound,
-  isOpen, title, remainingBudget,
-  excludePlayers, onClose
+  onSelectPlayer, isOpen, title, 
+  remainingBudget, excludePlayers, onClose
 }: Props) {
 
   const atoms = [
@@ -55,7 +54,6 @@ export default function PlayerPicker({
       <PlayerPickerDataProvider
         playerToBeReplaced={playerToBeReplaced}
         positionPool={positionPool}
-        leagueRound={targetLeagueRound}
         title={title}
         excludePlayers={excludePlayers}
         remainingBudget={remainingBudget}

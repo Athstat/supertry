@@ -4,7 +4,7 @@ import { ReactNode, useEffect } from 'react';
 import { ScopeProvider } from 'jotai-scope';
 import ScrummyLoadingState from '../components/ui/ScrummyLoadingState';
 import { featuredLeagueAtom, featuredPlayersAtom } from '../hooks/onboarding/useOnboarding';
-import { djangoAthleteService } from '../services/athletes/djangoAthletesService';
+import { athleteService } from '../services/athletes/athletesService';
 import { fantasyLeagueGroupsService } from '../services/fantasy/fantasyLeagueGroupsService';
 import { IProAthlete } from '../types/athletes';
 import { DEFAULT_FALLBACK_FEATURED_LEAGUE_ID, FEATURED_PLAYER_IDS } from '../types/constants';
@@ -82,7 +82,7 @@ async function featuredPlayersFetcherV2(ids: string[]) {
   const players: IProAthlete[] = [];
 
   const promises = ids.map(async (playerId: string) => {
-    const res = await djangoAthleteService.getAthleteById(playerId);
+    const res = await athleteService.getAthleteById(playerId);
     if (res) {
       players.push(res);
     }

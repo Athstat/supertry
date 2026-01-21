@@ -1,6 +1,6 @@
 import { Fragment, ReactNode, useEffect } from 'react';
 import { fantasySeasonsAtom } from '../../state/fantasy/fantasyLeagueScreen.atoms';
-import { fantasySeasonsAtoms } from '../../state/dashboard/dashboard.atoms';
+import { fantasySeasonsAtoms } from '../../state/dashboard/fantasySeasons.atoms';
 import { ScopeProvider } from 'jotai-scope';
 import { useAtom, useSetAtom } from 'jotai';
 import { fantasySeasonsService } from '../../services/fantasy/fantasySeasonsService';
@@ -110,13 +110,13 @@ function InnerProvider({ children }: Props) {
           .find(r => {
             const dateNow = new Date().valueOf();
             const start = new Date(r.build_up_start).valueOf();
-            const end = new Date(r.coverage_end).valueOf();
+
+            // add 2 hours to the end
+            const end = new Date(r.games_end).valueOf() + 1000 * 60 * 60 * 2;
             return dateNow >= start && dateNow <= end;
           });
 
-        const seasonsLength = seasonRounds.length;
-
-        setCurrentRound(firstActive || seasonRounds[seasonsLength - 1]);
+        setCurrentRound(firstActive || seasonRounds[0]);
       } catch (err) {
         logger.error('Error setting active season round ', err);
       }

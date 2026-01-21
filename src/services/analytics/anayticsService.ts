@@ -5,6 +5,7 @@ import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeag
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
 import { IProAthlete } from '../../types/athletes';
 import { IFixture } from '../../types/games';
+import { ISeasonRound } from '../../types/fantasy/fantasySeason';
 
 
 function initAmplitude() {
@@ -102,12 +103,12 @@ function trackTeamCreationStarted(leagueRound?: IFantasyLeagueRound) {
   });
 }
 
-function trackTeamCreationCompleted(leagueRound?: IFantasyLeagueRound, team?: IFantasyLeagueTeam) {
+function trackTeamCreationCompleted(leagueRound?: ISeasonRound, team?: IFantasyLeagueTeam) {
   if (!leagueRound || !team) return;
 
   track('Team_Created', {
-    leagueId: leagueRound.id,
-    officialLeagueId: leagueRound.official_league_id,
+    round_number: leagueRound.round_number,
+    officialLeagueId: leagueRound.season,
     teamId: team.id,
     team_name: team.team_name,
     team_athletes: team.athletes.map(a => a.athlete_id),

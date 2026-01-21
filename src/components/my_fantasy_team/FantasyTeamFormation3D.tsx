@@ -15,7 +15,7 @@ interface TeamFormationProps {
 /** Renders a 3 Dimensional-looking pitch view */
 export function FantasyTeamFormation3D({ onPlayerClick, marginCN }: TeamFormationProps) {
 
-  const { slots, leagueRound: round } = useFantasyTeam();
+  const { slots } = useFantasyTeam();
 
   const slotPositions = [
     { x: 20, y: 10, slot: 1 },
@@ -25,10 +25,6 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN }: TeamFormatio
     { x: 80, y: 50, slot: 5 },
   ]
 
-
-  if (!round) {
-    return;
-  }
 
   return (
     <div className="relative w-full mt-10  flex flex-col justify-center">
@@ -54,7 +50,6 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN }: TeamFormatio
                 key={slot.slotNumber}
                 slot={slot}
                 position={pos}
-                round={round}
                 onPlayerClick={onPlayerClick}
               />
             )
@@ -75,7 +70,7 @@ type SlotCardProps = {
   position: SlotCardPosition
 }
 
-function SlotCard({ slot, onPlayerClick, round, position }: SlotCardProps) {
+function SlotCard({ slot, onPlayerClick, position }: SlotCardProps) {
 
   const { athlete } = slot;
 
@@ -96,10 +91,6 @@ function SlotCard({ slot, onPlayerClick, round, position }: SlotCardProps) {
     )
   };
 
-  if (!round) {
-    return null;
-  }
-
 
   return (
     <div
@@ -115,7 +106,6 @@ function SlotCard({ slot, onPlayerClick, round, position }: SlotCardProps) {
         player={athlete}
         onClick={onPlayerClick}
         key={slot.slotNumber}
-        round={round}
       />
 
     </div>

@@ -3,19 +3,19 @@ import { ScopeProvider } from "jotai-scope"
 import { ReactNode, useEffect } from "react";
 import { fantasyLeagueTeamAtom, fantasyTeamSlotsAtom, swapPlayerAtom, swapStateAtom, fantasyLeagueTeamLeagueRoundAtom, readOnlyAtom } from "../../state/fantasy/fantasyLeagueTeam.atoms";
 import { fantasyTeamAthletesAtom } from "../../state/myTeam.atoms";
-import { IFantasyLeagueTeam, IFantasyLeagueRound } from "../../types/fantasyLeague";
+import { IFantasyLeagueTeam } from "../../types/fantasyLeague";
 import { defaultFantasyPositions, IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
+import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
 
 type Props = {
     team: IFantasyLeagueTeam,
     children?: ReactNode,
-    leagueRound?: IFantasyLeagueRound,
     readOnly?: boolean
 }
 
 /** Provides team athlete data and fantasy league team data to be provided  */
-export default function FantasyTeamProvider({ team, children, leagueRound, readOnly }: Props) {
+export default function FantasyTeamProvider({ team, children, readOnly }: Props) {
 
     const atoms = [
         fantasyLeagueTeamAtom,
@@ -29,7 +29,7 @@ export default function FantasyTeamProvider({ team, children, leagueRound, readO
 
     return (
         <ScopeProvider atoms={atoms} >
-            <InnerProvider leagueRound={leagueRound} team={team} readOnly={readOnly} >
+            <InnerProvider team={team} readOnly={readOnly} >
                 {children}
             </InnerProvider>
         </ScopeProvider>
@@ -37,8 +37,9 @@ export default function FantasyTeamProvider({ team, children, leagueRound, readO
 }
 
 
-function InnerProvider({ team, children, leagueRound, readOnly }: Props) {
+function InnerProvider({ team, children, readOnly }: Props) {
 
+    const {round} = useTeamHistory();
     const setTeam = useSetAtom(fantasyLeagueTeamAtom);
     const setSlots = useSetAtom(fantasyTeamSlotsAtom);
 
@@ -76,15 +77,15 @@ function InnerProvider({ team, children, leagueRound, readOnly }: Props) {
 
         }
 
-        if (leagueRound) {
-            setLeagueRound(leagueRound);
+        if (round) {
+            setLeagueRound(round);
         }
 
         if (readOnly !== undefined) {
             setReadOnly(readOnly);
         }
         
-    }, [setSlots, setTeam, team, leagueRound, setLeagueRound, readOnly, setReadOnly]);
+    }, [setSlots, setTeam, team, round, setLeagueRound, readOnly, setReadOnly]);
 
     return (
         <>
@@ -92,6 +93,3 @@ function InnerProvider({ team, children, leagueRound, readOnly }: Props) {
         </>
     )
 }
-
-// TODO: Move Hook to the right folder
-/** Provides a hook for manipulating a fantasy league team  */

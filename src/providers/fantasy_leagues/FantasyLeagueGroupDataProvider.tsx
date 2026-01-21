@@ -47,7 +47,7 @@ export default function FantasyLeagueGroupDataProvider({
   );
 }
 
-function Fetcher({ children, leagueId, loadingFallback, skipCache, fetchMembers = true }: Props) {
+function Fetcher({ children, leagueId, loadingFallback, skipCache = false, fetchMembers = true }: Props) {
 
   const [leagueGroup, setFantasyLeagueGroup] = useAtom(fantasyLeagueGroupAtom);
   const setFantasyLeagueMembers = useSetAtom(fantasyLeagueGroupMembersAtom);
@@ -59,15 +59,18 @@ function Fetcher({ children, leagueId, loadingFallback, skipCache, fetchMembers 
 
   const { leagueConfig, isLoading: loadingConfig } = useLeagueConfig(leagueGroup?.season_id);
 
-  const datePart = useMemo(() => {
-    return skipCache ? `${new Date().valueOf()}` : ""
-  }, [skipCache]);
+  const key = useMemo(() => {
+    if (!leagueId) {
+      return null;
+    }
 
-  const key = leagueId ? (swrFetchKeys.getFantasyLeagueGroupById(leagueId) + `${datePart}`) : null;
+    return !skipCache ? (swrFetchKeys.getFantasyLeagueGroupById(leagueId)) : `/fantasy-league-groups/skip-cache/${new Date()}`;
+  }, [leagueId, skipCache]);
+
   const { data: leagueData, isLoading: loadingLeague, mutate: refreshLeague } = useSWR(key, () =>
     fetcher(leagueId ?? '', fetchMembers)
   , {
-    revalidateOnFocus: false
+    revalidateOnFocus: false,
   });
 
   const league = leagueData?.league;
