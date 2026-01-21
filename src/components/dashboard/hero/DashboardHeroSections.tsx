@@ -5,7 +5,7 @@ import { ReactNode, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Fragment } from "react/jsx-runtime";
 import { useAuth } from "../../../contexts/AuthContext";
-import { useRoundScoringSummary } from "../../../hooks/fantasy/useRoundScoringSummary";
+import { useRoundScoringSummaryV2 } from "../../../hooks/fantasy/useRoundScoringSummary";
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
 import { IFantasyLeagueTeam } from "../../../types/fantasyLeague";
 import { formatCountdown } from "../../../utils/countdown";
@@ -128,9 +128,9 @@ type ScoreProps = {
 
 export function DashboardHeroScoreSection({ roundTeam, children }: ScoreProps) {
 
-  const { scoringRound } = useFantasyLeagueGroup();
+  const {scoringRound} = useFantasySeasons();
 
-  const { userScore, averagePointsScored, highestPointsScored } = useRoundScoringSummary(scoringRound);
+  const { userScore, averagePointsScored, highestPointsScored } = useRoundScoringSummaryV2(scoringRound);
   const isFirstTime = roundTeam === undefined;
 
   if (children) {
@@ -178,7 +178,7 @@ export function DashboardHeroScoreSection({ roundTeam, children }: ScoreProps) {
 
           {/* Round Indicator (inside card) - Shows Scoring Round Card */}
           <p className="text-sm font-semibold text-[#1196F5] text-center ">
-            Round {scoringRound?.start_round || '—'}
+            Round {scoringRound?.round_number || '—'}
           </p>
         </div>
       </div>
