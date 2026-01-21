@@ -78,6 +78,8 @@ export default function MyTeamModeSelector() {
     return <PitchViewLoadingSkeleton />;
   }
 
+  console.log("Round ", round);
+
   return (
     <Fragment>
       <TeamHistoryBar lock={false} />

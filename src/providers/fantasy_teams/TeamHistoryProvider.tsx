@@ -40,7 +40,7 @@ export default function TeamHistoryProvider({ children, user }: Props) {
     const minIndex = 0;
 
     const round = useMemo(() => {
-        return seasonRounds.find((r) => r.round_number === roundNumber)
+        return seasonRounds.find((r) => r.round_number.toString() === roundNumber)
     }, [roundNumber, seasonRounds]);
 
     const setRound = useCallback((r: ISeasonRound) => {
