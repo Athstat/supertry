@@ -7,7 +7,8 @@ import PrimaryButton from "../ui/buttons/PrimaryButton";
 import SecondaryText from "../ui/typography/SecondaryText";
 import { Toast } from "../ui/Toast";
 import { useState } from "react";
-import { useShareLeagueLegacy } from "../../hooks/leagues/useShareLeague";
+import { useShareLeague } from "../../hooks/leagues/useShareLeague";
+import { useInView } from "react-intersection-observer";
 
 
 type Props = {
@@ -22,7 +23,8 @@ export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [successMessage, setSuccessMessage] = useState<string>();
 
-  const { handleShare: handleShareJoinLink } = useShareLeagueLegacy(league);
+  const {ref, inView} = useInView({triggerOnce: true})
+  const { handleShare: handleShareJoinLink, isLoading } = useShareLeague(league, inView);
   // const { ref: qrRef, copyAsImage } = useCanvas(setErrorMessage, setSuccessMessage);
 
   const clearMessages = () => {
@@ -100,8 +102,8 @@ export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
         </div>
       </section>
 
-      <section className="flex flex-col gap-3 pt-6">
-        <PrimaryButton onClick={handleShareJoinLink} className="flex-1 py-3 gap-3 flex flex-row items-center"  >
+      <section className="flex flex-col gap-3 pt-6" ref={ref} >
+        <PrimaryButton isLoading={isLoading} disabled={isLoading} onClick={handleShareJoinLink} className="flex-1 py-3 gap-3 flex flex-row items-center"  >
           <p>Share Join Link</p>
           <Share2 className="w-5 h-5" />
         </PrimaryButton>

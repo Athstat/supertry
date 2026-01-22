@@ -7,10 +7,10 @@ import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
 import { isMobileWebView } from "../../utils/bridgeUtils";
 import useSWR from "swr";
 
-export function useShareLeague(league?: FantasyLeagueGroup) {
+export function useShareLeague(league?: FantasyLeagueGroup, shouldFetch: boolean = true) {
     const { authUser } = useAuth();
 
-    const key = `/fantasy-league-groups/${league?.id}/invite`;
+    const key = shouldFetch ? `/fantasy-league-groups/${league?.id}/invite` : null;
     const {data, isLoading} = useSWR(key, () => createInviteLinkV2(league, authUser), {
         revalidateOnFocus: false,
         revalidateIfStale: true,
