@@ -7,7 +7,7 @@ import PrimaryButton from "../ui/buttons/PrimaryButton";
 import SecondaryText from "../ui/typography/SecondaryText";
 import { Toast } from "../ui/Toast";
 import { useState } from "react";
-import { useShareLeague } from "../../hooks/leagues/useShareLeague";
+import { useShareLeagueLegacy } from "../../hooks/leagues/useShareLeague";
 
 
 type Props = {
@@ -22,7 +22,7 @@ export default function LeagueInviteModal({ onClose, league, isOpen }: Props) {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [successMessage, setSuccessMessage] = useState<string>();
 
-  const { handleShare: handleShareJoinLink } = useShareLeague(league);
+  const { handleShare: handleShareJoinLink } = useShareLeagueLegacy(league);
   // const { ref: qrRef, copyAsImage } = useCanvas(setErrorMessage, setSuccessMessage);
 
   const clearMessages = () => {

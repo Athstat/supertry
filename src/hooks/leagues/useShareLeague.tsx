@@ -1,18 +1,23 @@
 import { useAuth } from "../../contexts/AuthContext";
 import { analytics } from "../../services/analytics/anayticsService";
+import { leagueInviteService } from "../../services/fantasy/leagueInviteService";
+import { DjangoUserMinimal } from "../../types/auth";
 import { leagueInviteQueryParams } from "../../types/constants";
 import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
 import { isMobileWebView } from "../../utils/bridgeUtils";
+import useSWR from "swr";
 
 export function useShareLeague(league?: FantasyLeagueGroup) {
-
     const { authUser } = useAuth();
-    const username = authUser?.username || authUser?.first_name;
 
-    const qs = leagueInviteQueryParams;
+    const key = `/fantasy-league-groups/${league?.id}/invite`;
+    const {data, isLoading} = useSWR(key, () => createInviteLinkV2(league, authUser), {
+        revalidateOnFocus: false,
+        revalidateIfStale: true,
+        dedupingInterval: 1000 * 60 * 60 * 24
+    });
 
-    const baseUrl = (import.meta)?.env?.VITE_APP_LINK_BASE_URL || window.location.origin;
-    const inviteLink = encodeURI(`${baseUrl}/invite-steps?${qs.LEAGUE_ID}=${league?.id}&${qs.USER_ID}=${authUser?.kc_id}&${qs.JOIN_CODE}=${league?.entry_code}`);
+    const inviteLink = data || '';
 
     const handleShareWithBridge = (message: string) => {
         const jsonObj = { message };
@@ -29,15 +34,10 @@ export function useShareLeague(league?: FantasyLeagueGroup) {
 
         if (!league) return;
 
+        const username = authUser?.username || authUser?.first_name;
         const shareMessage = `${username} is inviting you to join ${league.title} league on SCRUMMY 🏉. Use the link below to join\n\n${inviteLink}`
-
-        // Ensure there are no leading blank lines
-        //const cleanedMessage = shareMessage.replace(/\r\n/g, '\n').replace(/^\s*\n+/, '');
-
-        // Share ONLY the composed message text (no title/url),
-        // so the share sheet doesn't prepend extra lines.
-
-
+        
+        
         if (isMobileShareAvailable) {
             handleShareWithBridge(shareMessage);
             return;
@@ -46,7 +46,7 @@ export function useShareLeague(league?: FantasyLeagueGroup) {
         const shareData: ShareData = {
             text: shareMessage
         };
-
+        
         if (navigator.share) {
             navigator.share(shareData)
                 .then(() => {
@@ -71,7 +71,30 @@ export function useShareLeague(league?: FantasyLeagueGroup) {
 
     return {
         handleShare,
-        inviteLink
+        inviteLink,
+        isLoading
     }
 
 }
+
+function createLegacyInviteLink(league?: FantasyLeagueGroup, authUser?: DjangoUserMinimal) {
+    const qs = leagueInviteQueryParams;
+
+    const baseUrl = (import.meta)?.env?.VITE_APP_LINK_BASE_URL || window.location.origin;
+    const inviteLink = encodeURI(`${baseUrl}/invite-steps?${qs.LEAGUE_ID}=${league?.id}&${qs.USER_ID}=${authUser?.kc_id}&${qs.JOIN_CODE}=${league?.entry_code}`);
+
+    return inviteLink;
+
+}
+
+async function createInviteLinkV2(league?: FantasyLeagueGroup, authUser?: DjangoUserMinimal) {
+    const invite = await leagueInviteService.createInvite(league?.id || '');
+
+    if (invite) {
+        const baseUrl = (import.meta)?.env?.VITE_APP_LINK_BASE_URL || window.location.origin;
+        const inviteLink = encodeURI(`${baseUrl}/i/${invite.id}`);
+        return inviteLink;
+    }
+
+    return createLegacyInviteLink(league, authUser);
+} 
