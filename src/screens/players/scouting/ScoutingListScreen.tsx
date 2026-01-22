@@ -17,6 +17,9 @@ import { useHideTopNavBar } from "../../../hooks/navigation/useNavigationBars";
 import { ScoutingListPlayerCard } from "../../../components/players/scouting/ScoutingListPlayerCard";
 import ScoutingListPlayerModal from "../../../components/players/scouting/ScoutingListPlayerModal";
 import { usePlayerSeasonTeam } from "../../../hooks/seasons/useSeasonTeams";
+import SearchBar from "../../../components/player_picker/SearchBar";
+import { useDebounced } from "../../../hooks/web/useDebounced";
+import { AthleteFilterBuilder } from "../../../utils/athletes/athlete_filter";
 
 /** Renders scouting list screen */
 export default function ScoutingListScreen() {
@@ -108,7 +111,7 @@ export default function ScoutingListScreen() {
                 </SecondaryText>
             </div>
 
-            {listHasPlayers && <div className="flex flex-col gap-2" >
+            {listHasPlayers && <div className="flex flex-col gap-2 mb-6" >
                 {list.map((si) => {
                     return <ScoutingListPlayerCard
                         item={si}
@@ -134,7 +137,7 @@ export default function ScoutingListScreen() {
                 onClose={handleCloseProfileModal}
             />}
 
-            {list.length < 5 && <SuggestedPlayers />}
+            {<SuggestedPlayers />}
         </PageView>
     )
 }
@@ -149,6 +152,9 @@ function NoContent() {
 }
 
 function SuggestedPlayers() {
+
+    const [searchQuery, setSearchQuery] = useState<string>();
+    const debouncedSearchQuery = useDebounced(searchQuery, 500);
 
     const { addPlayer, isAdding, list } = useScoutingList();
     const { athletes } = useSupportedAthletes();
@@ -171,13 +177,26 @@ function SuggestedPlayers() {
         addPlayer(player.tracking_id);
     }
 
+    const searchAthletes = useMemo(() => {
+        return new AthleteFilterBuilder(athletes)
+            .search(debouncedSearchQuery)
+            .excludeIds(excludeIds)
+            .build();
+    }, [athletes, debouncedSearchQuery, excludeIds]);
+
     return (
-        <div className="flex flex-col gap-2" >
+        <div className="flex flex-col gap-2 min-h-[80vh]" >
+
             <div>
-                <SecondaryText>Suggested Players</SecondaryText>
+                <SecondaryText className="text-md" >Suggested Players</SecondaryText>
             </div>
 
-            <div className="flex flex-col gap-2" >
+            <SearchBar 
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+            />
+
+            {!searchQuery && <div className="flex flex-col gap-2" >
                 {top10.map((p) => {
                     return (
                         <SuggestedPlayerCard
@@ -188,7 +207,22 @@ function SuggestedPlayers() {
                         />
                     )
                 })}
-            </div>
+            </div>}
+
+            {searchQuery && (
+                <>
+                    {searchAthletes.map((p) => {
+                        return (
+                            <SuggestedPlayerCard 
+                                player={p}
+                                key={p.tracking_id}
+                                isAdding={isAdding}
+                                onAdd={handleAddPlayer}
+                            />
+                        )
+                    })}
+                </>
+            )}
 
         </div>
     )
