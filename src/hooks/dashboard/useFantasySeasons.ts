@@ -83,6 +83,10 @@ export function useFantasySeasons() {
 
     const nextDeadlineRound = useMemo(() => {
 
+        if (!previousRound && currentRound) {
+            return currentRound;
+        }
+
         if (scoringRound) {
             const nextRoundNumber = scoringRound?.round_number ? scoringRound.round_number + 1 : -1;
             return seasonRounds.find((s) => s.round_number === nextRoundNumber);
@@ -90,7 +94,7 @@ export function useFantasySeasons() {
 
         return currentRound;
 
-    }, [currentRound, scoringRound, seasonRounds])
+    }, [currentRound, previousRound, scoringRound, seasonRounds])
 
     return {
         fantasySeasons,
