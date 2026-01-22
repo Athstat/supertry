@@ -1,9 +1,9 @@
-import { useNavigate } from "react-router-dom";
 import ScrummyLogo from "../../../components/branding/scrummy_logo";
 import OnboardingSlideShow from "../../../components/onboarding/OnboardingSlideShow";
 import PrimaryButton from "../../../components/ui/buttons/PrimaryButton";
 import SecondaryText from "../../../components/ui/typography/SecondaryText";
 import { useHideBottomNavBar, useHideTopNavBar } from "../../../hooks/navigation/useNavigationBars";
+import { useNavigateBack } from "../../../hooks/web/useNavigateBack";
 
 /** Renders the Scouting Onboarding Screens */
 export default function ScoutingOnboardingScreen() {
@@ -104,9 +104,10 @@ function Slide4() {
 
 function Slide5() {
 
-  const navigate = useNavigate();
+  const {hardPop} = useNavigateBack();
   const handleCTA = () => {
-    navigate('/scouting/my-list')
+
+    hardPop('/scouting/my-list')
   }
 
   return (

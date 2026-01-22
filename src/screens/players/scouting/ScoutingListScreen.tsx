@@ -1,4 +1,4 @@
-import { ArrowLeft, Binoculars, Plus } from "lucide-react";
+import { ArrowLeft, Binoculars, HelpCircle, Plus } from "lucide-react";
 import PageView from "../../../components/ui/containers/PageView";
 import { useScoutingList } from "../../../hooks/fantasy/scouting/useScoutingList";
 import RoundedCard from "../../../components/ui/cards/RoundedCard";
@@ -20,12 +20,14 @@ import { usePlayerSeasonTeam } from "../../../hooks/seasons/useSeasonTeams";
 import SearchBar from "../../../components/player_picker/SearchBar";
 import { useDebounced } from "../../../hooks/web/useDebounced";
 import { AthleteFilterBuilder } from "../../../utils/athletes/athlete_filter";
+import { useNavigate } from "react-router-dom";
 
 /** Renders scouting list screen */
 export default function ScoutingListScreen() {
 
     useHideTopNavBar();
     const { list, loadingList, mutateList } = useScoutingList();
+    const navigate = useNavigate();
     const { hardPop } = useNavigateBack()
 
     const [selectedPlayer, setSelectedPlayer] = useState<ScoutingListPlayer>();
@@ -64,22 +66,26 @@ export default function ScoutingListScreen() {
         setShowProfileModal(false);
     }
 
+    const handleViewTutorial = () => {
+        navigate('/scouting/onboarding');
+    }
+
     const listHasPlayers = list.length > 0;
 
     if (loadingList) {
         return (
             <PageView className="px-4 flex flex-col gap-4 py-4" >
-                <div className="flex flex-row items-center gap-2" >
+                <div className="flex flex-row items-center justify-between gap-2" >
+                    <div className="flex flex-row items-center gap-2" >
+                        <CircleButton
+                            onClick={handleNavigateBack}
+                        >
+                            <ArrowLeft />
+                        </CircleButton>
 
-                    <CircleButton
-                        onClick={handleNavigateBack}
-                    >
-                        <ArrowLeft />
-                    </CircleButton>
-
-                    <Binoculars />
-                    <p className="text-lg font-bold" >My Scouting List</p>
-
+                        <Binoculars />
+                        <p className="text-lg font-bold" >My Scouting List</p>
+                    </div>
                 </div>
 
                 <RoundedCard className="w-full min-h-[100px] animate-pulse border-none" />
@@ -93,16 +99,23 @@ export default function ScoutingListScreen() {
 
     return (
         <PageView className="p-4 flex flex-col gap-4" >
-            <div className="flex flex-row items-center gap-2" >
+            <div className="flex flex-row items-center justify-between gap-2" >
+                <div className="flex flex-row items-center gap-2" >
+                    <CircleButton
+                        onClick={handleNavigateBack}
+                    >
+                        <ArrowLeft />
+                    </CircleButton>
 
-                <CircleButton
-                    onClick={handleNavigateBack}
+                    <Binoculars />
+                    <p className="text-lg font-bold" >My Scouting List</p>
+                </div>
+
+                <button
+                    onClick={handleViewTutorial}
                 >
-                    <ArrowLeft />
-                </CircleButton>
-
-                <Binoculars />
-                <p className="text-lg font-bold" >My Scouting List</p>
+                    <HelpCircle />
+                </button>
             </div>
 
             <div>
@@ -146,7 +159,7 @@ export default function ScoutingListScreen() {
 function NoContent() {
     return (
         <div className="flex flex-col items-center justify-center h-[200px]" >
-            <SecondaryText className="text-center" >Your scouting list is empty.<br/>Add players to your scouting list to get started!</SecondaryText>
+            <SecondaryText className="text-center" >Your scouting list is empty.<br />Add players to your scouting list to get started!</SecondaryText>
         </div>
     )
 }
@@ -191,7 +204,7 @@ function SuggestedPlayers() {
                 <SecondaryText className="text-md" >Suggested Players</SecondaryText>
             </div>
 
-            <SearchBar 
+            <SearchBar
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
             />
@@ -213,7 +226,7 @@ function SuggestedPlayers() {
                 <>
                     {searchAthletes.map((p) => {
                         return (
-                            <SuggestedPlayerCard 
+                            <SuggestedPlayerCard
                                 player={p}
                                 key={p.tracking_id}
                                 isAdding={isAdding}
@@ -237,7 +250,7 @@ type SuggestedPlayerCardProps = {
 
 function SuggestedPlayerCard({ player, onAdd, onViewProfile, isAdding }: SuggestedPlayerCardProps) {
 
-    const {seasonTeam} = usePlayerSeasonTeam(player);
+    const { seasonTeam } = usePlayerSeasonTeam(player);
 
     const handleAddPlayer = () => {
         if (onAdd) {
