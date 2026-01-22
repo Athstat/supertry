@@ -17,6 +17,7 @@ import TeamHistoryProvider from "../../providers/fantasy_teams/TeamHistoryProvid
 import FantasyTeamProvider from "../../providers/fantasy_teams/FantasyTeamProvider";
 import NoTeamCreatedFallback from "../../components/fantasy-leagues/NoTeamCreatedFallback";
 import PitchViewLoadingSkeleton from "../../components/my_fantasy_team/PitchViewLoadingSkeleton";
+import MyTeamScreenProvider from "../../contexts/MyTeamScreenContext";
 
 
 export default function LeagueMemberTeamScreen() {
@@ -75,29 +76,32 @@ function Content() {
             <TeamHistoryBar
             />
 
-            {roundTeam && (
-                <FantasyTeamProvider
-                    team={roundTeam}
-                    readOnly
-                >
-                    <FantasyTeamView
-                        leagueConfig={leagueConfig}
-                        onTeamUpdated={async () => { }}
-                        onBack={() => { }}
+            <MyTeamScreenProvider onUpdateTeam={() => {}} >
+
+                {roundTeam && (
+                    <FantasyTeamProvider
+                        team={roundTeam}
+                        readOnly
+                    >
+                        <FantasyTeamView
+                            leagueConfig={leagueConfig}
+                            onTeamUpdated={async () => { }}
+                            onBack={() => { }}
+                        />
+                    </FantasyTeamProvider>
+                )}
+
+                {!roundTeam && !isLoading && (
+                    <NoTeamCreatedFallback
+                        hideViewStandingsOption
+                        perspective="third-person"
                     />
-                </FantasyTeamProvider>
-            )}
+                )}
 
-            {!roundTeam && !isLoading && (
-                <NoTeamCreatedFallback
-                    hideViewStandingsOption
-                    perspective="third-person"
-                />
-            )}
-
-            {isLoading && (
-                <PitchViewLoadingSkeleton />
-            )}
+                {isLoading && (
+                    <PitchViewLoadingSkeleton />
+                )}
+            </MyTeamScreenProvider>
         </PageView>
     )
 }
