@@ -4,6 +4,7 @@ import { scoutingService } from "../../../services/fantasy/scoutingService";
 import useSWR from "swr";
 import { ScoutingListPlayer } from "../../../types/fantasy/scouting";
 import { useFantasySeasons } from "../../dashboard/useFantasySeasons";
+import { SCOUTING_LIST_MAX_SIZE } from "../../../types/constants";
 
 /** API for getting a users scouting list and manipulating it */
 export function useScoutingList() {
@@ -36,7 +37,7 @@ export function useScoutingList() {
         setMessage(undefined);
         setError(undefined);
 
-        if (list.length >= 5) {
+        if (list.length >= SCOUTING_LIST_MAX_SIZE) {
             setIsAdding(false);
             setError("Whoops, limit reached! You can only scout up to 5 players at a time");
             return;

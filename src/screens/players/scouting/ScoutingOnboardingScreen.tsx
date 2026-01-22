@@ -4,6 +4,7 @@ import PrimaryButton from "../../../components/ui/buttons/PrimaryButton";
 import SecondaryText from "../../../components/ui/typography/SecondaryText";
 import { useHideBottomNavBar, useHideTopNavBar } from "../../../hooks/navigation/useNavigationBars";
 import { useNavigateBack } from "../../../hooks/web/useNavigateBack";
+import { SCOUTING_LIST_MAX_SIZE } from "../../../types/constants";
 
 /** Renders the Scouting Onboarding Screens */
 export default function ScoutingOnboardingScreen() {
@@ -45,7 +46,7 @@ function Slide1() {
       <div className="flex flex-col gap-4 items-center justify-center text-center" >
         <p className="font-bold text-2xl" >Scouting 101</p>
         <SecondaryText className="font-semibold text-md" >Scouting allows you to keep a list of players you would like to keep an eye, or plan to add to your team in the future</SecondaryText>
-        <SecondaryText className="font-semibold text-md" >You can scout a maximum of 12 players at a time for each competition, and can access the scouting list from the "Players" tab</SecondaryText>
+        <SecondaryText className="font-semibold text-md" >You can only scout up to {SCOUTING_LIST_MAX_SIZE} players at a time for each competition, and can access the scouting list from the "Players" tab</SecondaryText>
       </div>
     </div>
   )
