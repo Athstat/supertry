@@ -354,6 +354,27 @@ export const fantasyLeagueGroupsService = {
         return [];
     },
 
+    getUserWeeklyStandings: async (leagueId: string, round_number: number | string, userId: string): Promise<FantasySeasonRankingItem | undefined> => {
+
+        try {
+
+            const uri = getUri(`/api/v1/fantasy-league-groups/${leagueId}/standings/weekly/${round_number}/${userId}`);
+
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as FantasySeasonRankingItem;
+            }
+
+        } catch (err) {
+            console.log("Error getting league standings ", err);
+        }
+
+        return undefined;
+    },
+
     getMemberRanking: async (id: string, userId: string): Promise<MemberRankingDetail | undefined> => {
         try {
             const uri = getUri(`/api/v1/fantasy-league-groups/${id}/members/${userId}/ranking`);

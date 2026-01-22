@@ -1,4 +1,4 @@
-import { Medal, User } from "lucide-react";
+import { ChevronDown, ChevronUp, Medal, User } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { FantasySeasonRankingItem } from "../../../types/fantasyLeagueGroups";
 import { smartRoundUp } from "../../../utils/intUtils";
@@ -16,11 +16,17 @@ type StandingsProps = {
 /** Renders a league standing table row */
 export function LeagueStandingsTableRow({ ranking, isUser, hideUserScore, index, onClick, showBadges }: StandingsProps) {
 
+    // const { league } = useFantasyLeagueGroup();
+
     const rank = ranking.league_rank ?? index + 1;
     const shouldHideScore = (isUser && hideUserScore) || !ranking.total_score
     const pointsDisplay = shouldHideScore ? '-' : smartRoundUp(ranking.total_score);
 
+    // const prevRound = ranking.round_number ? ranking.round_number - 1 : undefined;
+    // const { userRanking: prevWeekRank } = useUserWeekRoundStanding(ranking.user_id, league?.id, prevRound);
+
     const isPointsKing = ranking.league_rank === 1;
+    // const positionChange = ranking.league_rank && prevWeekRank?.league_rank ? (ranking.league_rank - prevWeekRank.league_rank) * -1 : undefined;
 
     const handleClick = () => {
         if (onClick && ranking) {
@@ -44,7 +50,7 @@ export function LeagueStandingsTableRow({ ranking, isUser, hideUserScore, index,
             <div className="flex flex-row items-center gap-2 justify-between px-2" >
                 <div className="flex flex-row items-center gap-2">
 
-                    <div className="flex flex-row">
+                    <div className="flex flex-row items-center">
                         <SecondaryText className={twMerge(
                             "w-10",
                             isUser && "text-black dark:text-white"
@@ -52,8 +58,9 @@ export function LeagueStandingsTableRow({ ranking, isUser, hideUserScore, index,
                             {/* {rank} {badge}{' '} */}
                             {rank}
                         </SecondaryText>
-
                     </div>
+
+                    {/* <PositionChangeCard positionChange={positionChange} /> */}
 
                     {isUser && (
                         <div className=" w-6 h-6 bg-blue-500 rounded-xl flex flex-col items-center justify-center">
@@ -62,6 +69,7 @@ export function LeagueStandingsTableRow({ ranking, isUser, hideUserScore, index,
                     )}
 
                     <div className="flex flex-col">
+
                         <p>{ranking.username ?? ranking.first_name}</p>
 
                         {isUser && hideUserScore && (
@@ -74,7 +82,7 @@ export function LeagueStandingsTableRow({ ranking, isUser, hideUserScore, index,
                     {showBadges && <RankingCrown isUser={isUser} ranking={ranking} />}
                 </div>
 
-                <div className="text-right">
+                <div className="text-right flex flex-row items-center gap-2">
                     <p>{pointsDisplay}</p>
                 </div>
             </div>
@@ -106,6 +114,32 @@ function RankingCrown({ isUser, ranking }: RankingCrownProps) {
             rankType === 'bronze' && 'from-[#8c5304] to-[#e66305] text-white dark:text-white',
         )} >
             <Medal className="w-4 h-4" />
+        </div>
+    )
+}
+
+type PositionChangeProps = {
+    positionChange?: number
+}
+
+export function PositionChangeCard({ positionChange }: PositionChangeProps) {
+
+    if (!positionChange) {
+        return null;
+    }
+
+    const isPositive = positionChange > 0;
+
+    return (
+        <div className="flex flex-row items-center gap-2" >
+            <div className={twMerge(
+                "bg-red-500 w-6 h-6 rounded-full flex flex-col items-center justify-center",
+                isPositive && "bg-green-500"
+            )} >
+                {isPositive && <ChevronUp className="text-white w-4 h-4 dark:text-white" />}
+                {!isPositive && <ChevronDown className="text-white w-4 h-4 dark:text-white" />}
+            </div>
+            {/* {positionChange} */}
         </div>
     )
 }
