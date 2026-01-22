@@ -21,6 +21,7 @@ import SearchBar from "../../../components/player_picker/SearchBar";
 import { useDebounced } from "../../../hooks/web/useDebounced";
 import { AthleteFilterBuilder } from "../../../utils/athletes/athlete_filter";
 import { useNavigate } from "react-router-dom";
+import { SCOUTING_LIST_MAX_SIZE } from "../../../types/constants";
 
 /** Renders scouting list screen */
 export default function ScoutingListScreen() {
@@ -113,6 +114,7 @@ export default function ScoutingListScreen() {
 
                 <button
                     onClick={handleViewTutorial}
+                    aria-label="scouting-list-help"
                 >
                     <HelpCircle />
                 </button>
@@ -120,7 +122,7 @@ export default function ScoutingListScreen() {
 
             <div>
                 <SecondaryText>
-                    You can only scout up to 5 players at time, per each competition
+                    You can only scout up to {SCOUTING_LIST_MAX_SIZE} players at time, per each competition
                 </SecondaryText>
             </div>
 

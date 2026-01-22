@@ -39,7 +39,7 @@ export function useScoutingList() {
 
         if (list.length >= SCOUTING_LIST_MAX_SIZE) {
             setIsAdding(false);
-            setError("Whoops, limit reached! You can only scout up to 5 players at a time");
+            setError(`Whoops, limit reached! You can only scout up to ${SCOUTING_LIST_MAX_SIZE} players at a time`);
             return;
         } 
 

@@ -40,7 +40,11 @@ function Slide1() {
       <ScrummyLogo className="w-32 h-32" />
 
       <div>
-        <img src={'https://dp7xhssw324ru.cloudfront.net/Scouting_Onboarding_Slide_1.png'} className="rounded-xl" />
+        <img 
+          src={'https://dp7xhssw324ru.cloudfront.net/Scouting_Onboarding_Slide_1.png'}
+          className="rounded-xl" 
+          alt="slide_1"
+        />
       </div>
 
       <div className="flex flex-col gap-4 items-center justify-center text-center" >
@@ -58,7 +62,11 @@ function Slide2() {
       <ScrummyLogo className="w-32 h-32" />
 
       <div>
-        <img src={'https://dp7xhssw324ru.cloudfront.net/Scouting_Onboarding_Slide_2.png'} className="rounded-xl" />
+        <img 
+          src={'https://dp7xhssw324ru.cloudfront.net/Scouting_Onboarding_Slide_2.png'}
+          className="rounded-xl" 
+          alt="slide_2"
+        />
       </div>
 
       <div className="flex flex-col items-center justify-center text-center gap-2" >
@@ -75,7 +83,11 @@ function Slide3() {
       <ScrummyLogo className="w-32 h-32" />
 
       <div>
-        <img src={'https://dp7xhssw324ru.cloudfront.net/Scouting_Onboarding_Slide_3.png'} className="rounded-xl" />
+        <img 
+          src={'https://dp7xhssw324ru.cloudfront.net/Scouting_Onboarding_Slide_3.png'}
+          className="rounded-xl" 
+          alt="slide_3"
+        />
       </div>
 
       <div className="flex flex-col items-center justify-center text-center gap-2" >
@@ -92,7 +104,11 @@ function Slide4() {
       <ScrummyLogo className="w-32 h-32" />
 
       <div>
-        <img src={'https://dp7xhssw324ru.cloudfront.net/Scouting_Onboarding_Slide_4.png'} className="rounded-xl" />
+        <img 
+          src={'https://dp7xhssw324ru.cloudfront.net/Scouting_Onboarding_Slide_4.png'}
+          className="rounded-xl"
+          alt="slide_4" 
+        />
       </div>
 
       <div className="flex flex-col items-center justify-center text-center gap-2" >
