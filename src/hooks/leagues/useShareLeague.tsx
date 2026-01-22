@@ -71,7 +71,7 @@ export function useShareLeague(league?: FantasyLeagueGroup, shouldFetch: boolean
 
     return {
         handleShare,
-        inviteLink,
+        inviteLink: inviteLink || createLegacyInviteLink(league, authUser),
         isLoading
     }
 

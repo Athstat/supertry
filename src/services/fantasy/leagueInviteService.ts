@@ -7,7 +7,8 @@ export const leagueInviteService = {
         try {
             const uri = getUri(`/api/v1/fantasy-league-groups/${leagueId}/invite`);
             const res = await fetch(uri, {
-                headers: getAuthHeader()
+                headers: getAuthHeader(),
+                method: 'POST'
             });
 
             if (res.ok) {
