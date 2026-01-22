@@ -40,6 +40,7 @@ import SbrScreen from "../screens/sbr/SbrScreen";
 import SchoolsScreen from "../screens/sbr/SchoolsScreen";
 import { AuthRoute, MainAppLayout } from "./layouts";
 import RootProviders from "../RootProviders";
+import TinyInviteStepsScreen from "../screens/onboarding/TinyInviteStepsScreen";
 
 /** App Data Router */
 export const dataRouter = createBrowserRouter([
@@ -416,6 +417,13 @@ export const dataRouter = createBrowserRouter([
                 path: "/invite-steps",
                 element: (
                     <InviteStepsScreen />
+                )
+            },
+
+            {
+                path: "/i/:inviteId",
+                element: (
+                    <TinyInviteStepsScreen />
                 )
             },
 
