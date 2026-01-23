@@ -22,9 +22,19 @@ import { LeagueGroupInvite } from "../../types/fantasyLeague";
 import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
 import TempGuestUserProvider from "../../components/auth/guest/TempGuestUserProvider";
+import ScrummyLoadingState from "../../components/ui/ScrummyLoadingState";
 
 
 export default function TinyInviteStepsScreen() {
+
+    return (
+        <TempGuestUserProvider loadingFallback={<ScrummyLoadingState />} >
+            <Content />
+        </TempGuestUserProvider>
+    )
+}
+
+function Content() {
 
     const { inviteId } = useParams();
 
@@ -33,15 +43,13 @@ export default function TinyInviteStepsScreen() {
 
     return (
 
-        <TempGuestUserProvider>
-            <PageView className="py-0 p-0" >
-                <DownloadAppHeader />
-                {!isLoading && <InviteView
-                    invite={data}
-                />}
-                {isLoading && <LoadingSkeleton />}
-            </PageView>
-        </TempGuestUserProvider>
+        <PageView className="py-0 p-0" >
+            <DownloadAppHeader />
+            {!isLoading && <InviteView
+                invite={data}
+            />}
+            {isLoading && <LoadingSkeleton />}
+        </PageView>
     )
 }
 
