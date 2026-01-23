@@ -58,7 +58,7 @@ export default function PlayerRowCard({ player, onClick }: Props) {
                                     <>
                                         <div className="w-1 h-1 rounded-full bg-slate-700 dark:bg-slate-400" ></div>
 
-                                        <SecondaryText className="text-xs max-w-[40px] truncate" >
+                                        <SecondaryText className="text-xs max-w-[65px] truncate" >
                                             {countryFlag} {stripCountryName(player.nationality)}
                                         </SecondaryText>
                                     </>
