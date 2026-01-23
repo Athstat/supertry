@@ -21,6 +21,7 @@ import DownloadAppHeader from "../../components/ui/navigation/DownloadAppHeader"
 import { LeagueGroupInvite } from "../../types/fantasyLeague";
 import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
+import TempGuestUserProvider from "../../components/auth/guest/TempGuestUserProvider";
 
 
 export default function TinyInviteStepsScreen() {
@@ -31,13 +32,16 @@ export default function TinyInviteStepsScreen() {
     const { data, isLoading } = useSWR(key, () => leagueInviteService.introspectInvite(inviteId || ''));
 
     return (
-        <PageView className="py-0 p-0" >
-            <DownloadAppHeader />
-            {!isLoading && <InviteView
-                invite={data}
-            />}
-            {isLoading && <LoadingSkeleton />}
-        </PageView>
+
+        <TempGuestUserProvider>
+            <PageView className="py-0 p-0" >
+                <DownloadAppHeader />
+                {!isLoading && <InviteView
+                    invite={data}
+                />}
+                {isLoading && <LoadingSkeleton />}
+            </PageView>
+        </TempGuestUserProvider>
     )
 }
 
