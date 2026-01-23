@@ -119,7 +119,8 @@ export type FantasySeasonRankingItem = {
   rank?: number,
   league_rank?: number,
   created_at: Date,
-  updated_at?: Date
+  updated_at?: Date,
+  round_number?: number
 }
 
 export type FantasySeasonOverallRanking = FantasyPointsScoredRankingItem;

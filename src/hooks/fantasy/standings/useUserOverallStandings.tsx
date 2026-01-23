@@ -14,3 +14,16 @@ export function useUserOverallStandings(userId?: string, leagueGroupId?: string)
     }
 
 }
+
+export function useUserWeekRoundStanding(userId?: string, leagueGroupId?: string, roundNumber?: number) {
+    const shouldFetch = userId && leagueGroupId && roundNumber;
+
+    const key = shouldFetch ? `/fantasy-league-groups/${leagueGroupId}/members/${userId}/round/${roundNumber}` : null;
+    const { data: userRanking, isLoading } = useSWR(key, () => fantasyLeagueGroupsService.getUserWeeklyStandings(leagueGroupId || "",  roundNumber || 1, userId || "", ));
+
+    return {
+        userRanking,
+        isLoading
+    }
+
+}

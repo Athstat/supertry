@@ -1,4 +1,4 @@
-import { ArrowLeft, Binoculars, Plus } from "lucide-react";
+import { ArrowLeft, Binoculars, HelpCircle, Plus } from "lucide-react";
 import PageView from "../../../components/ui/containers/PageView";
 import { useScoutingList } from "../../../hooks/fantasy/scouting/useScoutingList";
 import RoundedCard from "../../../components/ui/cards/RoundedCard";
@@ -17,12 +17,18 @@ import { useHideTopNavBar } from "../../../hooks/navigation/useNavigationBars";
 import { ScoutingListPlayerCard } from "../../../components/players/scouting/ScoutingListPlayerCard";
 import ScoutingListPlayerModal from "../../../components/players/scouting/ScoutingListPlayerModal";
 import { usePlayerSeasonTeam } from "../../../hooks/seasons/useSeasonTeams";
+import SearchBar from "../../../components/player_picker/SearchBar";
+import { useDebounced } from "../../../hooks/web/useDebounced";
+import { AthleteFilterBuilder } from "../../../utils/athletes/athlete_filter";
+import { useNavigate } from "react-router-dom";
+import { SCOUTING_LIST_MAX_SIZE } from "../../../types/constants";
 
 /** Renders scouting list screen */
 export default function ScoutingListScreen() {
 
     useHideTopNavBar();
     const { list, loadingList, mutateList } = useScoutingList();
+    const navigate = useNavigate();
     const { hardPop } = useNavigateBack()
 
     const [selectedPlayer, setSelectedPlayer] = useState<ScoutingListPlayer>();
@@ -61,22 +67,26 @@ export default function ScoutingListScreen() {
         setShowProfileModal(false);
     }
 
+    const handleViewTutorial = () => {
+        navigate('/scouting/onboarding');
+    }
+
     const listHasPlayers = list.length > 0;
 
     if (loadingList) {
         return (
             <PageView className="px-4 flex flex-col gap-4 py-4" >
-                <div className="flex flex-row items-center gap-2" >
+                <div className="flex flex-row items-center justify-between gap-2" >
+                    <div className="flex flex-row items-center gap-2" >
+                        <CircleButton
+                            onClick={handleNavigateBack}
+                        >
+                            <ArrowLeft />
+                        </CircleButton>
 
-                    <CircleButton
-                        onClick={handleNavigateBack}
-                    >
-                        <ArrowLeft />
-                    </CircleButton>
-
-                    <Binoculars />
-                    <p className="text-lg font-bold" >My Scouting List</p>
-
+                        <Binoculars />
+                        <p className="text-lg font-bold" >My Scouting List</p>
+                    </div>
                 </div>
 
                 <RoundedCard className="w-full min-h-[100px] animate-pulse border-none" />
@@ -90,25 +100,33 @@ export default function ScoutingListScreen() {
 
     return (
         <PageView className="p-4 flex flex-col gap-4" >
-            <div className="flex flex-row items-center gap-2" >
+            <div className="flex flex-row items-center justify-between gap-2" >
+                <div className="flex flex-row items-center gap-2" >
+                    <CircleButton
+                        onClick={handleNavigateBack}
+                    >
+                        <ArrowLeft />
+                    </CircleButton>
 
-                <CircleButton
-                    onClick={handleNavigateBack}
+                    <Binoculars />
+                    <p className="text-lg font-bold" >My Scouting List</p>
+                </div>
+
+                <button
+                    onClick={handleViewTutorial}
+                    aria-label="scouting-list-help"
                 >
-                    <ArrowLeft />
-                </CircleButton>
-
-                <Binoculars />
-                <p className="text-lg font-bold" >My Scouting List</p>
+                    <HelpCircle />
+                </button>
             </div>
 
             <div>
                 <SecondaryText>
-                    You can only scout up to 5 players at time, per each competition
+                    You can only scout up to {SCOUTING_LIST_MAX_SIZE} players at time, per each competition
                 </SecondaryText>
             </div>
 
-            {listHasPlayers && <div className="flex flex-col gap-2" >
+            {listHasPlayers && <div className="flex flex-col gap-2 mb-6" >
                 {list.map((si) => {
                     return <ScoutingListPlayerCard
                         item={si}
@@ -134,7 +152,7 @@ export default function ScoutingListScreen() {
                 onClose={handleCloseProfileModal}
             />}
 
-            {list.length < 5 && <SuggestedPlayers />}
+            {<SuggestedPlayers />}
         </PageView>
     )
 }
@@ -143,12 +161,15 @@ export default function ScoutingListScreen() {
 function NoContent() {
     return (
         <div className="flex flex-col items-center justify-center h-[200px]" >
-            <SecondaryText className="text-center" >Your scouting list is empty.<br/>Add players to your scouting list to get started!</SecondaryText>
+            <SecondaryText className="text-center" >Your scouting list is empty.<br />Add players to your scouting list to get started!</SecondaryText>
         </div>
     )
 }
 
 function SuggestedPlayers() {
+
+    const [searchQuery, setSearchQuery] = useState<string>();
+    const debouncedSearchQuery = useDebounced(searchQuery, 500);
 
     const { addPlayer, isAdding, list } = useScoutingList();
     const { athletes } = useSupportedAthletes();
@@ -171,13 +192,26 @@ function SuggestedPlayers() {
         addPlayer(player.tracking_id);
     }
 
+    const searchAthletes = useMemo(() => {
+        return new AthleteFilterBuilder(athletes)
+            .search(debouncedSearchQuery)
+            .excludeIds(excludeIds)
+            .build();
+    }, [athletes, debouncedSearchQuery, excludeIds]);
+
     return (
-        <div className="flex flex-col gap-2" >
+        <div className="flex flex-col gap-2 min-h-[80vh]" >
+
             <div>
-                <SecondaryText>Suggested Players</SecondaryText>
+                <SecondaryText className="text-md" >Suggested Players</SecondaryText>
             </div>
 
-            <div className="flex flex-col gap-2" >
+            <SearchBar
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+            />
+
+            {!searchQuery && <div className="flex flex-col gap-2" >
                 {top10.map((p) => {
                     return (
                         <SuggestedPlayerCard
@@ -188,7 +222,22 @@ function SuggestedPlayers() {
                         />
                     )
                 })}
-            </div>
+            </div>}
+
+            {searchQuery && (
+                <>
+                    {searchAthletes.map((p) => {
+                        return (
+                            <SuggestedPlayerCard
+                                player={p}
+                                key={p.tracking_id}
+                                isAdding={isAdding}
+                                onAdd={handleAddPlayer}
+                            />
+                        )
+                    })}
+                </>
+            )}
 
         </div>
     )
@@ -203,7 +252,7 @@ type SuggestedPlayerCardProps = {
 
 function SuggestedPlayerCard({ player, onAdd, onViewProfile, isAdding }: SuggestedPlayerCardProps) {
 
-    const {seasonTeam} = usePlayerSeasonTeam(player);
+    const { seasonTeam } = usePlayerSeasonTeam(player);
 
     const handleAddPlayer = () => {
         if (onAdd) {

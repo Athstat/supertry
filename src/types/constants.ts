@@ -298,3 +298,5 @@ export type LeagueInviteParamsDef = {
 export const TEMP_GUEST_USER_DEVICE_ID = 'temp_guest_user_provider_device_id';
 
 export const SIZE_5_MEGABYTES = 5242880;
+
+export const SCOUTING_LIST_MAX_SIZE = 10;

@@ -1,4 +1,6 @@
 import { IProAthlete } from './athletes';
+import { DjangoUserMinimal } from './auth';
+import { FantasyLeagueGroup } from './fantasyLeagueGroups';
 import { IFantasyTeamAthlete } from './fantasyTeamAthlete';
 
 export interface ISeason {
@@ -104,4 +106,13 @@ export type IFantasyLeagueScoringOverview = {
   total_number_of_partipants?: number,
   user_score?: number,
   user_email?: string
+}
+
+export type LeagueGroupInvite = {
+  league: FantasyLeagueGroup
+  inviter: DjangoUserMinimal
+  id: string,
+  created_at?: Date,
+  expires_at?: Date,
+  times_visited: number
 }

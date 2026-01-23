@@ -321,7 +321,7 @@ export const countryFlags: Country[] = [
         "flag": "🇪🇨"
     },
     {
-        "code": "ENG",
+        "code": "GB-ENG",
         "name": "England",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
     },
@@ -1226,7 +1226,7 @@ export const countryFlags: Country[] = [
         "flag": "🇻🇺"
     },
     {
-        "code": "WL",
+        "code": "GB-WLS",
         "name": "Wales",
         "flag": "🏴󠁧󠁢󠁷󠁬󠁳󠁿"
     },

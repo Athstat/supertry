@@ -50,15 +50,15 @@ export default function PlayerRowCard({ player, onClick }: Props) {
                             <div>
                                 <p className="text-sm" >{player.player_name}</p>
                             </div>
-                            <div className="flex flex-row items-center gap-2" >
+                            <div className="flex flex-row items-center gap-1" >
 
-                                <SecondaryText className="text-xs  truncate" >{formatPosition(player.position)} </SecondaryText>
+                                <SecondaryText className="text-[11px]  truncate" >{formatPosition(player.position)} </SecondaryText>
 
                                 {player.nationality && (
                                     <>
                                         <div className="w-1 h-1 rounded-full bg-slate-700 dark:bg-slate-400" ></div>
 
-                                        <SecondaryText className="text-xs max-w-[40px] truncate" >
+                                        <SecondaryText className="text-[11px] max-w-[80px] truncate" >
                                             {countryFlag} {stripCountryName(player.nationality)}
                                         </SecondaryText>
                                     </>
