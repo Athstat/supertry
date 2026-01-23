@@ -53,11 +53,13 @@ function getLogoUrlForCountryLeague(leagueGroup?: FantasyLeagueGroup) {
     const leagueName = leagueGroup?.title;
     
     const country: Country | undefined = countryFlags.find((c) => {
-        return c?.name === leagueName;
+        return leagueName?.toLocaleLowerCase().startsWith(c.name.toLowerCase());
     });
 
+    
     if (country) {
-        return `https://dp7xhssw324ru.cloudfront.net/${country.code.toLowerCase()}.png`
+        const url = `https://dp7xhssw324ru.cloudfront.net/${country.code.toLowerCase()}.png`
+        return url;
     }
 
     return undefined;
