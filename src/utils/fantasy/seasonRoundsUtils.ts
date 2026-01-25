@@ -2,7 +2,7 @@ import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 import { isSeasonRoundLocked } from "../leaguesUtils";
 
 function sortSeasonRounds(seasonRounds: ISeasonRound[]) {
-    return seasonRounds.sort((a, b) => {
+    return [...seasonRounds].sort((a, b) => {
         return (a.round_number || 0) - (b.round_number || 0);
     })
 }
