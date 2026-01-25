@@ -98,7 +98,7 @@ export default function EditLeagueLogoModal({ isOpen, onClose }: Props) {
                 className="py-3 flex flex-row items-center gap-2"
                 onClick={() => handleUpload()}
                 isLoading={isUploading}
-                disabled={files ? files?.length === 0 : true}
+                disabled={files.length === 0 || isUploading}
             >
                 <p>Upload Logo</p>
                 <Upload />
