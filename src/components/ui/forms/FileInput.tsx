@@ -111,7 +111,7 @@ function DropzoneCard({ accept }: DropzoneCardProps) {
                     <SecondaryText>
                         <span>Accepted file types: </span>
                         {fileFormats.map((f) => {
-                            return <span className="px-0.5" >{f}</span>
+                            return <span className="px-0.5" key={f} >{f}</span>
                         })}
                     </SecondaryText>
                 )}
