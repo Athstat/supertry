@@ -99,6 +99,7 @@ export function EditLeagueBannerModal({ isOpen, onClose }: EditLeagueBannerProps
                 className="py-3 flex flex-row items-center gap-2"
                 onClick={() => handleUpload()}
                 isLoading={isUploading}
+                disabled={files ? files?.length === 0 : true}
             >
                 <p>Upload Banner</p>
                 <Upload />

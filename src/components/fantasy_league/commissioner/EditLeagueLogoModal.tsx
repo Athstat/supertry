@@ -83,7 +83,7 @@ export default function EditLeagueLogoModal({ isOpen, onClose }: Props) {
             <section className="text-xs" >
                 <p className="text-sm" >Logo image tips:</p>
                 <SecondaryText>- Any square image, but 500 x 500 resolution works best</SecondaryText>
-                <SecondaryText>- Max image size is 5MB. For the best look, For the best look, use an image that fits well inside a circular or square frame.</SecondaryText>
+                <SecondaryText>- Max image size is 5MB. For the best look, use an image that fits well inside a circular or square frame.</SecondaryText>
             </section>
 
             <form className="py-4" >
@@ -98,6 +98,7 @@ export default function EditLeagueLogoModal({ isOpen, onClose }: Props) {
                 className="py-3 flex flex-row items-center gap-2"
                 onClick={() => handleUpload()}
                 isLoading={isUploading}
+                disabled={files ? files?.length === 0 : true}
             >
                 <p>Upload Logo</p>
                 <Upload />
