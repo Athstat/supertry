@@ -59,7 +59,7 @@ function Content() {
 
                     <div className='w-full items-center justify-center flex flex-row' >
                         <p className='text-lg text-white max-w-[80%] font-light text-center' style={{ fontFamily: 'Oswald, sans-serif' }} >
-                            <strong className='text-[#D94204] font-normal ' >Win Tickets</strong> to the EPRC Champions Cup Final (2026) in Bilbao, Spain
+                            <strong className='text-[#D94204] font-normal ' >Win Tickets</strong> to the EPCR Champions Cup Final (2026) in Bilbao, Spain
                         </p>
                     </div>
                 </div>
