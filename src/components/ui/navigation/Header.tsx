@@ -7,6 +7,8 @@ import { twMerge } from 'tailwind-merge';
 import { AppColours } from '../../../types/constants';
 import UserProfileButton from '../../auth/user_profile/UserProfileButton';
 import { Activity } from 'react';
+import { isInProduction } from '../../../utils/webUtils';
+import BetaTag from '../../branding/BetaTag';
 
 export function Header() {
   const navigate = useNavigate();
@@ -24,6 +26,8 @@ export function Header() {
     return location.pathname?.startsWith(p);
   })
 
+  const isInQa = isInProduction() === false;
+
 
   return (
     <Activity mode={topNavViewMode}>
@@ -32,7 +36,7 @@ export function Header() {
         AppColours.BACKGROUND
       )}>
         <div className="container mx-auto px-1 h-16 overflow-hidden flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1">
             <div
               className="flex flex-row overflow-hidden items-start justify-start cursor-pointer"
               onClick={() => navigate('/dashboard')}
@@ -42,7 +46,7 @@ export function Header() {
               <ScrummyLogoHorizontal className="" />
             </div>
 
-            {/* {isInQa && <BetaTag />} */}
+            {isInQa && <BetaTag />}
 
 
           </div>

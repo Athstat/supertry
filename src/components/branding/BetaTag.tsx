@@ -17,7 +17,7 @@ export default function BetaTag({ className } : Props) {
       "rounded-xl px-2 w-fit font-medium py-0.5 text-xs border border-green-500 text-green-600 bg-green-500/30 dark:bg-green-900/40",
       className
     )} >
-      beta
+      testing
     </div>
   )
 }

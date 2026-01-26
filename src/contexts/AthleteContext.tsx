@@ -8,7 +8,6 @@ import { getAthletesSummary } from "../utils/athletes/athleteUtils";
 import { useFantasySeasons } from "../hooks/dashboard/useFantasySeasons";
 import { IProSeason } from "../types/season";
 import { seasonService } from "../services/seasonsService";
-import { competitionService } from "../services/competitionsService";
 
 interface AthleteContextType {
   athletes: IProAthlete[];
@@ -98,13 +97,13 @@ export const useAthletes = () => {
 async function fetcher(season?: IProSeason) {
   if (season) {
 
-    const SIX_NATIONS_SEASON_ID = 'a51dc32a-99cb-5df8-bbc4-4c7557ccccc3';
+    // const SIX_NATIONS_SEASON_ID = 'a51dc32a-99cb-5df8-bbc4-4c7557ccccc3';
 
-    if (season.id === SIX_NATIONS_SEASON_ID) {
-      return (await competitionService.getAthletes(season.competition_id)).filter((a) => {
-        return (a.power_rank_rating || 0) > 0;
-      });
-    }
+    // if (season.id === SIX_NATIONS_SEASON_ID) {
+    //   return (await competitionService.getAthletes(season.competition_id)).filter((a) => {
+    //     return (a.power_rank_rating || 0) > 0;
+    //   });
+    // }
 
     return (await seasonService.getSeasonAthletes(season.id)).filter((a) => {
       return (a.power_rank_rating || 0) > 0;

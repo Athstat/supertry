@@ -17,10 +17,10 @@ export function useProTeam(teamId?: string) {
 export function useProTeamAthletes(teamId?: string) {
 
     const {selectedSeason} = useFantasySeasons();
-    const competitionid = selectedSeason?.competition_id;
+    const seasonId = selectedSeason?.id;
 
-    const key = teamId ? `/pro-teams/${teamId}/athletes${competitionid ? `?competitionId=${competitionid}` : ''}` : null;
-    const {data, isLoading, error} = useSWR(key, () => teamService.getAthletes(teamId || '', competitionid));
+    const key = teamId ? `/pro-teams/${teamId}/athletes${seasonId ? `?season_id=${seasonId}` : ''}` : null;
+    const {data, isLoading, error} = useSWR(key, () => teamService.getAthletesBySeason(teamId || '', seasonId));
 
     const athletes = useMemo(() => {
         return data || [];
