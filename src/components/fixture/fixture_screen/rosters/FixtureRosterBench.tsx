@@ -64,7 +64,7 @@ export default function FixtureRosterBench({ bench }: Props) {
                     return (
                         <RosterBenchItem
                             item={r}
-                            key={r.game_id}
+                            key={r.athlete.tracking_id}
                         />
                     )
                 })}
@@ -98,7 +98,7 @@ function RosterBenchItem({ item }: RosterItemProps) {
         >
 
             <SmartPlayerMugshot
-                teamId={athlete.team_id}
+                teamId={item.team_id}
                 className="hover:bg-transparent"
                 playerImageClassName="hover:bg-white dark:hover:bg-slate-700 dark:bg-slate-600"
                 
