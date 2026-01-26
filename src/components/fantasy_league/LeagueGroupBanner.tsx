@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups"
 import { countryFlags } from "../../types/countries";
 
@@ -13,13 +13,19 @@ export default function LeagueGroupBanner({league} : Props) {
   const defaultCountryBannerUrl = getCountryDefaultBanner(league);
   const bannerUrl = league?.banner || defaultCountryBannerUrl;
 
+  useEffect(() => {
+    setError(false);
+  }, [bannerUrl]);
+
+  const altTitle = league?.title ?? "League";
+
   if (bannerUrl && !error) {
     return (
       <div className="w-full max-h-[250px] min-h-[150px] overflow-clip" >
         <img 
           onError={() => setError(true)}
           src={bannerUrl}
-          alt={`${league?.title} Banner`}
+          alt={`${altTitle} Banner`}
           className="w-full h-full object-right"
         />
       </div>
