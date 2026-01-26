@@ -6,6 +6,7 @@ import { FixtureVotingCard } from "../../pickem/voting/FixtureVotingCard"
 import FixtureSeasonLeaders from "./FixtureSeasonLeaders"
 import FixtureTeamStats from "./FixtureTeamStats"
 import { IProAthlete } from "../../../types/athletes"
+import PastMatchupsCard from "./PastMatchupsCard"
 
 type Props = {
     fixture: IFixture
@@ -30,6 +31,11 @@ export default function FixtureH2HTab({ fixture }: Props) {
             <FixtureTeamStats
                 fixture={fixture}
             />
+
+            <PastMatchupsCard
+                fixture={fixture}
+            />
+
 
             <FixtureVotingCard
                 fixture={fixture}
