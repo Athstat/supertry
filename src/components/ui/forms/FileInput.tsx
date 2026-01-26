@@ -67,7 +67,7 @@ export default function ImageFileInput({ files, setFiles, previewSize, accept = 
                 )}
 
                 {!isDragActive && files.length === 0 && (
-                    <DropzoneCard />
+                    <DropzoneCard accept={accept} />
                 )}
 
                 {files.map((f, index) => {
@@ -87,12 +87,34 @@ export default function ImageFileInput({ files, setFiles, previewSize, accept = 
     )
 }
 
-function DropzoneCard() {
+type DropzoneCardProps = {
+    accept: Record<string, string[]>,
+}
+
+function DropzoneCard({ accept }: DropzoneCardProps) {
+
+    const fileFormats: string[] = [];
+
+    Object.values(accept).forEach(arr => {
+        arr.forEach(value => {
+            fileFormats.push(value);
+        });
+    });
+
+
     return (
         <div className="border-dotted cursor-pointer border-4 px-4 py-10 rounded-xl border-slate-300 dark:border-slate-600 flex flex-col items-center justify-center" >
-            <div className="flex flex-row items-center gap-2" >
+            <div className="flex flex-col items-center gap-2" >
                 <ImagePlus className="w-10 h-10 text-slate-700 dark:text-slate-400" />
                 <SecondaryText className="text-base" >Select or drag file</SecondaryText>
+                {fileFormats && (
+                    <SecondaryText>
+                        <span>Accepted file types: </span>
+                        {fileFormats.map((f) => {
+                            return <span className="px-0.5" key={f} >{f}</span>
+                        })}
+                    </SecondaryText>
+                )}
             </div>
         </div>
     )

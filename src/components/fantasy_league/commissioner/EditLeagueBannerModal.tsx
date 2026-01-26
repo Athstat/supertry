@@ -9,6 +9,7 @@ import { fantasyLeagueGroupsService } from "../../../services/fantasy/fantasyLea
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
 import { logger } from "../../../services/logger";
 import { Toast } from "../../ui/Toast";
+import SecondaryText from "../../ui/typography/SecondaryText";
 
 type EditLeagueBannerProps = {
     isOpen?: boolean,
@@ -21,7 +22,7 @@ export function EditLeagueBannerModal({ isOpen, onClose }: EditLeagueBannerProps
     const [isUploading, setUploading] = useState(false);
     const [error, setError] = useState<string>();
 
-    const {league, mutateLeague} = useFantasyLeagueGroup();
+    const { league, mutateLeague } = useFantasyLeagueGroup();
 
     const handleClose = useCallback(() => {
         if (onClose) {
@@ -38,7 +39,7 @@ export function EditLeagueBannerModal({ isOpen, onClose }: EditLeagueBannerProps
             if (files.length === 0 || !league?.id) {
                 return;
             }
-            
+
             setUploading(true);
 
             const banner = files[0];
@@ -69,7 +70,7 @@ export function EditLeagueBannerModal({ isOpen, onClose }: EditLeagueBannerProps
     return (
         <BottomSheetView
             hideHandle
-            className='max-h-[80vh] p-4 min-h-[40vh] flex flex-col gap-2'
+            className='max-h-[80vh] p-4 min-h-[60vh] flex flex-col gap-2'
         >
             <div className='flex flex-row items-center gap-2 justify-between' >
                 <p className='font-semibold text-lg' >Edit Banner</p>
@@ -81,24 +82,31 @@ export function EditLeagueBannerModal({ isOpen, onClose }: EditLeagueBannerProps
                 </div>
             </div>
 
+            <section className="text-xs" >
+                <p className="text-sm" >Banner image tips:</p>
+                <SecondaryText>- 1920 × 1080 resolution works best, and avoid using images with any transparencies</SecondaryText>
+                <SecondaryText>- Max image size is 5MB. For the best look, pick a banner that both matches your brand/identity and the colours and vibe of the app</SecondaryText>
+            </section>
+
             <form>
-                <ImageFileInput 
+                <ImageFileInput
                     files={files}
                     setFiles={setFiles}
                 />
             </form>
 
-            <PrimaryButton 
+            <PrimaryButton
                 className="py-3 flex flex-row items-center gap-2"
                 onClick={() => handleUpload()}
                 isLoading={isUploading}
+                disabled={files.length === 0 || isUploading}
             >
                 <p>Upload Banner</p>
                 <Upload />
             </PrimaryButton>
 
             {error && (
-                <Toast 
+                <Toast
                     message={error}
                     isVisible={true}
                     type="error"

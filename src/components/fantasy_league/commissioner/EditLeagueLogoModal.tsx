@@ -8,6 +8,7 @@ import PrimaryButton from "../../ui/buttons/PrimaryButton";
 import ImageFileInput from "../../ui/forms/FileInput";
 import BottomSheetView from "../../ui/modals/BottomSheetView";
 import { Toast } from "../../ui/Toast";
+import SecondaryText from "../../ui/typography/SecondaryText";
 
 type Props = {
     isOpen?: boolean,
@@ -15,11 +16,11 @@ type Props = {
 }
 
 export default function EditLeagueLogoModal({ isOpen, onClose }: Props) {
-const [files, setFiles] = useState<File[]>([]);
+    const [files, setFiles] = useState<File[]>([]);
     const [isUploading, setUploading] = useState(false);
     const [error, setError] = useState<string>();
 
-    const {league, mutateLeague} = useFantasyLeagueGroup();
+    const { league, mutateLeague } = useFantasyLeagueGroup();
 
     const handleClose = useCallback(() => {
         if (onClose) {
@@ -32,11 +33,11 @@ const [files, setFiles] = useState<File[]>([]);
         try {
 
             setError(undefined);
-            
+
             if (files.length === 0 || !league?.id) {
                 return;
             }
-            
+
             setUploading(true);
 
             const logo = files[0];
@@ -79,25 +80,32 @@ const [files, setFiles] = useState<File[]>([]);
                 </div>
             </div>
 
+            <section className="text-xs" >
+                <p className="text-sm" >Logo image tips:</p>
+                <SecondaryText>- Any square image, but 500 x 500 resolution works best</SecondaryText>
+                <SecondaryText>- Max image size is 5MB. For the best look, use an image that fits well inside a circular or square frame.</SecondaryText>
+            </section>
+
             <form className="py-4" >
-                <ImageFileInput 
+                <ImageFileInput
                     files={files}
                     setFiles={setFiles}
                     previewSize={100}
                 />
             </form>
 
-            <PrimaryButton 
+            <PrimaryButton
                 className="py-3 flex flex-row items-center gap-2"
                 onClick={() => handleUpload()}
                 isLoading={isUploading}
+                disabled={files.length === 0 || isUploading}
             >
                 <p>Upload Logo</p>
                 <Upload />
             </PrimaryButton>
 
             {error && (
-                <Toast 
+                <Toast
                     message={error}
                     isVisible={true}
                     type="error"

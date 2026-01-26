@@ -5,6 +5,7 @@ import { useCallback, useMemo } from "react";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 import { IProSeason } from "../../types/season";
 import { SELECTED_SEASON_ID_KEY } from "../../types/constants";
+import { getCurrentRound, getPreviousRound, getScoringRound } from "../../utils/fantasy/seasonRoundsUtils";
 
 /** useDashboard is a useful hook to read state of the fantasys easons */
 export function useFantasySeasons() {
@@ -15,7 +16,6 @@ export function useFantasySeasons() {
     const [fantasySeasons,] = useAtom(fantasySeasonsAtom);
     const [currentSeason] = useAtom(fantasySeasonsAtoms.currentSeasonAtom);
     const [seasonRounds,] = useAtom(fantasySeasonsAtoms.seasonRoundsAtom);
-    const [currentRound,] = useAtom(fantasySeasonsAtoms.currentSeasonRoundAtom);
     const [selectedSeason, selectedSeasonSetter] = useAtom(fantasySeasonsAtoms.selectedDashboardSeasonAtom);
     const isLoading = useAtomValue(fantasySeasonsAtoms.isFantasySeasonsLoadingAtom);
 
@@ -35,31 +35,17 @@ export function useFantasySeasons() {
         return selectedSeason || prevSavedSeason || currentSeason;
     }, [currentSeason, prevSavedSeason, selectedSeason]);
 
+    const currentRound = useMemo(() => {
+        return getCurrentRound(seasonRounds);
+    }, [seasonRounds])
+
     const previousRound = useMemo(() => {
-        if (currentRound && seasonRounds) {
-            return seasonRounds.find((r) => {
-                return r.round_number === currentRound.round_number - 1
-            });
-        }
-
-        return undefined;
-
-    }, [seasonRounds, currentRound]);
-
+        return getPreviousRound(seasonRounds);
+    }, [seasonRounds]);
 
     const scoringRound = useMemo(() => {
-        const now = new Date();
-
-        const curr_kickoff = currentRound?.games_start ? new Date(currentRound?.games_start) : undefined
-
-        if (curr_kickoff && curr_kickoff.valueOf() <= now.valueOf()) {
-            return currentRound
-        }
-
-        return previousRound || currentRound;
-
-    }, [currentRound, previousRound]);
-
+        return getScoringRound(seasonRounds);
+    }, [seasonRounds]);
 
     const pastAndPresentRounds = useMemo(() => {
         const set: ISeasonRound[] = [];
