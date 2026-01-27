@@ -5,11 +5,12 @@ import { Country, countryFlags } from "../../types/countries";
 
 type Props = {
     league?: FantasyLeagueGroup,
-    className?: string
+    className?: string,
+    objectClassName?: string
 }
 
 /** Renders a league group logo */
-export default function LeagueGroupLogo({ league, className }: Props) {
+export default function LeagueGroupLogo({ league, className, objectClassName }: Props) {
 
     const defaultImageUrl = "/images/leagues/default_league_group_logo.png";
     const countryLogo = getLogoUrlForCountryLeague(league);
@@ -26,7 +27,10 @@ export default function LeagueGroupLogo({ league, className }: Props) {
                 <img
                     onError={() => setError(true)}
                     src={imageUrl}
-                    className="object-scale-down"
+                    className={twMerge(
+                        "object-scale-down",
+                        objectClassName
+                    )}
                     alt='league_logo'
                 />
             </div>
@@ -41,7 +45,10 @@ export default function LeagueGroupLogo({ league, className }: Props) {
         )} >
             <img
                 src={defaultImageUrl}
-                className="object-scale-down"
+                className={twMerge(
+                    "object-scale-down",
+                    objectClassName
+                )}
                 alt='league_logo'
             />
         </div>

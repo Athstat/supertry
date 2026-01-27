@@ -60,8 +60,15 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
                 onClick={handleOnClick}
                 className="py-2 cursor-pointer rounded-md px-4 bg-slate-100 border-none flex flex-row items-center justify-between"
             >
-                <div className="flex flex-row items-center gap-2" >
-                    <LeagueGroupLogo className="w-6 h-6" league={leagueGroup} />
+                <div className="flex flex-row items-center gap-4 " >
+                    
+                    <div className="w-12 h-12 overflow-clip bg-white rounded-md" >
+                        <LeagueGroupLogo 
+                            className="overflow-visible"
+                            objectClassName="h-12 w-12"
+                            league={leagueGroup} 
+                        />
+                    </div>
 
                     <h3 className="text-sm font-medium text-gray-900 dark:text-white truncate">
                         {leagueGroup.title}
