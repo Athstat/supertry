@@ -86,7 +86,7 @@ export default function ProFixturesScreen() {
 
         </RoundedScreenHeader>
 
-        <div className='px-6' >
+        <div className='px-6 flex flex-col gap-6' >
 
           {searchQuery && <h2 className="font-semibold text-base md:text-lg">
             {searchQuery ? `Search Results for '${searchQuery}'` : weekHeader}

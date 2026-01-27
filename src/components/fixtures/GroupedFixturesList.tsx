@@ -32,7 +32,7 @@ export default function GroupedFixturesList({ fixtures, viewMode = "fixtures", h
                 </div>}
 
                 {/* Competition Fixtures */}
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-4">
                     {fixtures.map((fixture, index) => (
                         <FixtureItem
                             fixture={fixture}
