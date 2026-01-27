@@ -138,6 +138,10 @@ export const swrFetchKeys = {
     return `/fantasy-league-group/${leagueGroupId}/standings`;
   },
 
+  getFantasyLeagueGroupMembers: (leagueGroupId: string) => {
+    return `/fantasy-league-group/${leagueGroupId}/members`;
+  },
+
   getPlayerSquadReport: (teamId: string | number, trackingId: string) => {
     return `/fantasy-league-teams/${teamId}/athletes/${trackingId}/squad-report`;
   },
