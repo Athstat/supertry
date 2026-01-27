@@ -14,7 +14,7 @@ export function PositionClassesPitch() {
     return (
         <RoundedCard className='py-4 px-6 flex flex-col gap-4' >
             <div>
-                <TextHeading className='font-bold' blue >By Position</TextHeading>
+                <TextHeading className='font-medium text-xl' blue >By Position</TextHeading>
             </div>
 
             <div className="flex flex-col items-center justify-center w-full" >

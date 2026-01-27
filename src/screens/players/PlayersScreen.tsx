@@ -71,15 +71,15 @@ function Content() {
       <div className='flex flex-row px-[3%] gap-8 items-center justify-between' >
         <GridButton
           lable='View All Players'
-          icon={<PlayersIcon fill='#1196F5' />}
-          className='flex-1 h-[81px]'
+          icon={<PlayersIcon fill='#1196F5' height='40' width='40' />}
+          className='flex-1 h-[90px]'
           onClick={handleViewAll}
         />
 
         <GridButton
           lable='My Scouting List'
-          icon={<ScoutingIcon fill='#1196F5' />}
-          className='flex-1 h-[81px]'
+          icon={<ScoutingIcon fill='#1196F5' width='40' height='40' />}
+          className='flex-1 h-[90px]'
           onClick={handleViewScoutingList}
         />
       </div>
