@@ -7,7 +7,7 @@ import { abbreviateSeasonName } from "../../utils/stringUtils";
 import TeamLogo from "../team/TeamLogo";
 import DialogModal from "../ui/modals/DialogModal";
 import GameHighlightsCard from "../ui/video/GameHighlightsCard";
-import { format } from "date-fns/format";
+import { format } from "date-fns";
 
 type ModalProps = {
     showModal: boolean;
