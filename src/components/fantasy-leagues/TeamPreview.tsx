@@ -62,7 +62,7 @@ export default function TeamPreview({ leagueGroup: league }: Props) {
         >
           <FantasyTeamProvider readOnly team={userTeam} >
             <div className=' flex flex-col w-full items-center justify-center' >
-              <FantasyTeamFormation3D className='mt-0 -top-12 max-w-[70%]' onPlayerClick={() => { }} />
+              <FantasyTeamFormation3D className='mt-0 -top-12 flex flex-col items-center justify-center' onPlayerClick={() => { }} />
             </div>
           </FantasyTeamProvider>
         </TeamHistoryProvider>
