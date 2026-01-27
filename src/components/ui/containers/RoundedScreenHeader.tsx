@@ -12,7 +12,7 @@ type Props = {
 export default function RoundedScreenHeader({ children, title, leadingIcon, className, trailingSlot }: Props) {
     return (
         <div className={twMerge(
-            "bg-[#1196F5] text-white p-4 rounded-b-[20px] flex flex-col gap-2",
+            "bg-[#1196F5] text-white p-4 rounded-b-[20px] flex flex-col gap-6",
             className
         )} >
 

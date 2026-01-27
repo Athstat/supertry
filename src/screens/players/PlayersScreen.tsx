@@ -1,4 +1,4 @@
-import { ArrowRight, BicepsFlexed, Binoculars, Shield, Users, WandSparkles } from 'lucide-react'
+import { ArrowRight, BicepsFlexed, Binoculars, Shield, WandSparkles } from 'lucide-react'
 import PageView from '../../components/ui/containers/PageView'
 import SearchInput from '../../components/ui/forms/SearchInput'
 import RoundedCard from "../../components/ui/cards/RoundedCard"
@@ -14,6 +14,8 @@ import NewTag from '../../components/branding/NewTag'
 import { useDebounced } from '../../hooks/web/useDebounced'
 import PlayersTeamsGridList from '../../components/players/teams/PlayersTeamsGridList'
 import PlayersCountryGridList from '../../components/players/nationality/PlayersCountryGridList'
+import RoundedScreenHeader from '../../components/ui/containers/RoundedScreenHeader'
+import PlayersIcon from '../../components/ui/icons/PlayersIcon'
 
 export default function PlayersScreen() {
 
@@ -22,20 +24,23 @@ export default function PlayersScreen() {
 
 
   return (
-    <PageView className='px-6 flex flex-col gap-4 py-4' >
-      <div>
-        <div className='flex flex-row items-center gap-2' >
-          <Users />
-          <p className='text-lg font-bold' >Players</p>
-        </div>
-      </div>
+    <PageView className='flex flex-col gap-4' >
 
-      <div className='flex flex-row items-center gap-2 w-full h-[40px]' >
-        <SearchInput
-          value={searchQuery}
-          onChange={setSearchQuery}
-        />
-      </div>
+      <RoundedScreenHeader
+        title='Players'
+        leadingIcon={<PlayersIcon />}
+        className='pb-8'
+      >
+        <div className='flex flex-row items-center gap-2 w-full h-[40px]' >
+          <SearchInput
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder='Search players by name'
+          />
+        </div>
+      </RoundedScreenHeader>
+
+
 
       <Activity mode={debouncedQuery ? "hidden" : "visible"} >
         <Content />

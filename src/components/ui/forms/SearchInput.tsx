@@ -17,13 +17,13 @@ export default function SearchInput({value, onChange, className, placeholder = "
         <InputField 
         
             className={twMerge(
-              "w-full",
+              "w-full rounded-[20px]",
               className
             )}
 
             inputCn=""
             placeholder={placeholder}
-            icon={<Search />}
+            icon={<Search className="w-[24px] h-[24px]" />}
             value={value}
             onChange={onChange}
         />
