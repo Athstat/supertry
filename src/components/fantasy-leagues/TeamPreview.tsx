@@ -1,6 +1,5 @@
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
 import { useAuth } from '../../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
 import BlueGradientCard from '../ui/cards/BlueGradientCard';
 import RoundedCard from '../ui/cards/RoundedCard';
@@ -17,20 +16,14 @@ import { Dot } from 'lucide-react';
 import TeamHistoryProvider from '../../providers/fantasy_teams/TeamHistoryProvider';
 import FantasyTeamProvider from '../../providers/fantasy_teams/FantasyTeamProvider';
 import { FantasyTeamFormation3D } from '../my_fantasy_team/FantasyTeamFormation3D';
-import SecondaryButton from '../ui/buttons/SecondaryButton';
+import { ManageTeamButton } from './ManageTeamButton';
 
 type Props = {
-  leagueGroup: FantasyLeagueGroup;
+  leagueGroup?: FantasyLeagueGroup;
 };
 
 /** Renders the showcase league section */
-export default function ManageTeamCTA({ leagueGroup }: Props) {
-  return (
-    <Content leagueGroup={leagueGroup} />
-  );
-}
-
-function Content({ leagueGroup: league }: Props) {
+export default function TeamPreview({ leagueGroup: league }: Props) {
 
   const { authUser } = useAuth();
   const { currentRound, previousRound } = useFantasySeasons();
@@ -91,7 +84,7 @@ function Content({ leagueGroup: league }: Props) {
         <div className='absolute top-0 p-4 left-0 w-full h-full flex flex-col items-center justify-between bg-gradient-to-b from-transparent to-[#011E5C]' >
           <div></div>
 
-          <CTAButtons
+          <ManageTeamButton
             leagueRound={currentRound}
             userRoundTeam={userTeam}
             previousRound={previousRound}
@@ -103,7 +96,6 @@ function Content({ leagueGroup: league }: Props) {
     </BlueGradientCard>
   );
 }
-
 
 function LoadingSkeleton() {
 
@@ -150,59 +142,6 @@ function RoundScoringSummary({ leagueRound, userTeam, league }: RoundScoringProp
         <Dot />
         <TextHeading className='text-lg' >Round {smartRoundUp(userScore || 0)}</TextHeading>
       </div>
-
-    </div>
-  )
-}
-
-type CTAButtonProps = {
-  leagueRound: ISeasonRound,
-  userRoundTeam?: IFantasyLeagueTeam,
-  previousRound?: ISeasonRound
-}
-
-function CTAButtons({ leagueRound, userRoundTeam }: CTAButtonProps) {
-
-  const navigate = useNavigate();
-
-  const isCurrentLocked = isSeasonRoundLocked(leagueRound);
-  const isUserHasTeam = Boolean(userRoundTeam);
-
-  const showManageTeam = !isCurrentLocked && isUserHasTeam;
-  const showViewTeam = isCurrentLocked && isUserHasTeam;
-  const showCreateTeam = !isCurrentLocked && !isUserHasTeam;
-  const showSorryMessage = isCurrentLocked && !isUserHasTeam;
-
-  const handleManageTeam = () => {
-    navigate(`/my-team`);
-  }
-
-  return (
-    <div className='flex flex-col gap-2' >
-
-      {showManageTeam && <SecondaryButton
-        onClick={handleManageTeam}
-      >
-        Manage My Team
-      </SecondaryButton>}
-
-      {showViewTeam && <SecondaryButton
-        onClick={handleManageTeam}
-      >
-        View My Team
-      </SecondaryButton>}
-
-      {showCreateTeam && (
-        <SecondaryButton onClick={handleManageTeam} >
-          Create My Team
-        </SecondaryButton>
-      )}
-
-      {showSorryMessage && (
-        <SecondaryButton className='text-xs lg:text-sm font-normal text-start' >
-          <p>Whoops! You missed the team deadline for <strong>{leagueRound.round_title}</strong>. You will have to wait for the next round to create your team</p>
-        </SecondaryButton>
-      )}
 
     </div>
   )

@@ -7,14 +7,14 @@ import SecondaryText from '../../ui/typography/SecondaryText';
 import RoundedCard from '../../ui/cards/RoundedCard';
 
 type Props = {
-    fantasySeason: IFantasySeason
+    fantasySeason?: IFantasySeason
 }
 
 /** Renders other leagues that the user can join */
 export default function SuggestedLeaguesSections({ fantasySeason }: Props) {
 
 
-    const { joinableLeagues: leagues, isLoading } = useSuggestedLeagues(fantasySeason.id);
+    const { joinableLeagues: leagues, isLoading } = useSuggestedLeagues(fantasySeason?.id);
 
     const trimmedList = useMemo(() => {
         return [...leagues].filter((l) => {

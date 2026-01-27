@@ -13,7 +13,7 @@ import { useAuth } from "../../../contexts/AuthContext"
 import LeagueGroupsSection from "../LeagueGroupsSection"
 
 type Props = {
-    fantasySeason: IFantasySeason
+    fantasySeason?: IFantasySeason
 }
 
 
@@ -23,7 +23,7 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
     const navigate = useNavigate();
 
     const { authUser } = useAuth();
-    const { leagues, isLoading } = useJoinedLeagues(fantasySeason.id);
+    const { leagues, isLoading } = useJoinedLeagues(fantasySeason?.id);
 
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [initTab, setInitTab] = useState<"join" | "create">("create");
