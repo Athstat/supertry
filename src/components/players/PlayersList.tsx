@@ -163,6 +163,7 @@ export default function PlayersList({ players, stickyHeaderClassName }: Props) {
             <div className={twMerge(
                 "flex flex-col items-center justify-center flex-wrap",
                 AppColours.BACKGROUND,
+                "bg-[#F0F3F7]"
 
             )}>
 

@@ -16,6 +16,8 @@ import PlayersTeamsGridList from '../../components/players/teams/PlayersTeamsGri
 import PlayersCountryGridList from '../../components/players/nationality/PlayersCountryGridList'
 import RoundedScreenHeader from '../../components/ui/containers/RoundedScreenHeader'
 import PlayersIcon from '../../components/ui/icons/PlayersIcon'
+import GridButton from '../../components/ui/buttons/GridButton'
+import ScoutingIcon from '../../components/ui/icons/ScoutingIcon'
 
 export default function PlayersScreen() {
 
@@ -75,6 +77,23 @@ function Content() {
 
   return (
     <Fragment>
+
+      <div className='flex flex-row px-[3%] gap-8 items-center justify-between' >
+        <GridButton
+          lable='View All Players'
+          icon={<PlayersIcon fill='#1196F5' />}
+          className='flex-1 h-[81px]'
+          onClick={handleViewAll}
+        />
+
+        <GridButton
+          lable='My Scouting List'
+          icon={<ScoutingIcon fill='#1196F5' />}
+          className='flex-1 h-[81px]'
+          onClick={handleViewScoutingList}
+        />
+      </div>
+
       <div className='flex flex-col gap-2' >
 
         <RoundedCard
