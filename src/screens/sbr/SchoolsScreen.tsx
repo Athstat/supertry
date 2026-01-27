@@ -1,6 +1,5 @@
 import { Fragment, useState } from 'react';
 import PageView from '../../components/ui/containers/PageView';
-import { Calendar } from 'lucide-react';
 import { useQueryState } from '../../hooks/web/useQueryState';
 import SbrMatchCenter from '../../components/fixtures/SbrMatchCenter';
 import FloatingSearchBar from '../../components/players/FloatingSearchBar';
@@ -48,13 +47,6 @@ export default function SchoolsScreen() {
           />
 
         </RoundedScreenHeader>
-
-        <div className="flex flex-row justify-between">
-          <div className="flex flex-row items-center gap-2">
-            <Calendar />
-            <p className="font-bold text-xl">Schoolboy Rugby</p>
-          </div>
-        </div>
 
         <div className="w-full mx-auto">
           <SbrMatchCenter searchQuery={searchQuery} onSearchChange={setSearchQuery} />

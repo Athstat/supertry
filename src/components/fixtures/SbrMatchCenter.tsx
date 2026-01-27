@@ -128,7 +128,6 @@ export default function SbrMatchCenter({ searchQuery }: Props) {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="font-bold text-lg">School Boy Rugby</h1>
 
       <PilledSeasonFilterBar seasons={seasons} onChange={setSeason} value={season} />
 
