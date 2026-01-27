@@ -7,7 +7,7 @@ import { Fragment, useState } from 'react';
 import { analytics } from '../../services/analytics/anayticsService';
 import { twMerge } from 'tailwind-merge';
 import ProFixtureVotingBox from '../pickem/voting/ProFixtureVotingBox';
-import { FixtureCardModal } from './FixtureCardModal';
+import { QuickFixtureModal } from './QuickFixtureModal';
 
 type Props = {
   fixture: IFixture;
@@ -101,7 +101,7 @@ export default function SmallFixtureCard({ fixture, className, hideVotingBox }: 
         {!hideVotingBox && <ProFixtureVotingBox className="mt-0" fixture={fixture} />}
       </div>
 
-      <FixtureCardModal fixture={fixture} onClose={toggle} showModal={showModal} />
+      <QuickFixtureModal fixture={fixture} onClose={toggle} showModal={showModal} />
     </Fragment>
   );
 }

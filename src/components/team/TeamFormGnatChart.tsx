@@ -5,7 +5,7 @@ import { fixtureSummary } from "../../utils/fixtureUtils"
 import SecondaryText from "../ui/typography/SecondaryText"
 import { Activity, useMemo, useState } from "react"
 import TeamLogo from "./TeamLogo"
-import { FixtureCardModal } from "../fixture/FixtureCardModal"
+import { QuickFixtureModal } from "../fixture/QuickFixtureModal"
 
 type Props = {
     team: IProTeam,
@@ -61,7 +61,7 @@ export default function TeamFormGnatChart({ team, fixtures }: Props) {
             </div>
 
             <Activity mode={fixture ? "visible" : "hidden"} >
-                {fixture && <FixtureCardModal
+                {fixture && <QuickFixtureModal
                     fixture={fixture}
                     onClose={handleClose}
                     showModal={Boolean(fixture)}

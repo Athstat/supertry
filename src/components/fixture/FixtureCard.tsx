@@ -11,7 +11,7 @@ import { useLiveFixture } from '../../hooks/fixtures/useLiveFixture';
 import { useLiveGameClock } from '../../hooks/fixtures/useLiveGameClock';
 import { abbreviateSeasonName } from '../../utils/stringUtils';
 import { IProTeam } from '../../types/team';
-import { FixtureCardModal } from './FixtureCardModal';
+import { QuickFixtureModal } from './QuickFixtureModal';
 type Props = {
   fixture: IFixture;
   className?: string;
@@ -141,7 +141,7 @@ export default function FixtureCard({
           </WarningCard>
         )}
       </div>
-      <FixtureCardModal fixture={fixture} showModal={showModal} onClose={toogle} />
+      <QuickFixtureModal fixture={fixture} showModal={showModal} onClose={toogle} />
     </>
   );
 }

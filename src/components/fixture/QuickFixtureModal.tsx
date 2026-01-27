@@ -15,7 +15,7 @@ type ModalProps = {
     fixture: IFixture;
 };
 
-export function FixtureCardModal({ onClose, fixture, showModal }: ModalProps) {
+export function QuickFixtureModal({ onClose, fixture, showModal }: ModalProps) {
     const title = `${fixture?.team?.athstat_name} vs ${fixture?.opposition_team?.athstat_name}`;
 
     const navigate = useNavigate();
