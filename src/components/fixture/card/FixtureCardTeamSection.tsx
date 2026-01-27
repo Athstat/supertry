@@ -42,14 +42,14 @@ export function FixtureCardTeamSection({ team, score, fixture, showLogos }: Team
     )}>
 
       <div className={twMerge(
-        "flex flex-row gap-2 items-center w-fit justify-start",
+        "flex flex-row gap-3 px-2 items-center w-fit justify-start",
       )}>
 
         {isAway && showGameScore ? (
           <div
             className={twMerge(
               'flex items-center justify-start px-2 py-1 rounded-full text-slate-700 dark:text-slate-200 text-md',
-              homeTeamWon && 'font-bold'
+              awayTeamWon && 'font-bold'
             )}
           >
             {score}
@@ -61,7 +61,7 @@ export function FixtureCardTeamSection({ team, score, fixture, showLogos }: Team
             <TeamLogo
               url={team?.image_url}
               teamName={team?.athstat_name}
-              className="w-10 h-10"
+              className="w-11 h-11"
             />
           )}
 
