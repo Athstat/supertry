@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import useSWR from "swr";
 import { fantasyLeagueGroupsService } from "../../services/fantasy/fantasyLeagueGroupsService";
 import { useAuth } from "../../contexts/AuthContext";
+import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
 
 /** Hook that fetches a user's joined leagues */
 export function useJoinedLeagues(fantasySeasonId?: string) {
@@ -16,7 +17,27 @@ export function useJoinedLeagues(fantasySeasonId?: string) {
         revalidateIfStale: true
     });
 
-    const leagues = useMemo(() => (fetchedLeagues ?? []), [fetchedLeagues]);
+    const getLeagueWeight = (league: FantasyLeagueGroup) => {
+        if (league.type === "official_league") {
+            return 3
+        }
+
+        if (league.type === "system_created") {
+            return 2
+        }
+
+        if (league.type === "user_created") {
+            return 1
+        }
+
+        return 0;
+    }
+
+    const leagues = useMemo(() => {
+        return (fetchedLeagues ?? []).sort((a , b) => {
+            return getLeagueWeight(b) - getLeagueWeight(a);
+        })
+    }, [fetchedLeagues]);
     const isLoading = loadingUserLeagues;
 
 

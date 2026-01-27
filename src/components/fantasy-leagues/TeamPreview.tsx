@@ -42,7 +42,7 @@ export default function TeamPreview({ leagueGroup: league }: Props) {
     <BlueGradientCard className='flex flex-col items-center justify-center px-0 gap-4 pt-8 pb-0 rounded-none bg-gradient-to-tr from-[#1196F5] to-[#011E5C]' >
 
       {lastScoreRound && <div className='w-full px-4' >
-        <RoundScoringSummary
+        <RoundScoringSection
           league={league}
           userTeam={userTeam}
           leagueRound={lastScoreRound}
@@ -106,7 +106,7 @@ type RoundScoringProps = {
   league?: FantasyLeagueGroup
 }
 
-function RoundScoringSummary({ leagueRound, userTeam, league }: RoundScoringProps) {
+function RoundScoringSection({ leagueRound, userTeam, league }: RoundScoringProps) {
 
   const { userScore, isLoading } = useRoundScoringSummaryV2(leagueRound);
   const hasTeam = Boolean(userTeam);
