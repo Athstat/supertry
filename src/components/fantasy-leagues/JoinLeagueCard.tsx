@@ -32,7 +32,7 @@ export function JoinLeagueCard({ leagueGroup }: JoinLeagueCardProps) {
   }, [leagueGroup, onJoin])
 
   return (
-    <RoundedCard className='py-2 px-4 dark:border-none bg-[#EDF1F6] shadow-[0px_1px_3px_rgba(0,0,0,0.25)]' >
+    <RoundedCard className='py-2 px-4 dark:border-none bg-[#EDF1F6] dark:bg-slate-700 shadow-[0px_1px_3px_rgba(0,0,0,0.25)]' >
 
       <div className={twMerge(
         "flex flex-row items-center justify-between",

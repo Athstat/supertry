@@ -57,7 +57,7 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
 
             <RoundedCard
                 onClick={handleOnClick}
-                className="py-2 cursor-pointer rounded-md pl-2 pr-4 bg-[#F4F7F9] shadow-[0px_1px_4px_rgba(0,0,0,0.25)] border-none flex flex-row items-center justify-between"
+                className="py-2 cursor-pointer rounded-md pl-2 pr-4 bg-[#F4F7F9] dark:bg-slate-700 shadow-[0px_1px_4px_rgba(0,0,0,0.25)] border-none flex flex-row items-center justify-between"
             >
                 <div className="flex flex-row items-center gap-4 " >
 
@@ -125,10 +125,10 @@ function LeagueVisibityBadge({type, isPrivate} : LeagueVisibityBadgeProps) {
 
     return (
         <div className={twMerge(
-            "flex flex-row items-center gap-2 text-xs py-0.5 px-2 rounded-full",
-            status === "Official" && "bg-[#DDEDF9] text-[#2BA1F5]",
-            status === "Invite Only" && "bg-[#E5E3F8] text-[#6B47F0]",
-            status === "Public" && "bg-[#DEEFE8] text-[#34AF62]",
+            "flex flex-row items-center gap-2 text-xs py-1 px-2 rounded-full",
+            status === "Official" && "bg-[#DDEDF9]  text-[#2BA1F5] dark:bg-[#2BA1F5]  dark:text-[#DDEDF9]",
+            status === "Invite Only" && "bg-[#E5E3F8] text-[#6B47F0] dark:bg-[#6B47F0] dark:text-[#E5E3F8]",
+            status === "Public" && "bg-[#DEEFE8] text-[#34AF62] dark:bg-[#34AF62] dark:text-[#DEEFE8]",
         )} >
             <p>{status}</p>
 
