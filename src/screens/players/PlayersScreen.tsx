@@ -15,7 +15,7 @@ import { useDebounced } from '../../hooks/web/useDebounced'
 import PlayersTeamsGridList from '../../components/players/teams/PlayersTeamsGridList'
 import PlayersCountryGridList from '../../components/players/nationality/PlayersCountryGridList'
 
-export default function PlayersOverviewScreen() {
+export default function PlayersScreen() {
 
   const [searchQuery, setSearchQuery] = useQueryState<string | undefined>('query');
   const debouncedQuery = useDebounced(searchQuery, 500);

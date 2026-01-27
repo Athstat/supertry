@@ -32,7 +32,7 @@ import FantasyTopPerformersScreen from "../screens/players/FantasyTopPerformersS
 import PlayersByCountryScreen from "../screens/players/PlayersByCountryScreen";
 import PlayersByPositionClassScreen from "../screens/players/PlayersByPositionClassScreen";
 import PlayersByTeamScreens from "../screens/players/PlayersByTeamScreens";
-import PlayersOverviewScreen from "../screens/players/PlayersOverviewScreen";
+import PlayersScreen from "../screens/players/PlayersScreen";
 import ScoutingListScreen from "../screens/players/scouting/ScoutingListScreen";
 import PredictionsRankingScreen from "../screens/predictions/PredictionsRankingScreen";
 import SbrFixtureScreen from "../screens/sbr/SbrFixtureScreen";
@@ -153,7 +153,7 @@ export const dataRouter = createBrowserRouter([
                 element: (
                     <ProtectedRoute>
                         <MainAppLayout>
-                            <PlayersOverviewScreen />
+                            <PlayersScreen />
                         </MainAppLayout>
                     </ProtectedRoute>
                 )
