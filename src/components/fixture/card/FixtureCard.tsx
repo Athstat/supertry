@@ -41,17 +41,18 @@ export default function FixtureCard({
   return (
     <>
       <div
+        key={fixture.game_id}
         onClick={handleClick}
         className={twMerge(
-          "py-4 flex shadow-[0px_0px_3px_rgba(0,0,0,0.25)] cursor-pointer ",
-          " justify-center flex-col bg-[#F0F3F7] dark:border border-slate-300 dark:border-slate-700",
+          "py-4 px-4 flex shadow-[0px_0px_3px_rgba(0,0,0,0.25)] cursor-pointer",
+          " justify-center flex-col gap-4 bg-[#F0F3F7] dark:border border-slate-300 dark:border-slate-700",
           "text-white hover:bg-slate-50/50 gap-1 dark:hover:bg-dark-800/50 dark:bg-slate-800/40 transition-colors ",
           className
         )}
       >
-        <FixtureCardHeaderSection 
+        <FixtureCardHeaderSection
           fixture={fixture}
-          showVenue={showVenue} 
+          showVenue={showVenue}
           showCompetition={showCompetition}
         />
 
@@ -84,6 +85,7 @@ export default function FixtureCard({
           </WarningCard>
         )}
       </div>
+
       <QuickFixtureModal fixture={fixture} showModal={showModal} onClose={toogle} />
     </>
   );
