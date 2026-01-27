@@ -88,7 +88,7 @@ function Content({ leagueGroup: league }: Props) {
 
 
 
-        <div className='absolute top-0 p-2 left-0 w-full h-full flex flex-col items-center justify-between bg-gradient-to-b from-transparent to-[#011E5C]' >
+        <div className='absolute top-0 p-4 left-0 w-full h-full flex flex-col items-center justify-between bg-gradient-to-b from-transparent to-[#011E5C]' >
           <div></div>
 
           <CTAButtons
