@@ -17,7 +17,7 @@ export default function SearchInput({value, onChange, className, placeholder = "
         <InputField 
         
             className={twMerge(
-              "w-full rounded-[20px]",
+              "w-full rounded-[20px] text-[#303133] dark:text-white",
               className
             )}
 

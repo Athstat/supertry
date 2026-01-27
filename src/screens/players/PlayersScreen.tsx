@@ -29,7 +29,7 @@ export default function PlayersScreen() {
       <RoundedScreenHeader
         title='Players'
         leadingIcon={<PlayersIcon />}
-        className='pb-8'
+        className='pb-6'
       >
         <div className='flex flex-row items-center gap-2 w-full h-[40px]' >
           <SearchInput
