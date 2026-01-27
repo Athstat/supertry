@@ -14,7 +14,7 @@ export default function GridButton({ icon, lable, className, onClick }: Props) {
     return (
         <button
             className={twMerge(
-                "flex flex-col items-center drop-shadow-[0_0_4px_rgba(0,0,0,0.25)] justify-center p-4 gap-2 rounded-md bg-[#F0F3F7]",
+                "flex flex-col items-center drop-shadow-[0_0_4px_rgba(0,0,0,0.25)] justify-center p-1 gap-2 rounded-md bg-[#F0F3F7]",
                 className
             )}
 

@@ -20,7 +20,7 @@ export default function PlayersScreen() {
 
 
   return (
-    <PageView className='flex flex-col gap-4 bg-[#F0F3F7]' >
+    <PageView className='flex flex-col gap-6 bg-[#F0F3F7]' >
 
       <RoundedScreenHeader
         title='Players'
