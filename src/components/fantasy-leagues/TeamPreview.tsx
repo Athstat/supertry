@@ -15,16 +15,19 @@ import TeamHistoryProvider from '../../providers/fantasy_teams/TeamHistoryProvid
 import FantasyTeamProvider from '../../providers/fantasy_teams/FantasyTeamProvider';
 import { FantasyTeamFormation3D } from '../my_fantasy_team/FantasyTeamFormation3D';
 import { ManageTeamButton } from './ManageTeamButton';
+import { isSeasonRoundLocked } from '../../utils/leaguesUtils';
 
 type Props = {
   leagueGroup?: FantasyLeagueGroup;
 };
 
-/** Renders the showcase league section */
+/** renders a team preview section that shows the users previous round score and a preview of their team*/
 export default function TeamPreview({ leagueGroup: league }: Props) {
 
   const { authUser } = useAuth();
   const { currentRound, previousRound, scoringRound } = useFantasySeasons();
+
+  const lastScoreRound = scoringRound || currentRound;
 
   const { roundTeam: userTeam, isLoading } = useUserRoundTeam(authUser?.kc_id, currentRound?.round_number);
 
@@ -38,11 +41,11 @@ export default function TeamPreview({ leagueGroup: league }: Props) {
 
     <BlueGradientCard className='flex flex-col items-center justify-center px-0 gap-4 pt-8 pb-0 rounded-none bg-gradient-to-tr from-[#1196F5] to-[#011E5C]' >
 
-      {scoringRound && <div className='w-full px-4' >
+      {lastScoreRound && <div className='w-full px-4' >
         <RoundScoringSummary
           league={league}
           userTeam={userTeam}
-          leagueRound={scoringRound}
+          leagueRound={lastScoreRound}
           userId={authUser?.kc_id || ""}
         />
       </div>}
@@ -108,6 +111,8 @@ function RoundScoringSummary({ leagueRound, userTeam, league }: RoundScoringProp
   const { userScore, isLoading } = useRoundScoringSummaryV2(leagueRound);
   const hasTeam = Boolean(userTeam);
 
+  const isLocked = isSeasonRoundLocked(leagueRound);
+
   if (isLoading || !hasTeam) {
     return (
       <div className='flex flex-row items-center animate-pulse justify-center w-full gap-2' >
@@ -125,8 +130,12 @@ function RoundScoringSummary({ leagueRound, userTeam, league }: RoundScoringProp
         <TextHeading className='text-lg' >{league?.title}</TextHeading>
         <Dot />
         <TextHeading className='text-lg' >Round {leagueRound.round_number}</TextHeading>
-        <Dot />
-        <TextHeading className='text-lg' >Round {smartRoundUp(userScore || 0)}</TextHeading>
+        {isLocked && (
+          <>
+            <Dot />
+            <TextHeading className='text-lg' >{smartRoundUp(userScore || 0)} Points</TextHeading>
+          </>
+        )}
       </div>
 
     </div>

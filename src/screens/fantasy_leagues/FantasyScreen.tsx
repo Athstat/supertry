@@ -32,6 +32,7 @@ export function FantasyScreen() {
 
       <TeamPreview
         leagueGroup={featuredGroup}
+        key={selectedSeason?.id}
       />
 
       <LeagueAndStandingsSection
