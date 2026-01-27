@@ -1,16 +1,9 @@
-import { ArrowRight, BicepsFlexed, Binoculars, Shield, WandSparkles } from 'lucide-react'
 import PageView from '../../components/ui/containers/PageView'
 import SearchInput from '../../components/ui/forms/SearchInput'
-import RoundedCard from "../../components/ui/cards/RoundedCard"
-import PositionCard from '../../components/players/positioning/PositionCard'
 import { Activity, Fragment } from 'react'
 import PlayerSearchResults from '../../components/players/PlayerSearchResults'
 import { useQueryState } from '../../hooks/web/useQueryState'
-import { PositionClass } from '../../types/athletes'
 import { useNavigate } from 'react-router-dom'
-import { FastForward } from 'lucide-react'
-import { TrendingUpDown } from 'lucide-react'
-import NewTag from '../../components/branding/NewTag'
 import { useDebounced } from '../../hooks/web/useDebounced'
 import PlayersTeamsGridList from '../../components/players/teams/PlayersTeamsGridList'
 import PlayersCountryGridList from '../../components/players/nationality/PlayersCountryGridList'
@@ -18,6 +11,7 @@ import RoundedScreenHeader from '../../components/ui/containers/RoundedScreenHea
 import PlayersIcon from '../../components/ui/icons/PlayersIcon'
 import GridButton from '../../components/ui/buttons/GridButton'
 import ScoutingIcon from '../../components/ui/icons/ScoutingIcon'
+import { PositionClassesPitch } from '../../components/players/positioning/PositionClassesPitch'
 
 export default function PlayersScreen() {
 
@@ -67,10 +61,6 @@ function Content() {
     navigate(`/players/all`);
   }
 
-  const handlePositionCardClick = (positionClass: PositionClass) => {
-    navigate(`/players/position-class/${positionClass}`);
-  }
-
   const handleViewScoutingList = () => {
     navigate(`/scouting/my-list`);
   }
@@ -94,82 +84,7 @@ function Content() {
         />
       </div>
 
-      <div className='flex flex-col gap-2' >
-
-        <RoundedCard
-          className='flex cursor-pointer py-3 px-4 dark:border-none flex-row items-center gap-2 justify-between'
-          onClick={handleViewAll}
-        >
-          <p className='text-sm' >View All Players</p>
-          <div>
-            <ArrowRight />
-          </div>
-        </RoundedCard>
-
-
-        <RoundedCard
-          className='flex cursor-pointer py-3 px-4 dark:border-none flex-row items-center gap-2 justify-between'
-          onClick={handleViewScoutingList}
-        >
-
-          <div className='flex flex-row items-center gap-2' >
-            <Binoculars />
-            <p className='text-sm' >View Scouting List</p>
-            <NewTag showUntil={new Date('15-12-2025')} />
-          </div>
-
-          <ArrowRight />
-
-        </RoundedCard>
-
-
-      </div>
-
-      <div>
-        <p className='font-bold text-md' >By Position</p>
-      </div>
-
-      <div className='grid grid-cols-2 gap-4' >
-        <PositionCard
-          positionClass='front-row'
-          title='Front Row'
-          showViewMoreButton
-          onClick={handlePositionCardClick}
-          icon={<BicepsFlexed className='w-20 h-20 text-yellow-500' />}
-        />
-
-        <PositionCard
-          positionClass='second-row'
-          title='Second Row'
-          showViewMoreButton
-          onClick={handlePositionCardClick}
-          icon={<TrendingUpDown className='w-20 h-20 text-yellow-500' />}
-        />
-
-        <PositionCard
-          positionClass='back-row'
-          title='Back Row'
-          showViewMoreButton
-          onClick={handlePositionCardClick}
-          icon={<Shield className='w-20 h-20 text-red-500' />}
-        />
-
-        <PositionCard
-          positionClass='half-back'
-          title='Half Backs'
-          showViewMoreButton
-          onClick={handlePositionCardClick}
-          icon={<WandSparkles className='w-20 h-20 text-green-500' />}
-        />
-
-        <PositionCard
-          positionClass='back'
-          title='Backs'
-          showViewMoreButton
-          onClick={handlePositionCardClick}
-          icon={<FastForward className='w-20 h-20 text-blue-500' />}
-        />
-      </div>
+      <PositionClassesPitch />
 
 
       <PlayersTeamsGridList />
