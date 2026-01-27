@@ -20,7 +20,7 @@ export default function PlayersScreen() {
 
 
   return (
-    <PageView className='flex flex-col gap-4' >
+    <PageView className='flex flex-col gap-4 bg-[#F0F3F7]' >
 
       <RoundedScreenHeader
         title='Players'
@@ -72,14 +72,14 @@ function Content() {
         <GridButton
           lable='View All Players'
           icon={<PlayersIcon fill='#1196F5' height='40' width='40' />}
-          className='flex-1 h-[90px]'
+          className='flex-1 min-h-[100px]'
           onClick={handleViewAll}
         />
 
         <GridButton
           lable='My Scouting List'
           icon={<ScoutingIcon fill='#1196F5' width='40' height='40' />}
-          className='flex-1 h-[90px]'
+          className='flex-1 min-h-[100px]'
           onClick={handleViewScoutingList}
         />
       </div>

@@ -34,7 +34,7 @@ export default function PlayersTeamsGridList({ onSuccess }: Props) {
   return (
     <RoundedCard className="flex flex-col gap-4 p-4 px-6" >
       <div>
-        <TextHeading className='font-[500] text-2xl' blue >By Team</TextHeading>
+        <TextHeading className='font-[500] text-xl' blue >By Team</TextHeading>
       </div>
 
       {firstSeason && <SeasonTeamGridList
@@ -82,7 +82,7 @@ function SeasonTeamGridList({ onSuccess }: SeasonTeamListProps) {
         />
       )}
 
-      <div className="grid grid-cols-3 gap-6  w-full px-[3%]" >
+      <div className="grid grid-cols-3 gap-6  w-full px-[2%]" >
         {teams.map((t) => {
           return (
             <TeamItem
@@ -117,7 +117,7 @@ function TeamItem({ team, onClick }: TeamItemProps) {
         url={team.image_url}
         className="w-9 h-9"
       />
-      <SecondaryText className="text-[12px] font-[400] max-w-[100px] truncate text-center" >{team.athstat_name}</SecondaryText>
+      <SecondaryText className="text-[12px] font-[400] w-[90%] text-wrap text-center" >{team.athstat_name}</SecondaryText>
     </div>
   )
 }

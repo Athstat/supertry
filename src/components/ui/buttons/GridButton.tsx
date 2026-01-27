@@ -20,7 +20,7 @@ export default function GridButton({ icon, lable, className, onClick }: Props) {
 
             onClick={onClick}
         >
-            <SecondaryText className="text-[#011E5C]" >{lable}</SecondaryText>
+            <SecondaryText className="text-[#011E5C] text-base" >{lable}</SecondaryText>
             {icon}
         </button>
     )
