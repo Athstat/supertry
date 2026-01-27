@@ -11,6 +11,7 @@ import LeagueMembersIcon from "../ui/icons/LeagueMembersIcon";
 import SecondaryText from "../ui/typography/SecondaryText";
 import { Verified } from "lucide-react";
 import { twMerge } from "tailwind-merge";
+import { seperateNumberParts } from "../../utils/intUtils";
 
 type CardProps = {
     leagueGroup: FantasyLeagueGroup,
@@ -56,7 +57,7 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
 
             <RoundedCard
                 onClick={handleOnClick}
-                className="py-2 cursor-pointer rounded-md px-4 bg-[#F4F7F9] shadow-[0px_1px_4px_rgba(0,0,0,0.25)] border-none flex flex-row items-center justify-between"
+                className="py-2 cursor-pointer rounded-md pl-2 pr-4 bg-[#F4F7F9] shadow-[0px_1px_4px_rgba(0,0,0,0.25)] border-none flex flex-row items-center justify-between"
             >
                 <div className="flex flex-row items-center gap-4 " >
 
@@ -88,8 +89,8 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
                         type={leagueGroup.type}
                     />
 
-                    {!isLoading && <div className="text-slate-600 dark:text-slate-200 font-semibold text-sm" >
-                        <p>{userRanking?.league_rank}</p>
+                    {!isLoading && <div className="text-slate-600 dark:text-slate-200 text-[14px]" >
+                        <p>{seperateNumberParts(userRanking?.league_rank)}</p>
                     </div>}
 
                     {isLoading && <div className="text-slate-600 animate-pulse dark:text-slate-200 font-semibold text-sm" >
