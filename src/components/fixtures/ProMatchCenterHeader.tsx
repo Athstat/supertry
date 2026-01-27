@@ -3,7 +3,6 @@ import { twMerge } from "tailwind-merge"
 import { AppColours } from "../../types/constants"
 import { FixtureListViewMode } from "../../types/games"
 import TextHeading from "../ui/typography/TextHeading"
-import SecondaryText from "../ui/typography/SecondaryText"
 
 type Props = {
     viewMode: FixtureListViewMode,
@@ -45,7 +44,7 @@ export default function ProMatchCenterHeader({
                     />
 
                     <div className="flex flex-col items-center justify-center gap-1" >
-                        <SecondaryText >Round 1</SecondaryText>
+                        {/* <SecondaryText >Round 1</SecondaryText> */}
                         <TextHeading blue className="">
                             {weekHeader}
                         </TextHeading>
