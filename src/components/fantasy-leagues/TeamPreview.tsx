@@ -59,13 +59,13 @@ export default function TeamPreview({ leagueGroup: league }: Props) {
       )}
 
 
-      {userTeam && currentRound && <div className='rounded-t-[20px] dark:bg-transparent relative w-full max-h-[250px] overflow-clip' >
+      {userTeam && currentRound && <div className='rounded-t-[20px] dark:bg-transparent relative w-full max-h-[200px] overflow-clip' >
         <TeamHistoryProvider
           user={authUser}
         >
           <FantasyTeamProvider readOnly team={userTeam} >
             <div className=' flex flex-col w-full items-center justify-center' >
-              <FantasyTeamFormation3D className='mt-0 -top-12 flex flex-col items-center justify-center' onPlayerClick={() => { }} />
+              <FantasyTeamFormation3D className='mt-0 -top-10 flex flex-col items-center justify-center' onPlayerClick={() => { }} />
             </div>
           </FantasyTeamProvider>
         </TeamHistoryProvider>
