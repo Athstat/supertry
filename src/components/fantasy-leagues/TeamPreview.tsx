@@ -59,7 +59,7 @@ export default function TeamPreview({ leagueGroup: league }: Props) {
       )}
 
 
-      {userTeam && currentRound && <div className='rounded-t-[20px] bg-white relative w-full max-h-[250px] overflow-clip' >
+      {userTeam && currentRound && <div className='rounded-t-[20px] dark:bg-transparent relative w-full max-h-[250px] overflow-clip' >
         <TeamHistoryProvider
           user={authUser}
         >
