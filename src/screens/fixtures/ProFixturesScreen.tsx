@@ -82,6 +82,7 @@ export default function ProFixturesScreen() {
             placeholder='Search pro fixtures'
             value={searchQuery}
             onChange={(s) => setSearchQuery(s || '')}
+            inputCn={'dark:bg-[#F0F3F7]'}
           />
 
         </RoundedScreenHeader>
