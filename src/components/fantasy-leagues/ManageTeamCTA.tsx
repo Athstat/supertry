@@ -14,6 +14,8 @@ import { smartRoundUp } from '../../utils/intUtils';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 import { useUserRoundTeam } from '../../hooks/fantasy/useUserRoundTeam';
 import { ISeasonRound } from '../../types/fantasy/fantasySeason';
+import TextHeading from '../ui/typography/TextHeading';
+import { Dot } from 'lucide-react';
 
 type Props = {
   leagueGroup: FantasyLeagueGroup;
@@ -55,12 +57,9 @@ function Content({ leagueGroup: league }: Props) {
     <div className="flex flex-col gap-4">
       <LearnScrummyNoticeCard />
 
-      <BlueGradientCard className='flex flex-col gap-4 p-4' >
-        <div>
-          <p className='font-semibold ' >{league.title}</p>
-        </div>
+      <BlueGradientCard className='flex flex-col items-center justify-center gap-4 p-4 py-8 rounded-none bg-gradient-to-tr from-[#1196F5] to-[#011E5C]' >
 
-        {scoreRound && <RoundScoringSummary userTeam={userTeam} leagueRound={scoreRound} userId={authUser?.kc_id || ""} />}
+        {scoreRound && <RoundScoringSummary league={league} userTeam={userTeam} leagueRound={scoreRound} userId={authUser?.kc_id || ""} />}
 
         {currentRound && (
           <LeagueRoundCountdown2
@@ -98,12 +97,13 @@ function LoadingSkeleton() {
 type RoundScoringProps = {
   leagueRound: ISeasonRound,
   userTeam?: IFantasyLeagueTeam
-  userId: string
+  userId: string,
+  league?: FantasyLeagueGroup
 }
 
-function RoundScoringSummary({ leagueRound, userTeam }: RoundScoringProps) {
+function RoundScoringSummary({ leagueRound, userTeam, league }: RoundScoringProps) {
 
-  const { highestPointsScored, averagePointsScored, userScore, isLoading } = useRoundScoringSummaryV2(leagueRound);
+  const { userScore, isLoading } = useRoundScoringSummaryV2(leagueRound);
   const hasTeam = Boolean(userTeam);
 
   if (isLoading || !hasTeam) {
@@ -117,28 +117,16 @@ function RoundScoringSummary({ leagueRound, userTeam }: RoundScoringProps) {
   }
 
   return (
-    <div className='flex flex-col gap-2' >
-      <div className='flex flex-col items-center justify-center w-full' >
-        <p className='text-sm' >{leagueRound.round_title} Score</p>
+    <div className='flex flex-col gap-2 w-full' >
+
+      <div className='border-t border-b p-4 w-full flex flex-row items-center justify-center' >
+        <TextHeading className='text-lg' >{league?.title}</TextHeading>
+        <Dot />
+        <TextHeading className='text-lg' >Round {leagueRound.round_number}</TextHeading>
+        <Dot />
+        <TextHeading className='text-lg' >Round {smartRoundUp(userScore || 0)}</TextHeading>
       </div>
 
-      <div className='grid grid-cols-3 px-[10%]' >
-
-        <div className='flex flex-col items-center justify-center' >
-          <p className='font-bold text-xl' >{smartRoundUp(averagePointsScored || 0)}</p>
-          <p className='text-xs' >Average</p>
-        </div>
-
-        <div className='flex flex-col items-center justify-center' >
-          <p className='font-bold text-2xl' >{smartRoundUp(userScore || 0)}</p>
-          <p className='text-xs' >My Score</p>
-        </div>
-
-        <div className='flex flex-col items-center justify-center' >
-          <p className='font-bold text-xl' >{smartRoundUp(highestPointsScored || 0)}</p>
-          <p className='text-xs' >Highest</p>
-        </div>
-      </div>
     </div>
   )
 }

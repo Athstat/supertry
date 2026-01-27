@@ -1,4 +1,3 @@
-import { Trophy } from 'lucide-react';
 import { FantasySeasonDashboard } from '../../components/fantasy-seasons/FantasyCompetitionDashboard';
 import FantasySeasonOptionsList from '../../components/fantasy-seasons/FantasySeasonOptionsList';
 import PageView from '../../components/ui/containers/PageView';
@@ -6,6 +5,8 @@ import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 import { Activity } from 'react';
 import AutoJoinLeagueModal from '../../components/fantasy-leagues/AutoJoinLeagueModal';
+import RoundedScreenHeader from '../../components/ui/containers/RoundedScreenHeader';
+import ThinTrophyIcon from '../../components/ui/icons/ThinTrophyIcon';
 
 /** Renders the Fantasy/League Screen */
 export function FantasyScreen() {
@@ -16,13 +17,13 @@ export function FantasyScreen() {
   const showSeasonsOverview = (isLoading === false) && (selectedSeason === undefined);
 
   return (
-    <PageView className="pt-4 flex flex-col gap-3">
+    <PageView className="flex flex-col">
 
-
-      <div className="flex flex-row items-center gap-2 px-4">
-        <Trophy className="w-5 h-5" />
-        <h1 className="font-bold text-xl">Fantasy</h1>
-      </div>
+      <RoundedScreenHeader 
+        title='Fantasy'
+        leadingIcon={<ThinTrophyIcon />}
+        className='rounded-none'
+      />
 
       <Activity mode={showLoading ? "visible" : "hidden"} >
         <LoadingIndicator />
