@@ -61,11 +61,11 @@ export default function TeamPreview({ leagueGroup: league }: Props) {
           user={authUser}
         >
           <FantasyTeamProvider readOnly team={userTeam} >
-            <FantasyTeamFormation3D className='mt-0 -top-12' onPlayerClick={() => { }} />
+            <div className=' flex flex-col w-full items-center justify-center' >
+              <FantasyTeamFormation3D className='mt-0 -top-12 max-w-[70%]' onPlayerClick={() => { }} />
+            </div>
           </FantasyTeamProvider>
         </TeamHistoryProvider>
-
-
 
         <div className='absolute top-0 p-4 left-0 w-full h-full flex flex-col items-center justify-between bg-gradient-to-b from-transparent to-[#011E5C]' >
           <div></div>
