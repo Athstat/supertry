@@ -19,7 +19,7 @@ import FantasyLeagueScreen from "../screens/fantasy_leagues/FantasyLeagueScreen"
 import CompetitionsScreen from "../screens/fantasy_seasons/CompetitionsScreen";
 import SeasonScreen from "../screens/fantasy_seasons/SeasonScreen";
 import FixtureDetailScreen from "../screens/fixtures/FixtureDetailScreen";
-import ProFixturesScreen from "../screens/fixtures/FixturesScreen";
+import ProFixturesScreen from "../screens/fixtures/ProFixturesScreen";
 import EditAccountInfoScreen from "../screens/myaccount/EditAccountInfoScreen";
 import NotificationPreferencesScreen from "../screens/myaccount/NotificationPreferencesScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
