@@ -20,7 +20,7 @@ export default function PlayersScreen() {
 
 
   return (
-    <PageView className='flex flex-col gap-6 bg-[#F0F3F7]' >
+    <PageView className='flex flex-col gap-6 bg-[#F0F3F7] dark:bg-[#15202b]' >
 
       <RoundedScreenHeader
         title='Players'
@@ -32,6 +32,7 @@ export default function PlayersScreen() {
             value={searchQuery}
             onChange={setSearchQuery}
             placeholder='Search players by name'
+            inputCn='dark:bg-white'
           />
         </div>
       </RoundedScreenHeader>

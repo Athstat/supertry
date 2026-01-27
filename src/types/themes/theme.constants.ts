@@ -10,7 +10,7 @@ export const appTheme1: AppTheme = {
 /** Prem Style Light Theme for Scrummy */
 export const appTheme2: AppTheme = {
     backgroundCN: 'bg-white dark:bg-[#15202b]',
-    cardBackgroundCN: 'bg-slate-[#F0F3F7] dark:bg-slate-700/50 dark:hover:bg-slate-700/80',
+    cardBackgroundCN: 'bg-slate-[#F0F3F7] dark:bg-slate-700/50',
     backgroundGradient: 'from-white dark:from-[#15202b]'
 }
 

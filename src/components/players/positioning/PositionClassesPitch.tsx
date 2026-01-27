@@ -108,7 +108,7 @@ function PitchPositionCard({ lable, className, onClick, positionClass }: PitchPo
         <div
 
             className={twMerge(
-                "absolute shadow-lg shadow-black/20 bg-[#F0F3F7E5] w-[110px] transition-all ease-linear hover:w-[120px] cursor-pointer h-[36px]  flex flex-col items-center justify-center rounded-md",
+                "absolute shadow-lg shadow-black/20 bg-[#F0F3F7E5] dark:bg-slate-800 w-[110px] transition-all ease-linear hover:w-[120px] cursor-pointer h-[36px]  flex flex-col items-center justify-center rounded-md",
                 className
             )}
             onClick={handleClick}
