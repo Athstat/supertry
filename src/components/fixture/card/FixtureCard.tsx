@@ -43,7 +43,9 @@ export default function FixtureCard({
       <div
         onClick={handleClick}
         className={twMerge(
-          'p-4 flex cursor-pointer justify-center flex-col bg-white shadow-sm border border-slate-300 dark:border-slate-700 text-white hover:bg-slate-50/50 gap-1 dark:hover:bg-dark-800/50 dark:bg-slate-800/40 transition-colors',
+          "py-4 flex shadow-[0px_0px_3px_rgba(0,0,0,0.25)] cursor-pointer ",
+          " justify-center flex-col bg-[#F0F3F7] dark:border border-slate-300 dark:border-slate-700",
+          "text-white hover:bg-slate-50/50 gap-1 dark:hover:bg-dark-800/50 dark:bg-slate-800/40 transition-colors ",
           className
         )}
       >
@@ -53,7 +55,7 @@ export default function FixtureCard({
           showCompetition={showCompetition}
         />
 
-        <div className="flex flex-row justify-between w-full bg-red-600">
+        <div className="flex flex-row justify-between w-full">
 
           <FixtureCardTeamSection
             team={fixture.team}

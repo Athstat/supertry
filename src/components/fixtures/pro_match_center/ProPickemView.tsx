@@ -72,6 +72,7 @@ export default function FixturesProPickemView({ displayFixtures, hasAnyFixtures,
         <GroupedFixturesList
           fixtures={displayFixtures}
           viewMode={"pickem"}
+          hideCompetitionName
         />
       </Activity>
 

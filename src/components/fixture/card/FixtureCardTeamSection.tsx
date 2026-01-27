@@ -30,6 +30,8 @@ export function FixtureCardTeamSection({ team, score, fixture, showLogos }: Team
 
   const isAway = team?.athstat_id === fixture.opposition_team?.athstat_id;
 
+  const trimmedTeamName = team?.athstat_name.replace(" Rugby", "");
+
 
   return (
     <div className="flex-1 flex text-slate-700 dark:text-white flex-col items-end justify-center">
@@ -57,7 +59,7 @@ export function FixtureCardTeamSection({ team, score, fixture, showLogos }: Team
           )}
 
           <p className={twMerge('text-xs md:text-sm w-fit text-center', awayTeamWon && '')}>
-            {team?.athstat_name}
+            {trimmedTeamName}
           </p>
         </div>
 

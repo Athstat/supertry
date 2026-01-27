@@ -40,6 +40,7 @@ export default function ProMatchCenterList({ onMoveNextWeek, displayFixtures, ha
       <GroupedFixturesList 
         fixtures={displayFixtures}
         viewMode={"fixtures"}
+        hideCompetitionName
       />
 
     </div>

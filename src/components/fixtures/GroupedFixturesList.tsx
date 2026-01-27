@@ -9,11 +9,12 @@ type Props = {
     search?: string,
     generateMessage?: (fixture: IFixture) => string,
     descendingOrder?: boolean,
-    viewMode?: FixtureListViewMode
+    viewMode?: FixtureListViewMode,
+    hideCompetitionName?: boolean
 }
 
 /** Groups Fixtures into dates and renders them by date, with an optionable pickem card view */
-export default function GroupedFixturesList({ fixtures, viewMode = "fixtures" }: Props) {
+export default function GroupedFixturesList({ fixtures, viewMode = "fixtures", hideCompetitionName }: Props) {
 
     const groupedFixtures = groupFixturesByCompetition(fixtures);
     const competitions = sortCompetitions(Array.from(groupedFixtures.keys()));
@@ -24,11 +25,11 @@ export default function GroupedFixturesList({ fixtures, viewMode = "fixtures" }:
         return (
             <div key={competition} className="flex flex-col gap-3">
                 {/* Competition Header */}
-                <div className="flex items-center gap-2 px-3 py-2 bg-slate-100 dark:bg-slate-800/50 rounded-lg">
+                {!hideCompetitionName && <div className="flex items-center gap-2 px-3 py-2 bg-slate-100 dark:bg-slate-800/50 rounded-lg">
                     <h3 className="font-bold text-sm text-slate-700 dark:text-slate-200">
                         {competition}
                     </h3>
-                </div>
+                </div>}
 
                 {/* Competition Fixtures */}
                 <div className="flex flex-col gap-3">

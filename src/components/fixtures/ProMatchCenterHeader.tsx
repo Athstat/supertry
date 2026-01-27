@@ -31,8 +31,9 @@ export default function ProMatchCenterHeader({
         <div>
             {/* Sticky Date Header */}
             <div className={twMerge(
-                "sticky top-14 z-10 -mx-4 md:-mx-6 px-4 md:px-6 py-3 bg-white/80 backdrop-blur-sm shadow-none border-slate-200 dark:border-slate-800",
-                AppColours.BACKGROUND
+                "sticky top-14 z-10 -mx-4 md:-mx-6 px-4 md:px-6 py-3  backdrop-blur-sm shadow-none border-slate-200 dark:border-slate-800",
+                AppColours.BACKGROUND,
+                "bg-[#F0F3F7]"
             )}>
 
                 <div className="flex flex-row items-center justify-between w-full " >

@@ -61,7 +61,7 @@ export default function ProFixturesScreen() {
 
   return (
     <Fragment>
-      <PageView className="dark:text-white flex flex-col gap-4 pb-28 md:pb-32">
+      <PageView className="dark:text-white bg-[#F0F3F7] flex flex-col gap-4 pb-28 md:pb-32">
 
         <RoundedScreenHeader
           title='Fixtures (Pro)'
