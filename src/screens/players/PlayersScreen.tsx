@@ -86,7 +86,6 @@ function Content() {
 
       <PositionClassesPitch />
 
-
       <PlayersTeamsGridList />
       <PlayersCountryGridList />
     </Fragment>
