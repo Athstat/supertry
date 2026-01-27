@@ -45,6 +45,7 @@ export default function PlayersScreen() {
       <Activity mode={debouncedQuery ? "visible" : "hidden"} >
         <PlayerSearchResults
           searchQuery={debouncedQuery}
+          className='px-4'
         />
       </Activity>
 
