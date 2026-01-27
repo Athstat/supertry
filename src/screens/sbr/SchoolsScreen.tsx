@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react';
 import PageView from '../../components/ui/containers/PageView';
 import { useQueryState } from '../../hooks/web/useQueryState';
-import SbrMatchCenter from '../../components/fixtures/SbrMatchCenter';
+import SbrMatchCenter from '../../components/fixtures/sbr/SbrMatchCenter';
 import FloatingSearchBar from '../../components/players/FloatingSearchBar';
 import RoundedScreenHeader from '../../components/ui/containers/RoundedScreenHeader';
 import SearchInput from '../../components/ui/forms/SearchInput';
