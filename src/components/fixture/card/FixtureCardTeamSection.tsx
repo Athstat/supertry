@@ -30,13 +30,20 @@ export function FixtureCardTeamSection({ team, score, fixture, showLogos }: Team
 
   const isAway = team?.athstat_id === fixture.opposition_team?.athstat_id;
 
-  const trimmedTeamName = team?.athstat_name.replace(" Rugby", "");
+  const trimmedTeamName = team?.athstat_name
+    .replace("Rugby", "")
+    .replace("Glasgow", "");
 
 
   return (
-    <div className="flex-1 flex text-slate-700 dark:text-white flex-col items-end justify-center">
+    <div className={twMerge(
+        "flex-1 flex text-slate-700 dark:text-white flex-col items-end justify-center",
+        !isAway && "items-start"
+    )}>
 
-      <div className="flex flex-row gap-2 items-center w-full justify-start">
+      <div className={twMerge(
+        "flex flex-row gap-2 items-center w-fit justify-start",
+      )}>
 
         {isAway && showGameScore ? (
           <div
@@ -49,7 +56,7 @@ export function FixtureCardTeamSection({ team, score, fixture, showLogos }: Team
           </div>
         ) : null}
 
-        <div className="flex flex-col gap-4 items-center w-full justify-start">
+        <div className="flex flex-col gap-4 items-center  justify-start">
           {showLogos && (
             <TeamLogo
               url={team?.image_url}
@@ -58,7 +65,7 @@ export function FixtureCardTeamSection({ team, score, fixture, showLogos }: Team
             />
           )}
 
-          <p className={twMerge('text-xs md:text-sm w-fit text-center', awayTeamWon && '')}>
+          <p className={twMerge('text-[10px] md:text-sm w-fit text-center', awayTeamWon && '')}>
             {trimmedTeamName}
           </p>
         </div>
@@ -66,7 +73,7 @@ export function FixtureCardTeamSection({ team, score, fixture, showLogos }: Team
         {!isAway && showGameScore ? (
           <div
             className={twMerge(
-              'flex items-center justify-start px-2 py-1 rounded-full text-slate-700 dark:text-slate-200 text-md',
+              'flex items-center text-sm justify-start px-2 py-1 rounded-full text-slate-700 dark:text-slate-200 text-md',
               homeTeamWon && 'font-bold'
             )}
           >
