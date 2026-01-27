@@ -87,6 +87,7 @@ export default function PlayersCountryGridList() {
 
     return (
         <RoundedCard className="flex flex-col gap-4 p-6" >
+
             <div>
                 <TextHeading className='font-medium text-xl' blue >By Country</TextHeading>
             </div>

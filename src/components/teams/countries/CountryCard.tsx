@@ -25,7 +25,8 @@ export default function CountryCard({ countryName, onClick, isSelected = false }
     return (
         <div
             className={twMerge(
-                "shadow-[0px_0px_5px_rgba(0,0,0,0.25)] bg-[#F8FAFC80] w-full rounded-md h-[100px] flex flex-col items-center gap-2 justify-center",
+                "shadow-[0px_0px_5px_rgba(0,0,0,0.25)] bg-[#F8FAFC80] w-full rounded-[5px] h-[100px] flex flex-col items-center gap-2 justify-center",
+                "cursor-pointer hover:bg-[#F8FAFC]",
                 isSelected && "bg-blue-500 dark:bg-blue-500 text-white"
             )}
             onClick={handleOnClick}

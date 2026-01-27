@@ -112,7 +112,7 @@ function TeamItem({ team, onClick }: TeamItemProps) {
 
 
   return (
-    <div onClick={handleOnClick} className="shadow-[0px_0px_5px_rgba(0,0,0,0.25)] bg-[#F8FAFC80] w-full rounded-md h-[100px] flex flex-col items-center gap-2 justify-center" >
+    <div onClick={handleOnClick} className="shadow-[0px_0px_5px_rgba(0,0,0,0.25)] cursor-pointer hover:bg-[#F8FAFC] bg-[#F8FAFC80] w-full rounded-md h-[100px] flex flex-col items-center gap-2 justify-center" >
       <TeamLogo
         url={team.image_url}
         className="w-9 h-9"
