@@ -1,5 +1,4 @@
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
-import LearnScrummyNoticeCard from '../branding/help/LearnScrummyNoticeCard';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
@@ -9,13 +8,16 @@ import { IFantasyLeagueTeam } from '../../types/fantasyLeague';
 import { isSeasonRoundLocked } from '../../utils/leaguesUtils';
 import { useRoundScoringSummaryV2 } from '../../hooks/fantasy/useRoundScoringSummary';
 import { LeagueRoundCountdown2 } from '../fantasy_league/LeagueCountdown';
-import { TranslucentButton } from '../ui/buttons/PrimaryButton';
 import { smartRoundUp } from '../../utils/intUtils';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 import { useUserRoundTeam } from '../../hooks/fantasy/useUserRoundTeam';
 import { ISeasonRound } from '../../types/fantasy/fantasySeason';
 import TextHeading from '../ui/typography/TextHeading';
 import { Dot } from 'lucide-react';
+import TeamHistoryProvider from '../../providers/fantasy_teams/TeamHistoryProvider';
+import FantasyTeamProvider from '../../providers/fantasy_teams/FantasyTeamProvider';
+import { FantasyTeamFormation3D } from '../my_fantasy_team/FantasyTeamFormation3D';
+import SecondaryButton from '../ui/buttons/SecondaryButton';
 
 type Props = {
   leagueGroup: FantasyLeagueGroup;
@@ -54,29 +56,51 @@ function Content({ leagueGroup: league }: Props) {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <LearnScrummyNoticeCard />
 
-      <BlueGradientCard className='flex flex-col items-center justify-center gap-4 p-4 py-8 rounded-none bg-gradient-to-tr from-[#1196F5] to-[#011E5C]' >
+    <BlueGradientCard className='flex flex-col items-center justify-center px-0 gap-4 pt-8 pb-0 rounded-none bg-gradient-to-tr from-[#1196F5] to-[#011E5C]' >
 
-        {scoreRound && <RoundScoringSummary league={league} userTeam={userTeam} leagueRound={scoreRound} userId={authUser?.kc_id || ""} />}
+      {scoreRound && <div className='w-full px-4' >
+        <RoundScoringSummary
+          league={league}
+          userTeam={userTeam}
+          leagueRound={scoreRound}
+          userId={authUser?.kc_id || ""}
+        />
+      </div>}
 
-        {currentRound && (
-          <LeagueRoundCountdown2
-            leagueRound={currentRound}
-            title={`${currentRound.round_title} Starts in`}
-            leagueTitleClassName='font-normal text-sm'
-          />
-        )}
-
-        {currentRound && <CTAButtons
+      {currentRound && (
+        <LeagueRoundCountdown2
           leagueRound={currentRound}
-          userRoundTeam={userTeam}
-          previousRound={previousRound}
-        />}
+          title={`${currentRound.round_title} Starts in`}
+          leagueTitleClassName='font-normal text-sm'
+        />
+      )}
 
-      </BlueGradientCard>
-    </div>
+
+      {userTeam && currentRound && <div className='rounded-t-[20px] bg-white relative w-full max-h-[250px] overflow-clip' >
+        <TeamHistoryProvider
+          user={authUser}
+        >
+          <FantasyTeamProvider readOnly team={userTeam} >
+            <FantasyTeamFormation3D className='mt-0 -top-12' onPlayerClick={() => { }} />
+          </FantasyTeamProvider>
+        </TeamHistoryProvider>
+
+
+
+        <div className='absolute top-0 p-2 left-0 w-full h-full flex flex-col items-center justify-between bg-gradient-to-b from-transparent to-[#011E5C]' >
+          <div></div>
+
+          <CTAButtons
+            leagueRound={currentRound}
+            userRoundTeam={userTeam}
+            previousRound={previousRound}
+          />
+
+        </div>
+      </div>}
+
+    </BlueGradientCard>
   );
 }
 
@@ -156,28 +180,28 @@ function CTAButtons({ leagueRound, userRoundTeam }: CTAButtonProps) {
   return (
     <div className='flex flex-col gap-2' >
 
-      {showManageTeam && <TranslucentButton
+      {showManageTeam && <SecondaryButton
         onClick={handleManageTeam}
       >
         Manage My Team
-      </TranslucentButton>}
+      </SecondaryButton>}
 
-      {showViewTeam && <TranslucentButton
+      {showViewTeam && <SecondaryButton
         onClick={handleManageTeam}
       >
         View My Team
-      </TranslucentButton>}
+      </SecondaryButton>}
 
       {showCreateTeam && (
-        <TranslucentButton onClick={handleManageTeam} >
+        <SecondaryButton onClick={handleManageTeam} >
           Create My Team
-        </TranslucentButton>
+        </SecondaryButton>
       )}
 
       {showSorryMessage && (
-        <TranslucentButton className='text-xs lg:text-sm font-normal text-start' >
+        <SecondaryButton className='text-xs lg:text-sm font-normal text-start' >
           <p>Whoops! You missed the team deadline for <strong>{leagueRound.round_title}</strong>. You will have to wait for the next round to create your team</p>
-        </TranslucentButton>
+        </SecondaryButton>
       )}
 
     </div>
