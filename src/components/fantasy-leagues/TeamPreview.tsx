@@ -1,10 +1,8 @@
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
 import { useAuth } from '../../contexts/AuthContext';
-import { useMemo } from 'react';
 import BlueGradientCard from '../ui/cards/BlueGradientCard';
 import RoundedCard from '../ui/cards/RoundedCard';
 import { IFantasyLeagueTeam } from '../../types/fantasyLeague';
-import { isSeasonRoundLocked } from '../../utils/leaguesUtils';
 import { useRoundScoringSummaryV2 } from '../../hooks/fantasy/useRoundScoringSummary';
 import { LeagueRoundCountdown2 } from '../fantasy_league/LeagueCountdown';
 import { smartRoundUp } from '../../utils/intUtils';
@@ -26,21 +24,9 @@ type Props = {
 export default function TeamPreview({ leagueGroup: league }: Props) {
 
   const { authUser } = useAuth();
-  const { currentRound, previousRound } = useFantasySeasons();
+  const { currentRound, previousRound, scoringRound } = useFantasySeasons();
 
   const { roundTeam: userTeam, isLoading } = useUserRoundTeam(authUser?.kc_id, currentRound?.round_number);
-
-  const scoreRound = useMemo(() => {
-    if (currentRound && isSeasonRoundLocked(currentRound)) {
-      return currentRound;
-    }
-
-    if (previousRound && currentRound && !isSeasonRoundLocked(currentRound)) {
-      return previousRound;
-    }
-
-    return undefined;
-  }, [currentRound, previousRound])
 
   if (!league) return;
 
@@ -52,11 +38,11 @@ export default function TeamPreview({ leagueGroup: league }: Props) {
 
     <BlueGradientCard className='flex flex-col items-center justify-center px-0 gap-4 pt-8 pb-0 rounded-none bg-gradient-to-tr from-[#1196F5] to-[#011E5C]' >
 
-      {scoreRound && <div className='w-full px-4' >
+      {scoringRound && <div className='w-full px-4' >
         <RoundScoringSummary
           league={league}
           userTeam={userTeam}
-          leagueRound={scoreRound}
+          leagueRound={scoringRound}
           userId={authUser?.kc_id || ""}
         />
       </div>}
