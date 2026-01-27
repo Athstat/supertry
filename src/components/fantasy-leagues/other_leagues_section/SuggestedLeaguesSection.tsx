@@ -34,9 +34,9 @@ export default function SuggestedLeaguesSections({ fantasySeason }: Props) {
     }
 
     return (
-        <RoundedCard className='flex flex-col gap-2 px-4 bg-[#E2E8F0] border-[#DFE3E8] p-4' >
+        <RoundedCard className='flex flex-col gap-4 px-4 bg-[#E2E8F0] border-[#DFE3E8] p-4' >
 
-            <div className="flex flex-col" >
+            <div className="flex flex-col gap-2" >
                 <TextHeading
                     blue
                     className="font-medium"
