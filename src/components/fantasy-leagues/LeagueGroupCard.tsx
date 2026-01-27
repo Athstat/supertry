@@ -69,7 +69,7 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
                     </div>
 
                     <div>
-                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                        <p className="text-base text-gray-900 dark:text-white truncate">
                             {leagueGroup.title}
                         </p>
 
