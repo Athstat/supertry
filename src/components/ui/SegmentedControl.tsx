@@ -28,7 +28,7 @@ export default function SegmentedControl({ options, value, onChange, className }
             'px-4 py-1.5 text-sm font-medium rounded-full transition-all duration-200',
             value === option.value
               ? 'bg-[#19336C] text-white  dark:text-white shadow-sm'
-              : 'text-slate-600 hover:bg-slate-200 dark:hover:bg-slate-700'
+              : 'text-slate-600 hover:bg-slate-200 '
           )}
         >
           {option.label}

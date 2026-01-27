@@ -33,7 +33,7 @@ export function FixtureCardGameStatusSection({ fixture, hideDate }: KickoffSecti
       {/* <p className='text-xs' >{fixture.venue}</p> */}
 
       {kickoff_time && (
-        <p className="text-[16px] font-medium">{format(kickoff_time, 'HH:mm ')}</p>
+        <p className="text-[18px] font-medium">{format(kickoff_time, 'HH:mm ')}</p>
       )}
 
       {!hideDate && kickoff_time && (
