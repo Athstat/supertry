@@ -61,7 +61,7 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
             >
                 <div className="flex flex-row items-center gap-4 " >
 
-                    <div className="w-12 h-12 overflow-clip bg-white rounded-md" >
+                    <div className="w-12 h-12 overflow-clip bg-white dark:bg-slate-800 rounded-md" >
                         <LeagueGroupLogo
                             className="overflow-visible"
                             objectClassName="h-12 w-12"

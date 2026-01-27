@@ -12,6 +12,8 @@ import RoundedCard from "../../ui/cards/RoundedCard"
 import LeagueGroupsSection from "../LeagueGroupsSection"
 import StarPodium from "../../ui/icons/StarPodium"
 import TextHeading from "../../ui/typography/TextHeading"
+import { twMerge } from "tailwind-merge"
+import { AppColours } from "../../../types/constants"
 
 type Props = {
     fantasySeason?: IFantasySeason
@@ -56,9 +58,12 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
     }
 
     return (
-        <div className="flex flex-col gap-4 dark:border-none bg-[#F0F3F7]" >
+        <div className={twMerge(
+            AppColours.BACKGROUND,
+            "flex flex-col gap-4 dark:border-none bg-[#F0F3F7]",
+        )} >
 
-            <div className="flex flex-row items-center justify-between p-4 bg-[#E2E8F0]" >
+            <div className="flex flex-row items-center justify-between p-4 bg-[#E2E8F0] dark:bg-slate-700/60" >
                 <div className="flex flex-row items-center gap-2" >
                     <div className="bg-white p-2 rounded-full" >
                         <StarPodium />

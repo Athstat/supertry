@@ -14,7 +14,7 @@ type Props = {
 export default function LeagueGroupsSection({ leagues, title, description, emptyMessage }: Props) {
     return (
         <section>
-            <RoundedCard className="flex flex-col gap-4 py-6 px-4 bg-[#F0F3F7] dark:bg-dark-800/40 " >
+            <RoundedCard className="flex flex-col gap-4 py-6 px-4 bg-[#F0F3F7] " >
 
                 <div className='flex flex-col gap-2' >
                     <div className='flex flex-row items-center gap-1' >

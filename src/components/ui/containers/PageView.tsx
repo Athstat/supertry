@@ -22,7 +22,7 @@ export default function PageView({ children, className }: Props) {
 
       style={{ fontFamily: 'Roboto' }}
     >
-      <div className={twMerge('w-full lg:w-[50%]', className)}>{children}</div>
+      <div className={twMerge('w-full lg:w-[50%]', AppColours.BACKGROUND, className)}>{children}</div>
     </div>
   );
 }
