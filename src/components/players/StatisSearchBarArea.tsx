@@ -48,7 +48,6 @@ export default function StaticSearchBarArea({
                 'sticky top-0 left-0 z-[20] py-2 pb-2 w-full flex flex-col gap-2',
                 !inView && "border-b dark:border-slate-700",
                 AppColours.BACKGROUND,
-                "bg-[#F0F3F7]",
                 stickyHeaderClassName,
             )} >
 
