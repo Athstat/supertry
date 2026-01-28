@@ -7,6 +7,7 @@ import NoContentCard from '../../ui/typography/NoContentMessage';
 import { useSbrFixtures } from '../../../hooks/fixtures/useSbrFixtures';
 import { useFixtureCursor } from '../../../hooks/fixtures/useFixtureCursor';
 import { useMemo } from 'react';
+import { searchSbrFixturesPredicate } from '../../../utils/fixtureUtils';
 
 type Props = {
   searchQuery: string;
@@ -26,12 +27,22 @@ export default function SbrMatchCenter({ searchQuery }: Props) {
     })
   }, [fixtures, season])
 
-  // Get current week on mount
   const {
     weekHeader, handleNextWeek, handlePreviousWeek,
-    weekFixtures: displayFixtures, hasAnyFixtures
+    weekFixtures, hasAnyFixtures
   } = useFixtureCursor({ fixtures: seasonFixtures, isLoading });
 
+
+  const displayFixtures = useMemo(() => {
+    
+    if (searchQuery) {
+      return fixtures.filter((f) => {
+        return searchSbrFixturesPredicate(f, searchQuery);
+      })
+    }
+
+    return weekFixtures;
+  }, [fixtures, searchQuery, weekFixtures])
 
 
   if (isLoading) {
@@ -42,12 +53,12 @@ export default function SbrMatchCenter({ searchQuery }: Props) {
     <div className="flex flex-col gap-8">
 
 
-      <WeekNavigator
+      {!searchQuery && <WeekNavigator
         onMoveNextWeek={handleNextWeek}
         onMovePreviousWeek={handlePreviousWeek}
         weekHeader={weekHeader}
         className='px-6'
-      />
+      />}
 
       {/* Fixtures List */}
       <div className="flex flex-col gap-3 w-full px-6">
@@ -67,7 +78,7 @@ export default function SbrMatchCenter({ searchQuery }: Props) {
         )}
 
         {displayFixtures.length === 0 && searchQuery && (
-          <NoContentCard message="No fixtures match your search" />
+          <NoContentCard message={`No fixtures found for '${searchQuery}'`} />
         )}
 
         {displayFixtures.map((fixture, index) => {

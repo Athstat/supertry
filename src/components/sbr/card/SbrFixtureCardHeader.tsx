@@ -1,5 +1,4 @@
 import { ISbrFixture } from "../../../types/sbr"
-import SbrFixtureStatsStatusCard from "./SbrFixtureStatsStatusCard"
 
 type Props = {
     showCompetition?: boolean,
@@ -22,8 +21,6 @@ export default function SbrFixtureCardHeader({ showCompetition, fixture }: Props
                     </>
                 )}
             </div>}
-
-            <SbrFixtureStatsStatusCard fixture={fixture} />
         </div>
     )
 }

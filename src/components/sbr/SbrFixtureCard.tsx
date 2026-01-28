@@ -9,6 +9,7 @@ import SbrFixturePredictionBox from './predictions/SbrFixturePredictionBox';
 import SbrFixtureDataProvider from '../../providers/SbrFixtureDataProvider';
 import SbrFixtureCardStatusSection from './card/SbrFixtureCardStatusSection';
 import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureTimelineAtom } from '../../state/sbrFixtureScreen.atoms';
+import SbrFixtureStatsStatusCard from './card/SbrFixtureStatsStatusCard';
 
 type Props = {
   fixture: ISbrFixture;
@@ -79,8 +80,9 @@ function SbrFixtureCardContent({
     >
 
       <SbrFixtureCardHeader fixture={fixture} showCompetition={showCompetition} />
+      <SbrFixtureStatsStatusCard fixture={fixture} />
 
-      <div onClick={handleClick} className="flex flex-row">
+      <div onClick={handleClick} className="flex flex-row items-center justify-between">
 
         <SbrFixtureCardTeamSection
           fixture={fixture}

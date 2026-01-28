@@ -14,7 +14,8 @@ export default function SbrFixtureCardStatusSection({showKickOffTime, fixture} :
     const hasScores = home_score !== null && away_score !== null;
 
     return (
-        <div className="flex-1 flex flex-col items-center gap-1 justify-center dark:text-slate-400 text-slate-700 ">
+        <div className="flex flex-col items-center gap-1 justify-center dark:text-slate-400 text-slate-700 ">
+            
             {!hasScores &&
                 !showKickOffTime &&
                 !isGameLive(fixture.status) &&
@@ -25,7 +26,7 @@ export default function SbrFixtureCardStatusSection({showKickOffTime, fixture} :
                 </div>
             )}
 
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center text-center justify-center">
                 {showKickOffTime && fixture.kickoff_time && (
                     <p className="text-[16px] font-[500] text-[#011E5C]">{format(fixture.kickoff_time, 'HH:mm')}</p>
                 )}

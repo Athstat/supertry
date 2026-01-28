@@ -21,7 +21,7 @@ export default function SbrFixtureCardTeamSection({ showLogos, fixture, isAwayTe
 
     return (
         <div className={twMerge(
-            "flex gap-2 flex-col w-fit items-center justify-start ",
+            "flex gap-2 flex-col w-fit items-center justify-start min-w-[100px] max-w-[100px]",
             isAwayTeam && "justify-end"
         )}>
 
