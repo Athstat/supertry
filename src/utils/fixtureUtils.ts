@@ -68,16 +68,20 @@ export function searchSbrFixturesPredicate(fixture: ISbrFixture, query: string |
   let match = false;
 
   const phrases = [
-    `${fixture.home_team} vs ${fixture.away_team}`,
-    `${fixture.away_team} vs ${fixture.home_team}`,
+    `${fixture.home_team.team_name} vs ${fixture.away_team.team_name}`,
+    `${fixture.away_team.team_name} vs ${fixture.home_team.team_name}`,
+    `${fixture.home_team.team_name?.split(' ').at(0)} vs ${fixture.away_team.team_name.split(' ').at(0)}`,
+    `${fixture.away_team.team_name?.split(' ').at(0)} vs ${fixture.home_team.team_name.split(' ').at(0)}`,
   ];
+  
+  console.log("Phrases ", phrases);
 
   phrases.forEach((phrase: string) => {
     if (phrase === '') return false;
 
     phrase = phrase.toLowerCase();
 
-    const flag = phrase.startsWith(query);
+    const flag = phrase.startsWith(query.toLowerCase());
 
     match = match || flag;
   });

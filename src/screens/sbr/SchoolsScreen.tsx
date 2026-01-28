@@ -7,10 +7,13 @@ import SearchInput from '../../components/ui/forms/SearchInput';
 import { FixtureViewModeSwitcher } from '../../components/fixtures/FixtureViewModeSwitcher';
 import { FixtureListViewMode } from '../../types/fixtures';
 import SbrCompetitionSelector from '../../components/fixtures/sbr/SbrCompetitionSelector';
+import { useDebounced } from '../../hooks/web/useDebounced';
 
 export default function SchoolsScreen() {
   const [viewMode, setViewMode] = useState<FixtureListViewMode>("fixtures");
   const [searchQuery, setSearchQuery] = useQueryState<string>('query', { init: '' });
+
+  const debouncedSearchQuery = useDebounced(searchQuery, 500);
 
   return (
     <Fragment>
@@ -50,7 +53,7 @@ export default function SchoolsScreen() {
 
         <SbrCompetitionSelector />
 
-        <SbrMatchCenter searchQuery={searchQuery} />
+        <SbrMatchCenter searchQuery={debouncedSearchQuery} />
 
       </PageView>
 
