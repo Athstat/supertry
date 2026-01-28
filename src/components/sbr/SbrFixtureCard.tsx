@@ -10,6 +10,7 @@ import SbrFixtureDataProvider from '../../providers/SbrFixtureDataProvider';
 import SbrFixtureCardStatusSection from './card/SbrFixtureCardStatusSection';
 import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureTimelineAtom } from '../../state/sbrFixtureScreen.atoms';
 import SbrFixtureStatsStatusCard from './card/SbrFixtureStatsStatusCard';
+import RoundedCard from '../ui/cards/RoundedCard';
 
 type Props = {
   fixture: ISbrFixture;
@@ -70,10 +71,10 @@ function SbrFixtureCardContent({
   };
 
   return (
-    <div
+    <RoundedCard
       // onClick={handleClick}
       className={twMerge(
-        ' gap-2.5 flex flex-col cursor-pointer bg-[#F4F7F9] dark:bg-slate-800/40 rounded-md dark:border dark:border-slate-700 p-4',
+        ' gap-2.5 flex flex-col cursor-pointer bg-[#F4F7F9] rounded-md dark:border dark:border-slate-700 p-4',
         "shadow-[0px_0px_3px_rgba(0,0,0,0.25)]",
         className
       )}
@@ -104,6 +105,6 @@ function SbrFixtureCardContent({
       </div>
 
       <SbrFixturePredictionBox fixture={fixture} hide={hideVoting} />
-    </div>
+    </RoundedCard>
   );
 }

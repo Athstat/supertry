@@ -8,6 +8,7 @@ import { QuickFixtureModal } from '../QuickFixtureModal';
 import { FixtureCardHeaderSection } from './FixtureCardHeader';
 import { FixtureCardTeamSection } from './FixtureCardTeamSection';
 import { FixtureCardGameStatusSection } from './FixtureCardGameStatusSection';
+import RoundedCard from '../../ui/cards/RoundedCard';
 type Props = {
   fixture: IFixture;
   className?: string;
@@ -40,13 +41,13 @@ export default function FixtureCard({
 
   return (
     <>
-      <div
+      <RoundedCard
         key={fixture.game_id}
         onClick={handleClick}
         className={twMerge(
           "py-4 px-4 flex shadow-[0px_0px_3px_rgba(0,0,0,0.25)] cursor-pointer",
           " justify-center flex-col gap-4 bg-[#F0F3F7] dark:border border-slate-300 dark:border-slate-700",
-          "text-white hover:bg-slate-50/50 gap-1 dark:hover:bg-dark-800/50 dark:bg-slate-800/40 transition-colors ",
+          "text-white hover:bg-slate-50/50 gap-1 dark:hover:bg-dark-800/50  transition-colors ",
           className
         )}
       >
@@ -84,7 +85,7 @@ export default function FixtureCard({
             <p className="text-xs truncate">{message}</p>
           </WarningCard>
         )}
-      </div>
+      </RoundedCard>
 
       <QuickFixtureModal fixture={fixture} showModal={showModal} onClose={toogle} />
     </>
