@@ -43,12 +43,13 @@ export type IFixture = BaseFixture & {
 export type GameStatus = string | 'completed' | 'in_progress' | 'not_started';
 
 export type IFullFixture = any;
+export type VoteForOption = 'home_team' | 'away_team' | 'draw';
 
 export type IGameVote = {
   id: number;
   game_id: string;
   user_id: string;
-  vote_for: 'home_team' | 'away_team' | 'draw';
+  vote_for: VoteForOption;
   created_at: string;
   updated_at: string;
   user_name?: string;

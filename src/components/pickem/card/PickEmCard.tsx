@@ -5,11 +5,11 @@ import { fixtureSummary } from '../../../utils/fixtureUtils';
 import { useGameVotes } from '../../../hooks/useGameVotes';
 import { gamesService } from '../../../services/gamesService';
 import ConsensusBar from '../ConsensusBar';
-import { Loader } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import PickEmCardSkeleton from '../PickEmCardSkeleton';
 import PickemCardHeader from './PickemCardHeader';
 import PickemCardTeamOption from './PickemCardTeamOption';
+import PickemCardDrawOption from './PickemCardDrawOption';
 
 type Props = {
   fixture: IFixture;
@@ -23,14 +23,10 @@ export default function PickEmCard({ fixture, className }: Props) {
     inView
   );
   const [isVoting, setIsVoting] = useState(false);
-  const [clickedButton, setClickedButton] = useState<'home_team' | 'away_team' | 'draw' | null>(
-    null
-  );
+  const [clickedButton, setClickedButton] = useState<'home_team' | 'away_team' | 'draw' | null>(null);
 
   const { gameKickedOff } = fixtureSummary(fixture);
   const isLocked = gameKickedOff;
-
-  const votedDraw = userVote?.vote_for === 'draw';
 
   const handleVote = async (voteFor: 'home_team' | 'away_team' | 'draw') => {
     if (isLocked || isVoting) return;
@@ -54,6 +50,8 @@ export default function PickEmCard({ fixture, className }: Props) {
       setClickedButton(null);
     }
   };
+
+  const disabled = isLocked || isVoting;
 
   if (isLoading) {
     return <PickEmCardSkeleton ref={ref} className={className} />;
@@ -88,37 +86,30 @@ export default function PickEmCard({ fixture, className }: Props) {
           team={fixture.team}
           fixture={fixture}
           fetchGameVotes={inView}
+          onVote={handleVote}
+          isVoting={isVoting}
+          disabled={disabled}
+          clickedButton={clickedButton}
         />
 
         {/* Draw Button */}
-        <button
-          onClick={() => handleVote('draw')}
-          disabled={isLocked || isVoting}
-          className={twMerge(
-            'flex flex-col items-center gap-2 px-4 py-3 rounded-full transition-all duration-200 max-w-[100px] justify-self-center',
-            !isLocked &&
-            'hover:bg-slate-100 dark:hover:bg-slate-700/50 active:scale-95 cursor-pointer',
-            votedDraw &&
-            !isLocked &&
-            'bg-slate-200 dark:bg-slate-600 ring-2 ring-slate-500 shadow-lg',
-            (isLocked || isVoting) && 'cursor-not-allowed opacity-60',
-            'border-2 border-slate-300 dark:border-slate-600'
-          )}
-        >
-          <div className="relative">
-            {clickedButton === 'draw' && isVoting ? (
-              <Loader className="w-5 h-5 animate-spin text-slate-600 dark:text-slate-300" />
-            ) : (
-              <span className="text-sm font-bold text-slate-600 dark:text-slate-300">DRAW</span>
-            )}
-          </div>
-        </button>
+        <PickemCardDrawOption
+          fixture={fixture}
+          onVote={handleVote}
+          isVoting={isVoting}
+          disabled={disabled}
+          clickedButton={clickedButton}
+        />
 
         {/* Away Team */}
         <PickemCardTeamOption
           team={fixture.opposition_team}
           fixture={fixture}
           fetchGameVotes={inView}
+          onVote={handleVote}
+          isVoting={isVoting}
+          disabled={disabled}
+          clickedButton={clickedButton}
         />
       </div>
 

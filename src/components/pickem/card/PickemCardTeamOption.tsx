@@ -1,9 +1,7 @@
 import { Loader } from "lucide-react";
-import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { useGameVotes } from "../../../hooks/useGameVotes";
-import { gamesService } from "../../../services/gamesService";
-import { IFixture } from "../../../types/fixtures"
+import { IFixture, VoteForOption } from "../../../types/fixtures"
 import { IProTeam } from "../../../types/team"
 import { fixtureSummary } from "../../../utils/fixtureUtils";
 import TeamLogo from "../../team/TeamLogo";
@@ -11,17 +9,16 @@ import TeamLogo from "../../team/TeamLogo";
 type Props = {
     team?: IProTeam,
     fixture: IFixture,
-    fetchGameVotes?: boolean
+    fetchGameVotes?: boolean,
+    onVote?: (voteFor: VoteForOption) => void,
+    clickedButton?: VoteForOption | null,
+    isVoting?: boolean,
+    disabled?: boolean
 }
 
-export default function PickemCardTeamOption({ team, fixture, fetchGameVotes }: Props) {
+export default function PickemCardTeamOption({ team, fixture, fetchGameVotes, onVote, clickedButton, isVoting, disabled }: Props) {
 
-    const { userVote, mutate } = useGameVotes(fixture, fetchGameVotes);
-    const [isVoting, setIsVoting] = useState(false);
-
-    const [clickedButton, setClickedButton] = useState<'home_team' | 'away_team' | 'draw' | null>(
-        null
-    );
+    const { userVote } = useGameVotes(fixture, fetchGameVotes);
 
     const { gameKickedOff } = fixtureSummary(fixture);
     const isLocked = gameKickedOff;
@@ -33,30 +30,12 @@ export default function PickemCardTeamOption({ team, fixture, fetchGameVotes }: 
     const votedForTeam = isHomeTeam ? votedHomeTeam : votedAwayTeam;
 
     const handleVote = async () => {
-        if (isLocked || isVoting) return;
-
         const voteFor = isHomeTeam ? "home_team" : "away_team";
-        setIsVoting(true);
-        setClickedButton(voteFor);
 
-        try {
-            if (!userVote) {
-                await gamesService.postGameVote(fixture.game_id, voteFor);
-            } else {
-                await gamesService.putGameVote(fixture.game_id, voteFor);
-            }
-
-            // Refresh the votes data
-            await mutate();
-        } catch (error) {
-            console.error('Error voting:', error);
-        } finally {
-            setIsVoting(false);
-            setClickedButton(null);
+        if (onVote) {
+            onVote(voteFor);
         }
     };
-
-    const disabled = isLocked || isVoting;
 
     return (
         <button
