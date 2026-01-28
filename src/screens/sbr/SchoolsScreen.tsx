@@ -2,7 +2,6 @@ import { Fragment, useState } from 'react';
 import PageView from '../../components/ui/containers/PageView';
 import { useQueryState } from '../../hooks/web/useQueryState';
 import SbrMatchCenter from '../../components/fixtures/sbr/SbrMatchCenter';
-import FloatingSearchBar from '../../components/players/FloatingSearchBar';
 import RoundedScreenHeader from '../../components/ui/containers/RoundedScreenHeader';
 import SearchInput from '../../components/ui/forms/SearchInput';
 import { FixtureViewModeSwitcher } from '../../components/fixtures/FixtureViewModeSwitcher';
@@ -48,21 +47,13 @@ export default function SchoolsScreen() {
           />
 
         </RoundedScreenHeader>
-        
+
         <SbrCompetitionSelector />
 
-        <div className="w-full mx-auto">
-          <SbrMatchCenter searchQuery={searchQuery} onSearchChange={setSearchQuery} />
-        </div>
+        <SbrMatchCenter searchQuery={searchQuery} />
+
       </PageView>
 
-      <FloatingSearchBar
-        value={searchQuery ?? ''}
-        onChange={setSearchQuery}
-        placeholder="Search fixtures..."
-        showFilterButton={false}
-        showCompareButton={false}
-      />
     </Fragment>
   );
 }

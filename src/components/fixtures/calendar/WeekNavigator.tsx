@@ -1,16 +1,21 @@
+import { twMerge } from "tailwind-merge"
 import { ChevronButton } from "../../ui/buttons/ChevronButton"
 import TextHeading from "../../ui/typography/TextHeading"
 
 type Props = {
     onMovePreviousWeek?: () => void,
     onMoveNextWeek?: () => void,
-    weekHeader?: string
+    weekHeader?: string,
+    className?: string
 }
 
 /** Renders a week navigator */
-export default function WeekNavigator({onMoveNextWeek, onMovePreviousWeek, weekHeader}: Props) {
+export default function WeekNavigator({onMoveNextWeek, onMovePreviousWeek, weekHeader, className}: Props) {
     return (
-        <div className="flex flex-row items-center justify-between" >
+        <div className={twMerge(
+            "flex flex-row items-center justify-between",
+            className
+        )} >
             <ChevronButton
                 onClick={onMovePreviousWeek}
                 disabled={false}

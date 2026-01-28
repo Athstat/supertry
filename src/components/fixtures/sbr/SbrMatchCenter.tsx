@@ -10,7 +10,6 @@ import { useMemo } from 'react';
 
 type Props = {
   searchQuery: string;
-  onSearchChange: (query: string) => void;
 };
 
 export default function SbrMatchCenter({ searchQuery }: Props) {
@@ -42,14 +41,13 @@ export default function SbrMatchCenter({ searchQuery }: Props) {
   return (
     <div className="flex flex-col gap-4">
 
-      {/* Week Navigation */}
-      <div className="flex flex-row gap-2">
-        <WeekNavigator
-          onMoveNextWeek={handleNextWeek}
-          onMovePreviousWeek={handlePreviousWeek}
-          weekHeader={weekHeader}
-        />
-      </div>
+
+      <WeekNavigator
+        onMoveNextWeek={handleNextWeek}
+        onMovePreviousWeek={handlePreviousWeek}
+        weekHeader={weekHeader}
+        className='px-6'
+      />
 
       {/* Fixtures List */}
       <div className="flex flex-col gap-3 w-full">
