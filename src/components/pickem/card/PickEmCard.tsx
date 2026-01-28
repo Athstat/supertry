@@ -61,6 +61,7 @@ export default function PickEmCard({ fixture, className }: Props) {
       ref={ref}
       className={twMerge(
         'p-4 flex flex-col bg-white shadow-md border border-slate-300 dark:border-slate-700 gap-3 dark:bg-slate-800/50 transition-all duration-200',
+        'bg-[#F9FBFD] dark:bg-slate-800 shadow-[0px_0px_3px_rgba(0,0,0,0.25)]',
         !isLocked && 'hover:shadow-lg',
         isLocked && 'opacity-70',
         className
@@ -114,8 +115,8 @@ export default function PickEmCard({ fixture, className }: Props) {
 
       {/* Total Votes Display */}
       <div className="w-full flex items-center justify-center">
-        <p className="text-[10px] text-slate-500 dark:text-slate-400">
-          Total votes:{' '}
+        <p className="text-sm text-slate-500 dark:text-slate-400">
+          Total Votes:{' '}
           <span className="font-semibold text-slate-700 dark:text-slate-300">
             {homeVotes.length + awayVotes.length + drawVotes.length}
           </span>

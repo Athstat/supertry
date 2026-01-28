@@ -1,16 +1,14 @@
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import PageView from '../../components/ui/containers/PageView';
 import { useQueryState } from '../../hooks/web/useQueryState';
 import SbrMatchCenter from '../../components/fixtures/sbr/SbrMatchCenter';
 import RoundedScreenHeader from '../../components/ui/containers/RoundedScreenHeader';
 import SearchInput from '../../components/ui/forms/SearchInput';
-import { FixtureViewModeSwitcher } from '../../components/fixtures/FixtureViewModeSwitcher';
-import { FixtureListViewMode } from '../../types/fixtures';
 import SbrCompetitionSelector from '../../components/fixtures/sbr/SbrCompetitionSelector';
 import { useDebounced } from '../../hooks/web/useDebounced';
 
 export default function SchoolsScreen() {
-  const [viewMode, setViewMode] = useState<FixtureListViewMode>("fixtures");
+  // const [viewMode, setViewMode] = useState<FixtureListViewMode>("fixtures");
   const [searchQuery, setSearchQuery] = useQueryState<string>('query', { init: '' });
 
   const debouncedSearchQuery = useDebounced(searchQuery, 500);
@@ -31,13 +29,6 @@ export default function SchoolsScreen() {
           )}
 
           className='bg-[#FFC603]'
-
-          trailingSlot={(
-            <FixtureViewModeSwitcher
-              viewMode={viewMode}
-              onChange={setViewMode}
-            />
-          )}
 
           titleCN="text-[#011E5C]"
         >
