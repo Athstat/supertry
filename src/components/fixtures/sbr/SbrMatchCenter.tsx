@@ -49,6 +49,8 @@ export default function SbrMatchCenter({ searchQuery }: Props) {
     return <LoadingIndicator />;
   }
 
+  const displayRound = season !== undefined ? weekFixtures.at(0)?.round : undefined;
+
   return (
     <div className="flex flex-col gap-8">
 
@@ -58,6 +60,7 @@ export default function SbrMatchCenter({ searchQuery }: Props) {
         onMovePreviousWeek={handlePreviousWeek}
         weekHeader={weekHeader}
         className='px-6'
+        round={displayRound}
       />}
 
       {/* Fixtures List */}
