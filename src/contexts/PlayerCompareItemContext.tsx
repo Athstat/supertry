@@ -5,7 +5,7 @@ import { IProSeason } from "../types/season"
 import useSWR from "swr"
 import { athleteService } from "../services/athletes/athletesService"
 import { swrFetchKeys } from "../utils/swrKeys"
-import { IFixture } from "../types/games"
+import { IFixture } from "../types/fixtures"
 
 type ContextProps = {
     player: IProAthlete,

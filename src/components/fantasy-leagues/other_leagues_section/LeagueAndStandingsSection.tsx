@@ -1,4 +1,4 @@
-import { Plus, Trophy } from "lucide-react"
+import { Plus } from "lucide-react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import SuggestedLeaguesSections from "./SuggestedLeaguesSection"
@@ -9,11 +9,14 @@ import PrimaryButton from "../../ui/buttons/PrimaryButton"
 import NoContentCard from "../../ui/typography/NoContentMessage"
 import CreateLeagueModal from "../create_league_modal/CreateLeagueModal"
 import RoundedCard from "../../ui/cards/RoundedCard"
-import { useAuth } from "../../../contexts/AuthContext"
 import LeagueGroupsSection from "../LeagueGroupsSection"
+import StarPodium from "../../ui/icons/StarPodium"
+import TextHeading from "../../ui/typography/TextHeading"
+import { twMerge } from "tailwind-merge"
+import { AppColours } from "../../../types/constants"
 
 type Props = {
-    fantasySeason: IFantasySeason
+    fantasySeason?: IFantasySeason
 }
 
 
@@ -21,27 +24,11 @@ type Props = {
 export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
 
     const navigate = useNavigate();
-
-    const { authUser } = useAuth();
-    const { leagues, isLoading } = useJoinedLeagues(fantasySeason.id);
+    const { leagues: myLeagues, isLoading } = useJoinedLeagues(fantasySeason?.id);
 
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [initTab, setInitTab] = useState<"join" | "create">("create");
     const toggle = () => setShowCreateModal(prev => !prev);
-
-    const officialLeagues = leagues.filter((l) => {
-        return l.type === 'official_league' || l.type === 'system_created';
-    });
-
-    const myLeagues = leagues.filter((l) => {
-        return l.creator_id === authUser?.kc_id;
-    })
-
-    const joinedLeagues = leagues.filter((l) => {
-        const notOfficial = l.type !== 'official_league' && l.type !== 'system_created';
-        const notMine = l.creator_id !== authUser?.kc_id;
-        return notMine && notOfficial;
-    })
 
     const openCreateModal = () => {
         setInitTab("create");
@@ -71,51 +58,35 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
     }
 
     return (
-        <div className="flex flex-col gap-4 dark:border-none" >
+        <div className={twMerge(
+            AppColours.BACKGROUND,
+            "flex flex-col gap-4 dark:border-none bg-[#F0F3F7]",
+        )} >
 
-            <div className="flex flex-row items-center justify-between px-4" >
-
+            <div className="flex flex-row items-center justify-between p-4 bg-[#E2E8F0] dark:bg-slate-700/60" >
                 <div className="flex flex-row items-center gap-2" >
-                    <Trophy className="w-4 h-4" />
-                    <p className="text-lg font-bold" >Leagues & Standings</p>
-                    {/* <GamePlayHelpButton className="" iconHw="w-4 h-4" /> */}
+                    <div className="bg-white p-2 rounded-full" >
+                        <StarPodium />
+                    </div>
+
+                    <TextHeading className="text-2xl font-semibold" blue >Leagues And Standings</TextHeading>
                 </div>
             </div>
 
             <div className="flex flex-row items-center justify-between gap-2 px-4" >
-                <PrimaryButton onClick={openCreateModal} className="flex-1" >
-                    <Plus className="w-4 h-4" />
+                <PrimaryButton onClick={openCreateModal} className="flex-1" flexRowCN="gap-3" >
+                    <Plus className="w-5 h-5" />
                     <p>Join or Create League</p>
                 </PrimaryButton>
             </div>
 
-
-            {/* <div>
-                <SecondaryText>Click on a league to view it's standings</SecondaryText>
-            </div> */}
-
-            <div className="flex flex-col gap-4 mt-4" >
-
-                <LeagueGroupsSection
-                    title="Official Leagues"
-                    description="Leagues created by SCRUMMY"
-                    emptyMessage="No Official leagues were found"
-                    leagues={officialLeagues}
-                    isVerified
-                />
+            <div className="flex flex-col gap-4 mt-4 px-2" >
 
                 <LeagueGroupsSection
                     title="My Leagues"
-                    description="Leagues created by you"
-                    emptyMessage="You have not created any leagues yet"
+                    description="Leagues you’re a part of or you created"
+                    emptyMessage="You are not part of any league, join a league or create your own to get started!"
                     leagues={myLeagues}
-                />
-
-                <LeagueGroupsSection
-                    title="Joined Leagues"
-                    description="Other leagues you are apart of, created by others"
-                    emptyMessage="You have not joined any leagues yet"
-                    leagues={joinedLeagues}
                 />
 
                 <SuggestedLeaguesSections
@@ -126,7 +97,7 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
 
 
 
-            {leagues.length === 0 && (
+            {myLeagues.length === 0 && (
                 <NoContentCard
                     message="You haven't joined any leagues yet 👀!"
                 />

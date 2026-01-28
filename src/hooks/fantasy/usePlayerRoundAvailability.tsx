@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import useSWR from "swr";
 import { athleteService } from "../../services/athletes/athletesService";
-import { IFixture } from "../../types/games";
+import { IFixture } from "../../types/fixtures";
 import { useFantasySeasons } from "../dashboard/useFantasySeasons";
 
 /** Gets Player Specific Round Availability outside rosters */

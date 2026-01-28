@@ -2,6 +2,12 @@
 import { IProAthlete } from './athletes';
 import { IProTeam } from './team';
 
+export type BaseFixture = {
+  kickoff_time?: Date,
+  venue?: string;
+  round: number;
+}
+
 export type ProGameStatus =
   | 'completed'
   | 'not_started'
@@ -10,14 +16,12 @@ export type ProGameStatus =
   | 'in_progress'
   | 'fixture';
 
-export type IFixture = {
+export type IFixture = BaseFixture & {
   game_id: string;
   team?: IProTeam;
   opposition_team?: IProTeam;
   team_score?: number;
   opposition_score?: number;
-  venue?: string;
-  kickoff_time?: Date;
   competition_name?: string;
   is_knockout?: boolean;
   is_league_managed?: boolean;
@@ -31,7 +35,6 @@ export type IFixture = {
   source_id?: string;
   data_source?: string;
   is_test?: false;
-  round: number;
   league: string;
   league_id: string;
   highlights_link?: string;
@@ -40,12 +43,13 @@ export type IFixture = {
 export type GameStatus = string | 'completed' | 'in_progress' | 'not_started';
 
 export type IFullFixture = any;
+export type VoteForOption = 'home_team' | 'away_team' | 'draw';
 
 export type IGameVote = {
   id: number;
   game_id: string;
   user_id: string;
-  vote_for: 'home_team' | 'away_team' | 'draw';
+  vote_for: VoteForOption;
   created_at: string;
   updated_at: string;
   user_name?: string;

@@ -1,5 +1,5 @@
 import { Calendar, Info, Trophy } from "lucide-react"
-import { IFixture } from "../../../types/games"
+import { IFixture } from "../../../types/fixtures"
 import { MapPin } from "lucide-react"
 import { format } from "date-fns"
 import { useNavigate } from "react-router-dom"

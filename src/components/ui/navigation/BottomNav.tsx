@@ -78,7 +78,8 @@ export function BottomNav() {
     <Activity mode={bottomNavViewMode}>
       <div className={twMerge(
         "fixed bottom-0 left-0 right-0 bg-white backdrop-blur-sm z-[100] shadow-sm",
-        AppColours.BACKGROUND
+        AppColours.BACKGROUND,
+        "bg-white"
       )}>
         <div className="flex justify-around items-center h-16 max-w-md mx-auto">
           {navItems.map(item => {

@@ -1,11 +1,11 @@
 import { twMerge } from "tailwind-merge"
-import { IFixture } from "../../types/games"
+import { IFixture } from "../../types/fixtures"
 import { IProTeam } from "../../types/team"
 import { fixtureSummary } from "../../utils/fixtureUtils"
 import SecondaryText from "../ui/typography/SecondaryText"
 import { Activity, useMemo, useState } from "react"
-import { FixtureCardModal } from "../fixture/FixtureCard"
 import TeamLogo from "./TeamLogo"
+import { QuickFixtureModal } from "../fixture/QuickFixtureModal"
 
 type Props = {
     team: IProTeam,
@@ -61,7 +61,7 @@ export default function TeamFormGnatChart({ team, fixtures }: Props) {
             </div>
 
             <Activity mode={fixture ? "visible" : "hidden"} >
-                {fixture && <FixtureCardModal
+                {fixture && <QuickFixtureModal
                     fixture={fixture}
                     onClose={handleClose}
                     showModal={Boolean(fixture)}

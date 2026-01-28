@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { IFixture } from '../../types/games';
+import { IFixture } from '../../types/fixtures';
 import { gamesService } from '../../services/gamesService';
 import { isGameLive } from '../../utils/fixtureUtils';
 

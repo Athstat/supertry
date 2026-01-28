@@ -1,7 +1,7 @@
 import { RestPromise } from "../../types/auth";
 import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { EditFantasyLeagueGroupReq, FantasyLeagueGroup, FantasyLeagueGroupMember, FantasySeasonRankingItem, MemberRankingDetail, NewFantasyLeagueGroupReq } from "../../types/fantasyLeagueGroups";
-import { IFixture } from "../../types/games";
+import { IFixture } from "../../types/fixtures";
 import { getAuthHeader, getAuthHeaderFormMultipart, getUri } from "../../utils/backendUtils"
 import { authService } from "../authService";
 import { logger } from "../logger";

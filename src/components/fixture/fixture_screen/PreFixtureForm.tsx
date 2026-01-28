@@ -1,5 +1,5 @@
 import { useTeamLastNFixtures } from '../../../hooks/teams/useTeamLastNFixtures'
-import { IFixture } from '../../../types/games'
+import { IFixture } from '../../../types/fixtures'
 import { fixtureSummary } from '../../../utils/fixtureUtils';
 import TeamFormGnatChart from '../../team/TeamFormGnatChart';
 import RoundedCard from '../../ui/cards/RoundedCard';

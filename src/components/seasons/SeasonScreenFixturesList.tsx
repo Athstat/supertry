@@ -1,5 +1,5 @@
 import { Calendar } from "lucide-react"
-import { IFixture } from "../../types/games"
+import { IFixture } from "../../types/fixtures"
 import GroupedFixturesList from "../fixtures/GroupedFixturesList"
 import PillBar, { PillBarItems } from "../ui/bars/PillTabBar"
 import { useQueryState } from "../../hooks/web/useQueryState"

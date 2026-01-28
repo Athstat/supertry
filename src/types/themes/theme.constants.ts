@@ -3,14 +3,14 @@ import { AppTheme } from "./themes";
 /** The Classic Theme for Scrummy */
 export const appTheme1: AppTheme = {
     backgroundCN: 'bg-white dark:bg-dark-850',
-    cardBackgroundCN: 'bg-slate-50 dark:bg-slate-800/60',
+    cardBackgroundCN: 'bg-slate-[#F0F3F7] dark:bg-slate-800/60',
     backgroundGradient: 'from-white dark:from-bg-dark-850'
 }
 
 /** Prem Style Light Theme for Scrummy */
 export const appTheme2: AppTheme = {
     backgroundCN: 'bg-white dark:bg-[#15202b]',
-    cardBackgroundCN: 'bg-slate-50 dark:bg-slate-700/50 dark:hover:bg-slate-700/80',
+    cardBackgroundCN: 'bg-slate-[#F0F3F7] dark:bg-slate-700/50',
     backgroundGradient: 'from-white dark:from-[#15202b]'
 }
 

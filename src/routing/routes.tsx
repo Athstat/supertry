@@ -19,7 +19,7 @@ import FantasyLeagueScreen from "../screens/fantasy_leagues/FantasyLeagueScreen"
 import CompetitionsScreen from "../screens/fantasy_seasons/CompetitionsScreen";
 import SeasonScreen from "../screens/fantasy_seasons/SeasonScreen";
 import FixtureDetailScreen from "../screens/fixtures/FixtureDetailScreen";
-import ProFixturesScreen from "../screens/fixtures/FixturesScreen";
+import ProFixturesScreen from "../screens/fixtures/ProFixturesScreen";
 import EditAccountInfoScreen from "../screens/myaccount/EditAccountInfoScreen";
 import NotificationPreferencesScreen from "../screens/myaccount/NotificationPreferencesScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
@@ -32,7 +32,7 @@ import FantasyTopPerformersScreen from "../screens/players/FantasyTopPerformersS
 import PlayersByCountryScreen from "../screens/players/PlayersByCountryScreen";
 import PlayersByPositionClassScreen from "../screens/players/PlayersByPositionClassScreen";
 import PlayersByTeamScreens from "../screens/players/PlayersByTeamScreens";
-import PlayersOverviewScreen from "../screens/players/PlayersOverviewScreen";
+import PlayersScreen from "../screens/players/PlayersScreen";
 import ScoutingListScreen from "../screens/players/scouting/ScoutingListScreen";
 import PredictionsRankingScreen from "../screens/predictions/PredictionsRankingScreen";
 import SbrFixtureScreen from "../screens/sbr/SbrFixtureScreen";
@@ -153,7 +153,7 @@ export const dataRouter = createBrowserRouter([
                 element: (
                     <ProtectedRoute>
                         <MainAppLayout>
-                            <PlayersOverviewScreen />
+                            <PlayersScreen />
                         </MainAppLayout>
                     </ProtectedRoute>
                 )

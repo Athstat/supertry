@@ -37,11 +37,12 @@ export function PlayerRankingCard({ rank, onClick, player, value, borderColor = 
 
         <div className="flex flex-row items-center gap-2 flex-shrink-0">
           {seasonTeam && (
-            <div className="w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-full flex flex-col items-center justify-center">
+            <div className="w-10 h-10 bg-white dark:bg-gray-700 overflow-clip rounded-full flex flex-col items-center justify-center">
               <TeamJersey
                 useBaseClasses={false}
                 teamId={seasonTeam.athstat_id}
-                className="h-8"
+                className="h-9 mt-3"
+                hideFade
               />
             </div>
           )}

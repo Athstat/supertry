@@ -1,4 +1,4 @@
-import { IFixture } from './games';
+import { IFixture } from './fixtures';
 
 /** Represents a single matches power ranking */
 export type SingleMatchPowerRanking = {

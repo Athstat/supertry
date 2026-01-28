@@ -1,6 +1,6 @@
 import useSWR, { preload } from "swr";
 import { gamesService } from "../../services/gamesService";
-import { IFixture } from "../../types/games";
+import { IFixture } from "../../types/fixtures";
 import { useMemo } from "react";
 
 export function useGameRosters(fixture: IFixture) {

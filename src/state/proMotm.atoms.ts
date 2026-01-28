@@ -2,7 +2,7 @@
 
 import { atom } from "jotai";
 import { IProMotmVote } from "../types/proMotm";
-import { IRosterItem } from "../types/games";
+import { IRosterItem } from "../types/fixtures";
 import { authService } from "../services/authService";
 
 export const proGameMotmVotesAtom = atom<IProMotmVote[]>([]);

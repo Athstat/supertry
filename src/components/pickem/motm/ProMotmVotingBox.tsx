@@ -1,4 +1,4 @@
-import { IFixture } from "../../../types/games";
+import { IFixture } from "../../../types/fixtures";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../../ui/tabs/TabView";
 import SecondaryText from "../../ui/typography/SecondaryText";
 import { ProMotmVotingCandidateList } from "./ProMotmVotingCandidateList";

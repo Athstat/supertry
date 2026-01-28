@@ -1,13 +1,13 @@
 import { format } from 'date-fns';
-import { IFixture } from '../../types/games';
+import { IFixture } from '../../types/fixtures';
 import SecondaryText from '../ui/typography/SecondaryText';
 import TeamLogo from '../team/TeamLogo';
 import { fixtureSummary, isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
 import { Fragment, useState } from 'react';
 import { analytics } from '../../services/analytics/anayticsService';
-import { FixtureCardModal } from './FixtureCard';
 import { twMerge } from 'tailwind-merge';
 import ProFixtureVotingBox from '../pickem/voting/ProFixtureVotingBox';
+import { QuickFixtureModal } from './QuickFixtureModal';
 
 type Props = {
   fixture: IFixture;
@@ -101,7 +101,7 @@ export default function SmallFixtureCard({ fixture, className, hideVotingBox }: 
         {!hideVotingBox && <ProFixtureVotingBox className="mt-0" fixture={fixture} />}
       </div>
 
-      <FixtureCardModal fixture={fixture} onClose={toggle} showModal={showModal} />
+      <QuickFixtureModal fixture={fixture} onClose={toggle} showModal={showModal} />
     </Fragment>
   );
 }

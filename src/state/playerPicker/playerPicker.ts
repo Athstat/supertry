@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { IFixture } from "../../types/games";
+import { IFixture } from "../../types/fixtures";
 import { IProAthlete, PositionClass } from "../../types/athletes";
 import { IFantasyAthlete } from "../../types/rugbyPlayer";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";

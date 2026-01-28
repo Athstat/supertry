@@ -1,11 +1,17 @@
 import { preload } from "react-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useUserOverallStandings } from "../../hooks/fantasy/standings/useUserOverallStandings";
-import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
+import { FantasyLeagueGroup, FantasyLeagueGroupType } from "../../types/fantasyLeagueGroups";
 import LeagueGroupLogo from "../fantasy_league/LeagueGroupLogo";
 import RoundedCard from "../ui/cards/RoundedCard";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useInView } from "react-intersection-observer";
+import { useLeagueGroupMembersCount } from "../../hooks/leagues/useLeagueGroupMembersCount";
+import LeagueMembersIcon from "../ui/icons/LeagueMembersIcon";
+import SecondaryText from "../ui/typography/SecondaryText";
+import { Verified } from "lucide-react";
+import { twMerge } from "tailwind-merge";
+import { seperateNumberParts } from "../../utils/intUtils";
 
 type CardProps = {
     leagueGroup: FantasyLeagueGroup,
@@ -17,18 +23,11 @@ type CardProps = {
 export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
 
     const { authUser } = useAuth();
-    const { userRanking, isLoading } = useUserOverallStandings(authUser?.kc_id, leagueGroup.id);
+    const { userRanking, isLoading: loadingStandings } = useUserOverallStandings(authUser?.kc_id, leagueGroup.id);
     const { ref, inView } = useInView({ triggerOnce: true });
 
-    const getStatusBadge = () => {
-        const isPrivate = leagueGroup.is_private;
-
-        if (isPrivate) {
-            return <Badge variant="invite">Invite Only</Badge>;
-        }
-
-        return <Badge variant="success">Public</Badge>;
-    };
+    const { formattedCount, isLoading: loadingMembers } = useLeagueGroupMembersCount(leagueGroup.id);
+    const isLoading = loadingStandings || loadingMembers;
 
     const handleOnClick = () => {
         if (onClick) {
@@ -58,31 +57,46 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
 
             <RoundedCard
                 onClick={handleOnClick}
-                className="py-2 cursor-pointer rounded-md px-4 bg-slate-100 border-none flex flex-row items-center justify-between"
+                className="py-2 cursor-pointer rounded-md pl-2 pr-4 bg-[#F4F7F9] dark:bg-slate-700 shadow-[0px_1px_4px_rgba(0,0,0,0.25)] border-none flex flex-row items-center justify-between"
             >
-                <div className="flex flex-row items-center gap-2" >
-                    <LeagueGroupLogo className="w-6 h-6" league={leagueGroup} />
+                <div className="flex flex-row items-center gap-4 " >
 
-                    <h3 className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                        {leagueGroup.title}
-                    </h3>
-                    {getStatusBadge()}
+                    <div className="w-12 h-12 overflow-clip bg-white dark:bg-slate-800 rounded-md" >
+                        <LeagueGroupLogo
+                            className="overflow-visible"
+                            objectClassName="h-12 w-12"
+                            league={leagueGroup}
+                        />
+                    </div>
+
+                    <div>
+                        <p className="text-base text-gray-900 dark:text-white truncate">
+                            {leagueGroup.title}
+                        </p>
+
+                        <div className="flex flex-row items-center gap-1.5" >
+                            <LeagueMembersIcon />
+                            {!isLoading && <SecondaryText>{formattedCount}</SecondaryText>}
+                        </div>
+                    </div>
                 </div>
 
 
-                <div className="" >
+                <div className="flex flex-row items-center gap-6" >
 
-                    {!isLoading && <div className="text-slate-600 dark:text-slate-200 font-semibold text-sm" >
-                        <p>{userRanking?.league_rank}</p>
+                    <LeagueVisibityBadge 
+                        isPrivate={leagueGroup.is_private}
+                        type={leagueGroup.type}
+                    />
+
+                    {!isLoading && <div className="text-slate-600 dark:text-slate-200 text-[14px]" >
+                        <p>{seperateNumberParts(userRanking?.league_rank)}</p>
                     </div>}
 
                     {isLoading && <div className="text-slate-600 animate-pulse dark:text-slate-200 font-semibold text-sm" >
                         <div className="w-4 h-4 rounded-xl bg-slate-200 dark:bg-slate-600" ></div>
                     </div>}
 
-                    {/* <button onClick={handleOnClick} >
-                    <ChevronRight className="w-4 h-4" />
-                    </button> */}
                 </div>
 
             </RoundedCard>
@@ -90,26 +104,35 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
     );
 }
 
+type LeagueVisibityBadgeProps = {
+    type?: FantasyLeagueGroupType,
+    isPrivate?: boolean
+}
 
-const Badge = ({ variant, children }: { variant: string; children: React.ReactNode }) => {
-    const getVariantClasses = () => {
-        switch (variant) {
-            case 'success':
-                return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400';
-            case 'destructive':
-                return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400';
-            case 'secondary':
-                return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
-            case 'invite':
-                return 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400';
-            default:
-                return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
+function LeagueVisibityBadge({type, isPrivate} : LeagueVisibityBadgeProps) {
+    
+    const status = useMemo(() => {
+        if (type === "official_league" || type === "system_created") {
+            return "Official"
         }
-    };
+
+        if (isPrivate) {
+            return "Invite Only"
+        }
+
+        return "Public"
+    }, [isPrivate, type]);
 
     return (
-        <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${getVariantClasses()}`}>
-            {children}
-        </span>
-    );
-};
+        <div className={twMerge(
+            "flex flex-row items-center gap-2 text-xs py-1 px-2 rounded-full",
+            status === "Official" && "bg-[#DDEDF9]  text-[#2BA1F5] dark:bg-[#2BA1F5]  dark:text-[#DDEDF9]",
+            status === "Invite Only" && "bg-[#E5E3F8] text-[#6B47F0] dark:bg-[#6B47F0] dark:text-[#E5E3F8]",
+            status === "Public" && "bg-[#DEEFE8] text-[#34AF62] dark:bg-[#34AF62] dark:text-[#DEEFE8]",
+        )} >
+            <p>{status}</p>
+
+            {status === "Official" && <Verified className="w-4 h-4" />}
+        </div>
+    )
+}

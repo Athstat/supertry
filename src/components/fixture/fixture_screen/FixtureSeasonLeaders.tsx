@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useTeamSeasonLeaders } from "../../../hooks/teams/useTeamSeasonLeaders"
-import { IFixture } from "../../../types/games"
+import { IFixture } from "../../../types/fixtures"
 import { TeamSeasonLeader } from "../../../types/team";
 import SmartPlayerMugshot from "../../player/SmartPlayerMugshot";
 import SecondaryText from "../../ui/typography/SecondaryText";

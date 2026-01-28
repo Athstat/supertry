@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useGameRosters } from "../../../hooks/fixtures/useGameRosters";
 import { fixtureAnalytics } from "../../../services/analytics/fixtureAnalytics";
 import { IProAthlete } from "../../../types/athletes";
-import { IFixture } from "../../../types/games";
+import { IFixture } from "../../../types/fixtures";
 import { fixtureSummary } from "../../../utils/fixtureUtils";
 import PlayerProfileModal from "../../player/PlayerProfileModal";
 import NoContentCard from "../../ui/typography/NoContentMessage";

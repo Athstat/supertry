@@ -1,5 +1,5 @@
 import { useAtom, useAtomValue } from "jotai";
-import { IRosterItem } from "../../../types/games";
+import { IRosterItem } from "../../../types/fixtures";
 import SecondaryText from "../../ui/typography/SecondaryText";
 import { 
     hasUserSubmittedProMotmAtom, 

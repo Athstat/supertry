@@ -1,6 +1,6 @@
 import NoContentCard from '../ui/typography/NoContentMessage';
 import { ChevronRight } from 'lucide-react';
-import { FixtureListViewMode, IFixture } from '../../types/games';
+import { FixtureListViewMode, IFixture } from '../../types/fixtures';
 import GroupedFixturesList from './GroupedFixturesList';
 
 
@@ -40,6 +40,7 @@ export default function ProMatchCenterList({ onMoveNextWeek, displayFixtures, ha
       <GroupedFixturesList 
         fixtures={displayFixtures}
         viewMode={"fixtures"}
+        hideCompetitionName
       />
 
     </div>
