@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ScrummyLogoHorizontal from '../../branding/scrummy_logo_horizontal';
 import NotificationsBellButton from '../../notifications/NotificationsBellButton';
 import { useNavigationBars } from '../../../hooks/navigation/useNavigationBars';
@@ -12,19 +12,7 @@ import BetaTag from '../../branding/BetaTag';
 
 export function Header() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { topNavViewMode } = useNavigationBars();
-
-  const pathsToShowCompetitionSelector = [
-    '/dashboard',
-    '/league',
-    '/players',
-    '/fixtures'
-  ]
-
-  const showCompetitionSelector = pathsToShowCompetitionSelector.find((p) => {
-    return location.pathname?.startsWith(p);
-  })
 
   const isInQa = isInProduction() === false;
 
@@ -52,11 +40,10 @@ export function Header() {
 
           </div>
 
-          {showCompetitionSelector && (
-            <div className="ml-2">
-              <CompetitionSelector />
-            </div>
-          )}
+          <div className="ml-2">
+            <CompetitionSelector />
+          </div>
+
 
           <div className="flex items-center gap-4">
             <NotificationsBellButton />
