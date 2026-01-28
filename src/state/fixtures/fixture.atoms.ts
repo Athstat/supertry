@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { IFixture } from "../../types/games";
+import { IFixture } from "../../types/fixtures";
 import { IProAthlete } from "../../types/athletes";
 
 /** Holds a fixture */

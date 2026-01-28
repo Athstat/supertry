@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { IFixture } from "../../../types/games"
+import { IFixture } from "../../../types/fixtures"
 import { fixtureSummary } from "../../../utils/fixtureUtils"
 import { swrFetchKeys } from "../../../utils/swrKeys";
 import { gamesService } from "../../../services/gamesService";

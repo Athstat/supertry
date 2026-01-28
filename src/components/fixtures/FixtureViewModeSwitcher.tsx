@@ -1,4 +1,4 @@
-import { FixtureListViewMode } from "../../types/games";
+import { FixtureListViewMode } from "../../types/fixtures";
 import SegmentedControl from "../ui/SegmentedControl";
 
 type ViewModeSwitcherProps = {

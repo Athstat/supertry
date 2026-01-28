@@ -10,7 +10,7 @@ import { format } from "date-fns"
 import TeamLogo from "../../../team/TeamLogo"
 import { fixtureSummary, getOpponent } from "../../../../utils/fixtureUtils"
 import { twMerge } from "tailwind-merge"
-import { IFixture } from "../../../../types/games"
+import { IFixture } from "../../../../types/fixtures"
 import { usePlayerData } from "../../../../providers/PlayerDataProvider"
 import RoundedCard from "../../../ui/cards/RoundedCard"
 

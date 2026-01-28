@@ -1,5 +1,5 @@
 import { twMerge } from 'tailwind-merge';
-import { IFixture } from '../../types/games';
+import { IFixture } from '../../types/fixtures';
 import { format } from 'date-fns';
 import { useState } from 'react';
 import TeamLogo from '../team/TeamLogo';

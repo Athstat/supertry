@@ -12,7 +12,7 @@ import { useQueryState } from '../../hooks/web/useQueryState';
 import FixturesProPickemView from '../../components/fixtures/pro_match_center/ProPickemView';
 import RoundedScreenHeader from '../../components/ui/containers/RoundedScreenHeader';
 import SearchInput from '../../components/ui/forms/SearchInput';
-import { FixtureListViewMode } from '../../types/games';
+import { FixtureListViewMode } from '../../types/fixtures';
 import { FixtureViewModeSwitcher } from '../../components/fixtures/FixtureViewModeSwitcher';
 
 /** Renders Pro Rugby Fixtures Screen */
@@ -31,7 +31,7 @@ export default function ProFixturesScreen() {
 
   const {
     handleJumpToCurrentWeek, handleNextWeek, handlePreviousWeek,
-    weekStart, weekHeader, hasAnyFixtures, isCurrentWeek,
+    weekStart, weekHeader, hasAnyFixtures,
     weekFixtures
   } = useFixtureCursor({
     fixtures, isLoading
@@ -95,13 +95,10 @@ export default function ProFixturesScreen() {
           </h2>}
 
           <ProMatchCenterHeader
-            viewMode={viewMode}
             onMoveNextWeek={handleNextWeek}
             onMovePreviousWeek={handlePreviousWeek}
             onMoveToCurrentWeek={handleJumpToCurrentWeek}
             hasAnyFixtures={hasAnyFixtures}
-            isCurrentWeek={isCurrentWeek}
-            onChangeViewMode={setViewMode}
             weekHeader={weekHeader}
             searchQuery={defferedSearchQuery}
           />

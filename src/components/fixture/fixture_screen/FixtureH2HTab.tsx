@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react"
-import { IFixture } from "../../../types/games"
+import { IFixture } from "../../../types/fixtures"
 import PlayerProfileModal from "../../player/PlayerProfileModal"
 import SeasonStandingsTable from "../../seasons/SeasonStandingsTable"
 import { FixtureVotingCard } from "../../pickem/voting/FixtureVotingCard"

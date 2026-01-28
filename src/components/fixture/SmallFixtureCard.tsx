@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { IFixture } from '../../types/games';
+import { IFixture } from '../../types/fixtures';
 import SecondaryText from '../ui/typography/SecondaryText';
 import TeamLogo from '../team/TeamLogo';
 import { fixtureSummary, isGameLive, formatGameStatus } from '../../utils/fixtureUtils';

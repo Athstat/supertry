@@ -1,4 +1,4 @@
-import { IFixture } from './games';
+import { IFixture } from './fixtures';
 import { PlayerForm } from './rugbyPlayer';
 import { IProSeason } from './season';
 import { IProTeam } from './team';

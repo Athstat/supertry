@@ -82,7 +82,7 @@ function SelectedIndicator({ option, isOpen, onClick, className }: SelectedProps
     return (
         <RoundedCard
             className={twMerge(
-                "dark:bg-slate-700/60 cursor-pointer px-2 text-sm dark:border-slate-600 flex flex-row items-center justify-between relative w-full h-[35px] rounded-md",
+                "dark:bg-slate-700/60 bg-[#E2E8F0] cursor-pointer text-[#475569] px-2 text-sm border-[#475569] dark:border-slate-600 flex flex-row items-center justify-between relative w-full h-[35px] rounded-md",
                 className
             )}
             onClick={onClick}
@@ -91,7 +91,7 @@ function SelectedIndicator({ option, isOpen, onClick, className }: SelectedProps
 
             <div className="" >
                 <ChevronDown className={twMerge(
-                    "w-4 h-4 transition-all ease-in delay-150",
+                    "w-7 h-7 transition-all text-[#011E5C] ease-in delay-150",
                     isOpen && "rotate-180"
                 )} />
 

@@ -1,5 +1,5 @@
 import { LoadingIndicator } from "../../ui/LoadingIndicator";
-import { ITeam } from "../../../types/games";
+import { ITeam } from "../../../types/fixtures";
 import { IProSeason } from "../../../types/season";
 import { useSeasonTeams } from "../../../hooks/seasons/useSeasonTeams";
 import SecondaryText from "../../ui/typography/SecondaryText";

@@ -1,4 +1,4 @@
-import { FixtureListViewMode, IFixture } from "../../types/games";
+import { FixtureListViewMode, IFixture } from "../../types/fixtures";
 import FixtureCard from "../fixture/card/FixtureCard";
 import PickEmCard from "../pickem/PickEmCard";
 

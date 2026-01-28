@@ -1,4 +1,4 @@
-import { ITeamAction, ITeamActionName } from "../types/games";
+import { ITeamAction, ITeamActionName } from "../types/fixtures";
 
 
 export type TeamHeadtoHeadItem = {

@@ -1,5 +1,5 @@
 import { twMerge } from "tailwind-merge";
-import { IFixture, IGameVote } from "../../../types/games";
+import { IFixture, IGameVote } from "../../../types/fixtures";
 import { IProTeam } from "../../../types/team";
 import SecondaryText from "../../ui/typography/SecondaryText";
 import TeamLogo from "../../team/TeamLogo";

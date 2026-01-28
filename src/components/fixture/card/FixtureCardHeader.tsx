@@ -1,5 +1,5 @@
 import { useLiveFixture } from "../../../hooks/fixtures/useLiveFixture";
-import { IFixture } from "../../../types/games";
+import { IFixture } from "../../../types/fixtures";
 import { abbreviateSeasonName } from "../../../utils/stringUtils";
 
 type HeaderProps = {

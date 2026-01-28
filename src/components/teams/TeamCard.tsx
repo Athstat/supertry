@@ -1,5 +1,5 @@
 import { twMerge } from "tailwind-merge"
-import { ITeam } from "../../types/games"
+import { ITeam } from "../../types/fixtures"
 import TeamLogo from "../team/TeamLogo"
 import RoundedCard from "../ui/cards/RoundedCard"
 

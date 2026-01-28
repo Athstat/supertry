@@ -10,7 +10,7 @@ import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
 import { useSectionNavigation } from '../../hooks/web/useSectionNavigation';
 import { gamesService } from '../../services/gamesService';
 import { ERPC_COMPETITION_ID, INVESTEC_CHAMPIONSHIP_CUP, URC_COMPETIION_ID } from '../../types/constants';
-import { IFixture } from '../../types/games';
+import { IFixture } from '../../types/fixtures';
 import { filterFixturesByDateRange, filterPastFixtures, filterUpcomingFixtures } from '../../utils/fixtureUtils';
 
 const competitionIds = [

@@ -1,5 +1,5 @@
 import { IProAthlete, IAthleteSeasonStarRatings, AthleteRoundAvailabilityReport, PlayerPriceHistoryItem } from '../../types/athletes';
-import { IFixture } from '../../types/games';
+import { IFixture } from '../../types/fixtures';
 import { IProSeason } from '../../types/season';
 import { SportAction } from '../../types/sports_actions';
 import { getUri, getAuthHeader } from '../../utils/backendUtils';

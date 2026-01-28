@@ -4,7 +4,7 @@ import { getProAthleteMotmVoteTally } from "../../../utils/proMotmUtils";
 import SecondaryText from "../../ui/typography/SecondaryText";
 import { Trophy } from "lucide-react";
 import BlueGradientCard from "../../ui/cards/BlueGradientCard";
-import { IFixture } from "../../../types/games";
+import { IFixture } from "../../../types/fixtures";
 import TeamLogo from "../../team/TeamLogo";
 
 type Props = {

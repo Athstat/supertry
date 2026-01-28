@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useLiveFixture } from "../../hooks/fixtures/useLiveFixture";
 import { useLiveGameClock } from "../../hooks/fixtures/useLiveGameClock";
-import { IFixture } from "../../types/games";
+import { IFixture } from "../../types/fixtures";
 import { fixtureSummary, isGameLive, formatGameStatus } from "../../utils/fixtureUtils";
 import { abbreviateSeasonName } from "../../utils/stringUtils";
 import TeamLogo from "../team/TeamLogo";

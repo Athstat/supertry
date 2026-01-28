@@ -1,4 +1,4 @@
-import { IFixture } from "../../../types/games"
+import { IFixture } from "../../../types/fixtures"
 import SeasonStandingsTable from "../../seasons/SeasonStandingsTable"
 
 type Props = {

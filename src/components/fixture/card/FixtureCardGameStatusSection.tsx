@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { useLiveFixture } from "../../../hooks/fixtures/useLiveFixture";
 import { useLiveGameClock } from "../../../hooks/fixtures/useLiveGameClock";
-import { IFixture } from "../../../types/games";
+import { IFixture } from "../../../types/fixtures";
 import { isGameLive, formatGameStatus } from "../../../utils/fixtureUtils";
 
 type KickoffSectionProps = {

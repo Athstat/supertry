@@ -2,7 +2,7 @@ import { ReactNode, useState } from 'react'
 import PlayerMugshot from './PlayerMugshot'
 import { IBoxScoreItem } from '../../types/boxScore'
 import PlayerFixtureStatsModal from '../fixture/PlayerFixtureStatsModal'
-import { IFixture } from '../../types/games'
+import { IFixture } from '../../types/fixtures'
 
 type Props = {
     children?: ReactNode,

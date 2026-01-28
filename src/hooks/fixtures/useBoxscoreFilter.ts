@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { IFixture } from "../../types/games";
+import { IFixture } from "../../types/fixtures";
 import { useQueryState } from "../web/useQueryState";
 import { IProTeam } from "../../types/team";
 

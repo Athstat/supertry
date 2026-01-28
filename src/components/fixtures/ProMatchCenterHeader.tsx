@@ -1,19 +1,14 @@
 import { twMerge } from "tailwind-merge"
 import { AppColours } from "../../types/constants"
-import { FixtureListViewMode } from "../../types/games"
-import TextHeading from "../ui/typography/TextHeading"
-import { ChevronButton } from "../ui/buttons/ChevronButton"
+import WeekNavigator from "./calendar/WeekNavigator"
 
 type Props = {
-    viewMode: FixtureListViewMode,
-    onChangeViewMode?: (mode: FixtureListViewMode) => void,
     searchQuery?: string,
     weekHeader?: string,
     hasAnyFixtures?: boolean,
     onMoveToCurrentWeek: () => void,
     onMoveNextWeek: () => void,
     onMovePreviousWeek: () => void,
-    isCurrentWeek?: boolean
 }
 
 /** Renders the Header for the fixture screen */
@@ -35,28 +30,11 @@ export default function ProMatchCenterHeader({
                 "bg-[#F0F3F7]"
             )}>
 
-                <div className="flex flex-row items-center justify-between w-full " >
-
-                    <ChevronButton
-                        onClick={onMovePreviousWeek}
-                        disabled={false}
-                        direction="left"
-                    />
-
-                    <div className="flex flex-col items-center justify-center gap-1" >
-                        {/* <SecondaryText >Round 1</SecondaryText> */}
-                        <TextHeading blue className="">
-                            {weekHeader}
-                        </TextHeading>
-                    </div>
-
-                    <ChevronButton
-                        onClick={onMoveNextWeek}
-                        disabled={false}
-                        direction="right"
-                    />
-
-                </div>
+                <WeekNavigator 
+                    onMoveNextWeek={onMoveNextWeek}
+                    onMovePreviousWeek={onMovePreviousWeek}
+                    weekHeader={weekHeader}
+                />
 
             </div>
         </div>

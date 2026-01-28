@@ -1,5 +1,5 @@
 import { twMerge } from 'tailwind-merge';
-import { IFixture } from '../../../types/games';
+import { IFixture } from '../../../types/fixtures';
 import { useState } from 'react';
 import { Info } from 'lucide-react';
 import WarningCard from '../../ui/cards/WarningCard';

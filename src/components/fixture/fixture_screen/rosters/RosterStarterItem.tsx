@@ -2,7 +2,7 @@ import { useAtomValue } from "jotai";
 import { useAthleteMatchPr } from "../../../../hooks/athletes/useAthleteMatchPr";
 import { useFixtureScreen } from "../../../../hooks/fixtures/useFixture";
 import { fixtureAtom } from "../../../../state/fixtures/fixture.atoms";
-import { IRosterItem } from "../../../../types/games";
+import { IRosterItem } from "../../../../types/fixtures";
 import TeamJersey from "../../../player/TeamJersey";
 import { SmallMatchPrCard } from "../../../rankings/MatchPrCard";
 import { useMemo } from "react";

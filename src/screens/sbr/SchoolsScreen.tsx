@@ -6,7 +6,8 @@ import FloatingSearchBar from '../../components/players/FloatingSearchBar';
 import RoundedScreenHeader from '../../components/ui/containers/RoundedScreenHeader';
 import SearchInput from '../../components/ui/forms/SearchInput';
 import { FixtureViewModeSwitcher } from '../../components/fixtures/FixtureViewModeSwitcher';
-import { FixtureListViewMode } from '../../types/games';
+import { FixtureListViewMode } from '../../types/fixtures';
+import SbrCompetitionSelector from '../../components/fixtures/sbr/SbrCompetitionSelector';
 
 export default function SchoolsScreen() {
   const [viewMode, setViewMode] = useState<FixtureListViewMode>("fixtures");
@@ -14,7 +15,7 @@ export default function SchoolsScreen() {
 
   return (
     <Fragment>
-      <PageView className="dark:text-white  flex flex-col gap-4 pb-28 md:pb-32">
+      <PageView className="dark:text-white bg-[#F0F3F7] min-h-screen  flex flex-col gap-4 pb-28 md:pb-32">
 
         <RoundedScreenHeader
           title='Fixtures (SBR)'
@@ -47,6 +48,8 @@ export default function SchoolsScreen() {
           />
 
         </RoundedScreenHeader>
+        
+        <SbrCompetitionSelector />
 
         <div className="w-full mx-auto">
           <SbrMatchCenter searchQuery={searchQuery} onSearchChange={setSearchQuery} />

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
-import { IFixture, IGameVote } from '../types/games';
+import { IFixture, IGameVote } from '../types/fixtures';
 import { gamesService } from '../services/gamesService';
 import { authService } from '../services/authService';
 
