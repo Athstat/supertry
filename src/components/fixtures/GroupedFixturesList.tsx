@@ -1,6 +1,6 @@
 import { FixtureListViewMode, IFixture } from "../../types/fixtures";
 import FixtureCard from "../fixture/card/FixtureCard";
-import PickEmCard from "../pickem/PickEmCard";
+import PickEmCard from "../pickem/card/PickEmCard";
 
 
 
