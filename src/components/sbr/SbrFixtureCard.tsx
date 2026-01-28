@@ -72,7 +72,7 @@ function SbrFixtureCardContent({
     <div
       // onClick={handleClick}
       className={twMerge(
-        'dark:bg-slate-800/40 gap-2.5 flex flex-col cursor-pointer bg-[#F4F7F9] rounded-xl border-none dark:border dark:border-slate-700 p-4',
+        'dark:bg-slate-800/40 gap-2.5 flex flex-col cursor-pointer bg-[#F4F7F9] rounded-md border-none dark:border dark:border-slate-700 p-4',
         "shadow-[0px_0px_3px_rgba(0,0,0,0.25)]",
         className
       )}

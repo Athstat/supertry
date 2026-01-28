@@ -14,17 +14,20 @@ export default function SbrFixtureCardTeamSection({ showLogos, fixture, isAwayTe
     const { home_score, away_score } = fixture;
     const gameCompleted = fixture.status === 'completed';
 
-    const teamName = isAwayTeam ? fixture.away_team.team_name:  fixture.home_team.team_name;
+    const showScores = home_score !== undefined && away_score !== undefined && gameCompleted;
+
+    const teamName = isAwayTeam ? fixture.away_team.team_name : fixture.home_team.team_name;
     const teamScore = isAwayTeam ? away_score : home_score;
 
     return (
         <div className={twMerge(
-            "flex-1 flex gap-2 flex-col items-center justify-start",
+            "flex gap-2 flex-col w-fit items-center justify-start ",
             isAwayTeam && "justify-end"
         )}>
+
             {showLogos && (
                 <SbrTeamLogo
-                    className="w-10 h-10 lg:w-10 lg:h-10"
+                    className="w-[36px] h-[36px] lg:w-10 lg:h-10"
                     teamName={teamName}
                 />
             )}
@@ -33,9 +36,12 @@ export default function SbrFixtureCardTeamSection({ showLogos, fixture, isAwayTe
                 {teamName}
             </p>
 
-            <p className="text-slate-700 text-xs dark:text-slate-400">
-                {gameCompleted && teamScore !== undefined ? teamScore : '-'}
-            </p>
+            {showScores && (
+                <p className="text-slate-700 text-sm dark:text-slate-400">
+                    {gameCompleted && teamScore !== undefined ? teamScore : '-'}
+                </p>
+            )}
+            
         </div>
     )
 }

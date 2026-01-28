@@ -27,10 +27,10 @@ export default function SbrFixtureCardStatusSection({showKickOffTime, fixture} :
 
             <div className="flex flex-col items-center justify-center">
                 {showKickOffTime && fixture.kickoff_time && (
-                    <p className="text-[10px]">{format(fixture.kickoff_time, 'HH:mm')}</p>
+                    <p className="text-[16px] font-[500] text-[#011E5C]">{format(fixture.kickoff_time, 'HH:mm')}</p>
                 )}
                 {showKickOffTime && fixture.kickoff_time && (
-                    <p className="text-[10px]">{format(fixture.kickoff_time, 'EEE, dd MMM yyyy')}</p>
+                    <p className="text-[12px] text-[#475569]">{format(fixture.kickoff_time, 'EEE, dd MMM')}</p>
                 )}
                 {!showKickOffTime && fixture.kickoff_time && (
                     <p className="text-sm font-semibold">{format(fixture.kickoff_time, 'HH:mm')}</p>

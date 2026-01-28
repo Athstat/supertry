@@ -7,12 +7,21 @@ type Props = {
 }
 
 /** Renders an SBR Fixture Card Header */
-export default function SbrFixtureCardHeader({showCompetition, fixture} : Props) {
+export default function SbrFixtureCardHeader({ showCompetition, fixture }: Props) {
     return (
-        <div>
-            <div className="text-center w-full flex flex-col items-center justify-center text-xs text-slate-700 dark:text-slate-400">
-                {showCompetition && fixture.season && <p className="text-[10px]">{fixture.season}</p>}
-            </div>
+        <div className="flex flex-row items-center justify-center" >
+
+            {showCompetition && <div className="flex bg-[#F0F3F7] rounded-full px-2 flex-row items-center justify-center gap-1 text-[10px] lg:text-sm text-[#1F396F]  dark:text-slate-400" >
+                <p>{fixture.season}</p>
+                <p>|</p>
+                <p>Round {fixture.round}</p>
+                {fixture.venue && (
+                    <>
+                        <p>|</p>
+                        <p>{fixture.venue}</p>
+                    </>
+                )}
+            </div>}
 
             <SbrFixtureStatsStatusCard fixture={fixture} />
         </div>

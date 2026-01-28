@@ -79,7 +79,7 @@ export default function SbrMatchCenter({ searchQuery }: Props) {
               showCompetition
               showKickOffTime
               hideVoting
-              className="rounded-xl border w-full dark:border-slate-700"
+              className="w-full dark:border-slate-700"
             />
           );
         })}
