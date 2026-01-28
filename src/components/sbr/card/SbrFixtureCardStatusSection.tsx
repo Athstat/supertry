@@ -1,6 +1,7 @@
 import { isGameLive, formatGameStatus } from '../../../utils/fixtureUtils';
 import { format } from 'date-fns';
 import { ISbrFixture } from '../../../types/sbr';
+import SecondaryText from '../../ui/typography/SecondaryText';
 
 type Props = {
     fixture: ISbrFixture
@@ -26,15 +27,13 @@ export default function SbrFixtureCardStatusSection({showKickOffTime, fixture} :
                 </div>
             )}
 
-            <div className="flex flex-col items-center text-center justify-center">
+            <div className="flex flex-col items-center text-center  justify-center">
                 {showKickOffTime && fixture.kickoff_time && (
-                    <p className="text-[16px] font-[500] text-[#011E5C]">{format(fixture.kickoff_time, 'HH:mm')}</p>
+                    <p className="text-[16px] font-[500] text-[#011E5C] dark:text-white">{format(fixture.kickoff_time, 'HH:mm')}</p>
                 )}
+                
                 {showKickOffTime && fixture.kickoff_time && (
-                    <p className="text-[12px] text-[#475569]">{format(fixture.kickoff_time, 'EEE, dd MMM')}</p>
-                )}
-                {!showKickOffTime && fixture.kickoff_time && (
-                    <p className="text-sm font-semibold">{format(fixture.kickoff_time, 'HH:mm')}</p>
+                    <SecondaryText className="text-[12px] text-[#475569]">{format(fixture.kickoff_time, 'EEE, dd MMM')}</SecondaryText>
                 )}
             </div>
 

@@ -91,7 +91,7 @@ function SelectedIndicator({ option, isOpen, onClick, className }: SelectedProps
 
             <div className="" >
                 <ChevronDown className={twMerge(
-                    "w-7 h-7 transition-all text-[#011E5C] ease-in delay-150",
+                    "w-7 h-7 transition-all text-[#011E5C] dark:text-white ease-in delay-150",
                     isOpen && "rotate-180"
                 )} />
 

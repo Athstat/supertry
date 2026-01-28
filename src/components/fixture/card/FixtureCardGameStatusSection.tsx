@@ -3,6 +3,7 @@ import { useLiveFixture } from "../../../hooks/fixtures/useLiveFixture";
 import { useLiveGameClock } from "../../../hooks/fixtures/useLiveGameClock";
 import { IFixture } from "../../../types/fixtures";
 import { isGameLive, formatGameStatus } from "../../../utils/fixtureUtils";
+import SecondaryText from "../../ui/typography/SecondaryText";
 
 type KickoffSectionProps = {
   fixture: IFixture,
@@ -29,7 +30,7 @@ export function FixtureCardGameStatusSection({ fixture, hideDate }: KickoffSecti
   } = displayFixture;
 
   return (
-    <div className="flex-1 text-slate-700 dark:text-slate-400 flex flex-col items-center text-center justify-center">
+    <div className="flex-1 text-slate-700 dark:text-white flex flex-col items-center text-center justify-center">
       {/* <p className='text-xs' >{fixture.venue}</p> */}
 
       {kickoff_time && (
@@ -37,7 +38,7 @@ export function FixtureCardGameStatusSection({ fixture, hideDate }: KickoffSecti
       )}
 
       {!hideDate && kickoff_time && (
-        <p className="text-[10px]">{format(kickoff_time, 'EEE, dd MMM ')}</p>
+        <SecondaryText className="text-[10px]">{format(kickoff_time, 'EEE, dd MMM ')}</SecondaryText>
       )}
 
 
