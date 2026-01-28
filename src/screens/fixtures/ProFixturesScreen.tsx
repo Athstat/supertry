@@ -59,6 +59,8 @@ export default function ProFixturesScreen() {
     return <LoadingIndicator />;
   }
 
+  const displayRound = weekFixtures.at(0)?.round;
+
   return (
     <Fragment>
       <PageView className="dark:text-white bg-[#F0F3F7] flex flex-col gap-4 pb-28 md:pb-32">
@@ -101,6 +103,7 @@ export default function ProFixturesScreen() {
             hasAnyFixtures={hasAnyFixtures}
             weekHeader={weekHeader}
             searchQuery={defferedSearchQuery}
+            round={displayRound}
           />
 
           {!defferedSearchQuery && <div className="w-full mx-auto">

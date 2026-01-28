@@ -9,11 +9,12 @@ type Props = {
     onMoveToCurrentWeek: () => void,
     onMoveNextWeek: () => void,
     onMovePreviousWeek: () => void,
+    round?: number
 }
 
 /** Renders the Header for the fixture screen */
 export default function ProMatchCenterHeader({
-    searchQuery, weekHeader,
+    searchQuery, weekHeader, round,
     hasAnyFixtures, onMoveNextWeek, onMovePreviousWeek,
 }: Props) {
 
@@ -34,6 +35,7 @@ export default function ProMatchCenterHeader({
                     onMoveNextWeek={onMoveNextWeek}
                     onMovePreviousWeek={onMovePreviousWeek}
                     weekHeader={weekHeader}
+                    round={round}
                 />
 
             </div>

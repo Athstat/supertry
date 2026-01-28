@@ -124,7 +124,7 @@ function OptionsTray({ options, value, onClickOption, className }: OptionsTrayPr
             }
         >
             <div className={twMerge(
-                "w-full flex flex-col rounded-md dark:bg-slate-700/70 bg-white px-0.5 py-1",
+                "w-full flex flex-col rounded-md dark:bg-slate-700/70 bg-white px-1 py-2",
             )} >
                 {options.map((o) => {
 
@@ -182,7 +182,7 @@ function OptionItem({ option, onClick, currentValue }: OptionItemProps) {
             key={option.value}
             onClick={handleOnClick}
             className={twMerge(
-                "cursor-pointer  hover:dark:bg-slate-600 hover:bg-blue-500/20 dark:text-slate-200 px-2 py-1 rounded-md",
+                "cursor-pointer  hover:dark:bg-slate-600 hover:bg-blue-500/20 dark:text-slate-200 px-2 py-2 rounded-md",
                 isCurrent && "dark:bg-blue-500/30 bg-blue-500/20 text-blue-600 dark:text-blue-200"
             )}
         >
