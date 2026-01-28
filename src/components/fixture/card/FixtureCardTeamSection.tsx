@@ -3,6 +3,7 @@ import { IFixture } from "../../../types/fixtures";
 import { IProTeam } from "../../../types/team";
 import { fixtureSummary } from "../../../utils/fixtureUtils";
 import TeamLogo from "../../team/TeamLogo";
+import { trimTeamName } from "../../../utils/stringUtils";
 
 type TeamLogoAndScoreProps = {
   team?: IProTeam,
@@ -30,9 +31,7 @@ export function FixtureCardTeamSection({ team, score, fixture, showLogos }: Team
 
   const isAway = team?.athstat_id === fixture.opposition_team?.athstat_id;
 
-  const trimmedTeamName = team?.athstat_name
-    .replace("Rugby", "")
-    .replace("Glasgow", "");
+  const trimmedTeamName = trimTeamName(team?.athstat_name)
 
 
   return (

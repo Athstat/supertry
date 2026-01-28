@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { fixtureSummary } from '../../../utils/fixtureUtils';
 import { useGameVotes } from '../../../hooks/useGameVotes';
 import { gamesService } from '../../../services/gamesService';
-import ConsensusBar from '../ConsensusBar';
 import { useInView } from 'react-intersection-observer';
 import PickEmCardSkeleton from '../PickEmCardSkeleton';
 import PickemCardHeader from './PickemCardHeader';
@@ -18,7 +17,7 @@ type Props = {
 
 export default function PickEmCard({ fixture, className }: Props) {
   const { ref, inView } = useInView({ triggerOnce: true });
-  const { userVote, percentages, homeVotes, awayVotes, drawVotes, isLoading, mutate } = useGameVotes(
+  const { userVote, homeVotes, awayVotes, drawVotes, isLoading, mutate } = useGameVotes(
     fixture,
     inView
   );
@@ -123,14 +122,6 @@ export default function PickEmCard({ fixture, className }: Props) {
         </p>
       </div>
 
-      {/* Consensus Bar */}
-      <ConsensusBar
-        homePercentage={percentages.home}
-        drawPercentage={percentages.draw}
-        awayPercentage={percentages.away}
-        homeTeamName={fixture?.team?.athstat_name || 'Home'}
-        awayTeamName={fixture?.opposition_team?.athstat_name || 'Away'}
-      />
     </div>
   );
 }
