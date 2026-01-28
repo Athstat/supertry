@@ -39,7 +39,7 @@ export default function SbrMatchCenter({ searchQuery }: Props) {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-8">
 
 
       <WeekNavigator
@@ -50,7 +50,7 @@ export default function SbrMatchCenter({ searchQuery }: Props) {
       />
 
       {/* Fixtures List */}
-      <div className="flex flex-col gap-3 w-full">
+      <div className="flex flex-col gap-3 w-full px-6">
         {!hasAnyFixtures && !searchQuery && <NoContentCard message="No fixtures available" />}
 
         {displayFixtures.length === 0 && !searchQuery && hasAnyFixtures && (
@@ -78,6 +78,7 @@ export default function SbrMatchCenter({ searchQuery }: Props) {
               showLogos
               showCompetition
               showKickOffTime
+              hideVoting
               className="rounded-xl border w-full dark:border-slate-700"
             />
           );
