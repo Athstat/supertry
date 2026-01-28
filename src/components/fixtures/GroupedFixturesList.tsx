@@ -38,7 +38,7 @@ export default function GroupedFixturesList({ fixtures, viewMode = "fixtures", h
                             fixture={fixture}
                             key={`${competition}-${viewMode}-${index}`}
                             viewMode={viewMode}
-                            className="rounded-xl border w-full dark:border-slate-700 flex-1"
+                            className="rounded-md border w-full dark:border-slate-700 flex-1"
                         />
                     ))}
                 </div>
@@ -58,7 +58,7 @@ function FixtureItem({ fixture, viewMode, className }: FixtureItemProps) {
     return (
         <>
             {viewMode === 'fixtures' && (
-                <FixtureCard fixture={fixture} showLogos showCompetition className={className} />
+                <FixtureCard fixture={fixture} showLogos showCompetition showVenue className={className} />
             )}
             {viewMode === 'pickem' && <PickEmCard fixture={fixture} className={className} />}
         </>

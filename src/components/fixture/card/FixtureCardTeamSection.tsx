@@ -42,7 +42,8 @@ export function FixtureCardTeamSection({ team, score, fixture, showLogos }: Team
     )}>
 
       <div className={twMerge(
-        "flex flex-row gap-3 px-2 items-center w-fit justify-start",
+        "flex flex-row gap-3 pr-2 items-center w-fit justify-start",
+        isAway && "pr-0 pl-2"
       )}>
 
         {isAway && showGameScore ? (
