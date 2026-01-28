@@ -6,6 +6,7 @@ import { IProTeam } from "../../../types/team"
 import { fixtureSummary } from "../../../utils/fixtureUtils";
 import TeamLogo from "../../team/TeamLogo";
 import { trimTeamName } from "../../../utils/stringUtils";
+import { VoteIndicator } from "./VoteIndicator";
 
 type Props = {
     team?: IProTeam,
@@ -42,13 +43,14 @@ export default function PickemCardTeamOption({ team, fixture, fetchGameVotes, on
     const votePerc = isHomeTeam ? percentages?.home : percentages?.away;
 
     const teamName = trimTeamName(team?.athstat_name);
+    const showVote = userVote !== undefined && votePerc !== undefined;
 
     return (
         <button
             onClick={handleVote}
             disabled={disabled}
             className={twMerge(
-                'flex flex-row relative min-w-[145px] h-[100px] items-end gap-3 p-3 rounded-xl transition-all duration-200 max-w-[120px] justify-self-start',
+                'flex flex-row relative w-full h-[100px] items-end gap-3 p-3 rounded-md transition-all duration-200 max-w-[120px] justify-self-start',
                 'bg-[#F9FBFD] dark:bg-slate-800 shadow-[0px_0px_3px_rgba(0,0,0,0.25)]',
                 !isLocked && 'hover:bg-slate-100 dark:hover:bg-slate-700/50 active:scale-95 cursor-pointer',
                 votedForTeam && !isLocked && 'bg-blue-50 dark:bg-blue-900/20 ring-2 ring-blue-500 shadow-lg',
@@ -86,13 +88,13 @@ export default function PickemCardTeamOption({ team, fixture, fetchGameVotes, on
                 <div className={twMerge(
                     "text-xs text-center text-nowrap font-medium w-full text-slate-700 dark:text-slate-200 flex flex-row items-center gap-2",
                 )} >
-                    {!isHomeTeam && <p>{votePerc !== undefined ? `(${votePerc}%)` : ''}</p>}
+                    {!isHomeTeam && <p>{showVote ? `(${votePerc}%)` : ''}</p>}
 
                     <p className="">
                         {teamName}
                     </p>
 
-                    {isHomeTeam && <p>{votePerc !== undefined ? `(${votePerc}%)` : ''}</p>}
+                    {isHomeTeam && <p>{showVote ? `(${votePerc}%)` : ''}</p>}
                 </div>
             </div>
 
@@ -103,17 +105,3 @@ export default function PickemCardTeamOption({ team, fixture, fetchGameVotes, on
     )
 }
 
-type VoteIndicatorProps = {
-    isHighlighted?: boolean,
-    className?: string
-}
-
-function VoteIndicator({ isHighlighted }: VoteIndicatorProps) {
-    return (
-        <div className="w-6 h-6 border-2 border-[#838383] flex flex-col items-center justify-center rounded-full" >
-            {isHighlighted &&
-                <div className="w-4 h-4 border bg-blue-600 rounded-full" ></div>
-            }
-        </div>
-    )
-}

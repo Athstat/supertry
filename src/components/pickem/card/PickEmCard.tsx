@@ -79,7 +79,7 @@ export default function PickEmCard({ fixture, className }: Props) {
       )}
 
       {/* Interactive Prediction Row */}
-      <div className="grid grid-cols-3 items-center gap-2">
+      <div className="grid grid-cols-3 items-center gap-4">
         {/* Home Team */}
         <PickemCardTeamOption
           team={fixture.team}
