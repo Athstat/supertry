@@ -7,7 +7,7 @@ import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
 /** Hook that fetches a user's joined leagues */
 export function useJoinedLeagues(fantasySeasonId?: string) {
 
-    const {authUser} = useAuth();
+    const { authUser } = useAuth();
 
     const key = fantasySeasonId ? `/user-joined-leagues/${fantasySeasonId}` : null;
 
@@ -34,9 +34,14 @@ export function useJoinedLeagues(fantasySeasonId?: string) {
     }
 
     const leagues = useMemo(() => {
-        return (fetchedLeagues ?? []).sort((a , b) => {
-            return getLeagueWeight(b) - getLeagueWeight(a);
-        })
+
+        if (fetchedLeagues) {
+            return [...fetchedLeagues].sort((a, b) => {
+                return getLeagueWeight(b) - getLeagueWeight(a);
+            })
+        }
+
+        return [];
     }, [fetchedLeagues]);
     const isLoading = loadingUserLeagues;
 
@@ -59,7 +64,7 @@ export function useJoinedLeagues(fantasySeasonId?: string) {
         })
     }, [leagues]);
 
-    const userCreatedLeagues =  useMemo(() => {
+    const userCreatedLeagues = useMemo(() => {
         return leagues.filter((l) => {
             return l.creator_id === authUser?.kc_id;
         })

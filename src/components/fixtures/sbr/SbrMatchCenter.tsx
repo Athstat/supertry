@@ -84,11 +84,11 @@ export default function SbrMatchCenter({ searchQuery }: Props) {
           <NoContentCard message={`No fixtures found for '${searchQuery}'`} />
         )}
 
-        {displayFixtures.map((fixture, index) => {
+        {displayFixtures.map((fixture) => {
           return (
             <SbrFixtureCard
               fixture={fixture}
-              key={index}
+              key={fixture.fixture_id}
               showLogos
               showCompetition
               showKickOffTime

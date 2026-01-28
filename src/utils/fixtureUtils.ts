@@ -74,8 +74,6 @@ export function searchSbrFixturesPredicate(fixture: ISbrFixture, query: string |
     `${fixture.away_team.team_name?.split(' ').at(0)} vs ${fixture.home_team.team_name.split(' ').at(0)}`,
   ];
   
-  console.log("Phrases ", phrases);
-
   phrases.forEach((phrase: string) => {
     if (phrase === '') return false;
 

@@ -30,7 +30,7 @@ export default function ProFixturesScreen() {
   const { fixtures, isLoading } = useProFixtures();
 
   const {
-    handleJumpToCurrentWeek, handleNextWeek, handlePreviousWeek,
+    handleNextWeek, handlePreviousWeek,
     weekStart, weekHeader, hasAnyFixtures,
     weekFixtures
   } = useFixtureCursor({
@@ -99,7 +99,6 @@ export default function ProFixturesScreen() {
           <ProMatchCenterHeader
             onMoveNextWeek={handleNextWeek}
             onMovePreviousWeek={handlePreviousWeek}
-            onMoveToCurrentWeek={handleJumpToCurrentWeek}
             hasAnyFixtures={hasAnyFixtures}
             weekHeader={weekHeader}
             searchQuery={defferedSearchQuery}

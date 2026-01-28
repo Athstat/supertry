@@ -6,7 +6,6 @@ type Props = {
     searchQuery?: string,
     weekHeader?: string,
     hasAnyFixtures?: boolean,
-    onMoveToCurrentWeek: () => void,
     onMoveNextWeek: () => void,
     onMovePreviousWeek: () => void,
     round?: number
