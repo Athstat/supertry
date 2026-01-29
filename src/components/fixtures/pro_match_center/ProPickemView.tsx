@@ -1,5 +1,5 @@
 import { ChevronRight } from "lucide-react";
-import { FixtureListViewMode, IFixture } from "../../../types/fixtures";
+import { FixtureListViewMode, IFixture } from "../../../types/games";
 import NoContentCard from "../../ui/typography/NoContentMessage";
 import GroupedFixturesList from "../GroupedFixturesList";
 import { TabSwitchContainer, TabSwitchOption } from "../../ui/buttons/TabSwitchOption";
@@ -72,7 +72,6 @@ export default function FixturesProPickemView({ displayFixtures, hasAnyFixtures,
         <GroupedFixturesList
           fixtures={displayFixtures}
           viewMode={"pickem"}
-          hideCompetitionName
         />
       </Activity>
 

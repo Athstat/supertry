@@ -6,16 +6,14 @@ import PlayerProfileModal from "../player/PlayerProfileModal";
 import { LoadingIndicator } from "../ui/LoadingIndicator";
 import SecondaryText from "../ui/typography/SecondaryText";
 import { PlayerListTable } from "./PlayerListTable";
-import { twMerge } from "tailwind-merge";
 
 type Props = {
     searchQuery?: string,
-    playerPool?: IProAthlete[],
-    className?: string
+    playerPool?: IProAthlete[]
 }
 
 /** Renders a list of player search results for a given search query */
-export default function PlayerSearchResults({ searchQuery, playerPool, className }: Props) {
+export default function PlayerSearchResults({ searchQuery, playerPool }: Props) {
 
     const { athletes: allAthletes } = useSupportedAthletes();
     const athletes = playerPool || allAthletes;
@@ -53,10 +51,7 @@ export default function PlayerSearchResults({ searchQuery, playerPool, className
     const resultsLen = results.length;
 
     return (
-        <div className={twMerge(
-            "flex flex-col gap-4",
-            className
-        )} >
+        <div className="flex flex-col gap-4" >
             {!isLoading && <div>
                 <p className="font-semibold text-md" >Results for '{searchQuery}' {resultsLen ? `(${resultsLen})` : ''}</p>
             </div>}

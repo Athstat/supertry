@@ -3,7 +3,7 @@ import { format, isToday, isTomorrow } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 import { GoTriangleLeft } from 'react-icons/go';
 import { useNavigateBack } from '../../../hooks/web/useNavigateBack';
-import { IFixture } from '../../../types/fixtures';
+import { IFixture } from '../../../types/games';
 import { IProTeam } from '../../../types/team';
 import { fixtureSummary, isGameLive, formatGameStatus } from '../../../utils/fixtureUtils';
 import SecondaryText from '../../ui/typography/SecondaryText';

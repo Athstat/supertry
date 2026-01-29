@@ -1,5 +1,5 @@
 import { IProAthlete } from "../types/athletes";
-import { IFixture } from "../types/fixtures";
+import { IFixture } from "../types/games";
 import { IProTeam } from "../types/team";
 import { getAuthHeader, getUri } from "../utils/backendUtils";
 import { logger } from "./logger"

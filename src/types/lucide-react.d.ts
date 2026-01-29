@@ -154,7 +154,6 @@ declare module "lucide-react" {
   export const ImagePlus : CIP;
   export const Upload : CIP;
   export const Image : CIP;
-  export const Verified : CIP;
   
 }
 

@@ -1,6 +1,6 @@
 import { Activity, useMemo, useState } from "react"
 import { IProAthlete } from "../../../types/athletes"
-import { IFixture } from "../../../types/fixtures"
+import { IFixture } from "../../../types/games"
 import { Info } from "lucide-react"
 import { useAthleteMatchPr } from "../../../hooks/athletes/useAthleteMatchPr"
 import SecondaryText from "../../ui/typography/SecondaryText"

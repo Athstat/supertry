@@ -3,7 +3,6 @@ import { useSupportedAthletes } from "../../../hooks/athletes/useSupportedAthlet
 import CountryCard from "../../teams/countries/CountryCard";
 import { useNavigate } from "react-router-dom";
 import RoundedCard from "../../ui/cards/RoundedCard";
-import TextHeading from "../../ui/typography/TextHeading";
 
 /** Renders a list of countries for available players through use athletes */
 export default function PlayersCountryGridList() {
@@ -86,13 +85,12 @@ export default function PlayersCountryGridList() {
     }
 
     return (
-        <RoundedCard className="flex flex-col gap-4 p-6" >
-
+        <div className="flex flex-col gap-4" >
             <div>
-                <TextHeading className='font-medium text-xl' blue >By Country</TextHeading>
+                <p className='font-bold text-md' >By Country</p>
             </div>
             
-            <div className="grid grid-cols-3 gap-6" >
+            <div className="grid grid-cols-4 gap-2" >
                 {countries.map((c) => {
                     return (
                         <CountryCard
@@ -103,6 +101,6 @@ export default function PlayersCountryGridList() {
                     )
                 })}
             </div>
-        </RoundedCard>
+        </div>
     )
 }

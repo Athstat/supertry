@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { gamesService } from "../../services/gamesService";
-import { IFixture } from "../../types/fixtures";
+import { IFixture } from "../../types/games";
 import { fixtureSummary, isProGameTBD } from "../../utils/fixtureUtils";
 import { useGameVotes } from "../useGameVotes";
 

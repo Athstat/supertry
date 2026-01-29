@@ -1,5 +1,5 @@
 import { twMerge } from "tailwind-merge"
-import { IFixture, ITeamActionName } from "../../../types/fixtures"
+import { IFixture, ITeamActionName } from "../../../types/games"
 import { TeamActionsParser, TeamHeadtoHeadItem } from "../../../utils/teamActionsUtils"
 import TeamLogo from "../../team/TeamLogo"
 import useSWR from "swr"

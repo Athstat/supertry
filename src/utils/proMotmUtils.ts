@@ -1,4 +1,4 @@
-import { IFixture } from "../types/fixtures";
+import { IFixture } from "../types/games";
 import { IProMotmVote } from "../types/proMotm";
 
 /** Returns true if MOTM voting has ended based on the given kick off time (3 hours after kickoff) */

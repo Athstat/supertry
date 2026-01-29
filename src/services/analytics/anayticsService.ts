@@ -4,7 +4,7 @@ import { getDeviceInfo, getWeekFromLaunch } from '../../utils/webUtils';
 import { IFantasyLeagueRound, IFantasyLeagueTeam } from '../../types/fantasyLeague';
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
 import { IProAthlete } from '../../types/athletes';
-import { IFixture } from '../../types/fixtures';
+import { IFixture } from '../../types/games';
 import { ISeasonRound } from '../../types/fantasy/fantasySeason';
 
 

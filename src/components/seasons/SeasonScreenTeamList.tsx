@@ -1,5 +1,5 @@
 import { Shield } from "lucide-react"
-import { ITeam } from "../../types/fixtures"
+import { ITeam } from "../../types/games"
 import ProTeamCard from "../teams/TeamCard"
 import NoContentCard from "../ui/typography/NoContentMessage"
 

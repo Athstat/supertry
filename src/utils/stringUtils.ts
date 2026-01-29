@@ -155,8 +155,3 @@ export function encodeToBase64(inStr?: string) {
 export function decodeFromBase64(base64Str?: string) {
     return atob(base64Str || '');
 }
-
-/** Removes words like Rugby and Glasgow from team names */
-export function trimTeamName(teamName?: string) {
-    return teamName?.replace("Rugby", "")?.replace("Glasgow", "")
-}
