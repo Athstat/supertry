@@ -28,7 +28,7 @@ export function PlayerProfileModalTabContent() {
     },
   ];
 
-  if (!player) return;
+  if (!player) return null;
 
   return (
     <div className='flex flex-col gap-4'>

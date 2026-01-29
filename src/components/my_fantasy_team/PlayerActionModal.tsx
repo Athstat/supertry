@@ -31,10 +31,9 @@ export function PlayerActionModal({
   onViewPointsBreakdown,
 }: PlayerActionModalProps) {
 
-  const {leagueRound} = useFantasyTeam();
   const { seasonTeam } = usePlayerSeasonTeam(player.athlete);
-
-  const { initiateSwap, removePlayerAtSlot, setTeamCaptainAtSlot, slots, teamCaptain, isReadOnly } = useFantasyTeam();
+  const {leagueRound,  initiateSwap, removePlayerAtSlot, setTeamCaptainAtSlot, slots, teamCaptain, isReadOnly } = useFantasyTeam();
+  
   const isSub = !player.is_starting;
 
   const playerSlot = useMemo(() => {

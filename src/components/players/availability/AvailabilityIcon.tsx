@@ -55,7 +55,7 @@ export default function AvailabilityIcon({ athlete, className, iconClassName }: 
 export function AvailabilityText({ athlete, className }: Props) {
 
     const { currentRound, selectedSeason } = useFantasySeasons();
-    const { seasonTeam } = usePlayerSeasonTeam();
+    const { seasonTeam } = usePlayerSeasonTeam(athlete);
 
     const athleteId = athlete.tracking_id;
     const seasonId = currentRound?.season;
