@@ -1,5 +1,5 @@
 import { TriangleAlert } from "lucide-react";
-import { Activity, useMemo } from "react";
+import { Activity } from "react";
 import { twMerge } from "tailwind-merge";
 import { useAthleteRoundScore } from "../../../hooks/fantasy/useAthleteRoundScore";
 import { useFantasyTeam } from "../../../hooks/fantasy/useFantasyTeam";
@@ -27,32 +27,12 @@ export function PitchCardScoreIndicator({ player }: PlayerPointsScoreProps) {
 
     const {seasonTeam} = usePlayerSeasonTeam(player.athlete);
 
-    const { isNotAvailable, isTeamNotPlaying, nextMatch, showAvailabilityWarning, isNotInSeasonSquad, isInjured } = usePlayerRoundAvailability(
+    const { showAvailabilityWarning, homeOrAway, opponent, reportTitle } = usePlayerRoundAvailability(
         player.tracking_id,
         league?.season_id ?? "",
         leagueRound?.round_number ?? 0,
         seasonTeam?.athstat_id
     );
-
-    const [homeOrAway, opponent] = useMemo(() => {
-
-        if (!nextMatch) {
-            return [undefined, undefined];
-        }
-
-        const playerTeamId = seasonTeam?.athstat_id;
-
-        if (playerTeamId === nextMatch.team?.athstat_id) {
-            return ["(H)", nextMatch.opposition_team];
-        }
-
-        if (playerTeamId === nextMatch.opposition_team?.athstat_id) {
-            return ["(A)", nextMatch.team];
-        }
-
-        return [undefined, undefined];
-
-    }, [nextMatch, seasonTeam?.athstat_id]);
 
     const showScore = !isLoading && isLocked;
     const showNextMatchInfo = !isLoading && !showAvailabilityWarning && homeOrAway && opponent && !showScore;
@@ -74,19 +54,9 @@ export function PitchCardScoreIndicator({ player }: PlayerPointsScoreProps) {
                     <p className=" text-[8px] md:text-[10px] max-w-[100px] font-medium truncate" >vs {opponent?.athstat_name} {homeOrAway}</p>
                 </Activity>
 
-                {/* <Activity mode={showPrice ? "visible" : "hidden"} >
-                    <div className=" max-w-[100px] font-medium truncate flex flex-row items-center gap-1" >
-                        <p className="text-[10px] md:text-[10px]" >{player.price}</p>
-                        <Coins className="text-yellow-500 w-2.5 h-2.5" />
-                    </div>
-            </Activity> */}
-
                 <Activity mode={showAvailabilityWarning ? "visible" : "hidden"} >
                     <div className="w-full flex flex-row gap-1 text-center items-center justify-center" >
-                        {isNotAvailable && <p className="text-[8px] md:text-[10px] font-medium" >Not Playing </p>}
-                        {isTeamNotPlaying && <p className="text-[8px] md:text-[10px] font-medium" >Team Not Playing </p>}
-                        {isNotInSeasonSquad && <p className="text-[8px] md:text-[10px] font-medium" >Not in Squad Selection</p>}
-                        {isInjured && <p className="text-[8px] md:text-[10px] font-medium" >Injured</p>}
+                        <p className="text-[8px] md:text-[10px] font-medium" >{reportTitle}</p>
                         <TriangleAlert className="w-3 h-3" />
                     </div>
                 </Activity>

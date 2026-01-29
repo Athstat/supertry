@@ -83,6 +83,43 @@ export function usePlayerRoundAvailability(athleteId: string, seasonId: string, 
 
   const showAvailabilityWarning = (isTeamNotPlaying || isInjured || isNotInSeasonSquad || isNotAvailable) && !isLoading
 
+  const [homeOrAway, opponent] = useMemo(() => {
+
+    if (!nextMatch) {
+      return [undefined, undefined];
+    }
+
+    const playerTeamId = team_id;
+
+    if (playerTeamId === nextMatch.team?.athstat_id) {
+      return ["(H)", nextMatch.opposition_team];
+    }
+
+    if (playerTeamId === nextMatch.opposition_team?.athstat_id) {
+      return ["(A)", nextMatch.team];
+    }
+
+    return [undefined, undefined];
+
+  }, [nextMatch, team_id]);
+
+  const reportTitle = useMemo(() => {
+    if (isNotAvailable) {
+      return "Not Playing"
+    }
+
+    if (isTeamNotPlaying) {
+      return "Team Not Playing"
+    }
+
+    if (isNotInSeasonSquad) {
+      return "Not in Squad Selection"
+    }
+
+    if (isInjured) {
+      return "Injured"
+    }
+  }, [isInjured, isNotAvailable, isNotInSeasonSquad, isTeamNotPlaying])
 
   return {
     report: firstReport,
@@ -96,6 +133,9 @@ export function usePlayerRoundAvailability(athleteId: string, seasonId: string, 
     isGameTooFarAway,
     isNotInSeasonSquad,
     isInjured,
-    showAvailabilityWarning
+    showAvailabilityWarning,
+    homeOrAway,
+    opponent,
+    reportTitle
   };
 }
