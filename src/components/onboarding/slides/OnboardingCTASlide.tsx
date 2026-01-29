@@ -6,14 +6,18 @@ import { useInternalUserProfile } from "../../../hooks/auth/useInternalUserProfi
 import { useOnboarding } from "../../../hooks/onboarding/useOnboarding";
 import { UpdatedUserInternalProfileReq } from "../../../types/auth";
 import { useAuth } from "../../../contexts/AuthContext";
+import InputField from "../../ui/forms/InputField";
+import { useState } from "react";
 
 export function OnboardingCTASlide() {
 
   const navigate = useNavigate();
-  const {authUser} = useAuth();
+  const { authUser } = useAuth();
 
-  const {updateProfile, isLoading} = useInternalUserProfile();
-  const {favouriteTeams, country} = useOnboarding();
+  const { updateProfile, isLoading } = useInternalUserProfile();
+  const { favouriteTeams, country } = useOnboarding();
+
+  const [username, setUsername] = useState<string | undefined>(authUser?.username);
 
   const handleGetStarted = async () => {
 
@@ -34,6 +38,9 @@ export function OnboardingCTASlide() {
     navigate('/dashboard');
   };
 
+  const isUsernameValid = (username?.length || 0) > 3;
+  const isDisabled = isLoading || !username || !isUsernameValid;
+
   return (
     <div className="relative flex flex-col gap-6 h-full w-full overflow-x-auto items-center">
       {/* Content */}
@@ -50,12 +57,23 @@ export function OnboardingCTASlide() {
           </div> */}
         </div>
 
-        <div className="flex flex-col items-center justify-center">
+        <div className="w-full" >
+
+        </div>
+
+        <div className="flex flex-col items-center gap-3 justify-center w-full">
+          <InputField
+            label={"What should we call you?"}
+            placeholder="Enter a username"
+            value={username}
+            onChange={(val) => setUsername(val || '')}
+            className="w-full"
+          />
           <PrimaryButton
             onClick={handleGetStarted}
-            className="rounded-3xl w-fit p-4 h-10 w-22 px-10 py-2"
+            className=" w-full p-4 h-12 px-10 py-2"
             isLoading={isLoading}
-            disabled={isLoading}
+            disabled={isDisabled}
           >
             Get Started
           </PrimaryButton>
