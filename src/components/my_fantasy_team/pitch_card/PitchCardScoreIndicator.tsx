@@ -24,7 +24,6 @@ export function PitchCardScoreIndicator({ player }: PlayerPointsScoreProps) {
     const { league } = useFantasyLeagueGroup();
 
     const isLoading = loadingScore;
-
     const {seasonTeam} = usePlayerSeasonTeam(player.athlete);
 
     const { showAvailabilityWarning, homeOrAway, opponent, reportTitle } = usePlayerRoundAvailability(

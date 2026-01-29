@@ -113,7 +113,7 @@ export function usePlayerRoundAvailability(athleteId: string, seasonId: string, 
     }
 
     if (isNotInSeasonSquad) {
-      return "Not in Squad Selection"
+      return "Not Playing"
     }
 
     if (isInjured) {
