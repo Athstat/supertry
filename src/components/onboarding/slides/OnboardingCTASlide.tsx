@@ -14,6 +14,7 @@ export function OnboardingCTASlide() {
 
   const {updateProfile, isLoading} = useInternalUserProfile();
   const {favouriteTeams, country} = useOnboarding();
+  
 
   const handleGetStarted = async () => {
 
