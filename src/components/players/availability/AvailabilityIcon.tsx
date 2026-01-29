@@ -17,8 +17,8 @@ type Props = {
 /** Renders an Availability Indicator Icon, usually to be placed on top of a card */
 export default function AvailabilityIcon({ athlete, className, iconClassName }: Props) {
 
-    const {currentRound} = useFantasySeasons();
-    const {seasonTeam} = usePlayerSeasonTeam();
+    const { currentRound } = useFantasySeasons();
+    const { seasonTeam } = usePlayerSeasonTeam(athlete);
 
     const athleteId = athlete.tracking_id;
     const seasonId = currentRound?.season;
@@ -54,8 +54,8 @@ export default function AvailabilityIcon({ athlete, className, iconClassName }: 
 /** Renders an Availability Text Report explaining the absense, usually to be placed on top of a card */
 export function AvailabilityText({ athlete, className }: Props) {
 
-    const {currentRound} = useFantasySeasons();
-    const {seasonTeam} = usePlayerSeasonTeam();
+    const { currentRound, selectedSeason } = useFantasySeasons();
+    const { seasonTeam } = usePlayerSeasonTeam();
 
     const athleteId = athlete.tracking_id;
     const seasonId = currentRound?.season;
@@ -102,6 +102,16 @@ export function AvailabilityText({ athlete, className }: Props) {
                 {athlete.player_name}'s {isPast ? 'was' : 'is'} team is not playing in this round
                 {!isPast && ' Consider taking action if he is in your team'}
             </p>)}
+
+            {report.status == "INJURED" && (<p className="text-xs" >
+                {athlete.player_name} is on injury
+                {!isPast && ', consider taking action if he is in your team'}
+            </p>)}
+
+
+            {report.status == "NOT_IN_SEASON_SQUAD" && (<p className="text-xs" >
+                {athlete.player_name} is not on his team's {selectedSeason?.name || ''} squad
+            </p>)}
         </WarningCard>
     )
 }
@@ -114,7 +124,7 @@ type RoundProps = Props & {
 export function RoundAvailabilityText({ athlete, className, round }: RoundProps) {
 
 
-    const {selectedSeason, currentRound} = useFantasySeasons();
+    const { selectedSeason, currentRound } = useFantasySeasons();
     const { seasonTeam } = usePlayerSeasonTeam(athlete);
 
     const roundNumber = round?.round_number || currentRound?.round_number;
