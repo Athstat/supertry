@@ -1,7 +1,7 @@
 /** Atoms for a season */
 
 import { atom } from "jotai";
-import { IFixture, ITeam } from "../types/fixtures";
+import { IFixture, ITeam } from "../types/games";
 import { IProAthlete } from "../types/athletes";
 import { IProSeason } from "../types/season";
 

@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import ScrummyLogoHorizontal from '../../branding/scrummy_logo_horizontal';
 import NotificationsBellButton from '../../notifications/NotificationsBellButton';
 import { useNavigationBars } from '../../../hooks/navigation/useNavigationBars';
@@ -12,7 +12,19 @@ import BetaTag from '../../branding/BetaTag';
 
 export function Header() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { topNavViewMode } = useNavigationBars();
+
+  const pathsToShowCompetitionSelector = [
+    '/dashboard',
+    '/league',
+    '/players',
+    '/fixtures'
+  ]
+
+  const showCompetitionSelector = pathsToShowCompetitionSelector.find((p) => {
+    return location.pathname?.startsWith(p);
+  })
 
   const isInQa = isInProduction() === false;
 
@@ -20,9 +32,8 @@ export function Header() {
   return (
     <Activity mode={topNavViewMode}>
       <header className={twMerge(
-        "sticky top-0 z-50 bg-white backdrop-blur-sm shadow-none mb-0 pb-0",
-        AppColours.BACKGROUND,
-        "bg-white"
+        "sticky top-0 z-50 bg-white/80 backdrop-blur-sm shadow-none mb-0 pb-0",
+        AppColours.BACKGROUND
       )}>
         <div className="container mx-auto px-1 h-16 overflow-hidden flex items-center justify-between">
           <div className="flex items-center gap-1">
@@ -32,18 +43,19 @@ export function Header() {
               tabIndex={0}
               aria-label="Navigate to home"
             >
-              <ScrummyLogoHorizontal className="w-[9rem]" />
+              <ScrummyLogoHorizontal className="" />
             </div>
 
-            {isInQa && <BetaTag className='text-xs' />}
+            {isInQa && <BetaTag />}
 
 
           </div>
 
-          <div className="ml-2">
-            <CompetitionSelector />
-          </div>
-
+          {showCompetitionSelector && (
+            <div className="ml-2">
+              <CompetitionSelector />
+            </div>
+          )}
 
           <div className="flex items-center gap-4">
             <NotificationsBellButton />

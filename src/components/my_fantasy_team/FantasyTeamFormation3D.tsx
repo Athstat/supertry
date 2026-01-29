@@ -9,12 +9,11 @@ import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
 interface TeamFormationProps {
   onPlayerClick: (player: IFantasyTeamAthlete) => void;
   marginCN?: string,
-  firstRowMargin?: string,
-  className?: string
+  firstRowMargin?: string
 }
 
 /** Renders a 3 Dimensional-looking pitch view */
-export function FantasyTeamFormation3D({ onPlayerClick, marginCN, className }: TeamFormationProps) {
+export function FantasyTeamFormation3D({ onPlayerClick, marginCN }: TeamFormationProps) {
 
   const { slots } = useFantasyTeam();
 
@@ -28,10 +27,7 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN, className }: T
 
 
   return (
-    <div className={twMerge(
-      "relative w-full mt-10  flex flex-col justify-center",
-      className
-    )}>
+    <div className="relative w-full mt-10  flex flex-col justify-center">
 
       <RugbyPitch3DRaster className={twMerge(
         'mt-12',

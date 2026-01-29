@@ -1,6 +1,6 @@
-import { FixtureListViewMode, IFixture } from "../../types/fixtures";
-import FixtureCard from "../fixture/card/FixtureCard";
-import PickEmCard from "../pickem/card/PickEmCard";
+import { FixtureListViewMode, IFixture } from "../../types/games";
+import FixtureCard from "../fixture/FixtureCard";
+import PickEmCard from "../pickem/PickEmCard";
 
 
 
@@ -9,12 +9,11 @@ type Props = {
     search?: string,
     generateMessage?: (fixture: IFixture) => string,
     descendingOrder?: boolean,
-    viewMode?: FixtureListViewMode,
-    hideCompetitionName?: boolean
+    viewMode?: FixtureListViewMode
 }
 
 /** Groups Fixtures into dates and renders them by date, with an optionable pickem card view */
-export default function GroupedFixturesList({ fixtures, viewMode = "fixtures", hideCompetitionName }: Props) {
+export default function GroupedFixturesList({ fixtures, viewMode = "fixtures" }: Props) {
 
     const groupedFixtures = groupFixturesByCompetition(fixtures);
     const competitions = sortCompetitions(Array.from(groupedFixtures.keys()));
@@ -25,20 +24,20 @@ export default function GroupedFixturesList({ fixtures, viewMode = "fixtures", h
         return (
             <div key={competition} className="flex flex-col gap-3">
                 {/* Competition Header */}
-                {!hideCompetitionName && <div className="flex items-center gap-2 px-3 py-2 bg-slate-100 dark:bg-slate-800/50 rounded-lg">
+                <div className="flex items-center gap-2 px-3 py-2 bg-slate-100 dark:bg-slate-800/50 rounded-lg">
                     <h3 className="font-bold text-sm text-slate-700 dark:text-slate-200">
                         {competition}
                     </h3>
-                </div>}
+                </div>
 
                 {/* Competition Fixtures */}
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-3">
                     {fixtures.map((fixture, index) => (
                         <FixtureItem
                             fixture={fixture}
                             key={`${competition}-${viewMode}-${index}`}
                             viewMode={viewMode}
-                            className="rounded-md border w-full dark:border-slate-700 flex-1"
+                            className="rounded-xl border w-full dark:border-slate-700 flex-1"
                         />
                     ))}
                 </div>
@@ -58,7 +57,7 @@ function FixtureItem({ fixture, viewMode, className }: FixtureItemProps) {
     return (
         <>
             {viewMode === 'fixtures' && (
-                <FixtureCard fixture={fixture} showLogos showCompetition showVenue className={className} />
+                <FixtureCard fixture={fixture} showLogos showCompetition className={className} />
             )}
             {viewMode === 'pickem' && <PickEmCard fixture={fixture} className={className} />}
         </>

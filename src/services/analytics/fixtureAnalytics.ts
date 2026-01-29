@@ -1,4 +1,4 @@
-import { IFixture } from "../../types/fixtures";
+import { IFixture } from "../../types/games";
 import { analytics } from "./anayticsService";
 
 export const fixtureAnalytics = {

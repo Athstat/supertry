@@ -1,5 +1,5 @@
 import { LoadingIndicator } from "../../ui/LoadingIndicator";
-import { ITeam } from "../../../types/fixtures";
+import { ITeam } from "../../../types/games";
 import { IProSeason } from "../../../types/season";
 import { useSeasonTeams } from "../../../hooks/seasons/useSeasonTeams";
 import SecondaryText from "../../ui/typography/SecondaryText";
@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { useFantasySeasons } from "../../../hooks/dashboard/useFantasySeasons";
 import RoundedCard from "../../ui/cards/RoundedCard";
 import NoContentCard from "../../ui/typography/NoContentMessage";
-import TextHeading from "../../ui/typography/TextHeading";
 
 type Props = {
   onSuccess?: () => void
@@ -32,16 +31,16 @@ export default function PlayersTeamsGridList({ onSuccess }: Props) {
 
 
   return (
-    <RoundedCard className="flex flex-col gap-4 p-4 px-6" >
+    <div className="flex flex-col gap-4" >
       <div>
-        <TextHeading className='font-[500] text-xl' blue >By Team</TextHeading>
+        <p className='font-bold text-md' >By Team</p>
       </div>
 
       {firstSeason && <SeasonTeamGridList
         season={firstSeason}
         onSuccess={onSuccess}
       />}
-    </RoundedCard>
+    </div>
   )
 }
 
@@ -74,7 +73,11 @@ function SeasonTeamGridList({ onSuccess }: SeasonTeamListProps) {
   }
 
   return (
-    <div className="flex flex-col gap-2 items-center justify-center" >
+    <div className="flex flex-col gap-2" >
+
+      {/* <div>
+        <p className="font-semibold" >{season.name}</p>
+      </div> */}
 
       {noTeams && (
         <NoContentCard
@@ -82,7 +85,7 @@ function SeasonTeamGridList({ onSuccess }: SeasonTeamListProps) {
         />
       )}
 
-      <div className="grid grid-cols-3 gap-6  w-full px-[2%]" >
+      <div className="grid grid-cols-3 gap-2" >
         {teams.map((t) => {
           return (
             <TeamItem
@@ -112,13 +115,13 @@ function TeamItem({ team, onClick }: TeamItemProps) {
 
 
   return (
-    <div onClick={handleOnClick} className="shadow-[0px_0px_5px_rgba(0,0,0,0.25)] cursor-pointer hover:bg-[#F8FAFC] bg-[#F8FAFC80] dark:bg-slate-700 w-full rounded-md h-[100px] flex flex-col items-center gap-2 justify-center" >
+    <RoundedCard onClick={handleOnClick} className="dark:border-none cursor-pointer p-2 h-[90px] flex flex-col items-center justify-center gap-2" >
       <TeamLogo
         url={team.image_url}
-        className="w-9 h-9"
+        className="w-8 h-8"
       />
-      <SecondaryText className="text-[12px] font-[400] w-[90%] text-wrap text-center" >{team.athstat_name}</SecondaryText>
-    </div>
+      <SecondaryText className="text-[10px] text-center" >{team.athstat_name}</SecondaryText>
+    </RoundedCard>
   )
 }
 

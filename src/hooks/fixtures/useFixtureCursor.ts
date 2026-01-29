@@ -1,16 +1,16 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { formatWeekHeader, findPreviousWeekPivotWithFixtures, findNextWeekPivotWithFixtures, findClosestWeekWithFixtures, getFixturesForWeek } from "../../utils/fixtureUtils";
 import { useWeekCursor } from "../navigation/useWeekCursor";
-import { BaseFixture } from "../../types/fixtures";
+import { IFixture } from "../../types/games";
 
-type Props<T extends BaseFixture> = {
-    fixtures: T[],
+type Props = {
+    fixtures: IFixture[],
     isLoading: boolean,
     initDateVal?: Date
 }
 
 /** Hook that provides a cursor to view fixtures, over week periods */
-export function useFixtureCursor<T extends BaseFixture>({ fixtures, isLoading, initDateVal }: Props<T>) {
+export function useFixtureCursor({ fixtures, isLoading, initDateVal }: Props) {
     const [initDate, setInitDate] = useState(initDateVal ? new Date(initDateVal) : new Date());
 
     const {
@@ -96,6 +96,6 @@ export function useFixtureCursor<T extends BaseFixture>({ fixtures, isLoading, i
         weekStart,
         hasAnyFixtures,
         switchPivot,
-        weekFixtures: weekFixtures as T[]
+        weekFixtures
     }
 }

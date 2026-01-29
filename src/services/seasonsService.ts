@@ -2,7 +2,7 @@
 
 import { IProAthlete } from '../types/athletes';
 import { ISeasonRound } from '../types/fantasy/fantasySeason';
-import { IFixture, ITeam } from '../types/fixtures';
+import { IFixture, ITeam } from '../types/games';
 import { IProSeason, SeasonStandingsItem, TeamSeasonRecord } from '../types/season';
 import { getAuthHeader, getUri } from '../utils/backendUtils';
 import { logger } from './logger';

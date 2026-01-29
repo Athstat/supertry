@@ -126,10 +126,10 @@ export function LeagueRoundCountdown2({ leagueRound, className, leagueTitleClass
 
     const timeBlocks = useMemo(() => {
         return [
-            { value: days, label: 'days' },
-            { value: hours, label: 'hrs' },
-            { value: minutes, label: 'mins' },
-            { value: seconds, label: 'secs' },
+            { value: days, label: 'Days' },
+            { value: hours, label: 'Hours' },
+            { value: minutes, label: 'Minutes' },
+            { value: seconds, label: 'Seconds' },
         ];
     }, [days, hours, minutes, seconds]);
 
@@ -152,7 +152,7 @@ export function LeagueRoundCountdown2({ leagueRound, className, leagueTitleClass
             {isTimeLeft && <div className="flex flex-row items-center gap-2">
                 {timeBlocks.map((block, index) => {
 
-                    if (days > 10 && (block.label === "Seconds" || block.label === "Minutes")) {
+                    if (days > 0 && (block.label === "Seconds" || block.label === "Minutes")) {
                         return;
                     }
 

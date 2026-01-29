@@ -1,4 +1,4 @@
-import { IFixture, IFullFixture, IGameVote, IRosterItem, ITeamAction } from '../types/fixtures';
+import { IFixture, IFullFixture, IGameVote, IRosterItem, ITeamAction } from '../types/games';
 import { getAuthHeader, getUri } from '../utils/backendUtils';
 import { logger } from './logger';
 import { authService } from './authService';

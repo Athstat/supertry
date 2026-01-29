@@ -4,7 +4,7 @@ import { fantasyAthleteService } from '../../services/fantasy/fantasyAthleteServ
 import { swrFetchKeys } from '../../utils/swrKeys';
 import { athleteService } from '../../services/athletes/athletesService';
 import { checkDaysDiff } from '../../utils/dateUtils';
-import { IFixture } from '../../types/fixtures';
+import { IFixture } from '../../types/games';
 
 export function usePlayerSquadReport(teamId: string | number, trackingId: string) {
   const key = swrFetchKeys.getPlayerSquadReport(teamId, trackingId);

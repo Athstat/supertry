@@ -1,5 +1,5 @@
 import { twMerge } from 'tailwind-merge'
-import { SeasonFilterBarItem } from '../../types/fixtures'
+import { SeasonFilterBarItem } from '../../types/games'
 import RoundedCard from '../ui/cards/RoundedCard'
 import { abbreviateSeasonName } from '../../utils/stringUtils'
 

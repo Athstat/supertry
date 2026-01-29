@@ -1,5 +1,5 @@
 import { IProAthlete } from "../../../types/athletes";
-import { IRosterItem } from "../../../types/fixtures";
+import { IRosterItem } from "../../../types/games";
 import { formatPosition } from "../../../utils/athletes/athleteUtils";
 import PlayerMugshot from "../../player/PlayerMugshot";
 import { CaptainsArmBand } from "../../player/CaptainsArmBand";

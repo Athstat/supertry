@@ -1,6 +1,6 @@
 import { IProAthlete } from './athletes';
 import { DjangoAuthUser } from './auth';
-import { IFixture } from './fixtures';
+import { IFixture } from './games';
 import { IProSeason } from './season';
 
 export type FantasyLeagueGroupType = 'user_created' | 'system_created' | 'official_league';

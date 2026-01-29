@@ -5,17 +5,16 @@ import { IFantasySeason } from '../../../types/fantasy/fantasySeason';
 import { JoinLeagueCard } from '../JoinLeagueCard';
 import SecondaryText from '../../ui/typography/SecondaryText';
 import RoundedCard from '../../ui/cards/RoundedCard';
-import TextHeading from '../../ui/typography/TextHeading';
 
 type Props = {
-    fantasySeason?: IFantasySeason
+    fantasySeason: IFantasySeason
 }
 
 /** Renders other leagues that the user can join */
 export default function SuggestedLeaguesSections({ fantasySeason }: Props) {
 
 
-    const { joinableLeagues: leagues, isLoading } = useSuggestedLeagues(fantasySeason?.id);
+    const { joinableLeagues: leagues, isLoading } = useSuggestedLeagues(fantasySeason.id);
 
     const trimmedList = useMemo(() => {
         return [...leagues].filter((l) => {
@@ -34,20 +33,13 @@ export default function SuggestedLeaguesSections({ fantasySeason }: Props) {
     }
 
     return (
-        <RoundedCard className='flex flex-col gap-4 px-4 bg-[#E2E8F0] border-[#DFE3E8] p-4' >
-
-            <div className="flex flex-col gap-2" >
-                <TextHeading
-                    blue
-                    className="font-medium"
-                >
-                    Discover More Leagues
-                </TextHeading>
-
+        <div className='flex flex-col gap-2 px-4' >
+            <div className="flex flex-col" >
+                <p className="font-semibold" >Discover More Leagues</p>
                 <SecondaryText>Public Leagues that you can join</SecondaryText>
             </div>
 
-            <div className='flex flex-col gap-4 mt-2' >
+            <div className='flex flex-col gap-2 mt-2' >
                 {trimmedList.map((l) => {
                     return (
                         <JoinLeagueCard
@@ -57,7 +49,7 @@ export default function SuggestedLeaguesSections({ fantasySeason }: Props) {
                     )
                 })}
             </div>
-        </RoundedCard>
+        </div>
     )
 }
 

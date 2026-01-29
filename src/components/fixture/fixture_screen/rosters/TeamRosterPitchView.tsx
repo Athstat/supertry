@@ -1,7 +1,7 @@
 import { useMemo, useCallback, Activity } from "react";
 import { twMerge } from "tailwind-merge";
 import { useGameRosters } from "../../../../hooks/fixtures/useGameRosters";
-import { IFixture } from "../../../../types/fixtures";
+import { IFixture } from "../../../../types/games";
 import { IProTeam } from "../../../../types/team";
 import { RugbyPitch3DRaster } from "../../../ui/containers/RugbyPitch";
 import { RosterStarterItem } from "./RosterStarterItem";

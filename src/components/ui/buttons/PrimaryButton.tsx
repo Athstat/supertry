@@ -11,10 +11,9 @@ type Props = {
     isLoading?: boolean,
     type?: "submit" | "reset" | "button" | undefined,
     destroy?: boolean,
-    slate?: boolean,
-    flexRowCN?: string
+    slate?: boolean
 }
-export default function PrimaryButton({ children, className, onClick, disbabled, isLoading = false, type, disabled, destroy, slate, flexRowCN }: Props) {
+export default function PrimaryButton({ children, className, onClick, disbabled, isLoading = false, type, disabled, destroy, slate }: Props) {
 
     const handleOnClick = () => {
         if (onClick) {
@@ -26,7 +25,7 @@ export default function PrimaryButton({ children, className, onClick, disbabled,
         <button
             disabled={disbabled || disabled}
             className={twMerge(
-                "bg-[#1196F5] dark:bg-blue-600 text-white font-medium px-4 py-2.5 w-full items-center justify-center flex rounded-[5px]",
+                "bg-blue-600 dark:bg-blue-600 text-white font-medium px-4 py-2 w-full items-center justify-center flex rounded-xl",
                 "hover:bg-blue-700 dark:hover:bg-blue-700",
                 "border border-primary-500 text-sm lg:text-base",
                 destroy && "bg-red-600 dark:bg-red-600 hover:bg-red-700 dark:hover:bg-red-700 border-red-500",
@@ -39,10 +38,7 @@ export default function PrimaryButton({ children, className, onClick, disbabled,
 
             type={type}
         >
-            <div className={twMerge(
-                'flex flex-row items-center gap-1',
-                flexRowCN
-            )} >
+            <div className='flex flex-row items-center gap-1' >
                 {children}
                 {isLoading && <Loader className="animate-spin w-4 h-4" />}
             </div>

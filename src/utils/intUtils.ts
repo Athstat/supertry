@@ -23,23 +23,3 @@ export function kgToLbs(kg: number): string {
   const lbs = Math.round(kg * 2.2046226218);
   return `${lbs} lbs`;
 }
-
-/** Format a number by compacting it */
-export function compactNumber(num?: number) {
-  if (!num) {
-    return num;
-  }
-
-  const formatter = new Intl.NumberFormat('en-US', { notation: 'compact' });
-  return formatter.format(num);
-}
-
-/** Format a number by compacting it */
-export function seperateNumberParts(num?: number) {
-  if (!num) {
-    return num;
-  }
-
-  const formatter = new Intl.NumberFormat('en-US');
-  return formatter.format(num);
-}

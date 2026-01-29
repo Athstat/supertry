@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { useSticky } from "../../../hooks/web/useSticky";
-import { IFixture } from "../../../types/fixtures";
+import { IFixture } from "../../../types/games";
 import { fixtureSummary } from "../../../utils/fixtureUtils";
 import { Sticky } from "../../ui/containers/Sticky";
 import TeamLogo from "../../team/TeamLogo";

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { IFixture } from "../../../../types/fixtures"
+import { IFixture } from "../../../../types/games"
 import FixtureTeamSelector from "../../boxscore/FixtureTeamSelector"
 import { IProTeam } from "../../../../types/team"
 import { TeamRosterPitchView } from "./TeamRosterPitchView"

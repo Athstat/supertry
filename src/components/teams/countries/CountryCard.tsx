@@ -1,6 +1,7 @@
 import { twMerge } from "tailwind-merge";
 import { getCountryEmojiFlag } from "../../../utils/svrUtils"
 import SecondaryText from "../../ui/typography/SecondaryText";
+import RoundedCard from "../../ui/cards/RoundedCard";
 
 type Props = {
     countryName?: string,
@@ -23,20 +24,18 @@ export default function CountryCard({ countryName, onClick, isSelected = false }
     }
 
     return (
-        <div
+        <RoundedCard
             className={twMerge(
-                "shadow-[0px_0px_5px_rgba(0,0,0,0.25)] bg-[#F8FAFC80] dark:bg-slate-700 w-full rounded-[5px] h-[100px] flex flex-col items-center gap-2 justify-center",
-                "cursor-pointer hover:bg-[#F8FAFC]",
+                "h-[80px] cursor-pointer dark:border-none p-4 flex flex-col items-center justify-center",
                 isSelected && "bg-blue-500 dark:bg-blue-500 text-white"
             )}
             onClick={handleOnClick}
         >
-            <p className="text-4xl" >{flag}</p>
-
+            <p className="text-2xl" >{flag}</p>
             <SecondaryText className={twMerge(
-                "text-[12px] text-center",
+                "text-xs text-center",
                 isSelected && "text-white dark:text-white"
             )} >{countryName}</SecondaryText>
-        </div>
+        </RoundedCard>
     )
 }

@@ -73,7 +73,7 @@ export default function SbrFixturePredictionBox({ fixture, hide, preVotingCols =
     return (
         <div ref={ref} className='' >
 
-            {isLoading && !hide && (
+            {isLoading && (
                 <div className="w-full h-20 bg-slate-200 dark:bg-slate-800/40 animate-pulse rounded-xl" >
 
                 </div>

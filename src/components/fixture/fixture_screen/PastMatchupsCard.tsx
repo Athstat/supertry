@@ -1,5 +1,5 @@
 import useSWR from "swr"
-import { IFixture } from "../../../types/fixtures"
+import { IFixture } from "../../../types/games"
 import { swrFetchKeys } from "../../../utils/swrKeys"
 import { gamesService } from "../../../services/gamesService"
 import TeamLogo from "../../team/TeamLogo"

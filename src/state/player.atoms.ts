@@ -3,7 +3,7 @@
 import { atom } from "jotai";
 import { IProAthlete } from "../types/athletes";
 import { IProSeason } from "../types/season";
-import { IFixture } from "../types/fixtures";
+import { IFixture } from "../types/games";
 
 /** Holds a player */
 export const playerAtom = atom<IProAthlete>();

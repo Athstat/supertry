@@ -1,4 +1,4 @@
-import { IRosterItem } from "../../../../types/fixtures"
+import { IRosterItem } from "../../../../types/games"
 import SmartPlayerMugshot from "../../../player/SmartPlayerMugshot"
 import CircleButton from "../../../ui/buttons/BackButton"
 import { useState } from "react"

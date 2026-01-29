@@ -5,7 +5,7 @@ import { LoadingIndicator } from "../components/ui/LoadingIndicator";
 import { gamesService } from "../services/gamesService";
 import { proMotmService } from "../services/proMotmService";
 import { proGameMotmCandidatesAtom, currentProGameAtom, proGameMotmVotesAtom } from "../state/proMotm.atoms";
-import { IFixture } from "../types/fixtures";
+import { IFixture } from "../types/games";
 
 type Props = {
     children?: ReactNode;

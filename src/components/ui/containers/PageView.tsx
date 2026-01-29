@@ -17,12 +17,12 @@ export default function PageView({ children, className }: Props) {
 
       className={twMerge(
         "w-full py-0 dark:text-white h-full flex flex-col items-center justify-start lg:py-8",
-        AppColours.BACKGROUND,
+        AppColours.BACKGROUND
       )}
 
       style={{ fontFamily: 'Roboto' }}
     >
-      <div className={twMerge('w-full lg:w-[50%]', AppColours.BACKGROUND, className)}>{children}</div>
+      <div className={twMerge('w-full lg:w-[50%]', className)}>{children}</div>
     </div>
   );
 }

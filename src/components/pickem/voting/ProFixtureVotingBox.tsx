@@ -5,7 +5,7 @@ import { mutate } from 'swr';
 import { useGameVotes } from '../../../hooks/useGameVotes';
 import { gamesService } from '../../../services/gamesService';
 import { fixtureSummary, isProGameTBD } from '../../../utils/fixtureUtils';
-import { IFixture } from '../../../types/fixtures';
+import { IFixture } from '../../../types/games';
 import { useInView } from 'react-intersection-observer';
 
 type Props = {
