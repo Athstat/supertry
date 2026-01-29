@@ -1,9 +1,6 @@
 import { TriangleAlert } from "lucide-react"
-import { useGeneralPlayerAvailability } from "../../../hooks/fantasy/usePlayerSquadReport"
 import { IProAthlete } from "../../../types/athletes"
 import WarningCard from "../../ui/cards/WarningCard"
-import { useMemo } from "react"
-import { IProTeam } from "../../../types/team"
 import { isPastFixture } from "../../../utils/fixtureUtils"
 import { twMerge } from "tailwind-merge"
 import { usePlayerRoundAvailability } from "../../../hooks/fantasy/usePlayerRoundAvailability"
@@ -20,24 +17,22 @@ type Props = {
 /** Renders an Availability Indicator Icon, usually to be placed on top of a card */
 export default function AvailabilityIcon({ athlete, className, iconClassName }: Props) {
 
-    const { seasonTeam } = usePlayerSeasonTeam(athlete);
-    const { report, isLoading } = useGeneralPlayerAvailability(athlete.tracking_id, seasonTeam?.athstat_id);
+    const {currentRound} = useFantasySeasons();
+    const {seasonTeam} = usePlayerSeasonTeam();
+
+    const athleteId = athlete.tracking_id;
+    const seasonId = currentRound?.season;
+    const roundNumber = currentRound?.round_number;
+    const teamId = seasonTeam?.athstat_id
+
+    const { isLoading, showAvailabilityWarning } = usePlayerRoundAvailability(athleteId, seasonId || '', roundNumber || 0, teamId);
 
     if (isLoading) {
         return;
     }
 
-    if (report?.status === "PENDING") {
-        return;
-    }
 
-    if (report?.status === "TEAM_NOT_PLAYING") {
-        return;
-    }
-
-    const notAvailable = report?.status === "NOT_AVAILABLE";
-
-    if (!notAvailable) {
+    if (!showAvailabilityWarning) {
         return;
     }
 
@@ -59,22 +54,15 @@ export default function AvailabilityIcon({ athlete, className, iconClassName }: 
 /** Renders an Availability Text Report explaining the absense, usually to be placed on top of a card */
 export function AvailabilityText({ athlete, className }: Props) {
 
-    const { seasonTeam } = usePlayerSeasonTeam(athlete);
-    const { report, isLoading } = useGeneralPlayerAvailability(athlete.tracking_id, seasonTeam?.athstat_id);
+    const {currentRound} = useFantasySeasons();
+    const {seasonTeam} = usePlayerSeasonTeam();
 
-    const opposition = useMemo<IProTeam | undefined>(() => {
+    const athleteId = athlete.tracking_id;
+    const seasonId = currentRound?.season;
+    const roundNumber = currentRound?.round_number;
+    const teamId = seasonTeam?.athstat_id
 
-        if (!report) return undefined;
-
-        const { game } = report;
-        const athelteTeamId = athlete.team_id;
-
-        if (athelteTeamId !== game?.team?.athstat_id) {
-            return game?.team;
-        }
-
-        return game?.opposition_team;
-    }, [report, athlete]);
+    const { report, isLoading, showAvailabilityWarning, opponent } = usePlayerRoundAvailability(athleteId, seasonId || '', roundNumber || 0, teamId);
 
     if (isLoading) {
         return;
@@ -88,16 +76,11 @@ export function AvailabilityText({ athlete, className }: Props) {
         return;
     }
 
-    const notAvailable = Boolean(report.game) && report?.status === "NOT_AVAILABLE";
     const isPast = isPastFixture(report.game)
 
-    if (!notAvailable) {
+    if (!showAvailabilityWarning) {
         return;
     }
-
-    // const handleViewGame = () => {
-    //     navigate(`/fixtures/${report.game?.game_id}`);
-    // }
 
     return (
         <WarningCard className={twMerge(
@@ -109,7 +92,7 @@ export function AvailabilityText({ athlete, className }: Props) {
             {report.status == "NOT_AVAILABLE" && (<p className="text-xs" >
                 {athlete.player_name} {isPast ? 'was' : 'is'} not on the team roster for the match
                 against <a href={`/fixtures/${report.game?.game_id}`} className="underline cursor-pointer text-primary-500" >
-                    <strong>{opposition?.athstat_name}</strong>
+                    <strong>{opponent?.athstat_name}</strong>
                 </a>
                 .
                 {!isPast && 'Consider taking action if he is in your team'}
@@ -131,13 +114,15 @@ type RoundProps = Props & {
 export function RoundAvailabilityText({ athlete, className, round }: RoundProps) {
 
 
-    const {selectedSeason} = useFantasySeasons();
+    const {selectedSeason, currentRound} = useFantasySeasons();
     const { seasonTeam } = usePlayerSeasonTeam(athlete);
+
+    const roundNumber = round?.round_number || currentRound?.round_number;
 
     const { report, isLoading, showAvailabilityWarning, opponent } = usePlayerRoundAvailability(
         athlete.tracking_id,
         selectedSeason?.id ?? "",
-        round?.round_number ?? 0,
+        roundNumber ?? 0,
         seasonTeam?.athstat_id
     );
 
@@ -177,7 +162,8 @@ export function RoundAvailabilityText({ athlete, className, round }: RoundProps)
             </p>)}
 
             {report.status == "INJURED" && (<p className="text-xs" >
-                {athlete.player_name} is on injury, consider taking action
+                {athlete.player_name} is on injury
+                {!isPast && ', consider taking action if he is in your team'}
             </p>)}
 
 

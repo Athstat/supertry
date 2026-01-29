@@ -2,7 +2,7 @@ import { TabViewHeaderItem, TabViewPage } from '../../ui/tabs/TabView';
 import PlayerOverviewTab from './tabs/PlayerOverviewTab';
 import PilledTabView from '../../ui/tabs/PilledTabView';
 import PlayerMatchesTab from './tabs/PlayerStatsTab';
-import { AvailabilityText } from '../../players/availability/AvailabilityIcon';
+import { RoundAvailabilityText } from '../../players/availability/AvailabilityIcon';
 import { usePlayerData } from '../../../providers/PlayerDataProvider';
 import PlayerSeasonStatsTab from './tabs/PlayerSeasonStatsTab';
 
@@ -34,7 +34,7 @@ export function PlayerProfileModalTabContent() {
     <div className='flex flex-col gap-4'>
 
       <div>
-        <AvailabilityText athlete={player} />
+        <RoundAvailabilityText athlete={player} />
       </div>
 
       <PilledTabView tabHeaderItems={tabItems}>
