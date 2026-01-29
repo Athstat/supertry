@@ -7,7 +7,7 @@ import { useFantasySeasons } from "../dashboard/useFantasySeasons";
 /** Gets Player Specific Round Availability outside rosters */
 export function usePlayerRoundAvailability(athleteId: string, seasonId: string, roundNumber: number, team_id?: string) {
 
-  const {selectedSeason} = useFantasySeasons();
+  const { selectedSeason } = useFantasySeasons();
   const finalSeasonId = selectedSeason?.id || seasonId;
 
   const shouldFetch = (Boolean(athleteId) && Boolean(finalSeasonId)) && (roundNumber > 0);
@@ -53,6 +53,14 @@ export function usePlayerRoundAvailability(athleteId: string, seasonId: string, 
     return firstReport?.status === "TEAM_NOT_PLAYING";
   }, [firstReport?.status]);
 
+  const isNotInSeasonSquad = useMemo(() => {
+    return firstReport?.status === "NOT_IN_SEASON_SQUAD"
+  }, [firstReport?.status])
+
+  const isInjured = useMemo(() => {
+    return firstReport?.status === "INJURED"
+  }, [firstReport?.status])
+
   const isAvailable = useMemo(() => {
     return firstReport?.status === "AVAILABLE";
   }, [firstReport]);
@@ -73,6 +81,7 @@ export function usePlayerRoundAvailability(athleteId: string, seasonId: string, 
     return false;
   }, [nextMatch]);
 
+  const showAvailabilityWarning = (isTeamNotPlaying || isInjured || isNotInSeasonSquad || isNotAvailable) && !isLoading
 
 
   return {
@@ -84,6 +93,9 @@ export function usePlayerRoundAvailability(athleteId: string, seasonId: string, 
     isTeamNotPlaying,
     isPastGame,
     isAvailable,
-    isGameTooFarAway
+    isGameTooFarAway,
+    isNotInSeasonSquad,
+    isInjured,
+    showAvailabilityWarning
   };
 }
