@@ -106,7 +106,7 @@ function RoundScoringSummary({ leagueRound, userTeam }: RoundScoringProps) {
   const { highestPointsScored, averagePointsScored, userScore, isLoading } = useRoundScoringSummaryV2(leagueRound);
   const hasTeam = Boolean(userTeam);
 
-  if (isLoading || !hasTeam) {
+  if (isLoading) {
     return (
       <div className='flex flex-row items-center animate-pulse justify-center w-full gap-2' >
         <RoundedCard className='h-[40px] w-[100px] bg-white/20 border-none dark:bg-white/20' />
@@ -114,6 +114,10 @@ function RoundScoringSummary({ leagueRound, userTeam }: RoundScoringProps) {
         <RoundedCard className='h-[40px] w-[100px] bg-white/20 border-none dark:bg-white/20' />
       </div>
     );
+  }
+
+  if (!hasTeam) {
+    return null;
   }
 
   return (
