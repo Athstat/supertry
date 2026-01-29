@@ -220,3 +220,9 @@ export type UpdatedUserInternalProfileReq = {
   completed_onboarding?: boolean,
   favourite_teams: UserFavouriteTeam[]
 }
+
+export type EditAccountInfoForm = {
+  username: string,
+  firstName?: string,
+  lastName?: string
+}

@@ -43,7 +43,7 @@ export function OnboardingCTASlide() {
 
   return (
     <div className="relative flex flex-col gap-6 h-full w-full overflow-x-auto items-center">
-      {/* Content */}
+    {/* Content */}
       <div className="relative z-10 flex flex-col gap-6 items-center">
         <ScrummyLogo className="w-44 h-44 lg:w-72 lg:h-72" />
 
