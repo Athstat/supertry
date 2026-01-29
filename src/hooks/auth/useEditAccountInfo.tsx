@@ -38,7 +38,7 @@ export function useEditAccountInfo() {
         return undefined;
     }, [form]);
 
-    const handleSaveChanges = useCallback(async () => {
+    const handleSaveChanges = useCallback(async (onSuccess?: () => void) => {
 
         if (userNameError) {
             return;
@@ -59,6 +59,10 @@ export function useEditAccountInfo() {
             if (res) {
                 setSuccessMessage("Profile Updated Successfully");
                 await refreshAuthUser(res);
+
+                if (onSuccess) {
+                    onSuccess();
+                }
             } else {
                 setError("Whoops! Something wen't wrong, please try again");
             }

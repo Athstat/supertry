@@ -7,17 +7,22 @@ import { useOnboarding } from "../../../hooks/onboarding/useOnboarding";
 import { UpdatedUserInternalProfileReq } from "../../../types/auth";
 import { useAuth } from "../../../contexts/AuthContext";
 import InputField from "../../ui/forms/InputField";
-import { useState } from "react";
+import { useEditAccountInfo } from "../../../hooks/auth/useEditAccountInfo";
+import ErrorCard from "../../ui/cards/ErrorCard";
 
 export function OnboardingCTASlide() {
 
   const navigate = useNavigate();
   const { authUser } = useAuth();
 
-  const { updateProfile, isLoading } = useInternalUserProfile();
+  const { updateProfile, isLoading: loadingSaveInternalProfile } = useInternalUserProfile();
   const { favouriteTeams, country } = useOnboarding();
 
-  const [username, setUsername] = useState<string | undefined>(authUser?.username);
+  const {
+    userNameError, form, setForm,
+    handleSaveChanges, isLoading: loadingSaveUsername,
+    error
+  } = useEditAccountInfo();
 
   const handleGetStarted = async () => {
 
@@ -34,16 +39,21 @@ export function OnboardingCTASlide() {
     }
 
     await updateProfile(data);
-    analytics.trackOnboardingCtaContinued('/dashboard');
-    navigate('/dashboard');
+
+    await handleSaveChanges(() => {
+      navigate('/dashboard');
+      analytics.trackOnboardingCtaContinued('/dashboard');
+    });
+
   };
 
-  const isUsernameValid = (username?.length || 0) > 3;
-  const isDisabled = isLoading || !username || !isUsernameValid;
+
+  const isLoading = loadingSaveInternalProfile || loadingSaveUsername
+  const isDisabled = isLoading || Boolean(userNameError);
 
   return (
     <div className="relative flex flex-col gap-6 h-full w-full overflow-x-auto items-center">
-    {/* Content */}
+      {/* Content */}
       <div className="relative z-10 flex flex-col gap-6 items-center">
         <ScrummyLogo className="w-44 h-44 lg:w-72 lg:h-72" />
 
@@ -65,9 +75,12 @@ export function OnboardingCTASlide() {
           <InputField
             label={"What should we call you?"}
             placeholder="Enter a username"
-            value={username}
-            onChange={(val) => setUsername(val || '')}
+            value={form.username}
+            onChange={(s) => {
+              setForm({ ...form, username: s ?? "" })
+            }}
             className="w-full"
+            error={userNameError}
           />
           <PrimaryButton
             onClick={handleGetStarted}
@@ -77,7 +90,14 @@ export function OnboardingCTASlide() {
           >
             Get Started
           </PrimaryButton>
+
+          {error && <ErrorCard
+            message={error}
+            error={"Whoops!"}
+          />}
         </div>
+
+
       </div>
     </div>
   );
