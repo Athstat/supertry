@@ -38,7 +38,7 @@ export function OnboardingCTASlide() {
       })
     }
 
-    updateProfile(data);
+    await updateProfile(data);
 
     await handleSaveChanges(() => {
       navigate('/dashboard');
