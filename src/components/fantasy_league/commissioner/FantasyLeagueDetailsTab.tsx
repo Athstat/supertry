@@ -10,9 +10,9 @@ import { Toast } from "../../ui/Toast";
 export default function FantasyLeagueDetailsTab() {
 
   const [message, setMessage] = useState<string>();
-  const { league, members } = useFantasyLeagueGroup();
+  const { league } = useFantasyLeagueGroup();
 
-  const membersCount = members.length;
+  const membersCount = league?.members_count || '-';
   const leagueType = league?.is_private ? 'Private' : 'Public';
 
   const handleCopyJoinCode = () => {
@@ -20,7 +20,6 @@ export default function FantasyLeagueDetailsTab() {
       navigator.clipboard.writeText(league?.entry_code);
       setMessage('League join code was coppied to your clipboard');
     }
-
   }
 
   return (

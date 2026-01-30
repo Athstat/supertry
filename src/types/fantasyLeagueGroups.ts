@@ -20,7 +20,8 @@ export type FantasyLeagueGroup = {
   end_date?: Date;
   season: IProSeason;
   banner?: string,
-  logo?: string
+  logo?: string,
+  members_count?: number
 };
 
 export type FantasyLeagueGroupMember = {

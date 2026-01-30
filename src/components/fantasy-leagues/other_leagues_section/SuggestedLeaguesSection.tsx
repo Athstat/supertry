@@ -1,10 +1,11 @@
-import { Trophy } from 'lucide-react'
+import { ArrowUpRight, Trophy } from 'lucide-react'
 import { useMemo } from 'react';
 import { useSuggestedLeagues } from '../../../hooks/leagues/useSuggestedLeagues';
 import { IFantasySeason } from '../../../types/fantasy/fantasySeason';
-import { JoinLeagueCard } from '../JoinLeagueCard';
+import { JoinLeagueCard } from '../card/JoinLeagueCard';
 import SecondaryText from '../../ui/typography/SecondaryText';
 import RoundedCard from '../../ui/cards/RoundedCard';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
     fantasySeason: IFantasySeason
@@ -13,7 +14,7 @@ type Props = {
 /** Renders other leagues that the user can join */
 export default function SuggestedLeaguesSections({ fantasySeason }: Props) {
 
-
+    const navigate = useNavigate();
     const { joinableLeagues: leagues, isLoading } = useSuggestedLeagues(fantasySeason.id);
 
     const trimmedList = useMemo(() => {
@@ -21,6 +22,10 @@ export default function SuggestedLeaguesSections({ fantasySeason }: Props) {
             return l.type !== 'system_created';
         }).slice(0, 5);
     }, [leagues]);
+
+    const handleDiscoverMore = () => {
+        navigate('/leagues/discover');
+    }
 
     if (isLoading) {
         return (
@@ -34,9 +39,16 @@ export default function SuggestedLeaguesSections({ fantasySeason }: Props) {
 
     return (
         <div className='flex flex-col gap-2 px-4' >
-            <div className="flex flex-col" >
-                <p className="font-semibold" >Discover More Leagues</p>
-                <SecondaryText>Public Leagues that you can join</SecondaryText>
+
+            <div className='flex flex-row items-center justify-between gap-2' >
+                <div className="flex flex-col" >
+                    <p className="font-semibold" >Discover More Leagues</p>
+                    <SecondaryText>Public Leagues that you can join</SecondaryText>
+                </div>
+
+                <button onClick={handleDiscoverMore} >
+                    <ArrowUpRight />
+                </button>
             </div>
 
             <div className='flex flex-col gap-2 mt-2' >

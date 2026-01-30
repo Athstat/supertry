@@ -12,6 +12,26 @@ type Props = {
 }
 
 export default function LeagueGroupsSection({leagues, title, description, isVerified, emptyMessage} : Props) {
+    
+    const leagueBias = (league: FantasyLeagueGroup) => {
+        if (league.type === "official_league") {
+            return 3000000000000000000;
+        }
+
+        if (league.type === "system_created") {
+            return 2000000000000000000;
+        }
+
+        return 1
+    }
+
+    const sortedLeagues = leagues.sort((a, b) => {
+        const bScore = leagueBias(b) + (b.members_count || 0);
+        const aScore = leagueBias(a) + (a.members_count || 0);
+
+        return bScore - aScore;
+    });
+    
     return (
         <section className="flex flex-col gap-2 py-6 rounded-none px-4 bg-slate-50 dark:bg-dark-800/40 border-none" >
 
@@ -26,7 +46,7 @@ export default function LeagueGroupsSection({leagues, title, description, isVeri
             </div>
 
             <LeagueGroupsTable
-                leagues={leagues}
+                leagues={sortedLeagues}
                 emptyMessage={emptyMessage}
             />
 

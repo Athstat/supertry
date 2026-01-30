@@ -116,3 +116,6 @@ export type LeagueGroupInvite = {
   expires_at?: Date,
   times_visited: number
 }
+
+export type FantasyLeaguesSortField = "name" | "size";
+export type FantasyLeagueFilterField = "official" | "user_created";

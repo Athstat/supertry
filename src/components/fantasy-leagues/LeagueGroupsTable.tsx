@@ -2,7 +2,7 @@ import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
 import { Link } from "react-router-dom";
 import SecondaryText from "../ui/typography/SecondaryText";
 import NoContentCard from "../ui/typography/NoContentMessage";
-import { LeagueGroupCard } from "./LeagueGroupCard";
+import { LeagueGroupCard } from "./card/LeagueGroupCard";
 
 type Props = {
     leagues: FantasyLeagueGroup[],

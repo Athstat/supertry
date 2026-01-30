@@ -38,6 +38,10 @@ export default function FixtureSeasonLeaders({ fixture, onPlayerClick }: Props) 
         return null;
     }
 
+    if (leaders1?.length === 0 || leaders2?.length === 0) {
+        return null;
+    }
+    
     return (
         <RoundedCard className={"p-4 dark:border-none flex flex-col gap-4"}>
             <div className="flex flex-row px-8 items-center justify-between" >
@@ -173,7 +177,6 @@ function StatLeadersItem({ actionNames, team1Leaders, team2Leaders, onClick }: S
 
                 <div className="flex flex-col items-center gap-1" >
                     <SmartPlayerMugshot
-                        url={leader1?.image_url}
                         teamId={leader1?.team_id}
                     />
 
@@ -199,7 +202,6 @@ function StatLeadersItem({ actionNames, team1Leaders, team2Leaders, onClick }: S
 
                 <div className="flex flex-col items-center gap-1" >
                     <SmartPlayerMugshot
-                        url={leader2?.image_url}
                         teamId={leader2?.team_id}
                     />
 
