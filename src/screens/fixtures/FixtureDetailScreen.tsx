@@ -5,7 +5,6 @@ import FixtureH2HTab from '../../components/fixture/fixture_screen/FixtureH2HTab
 import FixtureHero from '../../components/fixture/fixture_screen/FixtureHero';
 import FixtureOverviewTab from '../../components/fixture/fixture_screen/FixtureOverviewTab';
 import FixtureStandingsTab from '../../components/fixture/fixture_screen/FixtureStandingsTab';
-import { FixtureStickyHeader } from '../../components/fixture/fixture_screen/FixtureStickyHeader';
 import FixtureRostersTab from '../../components/fixture/fixture_screen/rosters/FixtureRostersTab';
 import { ProMotmVotingBox } from '../../components/pickem/motm';
 import PlayerProfileModal from '../../components/player/PlayerProfileModal';
@@ -114,7 +113,7 @@ function Content() {
       {!loadingSportsActions && (
         <PageView className="w-full"  >
           <FixtureHero fixture={fixture} />
-          <FixtureStickyHeader fixture={fixture} />
+          {/* <FixtureStickyHeader fixture={fixture} /> */}
 
           <PilledTabView pillTabRowClassName={"px-4"} className='' tabHeaderItems={tabItems}>
 
