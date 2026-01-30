@@ -1,3 +1,4 @@
+import { FantasyLeagueFilterField, FantasyLeaguesSortField } from "../../types/fantasyLeague";
 import { FilterListOption, RadioListOption } from "../../types/ui";
 import RadioList from "../ui/buttons/RadioList";
 import FilterList from "../ui/forms/FilterList";
@@ -7,8 +8,8 @@ type Props = {
     isOpen?: boolean
     sortField?: string,
     filterField?: string,
-    setSortField: (field?: string) => void,
-    setFilterField: (field?: string) => void,
+    setSortField: (field?: FantasyLeaguesSortField) => void,
+    setFilterField: (field?: FantasyLeagueFilterField) => void,
     onClose?: () => void
 }
 
@@ -18,7 +19,7 @@ export default function FantasyLeaguesFilter({ sortField, setFilterField, setSor
     const sortOptions: RadioListOption[] = [
         {
             label: 'League Size',
-            value: 'league_size'
+            value: 'size'
         },
 
         {
@@ -40,12 +41,12 @@ export default function FantasyLeaguesFilter({ sortField, setFilterField, setSor
     ]
 
     const handleChangeSortField = (val?: string) => {
-        setSortField(val);
+        setSortField(val as FantasyLeaguesSortField);
 
     }
 
     const handleChangeFilterField = (field?: string) => {
-        setFilterField(field);
+        setFilterField(field as FantasyLeagueFilterField);
     }
 
     if (!isOpen) {
