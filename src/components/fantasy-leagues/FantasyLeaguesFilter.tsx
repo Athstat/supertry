@@ -4,14 +4,16 @@ import FilterList from "../ui/forms/FilterList";
 import BottomSheetView from "../ui/modals/BottomSheetView";
 
 type Props = {
+    isOpen?: boolean
     sortField?: string,
     filterField?: string,
     setSortField: (field?: string) => void,
-    setFilterField: (field?: string) => void
+    setFilterField: (field?: string) => void,
+    onClose?: () => void
 }
 
 /** Renders a fantasy leagues filter bottom view sheet */
-export default function FantasyLeaguesFilter({ sortField, setFilterField, setSortField, filterField }: Props) {
+export default function FantasyLeaguesFilter({ sortField, setFilterField, setSortField, filterField, isOpen, onClose }: Props) {
 
     const sortOptions: RadioListOption[] = [
         {
@@ -43,15 +45,18 @@ export default function FantasyLeaguesFilter({ sortField, setFilterField, setSor
     }
 
     const handleChangeFilterField = (field?: string) => {
-        if (field) {
-            setFilterField(field)
-        }
+        setFilterField(field);
+    }
+
+    if (!isOpen) {
+        return null;
     }
 
     return (
         <BottomSheetView
             hideHandle
             className="p-6  min-h-[200px] max-h-[90vh] flex flex-col gap-4"
+            onClickOutside={onClose}
         >
             <section className="flex flex-col gap-2" >
                 <div>

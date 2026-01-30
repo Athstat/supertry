@@ -27,6 +27,9 @@ export default function DiscoverLeaguesScreen() {
     const [sortField, setSortField] = useState<string | undefined>("name");
     const [filterField, setFilterField] = useState<string | undefined>(undefined);
 
+    const [isOpen, setOpen] = useState<boolean>(false);
+    const toggle = () => setOpen(prev => !prev);
+
     const filteredLeagues = leagues.filter((l) => {
         if (debouncedSearchQuery) {
             return l.title?.toLowerCase().startsWith(debouncedSearchQuery.toLowerCase())
@@ -57,7 +60,7 @@ export default function DiscoverLeaguesScreen() {
 
                 </div>
 
-                <button>
+                <button onClick={toggle} >
                     <Filter />
                 </button>
             </div>
@@ -82,10 +85,12 @@ export default function DiscoverLeaguesScreen() {
             </div>
 
             <FantasyLeaguesFilter 
+                isOpen={isOpen}
                 sortField={sortField}
                 filterField={filterField}
                 setFilterField={setFilterField}
                 setSortField={setSortField}
+                onClose={toggle}
             />
         </PageView>
     )

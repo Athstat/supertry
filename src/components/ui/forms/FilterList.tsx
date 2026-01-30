@@ -30,14 +30,20 @@ export default function FilterList({options, onChange, className, value}: Props)
 
 type FilterListItemProps = {
     option: FilterListOption,
-    onClick?: (field: string) => void,
+    onClick?: (field?: string) => void,
     isCurrent?: boolean
 }
 
 function FilterListItem({option, onClick, isCurrent} : FilterListItemProps) {
     const handleClick = () => {
         if (onClick) {
-            onClick(option.value);
+
+            if (isCurrent) {
+                onClick(undefined);
+            } else {
+                onClick(option.value);
+            }
+
         }
     }
 
