@@ -91,7 +91,7 @@ function Content() {
           <div className='flex flex-row items-center gap-2' >
             <Binoculars />
             <p className='text-sm' >View Scouting List</p>
-            <NewTag showUntil={new Date('15-12-2025')} />
+            <NewTag showUntil={new Date('2025-12-15')} />
           </div>
 
           <ArrowRight />
