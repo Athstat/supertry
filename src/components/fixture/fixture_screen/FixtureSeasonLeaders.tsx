@@ -177,7 +177,6 @@ function StatLeadersItem({ actionNames, team1Leaders, team2Leaders, onClick }: S
 
                 <div className="flex flex-col items-center gap-1" >
                     <SmartPlayerMugshot
-                        url={leader1?.image_url}
                         teamId={leader1?.team_id}
                     />
 
@@ -203,7 +202,6 @@ function StatLeadersItem({ actionNames, team1Leaders, team2Leaders, onClick }: S
 
                 <div className="flex flex-col items-center gap-1" >
                     <SmartPlayerMugshot
-                        url={leader2?.image_url}
                         teamId={leader2?.team_id}
                     />
 
