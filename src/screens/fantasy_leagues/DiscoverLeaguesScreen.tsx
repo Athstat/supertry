@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useDebounced } from "../../hooks/web/useDebounced";
 import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
 import FantasyLeaguesFilter from "../../components/fantasy-leagues/FantasyLeaguesFilter";
+import { FantasyLeagueFilterField, FantasyLeaguesSortField } from "../../types/fantasyLeague";
 
 /** Renders screen to discover public leagues */
 export default function DiscoverLeaguesScreen() {
@@ -24,8 +25,8 @@ export default function DiscoverLeaguesScreen() {
     const { selectedSeason } = useFantasySeasons();
     const { joinableLeagues: leagues, isLoading } = useSuggestedLeagues(selectedSeason?.id);
 
-    const [sortField, setSortField] = useState<string | undefined>("name");
-    const [filterField, setFilterField] = useState<string | undefined>(undefined);
+    const [sortField, setSortField] = useState<FantasyLeaguesSortField | undefined>("size");
+    const [filterField, setFilterField] = useState<FantasyLeagueFilterField | undefined>(undefined);
 
     const [isOpen, setOpen] = useState<boolean>(false);
     const toggle = () => setOpen(prev => !prev);
@@ -47,6 +48,16 @@ export default function DiscoverLeaguesScreen() {
         }
 
         return true;
+    }).sort((a,b) => {
+        if (sortField === "name") {
+            return a.title?.localeCompare(b?.title || '') || 0;
+        }
+
+        if (sortField === "size") {
+            return (b.members_count || 0) - (a.members_count || 0);
+        }
+
+        return 0;
     });
 
     const handleGoBack = () => {
