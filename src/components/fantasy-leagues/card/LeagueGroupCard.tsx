@@ -74,11 +74,12 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
                             <span className='text-xs' > {leagueGroup.members_count}</span>
                         </div>}
                     </div>
-                    {getStatusBadge()}
                 </div>
 
 
-                <div className="" >
+                <div className="flex flex-row items-center gap-2" >
+
+                    {getStatusBadge()}
 
                     {!isLoading && <div className="text-slate-600 dark:text-slate-200 font-semibold text-sm" >
                         <p>{userRanking?.league_rank}</p>
@@ -88,9 +89,6 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
                         <div className="w-4 h-4 rounded-xl bg-slate-200 dark:bg-slate-600" ></div>
                     </div>}
 
-                    {/* <button onClick={handleOnClick} >
-                    <ChevronRight className="w-4 h-4" />
-                    </button> */}
                 </div>
 
             </RoundedCard>
