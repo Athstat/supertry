@@ -1,5 +1,4 @@
 import { Coins, Lock } from "lucide-react";
-import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import PlayerMugshot from "../player/PlayerMugshot";
 import AvailabilityIcon, { RoundAvailabilityText } from "../players/availability/AvailabilityIcon";
@@ -8,7 +7,7 @@ import SecondaryText from "../ui/typography/SecondaryText";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import SuperSubPill from "./SuperSubPill";
 import { Activity, useMemo } from "react";
-import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
+import { isSeasonRoundLocked } from "../../utils/leaguesUtils";
 import { twMerge } from "tailwind-merge";
 import { CaptainsArmBand } from "../player/CaptainsArmBand";
 import MatchPrCard from "../rankings/MatchPrCard";
@@ -22,7 +21,6 @@ type PlayerActionModalProps = {
   player: IFantasyTeamAthlete;
   onClose: () => void;
   onViewProfile: (player: IFantasyTeamAthlete) => void;
-  league?: IFantasyLeagueRound,
   onViewPointsBreakdown?: (player: IFantasyTeamAthlete) => void,
 }
 
@@ -31,12 +29,11 @@ export function PlayerActionModal({
   onClose,
   onViewProfile,
   onViewPointsBreakdown,
-  league
 }: PlayerActionModalProps) {
 
   const { seasonTeam } = usePlayerSeasonTeam(player.athlete);
-
-  const { initiateSwap, removePlayerAtSlot, setTeamCaptainAtSlot, slots, teamCaptain, isReadOnly } = useFantasyTeam();
+  const {leagueRound,  initiateSwap, removePlayerAtSlot, setTeamCaptainAtSlot, slots, teamCaptain, isReadOnly } = useFantasyTeam();
+  
   const isSub = !player.is_starting;
 
   const playerSlot = useMemo(() => {
@@ -46,7 +43,7 @@ export function PlayerActionModal({
   }, [slots, player]);
 
   const isTeamCaptain = teamCaptain?.tracking_id === player.tracking_id;
-  const isLocked = league && isLeagueRoundLocked(league);
+  const isLocked = leagueRound && isSeasonRoundLocked(leagueRound);
 
   const handleViewProfile = () => {
     if (onViewProfile) {
@@ -158,9 +155,9 @@ export function PlayerActionModal({
 
       </div>
 
-      {league && player.athlete && (
+      {leagueRound && player.athlete && (
         <RoundAvailabilityText
-          round={league}
+          round={leagueRound}
           athlete={player.athlete}
         />
       )}

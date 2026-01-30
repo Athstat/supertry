@@ -1,10 +1,11 @@
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { RugbyPitch3DRaster } from '../ui/containers/RugbyPitch';
-import { EmptySlotPitchCard, PlayerPitchCard } from './PlayerPitchCard';
+import { PlayerPitchCard } from './pitch_card/PlayerPitchCard';
 import { twMerge } from 'tailwind-merge';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { IFantasyLeagueTeamSlot, SlotCardPosition } from '../../types/fantasyLeagueTeam';
 import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
+import { EmptySlotPitchCard } from './pitch_card/EmptySlotPitchCard';
 
 interface TeamFormationProps {
   onPlayerClick: (player: IFantasyTeamAthlete) => void;
@@ -13,7 +14,7 @@ interface TeamFormationProps {
 }
 
 /** Renders a 3 Dimensional-looking pitch view */
-export function FantasyTeamFormation3D({ onPlayerClick, marginCN }: TeamFormationProps) {
+export function FantasyTeamFormation3D({ onPlayerClick, marginCN, firstRowMargin }: TeamFormationProps) {
 
   const { slots } = useFantasyTeam();
 
@@ -35,7 +36,10 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN }: TeamFormatio
       )} />
 
       <div className='top-0  left-0 absolute w-full p-3 flex flex-col items-center justify-center gap-0' >
-        <div className='w-full h-full p-2 relative min-h-[750px] lg:min-h-[800px] md:min-w-[670px] lg:min-w-[450px] lg:max-w-[150px]' >
+        <div className={twMerge(
+          'w-full h-full p-2 relative min-h-[750px] lg:min-h-[800px] md:min-w-[670px] lg:min-w-[450px] lg:max-w-[150px]',
+          firstRowMargin
+        )} >
           {slotPositions.map((pos) => {
 
             const slotNumber = pos.slot;

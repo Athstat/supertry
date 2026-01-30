@@ -74,7 +74,7 @@ export type IAthleteSeasonStarRatings = {
 export type PlayerCompareMode = "none" | "picking" | "modal";
 export type CardTier = 'gold' | 'silver' | 'bronze' | 'blue';
 
-export type PlayerAvailabilityStatus = "PENDING" | "TEAM_NOT_PLAYING" | "NOT_AVAILABLE" | "AVAILABLE";
+export type PlayerAvailabilityStatus = "PENDING" | "TEAM_NOT_PLAYING" | "NOT_AVAILABLE" | "AVAILABLE" | 'INJURED'| 'NOT_IN_SEASON_SQUAD';
 
 /** Represents a single fantasy season round availability report for a player */
 export type AthleteRoundAvailabilityReport = {

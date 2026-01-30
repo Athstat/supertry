@@ -35,7 +35,7 @@ export default function PlayerNameAndPosition() {
     }
   }
 
-  if (!player) return;
+  if (!player) return null;
 
   return (
     <>
