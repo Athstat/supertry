@@ -10,7 +10,6 @@ import { PositionClass } from '../../types/athletes'
 import { useNavigate } from 'react-router-dom'
 import { FastForward } from 'lucide-react'
 import { TrendingUpDown } from 'lucide-react'
-import NewTag from '../../components/branding/NewTag'
 import { useDebounced } from '../../hooks/web/useDebounced'
 import PlayersTeamsGridList from '../../components/players/teams/PlayersTeamsGridList'
 import PlayersCountryGridList from '../../components/players/nationality/PlayersCountryGridList'
@@ -91,7 +90,6 @@ function Content() {
           <div className='flex flex-row items-center gap-2' >
             <Binoculars />
             <p className='text-sm' >View Scouting List</p>
-            <NewTag showUntil={new Date('2025-12-15')} />
           </div>
 
           <ArrowRight />
