@@ -29,7 +29,7 @@ export default function FantasyLeaguesFilter({ sortField, setFilterField, setSor
 
     const filterOptions: FilterListOption[] = [
         {
-            label: "Official SCRUMMY Leagues",
+            label: "Official Leagues",
             value: "official"
         },
 

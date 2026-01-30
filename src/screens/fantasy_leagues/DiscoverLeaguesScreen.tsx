@@ -36,6 +36,17 @@ export default function DiscoverLeaguesScreen() {
         }
 
         return true;
+    }).filter((l) => {
+
+        if (filterField === "official") {
+            return l.type === "official_league" || l.type === "system_created";
+        }
+
+        if (filterField === "user_created") {
+            return l.type === "user_created";
+        }
+
+        return true;
     });
 
     const handleGoBack = () => {
