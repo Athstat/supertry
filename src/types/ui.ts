@@ -12,3 +12,8 @@ export type TooltipData = {
     title?: string,
     description?: string
 }
+
+export type FilterListOption = {
+    label: string,
+    value: string
+}

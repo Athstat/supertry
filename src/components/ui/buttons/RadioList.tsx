@@ -9,11 +9,12 @@ type Props = {
   disabled?: boolean,
   value?: string,
   onChange?: (newVal: string) => void,
-  className?: string
+  className?: string,
+  optionCN?: string
 }
 
 /** Renders a Radio List Component */
-export default function RadioList({ title, description, options, value, onChange, className }: Props) {
+export default function RadioList({ title, description, options, value, onChange, className, optionCN }: Props) {
   return (
     <div className={twMerge(
       "flex flex-col gap-2",
@@ -31,6 +32,7 @@ export default function RadioList({ title, description, options, value, onChange
             value={value}
             onChange={onChange}
             key={index}
+            className={optionCN}
           />
         })}
       </div>
@@ -41,10 +43,11 @@ export default function RadioList({ title, description, options, value, onChange
 type OptionProp = {
   option: RadioListOption,
   onChange?: (newVal: string) => void,
-  value?: string
+  value?: string,
+  className?: string
 }
 
-function Option({ option, value, onChange }: OptionProp) {
+function Option({ option, value, onChange, className }: OptionProp) {
 
   const isCurrent = value === option.value;
 
@@ -57,7 +60,10 @@ function Option({ option, value, onChange }: OptionProp) {
   return (
     <div
       onClick={handleClick}
-      className="flex flex-row items-center gap-1 cursor-pointer"
+      className={twMerge(
+        "flex flex-row items-center gap-1 cursor-pointer text-xs",
+        className
+      )}
     >
 
       <div className={twMerge(
@@ -71,7 +77,7 @@ function Option({ option, value, onChange }: OptionProp) {
         </div>}
       </div>
 
-      <p className="text-xs" >{option.label}</p>
+      <p className="" >{option.label}</p>
 
     </div>
   )

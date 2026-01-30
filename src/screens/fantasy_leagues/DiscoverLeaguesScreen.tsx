@@ -10,6 +10,7 @@ import SearchInput from "../../components/ui/forms/SearchInput";
 import { useState } from "react";
 import { useDebounced } from "../../hooks/web/useDebounced";
 import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
+import FantasyLeaguesFilter from "../../components/fantasy-leagues/FantasyLeaguesFilter";
 
 /** Renders screen to discover public leagues */
 export default function DiscoverLeaguesScreen() {
@@ -76,6 +77,8 @@ export default function DiscoverLeaguesScreen() {
                     )
                 })}
             </div>
+
+            <FantasyLeaguesFilter />
         </PageView>
     )
 }
