@@ -3,18 +3,25 @@ import RadioList from "../ui/buttons/RadioList";
 import FilterList from "../ui/forms/FilterList";
 import BottomSheetView from "../ui/modals/BottomSheetView";
 
+type Props = {
+    sortField?: string,
+    filterField?: string,
+    setSortField: (field?: string) => void,
+    setFilterField: (field?: string) => void
+}
+
 /** Renders a fantasy leagues filter bottom view sheet */
-export default function FantasyLeaguesFilter() {
+export default function FantasyLeaguesFilter({ sortField, setFilterField, setSortField, filterField }: Props) {
 
     const sortOptions: RadioListOption[] = [
         {
-            label: 'League Size: (Hight to Low)',
+            label: 'League Size',
             value: 'league_size'
         },
 
         {
-            label: 'Alphabetical',
-            value: 'alphabetical'
+            label: 'League Name',
+            value: 'name'
         }
     ]
 
@@ -22,13 +29,24 @@ export default function FantasyLeaguesFilter() {
         {
             label: "Official SCRUMMY Leagues",
             value: "official"
-        }, 
+        },
 
         {
             label: "Community Created",
             value: "user_created"
         }
     ]
+
+    const handleChangeSortField = (val?: string) => {
+        setSortField(val);
+
+    }
+
+    const handleChangeFilterField = (field?: string) => {
+        if (field) {
+            setFilterField(field)
+        }
+    }
 
     return (
         <BottomSheetView
@@ -43,6 +61,8 @@ export default function FantasyLeaguesFilter() {
                 <RadioList
                     options={sortOptions}
                     optionCN="text-base"
+                    value={sortField}
+                    onChange={handleChangeSortField}
                 />
             </section>
 
@@ -51,8 +71,10 @@ export default function FantasyLeaguesFilter() {
                     <p className="font-semibold text-lg" >Filter</p>
                 </div>
 
-                <FilterList 
+                <FilterList
                     options={filterOptions}
+                    onChange={handleChangeFilterField}
+                    value={filterField}
                 />
             </section>
         </BottomSheetView>

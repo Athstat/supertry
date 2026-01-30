@@ -24,6 +24,9 @@ export default function DiscoverLeaguesScreen() {
     const { selectedSeason } = useFantasySeasons();
     const { joinableLeagues: leagues, isLoading } = useSuggestedLeagues(selectedSeason?.id);
 
+    const [sortField, setSortField] = useState<string | undefined>("name");
+    const [filterField, setFilterField] = useState<string | undefined>(undefined);
+
     const filteredLeagues = leagues.filter((l) => {
         if (debouncedSearchQuery) {
             return l.title?.toLowerCase().startsWith(debouncedSearchQuery.toLowerCase())
@@ -78,7 +81,12 @@ export default function DiscoverLeaguesScreen() {
                 })}
             </div>
 
-            <FantasyLeaguesFilter />
+            <FantasyLeaguesFilter 
+                sortField={sortField}
+                filterField={filterField}
+                setFilterField={setFilterField}
+                setSortField={setSortField}
+            />
         </PageView>
     )
 }
