@@ -48,7 +48,7 @@ export function JoinLeagueCard({ leagueGroup }: JoinLeagueCardProps) {
 
             {leagueGroup.members_count && <div className="flex items-center gap-1 text-sm text-gray-400">
               <Users className='w-4 h-4' />
-              <span className='text-xs' >Players {leagueGroup.members_count}</span>
+              <span className='text-xs' > {leagueGroup.members_count}</span>
             </div>}
           </div>
         </div>

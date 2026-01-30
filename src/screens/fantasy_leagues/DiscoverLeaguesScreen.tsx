@@ -1,4 +1,4 @@
-import { ArrowLeft, Filter, Trophy } from "lucide-react";
+import { ArrowLeft, Filter } from "lucide-react";
 import PageView from "../../components/ui/containers/PageView";
 import { LoadingIndicator } from "../../components/ui/LoadingIndicator";
 import { useFantasySeasons } from "../../hooks/dashboard/useFantasySeasons";
@@ -9,11 +9,13 @@ import { JoinLeagueCard } from "../../components/fantasy-leagues/card/JoinLeague
 import SearchInput from "../../components/ui/forms/SearchInput";
 import { useState } from "react";
 import { useDebounced } from "../../hooks/web/useDebounced";
+import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
 
 /** Renders screen to discover public leagues */
 export default function DiscoverLeaguesScreen() {
 
     const {hardPop} = useNavigateBack();
+    useHideTopNavBar();
 
     const [searchQuery, setSearchQuery] = useState<string>();
     const debouncedSearchQuery = useDebounced(searchQuery, 500);
@@ -38,18 +40,16 @@ export default function DiscoverLeaguesScreen() {
     }
 
     return (
-        <PageView className="px-4 flex flex-col gap-4" >
+        <PageView className="px-4 flex flex-col gap-4 py-4" >
 
             <div className="flex flex-row items-center justify-between gap-2" >
-                <div className="flex flex-row items-center gap-2" >
+                <div className="flex flex-row items-center gap-4" >
                     
-                    <CircleButton onClick={handleGoBack} >
-                        <ArrowLeft />
+                    <CircleButton className="w-8 h-8" onClick={handleGoBack} >
+                        <ArrowLeft className="" />
                     </CircleButton>
 
-                    <Trophy />
-
-                    <h1 className="text-2xl font-bold" >Leagues</h1>
+                    <h1 className="text-xl font-bold" >Leagues</h1>
 
                 </div>
 
