@@ -32,7 +32,7 @@ export default function DiscoverLeaguesScreen() {
     });
 
     const handleGoBack = () => {
-        hardPop();
+        hardPop('/leagues');
     }
 
     if (isLoading) {

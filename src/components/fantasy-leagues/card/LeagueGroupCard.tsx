@@ -6,6 +6,7 @@ import LeagueGroupLogo from "../../fantasy_league/LeagueGroupLogo";
 import RoundedCard from "../../ui/cards/RoundedCard";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
+import { Users } from "lucide-react";
 
 type CardProps = {
     leagueGroup: FantasyLeagueGroup,
@@ -60,12 +61,19 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
                 onClick={handleOnClick}
                 className="py-2 cursor-pointer rounded-md px-4 bg-slate-100 border-none flex flex-row items-center justify-between"
             >
-                <div className="flex flex-row items-center gap-2" >
+                <div className="flex flex-row items-center gap-3" >
                     <LeagueGroupLogo className="w-6 h-6" league={leagueGroup} />
 
-                    <h3 className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                        {leagueGroup.title}
-                    </h3>
+                    <div className="flex flex-col gap-0.5" >
+                        <h3 className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                            {leagueGroup.title}
+                        </h3>
+
+                        {leagueGroup.members_count && <div className="flex items-center gap-1 text-sm text-gray-400">
+                            <Users className='w-4 h-4' />
+                            <span className='text-xs' > {leagueGroup.members_count}</span>
+                        </div>}
+                    </div>
                     {getStatusBadge()}
                 </div>
 
