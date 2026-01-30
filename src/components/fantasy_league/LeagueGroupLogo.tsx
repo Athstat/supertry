@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups"
 import { twMerge } from "tailwind-merge";
 import { Country, countryFlags } from "../../types/countries";
+import { useSeasonTeams } from "../../hooks/seasons/useSeasonTeams";
 
 type Props = {
     league?: FantasyLeagueGroup,
@@ -12,10 +13,24 @@ type Props = {
 export default function LeagueGroupLogo({ league, className }: Props) {
 
     const defaultImageUrl = "/images/leagues/default_league_group_logo.png";
-    const countryLogo = getLogoUrlForCountryLeague(league);
+    
+    const {getTeamByName} = useSeasonTeams();
+    
+    const fallbackLogo = useMemo(() => {
+        const title = league?.title
+        const isTeamFansLeague = title && title.endsWith('Fans');
+        const countryLogo = getLogoUrlForCountryLeague(league);
+
+        if (!countryLogo && isTeamFansLeague) {
+            const team = getTeamByName(title.replace(' Fans', ''));
+            return team?.image_url;
+        }
+
+        return countryLogo || defaultImageUrl;
+    }, [getTeamByName, league]);
 
     const [error, setError] = useState(false);
-    const imageUrl = league?.logo || countryLogo;
+    const imageUrl = league?.logo || fallbackLogo;
 
     if (imageUrl && !error) {
         return (

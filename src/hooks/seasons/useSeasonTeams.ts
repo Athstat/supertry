@@ -39,6 +39,12 @@ export function useSeasonTeams() {
         return undefined;
     }, [getTeamById, selectedSeason]);
 
+    const getTeamByName = useCallback((name: string) => {
+        return teams.find((t) => {
+            return t.athstat_name.toLowerCase() == name.toLowerCase();
+        })
+    }, [teams]);
+
     return {
         teams,
         isLoading,
@@ -46,7 +52,8 @@ export function useSeasonTeams() {
         error,
         getTeamById,
         getAthleteSeasonTeam,
-        season: selectedSeason
+        season: selectedSeason,
+        getTeamByName
     }
 }
 
