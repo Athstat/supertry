@@ -7,6 +7,7 @@ import RoundedCard from "../../ui/cards/RoundedCard";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { Users } from "lucide-react";
+import LeagueBadge from "./LeagueBadge";
 
 type CardProps = {
     leagueGroup: FantasyLeagueGroup,
@@ -21,15 +22,6 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
     const { userRanking, isLoading } = useUserOverallStandings(authUser?.kc_id, leagueGroup.id);
     const { ref, inView } = useInView({ triggerOnce: true });
 
-    const getStatusBadge = () => {
-        const isPrivate = leagueGroup.is_private;
-
-        if (isPrivate) {
-            return <Badge variant="invite">Invite Only</Badge>;
-        }
-
-        return <Badge variant="success">Public</Badge>;
-    };
 
     const handleOnClick = () => {
         if (onClick) {
@@ -79,7 +71,7 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
 
                 <div className="flex flex-row items-center gap-2" >
 
-                    {getStatusBadge()}
+                    <LeagueBadge leagueGroup={leagueGroup} />
 
                     {!isLoading && <div className="text-slate-600 dark:text-slate-200 font-semibold text-sm" >
                         <p>{userRanking?.league_rank}</p>
@@ -97,25 +89,3 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
 }
 
 
-const Badge = ({ variant, children }: { variant: string; children: React.ReactNode }) => {
-    const getVariantClasses = () => {
-        switch (variant) {
-            case 'success':
-                return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400';
-            case 'destructive':
-                return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400';
-            case 'secondary':
-                return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
-            case 'invite':
-                return 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400';
-            default:
-                return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
-        }
-    };
-
-    return (
-        <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${getVariantClasses()}`}>
-            {children}
-        </span>
-    );
-};
