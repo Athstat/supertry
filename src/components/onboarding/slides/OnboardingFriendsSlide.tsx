@@ -7,7 +7,7 @@ export function OnboardingFriendsSlide() {
       <ScrummyLogo className="w-32 h-32" />
 
       <div>
-        <img src={'https://dp7xhssw324ru.cloudfront.net/onboarding_2.png'} className="rounded-xl" />
+        <img src={'https://dp7xhssw324ru.cloudfront.net/onboarding_2_v2.png'} className="rounded-xl" />
       </div>
 
       {/* Coins Floating Glowings in Yellow */}

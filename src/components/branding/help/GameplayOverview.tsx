@@ -5,6 +5,7 @@ import SecondaryText from "../../ui/typography/SecondaryText";
 import PrimaryButton, { TranslucentButton } from "../../ui/buttons/PrimaryButton";
 import ScrummyLogo from "../scrummy_logo";
 import RoundedCard from "../../ui/cards/RoundedCard";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
     onTopicSelect: (topic: GameplayTopic, index: number) => void;
@@ -12,6 +13,12 @@ type Props = {
 }
 
 export default function GameplayOverview({ onTopicSelect, onClose }: Props) {
+
+    const navigate = useNavigate();
+    const handleOnboarding = () => {
+        navigate('/post-signup-welcome');
+    }
+
     return (
         <div className="flex flex-col items-center justify-center w-full  gap-4">
             {/* Header */}
@@ -35,6 +42,9 @@ export default function GameplayOverview({ onTopicSelect, onClose }: Props) {
 
             {/* Topics */}
             <div className="space-y-3">
+
+
+
                 {gameplayModalData.subTopics.map((topic, index) => (
                     <RoundedCard
                         key={index}
@@ -61,6 +71,11 @@ export default function GameplayOverview({ onTopicSelect, onClose }: Props) {
                         <ChevronRight className="w-5 h-5 text-gray-500 ml-2 flex-shrink-0" />
                     </RoundedCard>
                 ))}
+
+                <RoundedCard onClick={handleOnboarding} className="p-4 cursor-pointer" >
+                    <p className="font-semibold" >Go Through Onboarding</p>
+                    <SecondaryText className="text-xs" >Setup your SCRUMMY account, go through the basics of how SCRUMMY works!</SecondaryText>
+                </RoundedCard>
             </div>
 
             <PrimaryButton onClick={onClose} className="py-3" >Continue</PrimaryButton>

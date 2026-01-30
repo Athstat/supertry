@@ -24,6 +24,7 @@ export default function OnboardingProvider({ children }: ProviderProps) {
     const defaultCountry: Country | undefined = countryFlags.find((c) => {
         return c.code === userLocation?.country_code;
     })
+    
 
     const [country, setCountry] = useState<Country | undefined>(defaultCountry);
     const [favouriteTeams, setFavouriteTeams] = useState<OnboardingFavouriteTeam[]>([]);
