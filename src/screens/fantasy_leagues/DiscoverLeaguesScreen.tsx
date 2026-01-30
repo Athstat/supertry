@@ -1,0 +1,81 @@
+import { ArrowLeft, Filter, Trophy } from "lucide-react";
+import PageView from "../../components/ui/containers/PageView";
+import { LoadingIndicator } from "../../components/ui/LoadingIndicator";
+import { useFantasySeasons } from "../../hooks/dashboard/useFantasySeasons";
+import { useSuggestedLeagues } from "../../hooks/leagues/useSuggestedLeagues";
+import CircleButton from "../../components/ui/buttons/BackButton";
+import { useNavigateBack } from "../../hooks/web/useNavigateBack";
+import { JoinLeagueCard } from "../../components/fantasy-leagues/card/JoinLeagueCard";
+import SearchInput from "../../components/ui/forms/SearchInput";
+import { useState } from "react";
+import { useDebounced } from "../../hooks/web/useDebounced";
+
+/** Renders screen to discover public leagues */
+export default function DiscoverLeaguesScreen() {
+
+    const {hardPop} = useNavigateBack();
+
+    const [searchQuery, setSearchQuery] = useState<string>();
+    const debouncedSearchQuery = useDebounced(searchQuery, 500);
+
+    const { selectedSeason } = useFantasySeasons();
+    const { joinableLeagues: leagues, isLoading } = useSuggestedLeagues(selectedSeason?.id);
+
+    const filteredLeagues = leagues.filter((l) => {
+        if (debouncedSearchQuery) {
+            return l.title?.toLowerCase().startsWith(debouncedSearchQuery.toLowerCase())
+        }
+
+        return true;
+    });
+
+    const handleGoBack = () => {
+        hardPop();
+    }
+
+    if (isLoading) {
+        return <LoadingIndicator />
+    }
+
+    return (
+        <PageView className="px-4 flex flex-col gap-4" >
+
+            <div className="flex flex-row items-center justify-between gap-2" >
+                <div className="flex flex-row items-center gap-2" >
+                    
+                    <CircleButton onClick={handleGoBack} >
+                        <ArrowLeft />
+                    </CircleButton>
+
+                    <Trophy />
+
+                    <h1 className="text-2xl font-bold" >Leagues</h1>
+
+                </div>
+
+                <button>
+                    <Filter />
+                </button>
+            </div>
+
+            <div>
+                <SearchInput
+                    placeholder="Search public leagues..."
+                    value={searchQuery}
+                    onChange={setSearchQuery}
+                />
+            </div>
+
+            <div className="flex flex-col gap-2" >
+                {filteredLeagues.map((l) => {
+                    return (
+                        <JoinLeagueCard 
+                            leagueGroup={l}
+                            key={l.id}
+                        />
+                    )
+                })}
+            </div>
+        </PageView>
+    )
+}

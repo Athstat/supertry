@@ -42,6 +42,7 @@ import { AuthRoute, MainAppLayout } from "./layouts";
 import RootProviders from "../RootProviders";
 import TinyInviteStepsScreen from "../screens/onboarding/TinyInviteStepsScreen";
 import ScoutingOnboardingScreen from "../screens/players/scouting/ScoutingOnboardingScreen";
+import DiscoverLeaguesScreen from "../screens/fantasy_leagues/DiscoverLeaguesScreen";
 
 /** App Data Router */
 export const dataRouter = createBrowserRouter([
@@ -110,6 +111,17 @@ export const dataRouter = createBrowserRouter([
                     <ProtectedRoute>
                         <MainAppLayout>
                             <MyFantasyTeamScreen />
+                        </MainAppLayout>
+                    </ProtectedRoute>
+                )
+            },
+
+            {
+                path: "/leagues/discover",
+                element: (
+                    <ProtectedRoute>
+                        <MainAppLayout>
+                            <DiscoverLeaguesScreen />
                         </MainAppLayout>
                     </ProtectedRoute>
                 )

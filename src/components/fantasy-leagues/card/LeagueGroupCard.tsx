@@ -1,9 +1,9 @@
 import { preload } from "react-dom";
-import { useAuth } from "../../contexts/AuthContext";
-import { useUserOverallStandings } from "../../hooks/fantasy/standings/useUserOverallStandings";
-import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
-import LeagueGroupLogo from "../fantasy_league/LeagueGroupLogo";
-import RoundedCard from "../ui/cards/RoundedCard";
+import { useAuth } from "../../../contexts/AuthContext";
+import { useUserOverallStandings } from "../../../hooks/fantasy/standings/useUserOverallStandings";
+import { FantasyLeagueGroup } from "../../../types/fantasyLeagueGroups";
+import LeagueGroupLogo from "../../fantasy_league/LeagueGroupLogo";
+import RoundedCard from "../../ui/cards/RoundedCard";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
