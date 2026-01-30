@@ -9,7 +9,6 @@ import PrimaryButton from "../../ui/buttons/PrimaryButton"
 import NoContentCard from "../../ui/typography/NoContentMessage"
 import CreateLeagueModal from "../create_league_modal/CreateLeagueModal"
 import RoundedCard from "../../ui/cards/RoundedCard"
-import { useAuth } from "../../../contexts/AuthContext"
 import LeagueGroupsSection from "../LeagueGroupsSection"
 
 type Props = {
@@ -21,27 +20,11 @@ type Props = {
 export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
 
     const navigate = useNavigate();
-
-    const { authUser } = useAuth();
     const { leagues, isLoading } = useJoinedLeagues(fantasySeason.id);
 
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [initTab, setInitTab] = useState<"join" | "create">("create");
     const toggle = () => setShowCreateModal(prev => !prev);
-
-    const officialLeagues = leagues.filter((l) => {
-        return l.type === 'official_league' || l.type === 'system_created';
-    });
-
-    const myLeagues = leagues.filter((l) => {
-        return l.creator_id === authUser?.kc_id;
-    })
-
-    const joinedLeagues = leagues.filter((l) => {
-        const notOfficial = l.type !== 'official_league' && l.type !== 'system_created';
-        const notMine = l.creator_id !== authUser?.kc_id;
-        return notMine && notOfficial;
-    })
 
     const openCreateModal = () => {
         setInitTab("create");
@@ -97,25 +80,10 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
             <div className="flex flex-col gap-4 mt-4" >
 
                 <LeagueGroupsSection
-                    title="Official Leagues"
-                    description="Leagues created by SCRUMMY"
-                    emptyMessage="No Official leagues were found"
-                    leagues={officialLeagues}
-                    isVerified
-                />
-
-                <LeagueGroupsSection
                     title="My Leagues"
-                    description="Leagues created by you"
+                    description="Leagues you are part of"
                     emptyMessage="You have not created any leagues yet"
-                    leagues={myLeagues}
-                />
-
-                <LeagueGroupsSection
-                    title="Joined Leagues"
-                    description="Other leagues you are apart of, created by others"
-                    emptyMessage="You have not joined any leagues yet"
-                    leagues={joinedLeagues}
+                    leagues={leagues}
                 />
 
                 <SuggestedLeaguesSections
