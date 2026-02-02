@@ -6,7 +6,7 @@ import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
 import { FantasyLeagueStandingsTab } from "../../components/fantasy_league/standings/FantasyLeagueStandingsTab";
 import RoundedCard from "../../components/ui/cards/RoundedCard";
 import FantasyLeagueGroupDataProvider from "../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider";
-import FantasyLeagueHeader from "../../components/fantasy_league/standings/FantasyLeagueHeader";
+import FantasyLeagueHeader from "../../components/fantasy_league/header/FantasyLeagueHeader";
 import { TabSwitchContainer, TabSwitchOption } from "../../components/ui/buttons/TabSwitchOption";
 import { Activity } from "react";
 import FantasyLeagueDetailsTab from "../../components/fantasy_league/commissioner/FantasyLeagueDetailsTab";

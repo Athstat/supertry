@@ -118,6 +118,8 @@ export function useFantasyLeagueGroup() {
     return currentRound;
   }, [currentRound, nextRound]);
 
+  const isCommissioner = authUser?.kc_id === league?.creator_id;
+
   return {
     league,
     members,
@@ -135,6 +137,7 @@ export function useFantasyLeagueGroup() {
     previousRound,
     scoringRound,
     nextRound,
-    nextDeadlineRound
+    nextDeadlineRound,
+    isCommissioner
   };
 }

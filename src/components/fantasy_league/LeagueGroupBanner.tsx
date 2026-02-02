@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups"
 import { countryFlags } from "../../types/countries";
+import EditLeagueHeaderOverlay from "./header/EditLeagueHeaderOverlay";
 
 type Props = {
   league?: FantasyLeagueGroup
@@ -34,7 +35,7 @@ export default function LeagueGroupBanner({league} : Props) {
 
   return (
     <div className="w-full h-[150px]  bg-slate-200 dark:bg-slate-700" >
-      
+      <EditLeagueHeaderOverlay />
     </div>
   )
 }
