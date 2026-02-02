@@ -8,10 +8,11 @@ import RoundedCard from "../../components/ui/cards/RoundedCard";
 import FantasyLeagueGroupDataProvider from "../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider";
 import FantasyLeagueHeader from "../../components/fantasy_league/standings/FantasyLeagueHeader";
 import { TabSwitchContainer, TabSwitchOption } from "../../components/ui/buttons/TabSwitchOption";
-import { Activity, useState } from "react";
+import { Activity } from "react";
 import FantasyLeagueDetailsTab from "../../components/fantasy_league/commissioner/FantasyLeagueDetailsTab";
-
-type LocalViewModel = "standings" | "details";
+import { useFantasyLeagueScreen } from "../../hooks/fantasy/useFantasyLeagueScreen";
+import { FantasyLeagueViewMode } from "../../types/fantasyLeague";
+import FantasyLeagueScreenProvider from "../../contexts/fantasy/FantasyLeagueScreenContext";
 
 /** Renders a fantasy League screen */
 export default function FantasyLeagueScreen() {
@@ -22,7 +23,9 @@ export default function FantasyLeagueScreen() {
             leagueId={leagueId}
             loadingFallback={<LoadingSkeleton />}
         >
-            <Content />
+            <FantasyLeagueScreenProvider>
+                <Content />
+            </FantasyLeagueScreenProvider>
         </FantasyLeagueGroupDataProvider>
     )
 }
@@ -31,11 +34,11 @@ export default function FantasyLeagueScreen() {
 function Content() {
 
     const navigate = useNavigate();
-    const [viewModal, setViewMode] = useState<LocalViewModel>('standings');
+    const {viewMode, setViewMode} = useFantasyLeagueScreen();
 
     const handleChangeViewMode = (newMode?: string) => {
         if (newMode) {
-            setViewMode(newMode as LocalViewModel);
+            setViewMode(newMode as FantasyLeagueViewMode);
         }
     }
 
@@ -55,23 +58,23 @@ function Content() {
                         label="Standings"
                         value="standings"
                         onSelect={handleChangeViewMode}
-                        current={viewModal}
+                        current={viewMode}
                     />
 
                     <TabSwitchOption
                         label="Details"
                         value="details"
                         onSelect={handleChangeViewMode}
-                        current={viewModal}
+                        current={viewMode}
                     />
                 </TabSwitchContainer>
             </div>
 
-            <Activity mode={viewModal === 'standings' ? 'visible' : 'hidden'} >
+            <Activity mode={viewMode === 'standings' ? 'visible' : 'hidden'} >
                 <FantasyLeagueStandingsTab />
             </Activity>
 
-            <Activity mode={viewModal === 'details' ? 'visible' : 'hidden'} >
+            <Activity mode={viewMode === 'details' ? 'visible' : 'hidden'} >
                 <FantasyLeagueDetailsTab />
             </Activity>
 
