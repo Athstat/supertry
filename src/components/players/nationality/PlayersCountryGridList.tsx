@@ -87,7 +87,7 @@ export default function PlayersCountryGridList() {
     return (
         <div className="flex flex-col gap-4" >
             <div>
-                <p className='font-bold text-md' >By Country</p>
+                <p className='font-bold text-md' >By Nationality</p>
             </div>
             
             <div className="grid grid-cols-4 gap-2" >
