@@ -22,9 +22,9 @@ export default function FantasyLeagueHeader({ handleBack }: Props) {
                 <LeagueGroupBanner league={league} />
 
                 <div className={twMerge(
-                    'flex absolute top-0 left-0 w-full pt-2 px-4 flex-row items-center justify-between pb-10',
+                    'flex absolute top-0 left-0 w-full pt-2 px-4 flex-row items-center justify-between pb-4',
                     'bg-gradient-to-b to-transparent',
-                    AppColours.BACKGROUND_GRADIENT
+                    AppColours.BACKGROUND_GRADIENT,
                 )} >
                     <div className='flex flex-row items-center gap-2' >
                         <CircleButton
