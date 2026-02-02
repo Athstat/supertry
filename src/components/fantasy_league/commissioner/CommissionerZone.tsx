@@ -4,9 +4,6 @@ import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGr
 import RoundedCard from '../../ui/cards/RoundedCard'
 import { ShieldUser } from 'lucide-react'
 import { useAuth } from '../../../contexts/AuthContext'
-import { EditLeagueInfoModal } from './EditLeagueInfoModal'
-import { EditLeagueBannerModal } from './EditLeagueBannerModal'
-import EditLeagueLogoModal from './EditLeagueLogoModal'
 import { useFantasyLeagueScreen } from '../../../hooks/fantasy/useFantasyLeagueScreen'
 
 export default function CommissionerZone() {
@@ -17,8 +14,7 @@ export default function CommissionerZone() {
     const isCommissioner = authUser?.kc_id === league?.creator_id;
 
     const {
-        toggleEditBanner, toggleEditLogo, toggleShowEditInfo,
-        showEditBanner, showEditInfo, showEditLogo
+        toggleEditBanner, toggleEditLogo, toggleShowEditInfo
     } = useFantasyLeagueScreen();
 
     if (!isCommissioner) {
@@ -108,21 +104,6 @@ export default function CommissionerZone() {
                 </RoundedCard>
             </div>
 
-
-            <EditLeagueInfoModal
-                isOpen={showEditInfo}
-                onClose={toggleShowEditInfo}
-            />
-
-            <EditLeagueBannerModal 
-                isOpen={showEditBanner}
-                onClose={toggleEditBanner} 
-            />
-
-            <EditLeagueLogoModal 
-                isOpen={showEditLogo}
-                onClose={toggleEditLogo}
-            />
         </div>
     )
 }

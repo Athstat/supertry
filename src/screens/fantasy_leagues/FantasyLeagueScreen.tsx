@@ -13,6 +13,9 @@ import FantasyLeagueDetailsTab from "../../components/fantasy_league/commissione
 import { useFantasyLeagueScreen } from "../../hooks/fantasy/useFantasyLeagueScreen";
 import { FantasyLeagueViewMode } from "../../types/fantasyLeague";
 import FantasyLeagueScreenProvider from "../../contexts/fantasy/FantasyLeagueScreenContext";
+import { EditLeagueBannerModal } from "../../components/fantasy_league/commissioner/EditLeagueBannerModal";
+import { EditLeagueInfoModal } from "../../components/fantasy_league/commissioner/EditLeagueInfoModal";
+import EditLeagueLogoModal from "../../components/fantasy_league/commissioner/EditLeagueLogoModal";
 
 /** Renders a fantasy League screen */
 export default function FantasyLeagueScreen() {
@@ -34,7 +37,7 @@ export default function FantasyLeagueScreen() {
 function Content() {
 
     const navigate = useNavigate();
-    const {viewMode, setViewMode} = useFantasyLeagueScreen();
+    const { viewMode, setViewMode } = useFantasyLeagueScreen();
 
     const handleChangeViewMode = (newMode?: string) => {
         if (newMode) {
@@ -77,6 +80,8 @@ function Content() {
             <Activity mode={viewMode === 'details' ? 'visible' : 'hidden'} >
                 <FantasyLeagueDetailsTab />
             </Activity>
+
+            <Modals />
 
         </PageView>
     )
@@ -124,5 +129,29 @@ function LoadingSkeleton() {
             </div>
 
         </PageView>
+    )
+}
+
+function Modals() {
+
+    const { showEditBanner, showEditInfo, showEditLogo, toggleEditBanner, toggleEditLogo, toggleShowEditInfo } = useFantasyLeagueScreen();
+
+    return (
+        <>
+            <EditLeagueInfoModal
+                isOpen={showEditInfo}
+                onClose={toggleShowEditInfo}
+            />
+
+            <EditLeagueBannerModal
+                isOpen={showEditBanner}
+                onClose={toggleEditBanner}
+            />
+
+            <EditLeagueLogoModal
+                isOpen={showEditLogo}
+                onClose={toggleEditLogo}
+            />
+        </>
     )
 }
