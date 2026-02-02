@@ -9,7 +9,7 @@ export function useGameRosters(fixture: IFixture) {
     const { data: fetchedRosters, isLoading } = useSWR(rostersKey, () => gamesService.getGameRostersById(fixtureId ?? ""));
 
     const rosters = useMemo(() => {
-        return fetchedRosters ?? [];
+        return (fetchedRosters?.filter(() => true) ?? []);
     }, [fetchedRosters]);
 
     const awayRoster = rosters.filter((r) => {
@@ -20,6 +20,8 @@ export function useGameRosters(fixture: IFixture) {
     const homeRoster = rosters.filter((r) => {
         return r.team_id === fixture?.team?.athstat_id;
     })
+
+
 
     return {
         rosters,
@@ -36,6 +38,6 @@ export function preloadGameRosters(fixture?: IFixture) {
     if (rostersKey == null) {
         return;
     }
-    
+
     preload(rostersKey, () => gamesService.getGameRostersById(fixtureId ?? ""));
 }

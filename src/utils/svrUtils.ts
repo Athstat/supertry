@@ -24,11 +24,12 @@ export function getCountryByName(countryName: string | undefined, matchStartsWit
 
     const country = countryFlags.find((c) => {
         const notNull = c.name && countryName;
-        const matchCode = c.code === countryName;
-        const matchesStart = countryName.startsWith(c.name);
+        const matchCode = c.code.toLocaleLowerCase() === countryName.toLowerCase();
+        const matchesStart = countryName.toLowerCase().startsWith(c.name.toLowerCase());
+        
         const matches = notNull && c.name.toUpperCase() === countryName.toUpperCase();
         return matches || matchCode || (matchStartsWith && matchesStart);
-    })
+    });
 
     return country;
 }

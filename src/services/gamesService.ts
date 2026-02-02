@@ -95,12 +95,18 @@ export const gamesService = {
         headers: getAuthHeader(),
       });
 
-      const json = await res.json();
-      return json;
+      console.log("Res ", res);
+
+      if (res.ok) {
+        const json = await res.json() as IRosterItem[];
+        return json ;
+      }
+
     } catch (error) {
       logger.error('Failed to get game rosters ' + error);
-      return [];
     }
+
+    return [];
   },
 
   // Voting methods
@@ -176,7 +182,7 @@ export const gamesService = {
   },
 
   getAllSupportedGames: async (leagueId?: string): Promise<IFixture[]> => {
-    
+
     const params = leagueId ? `?league=${leagueId}` : '';
     const uri = getUri(`/api/v1/games${params}`);
 
@@ -192,7 +198,7 @@ export const gamesService = {
     }
   },
 
-  getFixturePastMatchUps: async (gameId: string) : Promise<IFixture[] | undefined> => {
+  getFixturePastMatchUps: async (gameId: string): Promise<IFixture[] | undefined> => {
     try {
       const uri = getUri(`/api/v1/games/${gameId}/past-matchups`);
       const res = await fetch(uri, {
@@ -211,7 +217,7 @@ export const gamesService = {
   },
 
   /** Fetches fixture player of the match */
-  getFixturePotm: async (fixtureId: string) : Promise<SingleMatchPowerRanking | undefined> => {
+  getFixturePotm: async (fixtureId: string): Promise<SingleMatchPowerRanking | undefined> => {
     try {
       const uri = getUri(`/api/v1/games/${fixtureId}/power-rankings/potm`);
       const res = await fetch(uri, {
@@ -228,11 +234,11 @@ export const gamesService = {
     return undefined;
   },
 
-  getAthleteMatchPr: async (fixtureId: string, athleteId: string) : Promise<SingleMatchPowerRanking | undefined> => {
+  getAthleteMatchPr: async (fixtureId: string, athleteId: string): Promise<SingleMatchPowerRanking | undefined> => {
     try {
 
       const uri = getUri(`/api/v1/games/${fixtureId}/power-rankings/${athleteId}`);
-      
+
       const res = await fetch(uri, {
         headers: getAuthHeader()
       });
@@ -249,7 +255,7 @@ export const gamesService = {
   },
 
   /** Gets the sports actions for a player for a single game */
-  getAthleteFixtureSportsActions: async (fixtureId: string, athleteId: string) : Promise<GameSportAction[]> => {
+  getAthleteFixtureSportsActions: async (fixtureId: string, athleteId: string): Promise<GameSportAction[]> => {
     try {
       const uri = getUri(`/api/v1/games/${fixtureId}/sport-actions/athletes/${athleteId}`);
       const res = await fetch(uri, {

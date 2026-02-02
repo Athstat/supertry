@@ -40,7 +40,7 @@ export default function CountryCard({ countryName, onClick, isSelected = false }
             />
 
             <SecondaryText className={twMerge(
-                "text-xs text-center",
+                "text-[10px] text-center",
                 isSelected && "text-white dark:text-white"
             )} >{countryName}</SecondaryText>
         </RoundedCard>
