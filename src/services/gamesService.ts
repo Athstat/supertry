@@ -95,8 +95,6 @@ export const gamesService = {
         headers: getAuthHeader(),
       });
 
-      console.log("Res ", res);
-
       if (res.ok) {
         const json = await res.json() as IRosterItem[];
         return json ;

@@ -28,12 +28,15 @@ export const boxScoreService = {
                 headers: getAuthHeader()
             });
 
-            const json = (await res.json()) as GameSportAction[];
-            return json;
+            if (res.ok) {
+                const json = (await res.json()) as GameSportAction[];
+                return json;
+            }
 
         } catch (error) {
             console.log(error);
-            return undefined;
         }
+
+        return [];
     }
 }

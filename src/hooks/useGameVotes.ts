@@ -5,7 +5,7 @@ import { gamesService } from '../services/gamesService';
 import { authService } from '../services/authService';
 
 export function useGameVotes(fixture: IFixture, fetchData: boolean = true) {
-  const key = fetchData ? (fixture.game_id ? `game-votes-${fixture.game_id}` : null) : null;
+  const key = (fetchData && fixture.game_id) ? `/fixtures/${fixture.game_id}/game-votes` : null;
   const { data, isLoading, mutate } = useSWR(key, () => gamesService.getGameVotes(fixture.game_id), {
     revalidateIfStale: true
   });

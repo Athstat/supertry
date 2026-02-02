@@ -2,10 +2,10 @@ import { ReactNode, useEffect } from "react";
 import { useSetAtom } from "jotai";
 import useSWR from "swr";
 import { LoadingIndicator } from "../components/ui/LoadingIndicator";
-import { gamesService } from "../services/gamesService";
 import { proMotmService } from "../services/proMotmService";
 import { proGameMotmCandidatesAtom, currentProGameAtom, proGameMotmVotesAtom } from "../state/proMotm.atoms";
 import { IFixture } from "../types/games";
+import { useGameRosters } from "../hooks/fixtures/useGameRosters";
 
 type Props = {
     children?: ReactNode;
@@ -19,14 +19,10 @@ export default function ProMotmVotingDataProvider({ children, fixture }: Props) 
     const setAllMotmVotes = useSetAtom(proGameMotmVotesAtom);
 
     const gameId = fixture.game_id;
+    const {rosters, isLoading: loadingRosters} = useGameRosters(fixture);
 
-    const rostersFetchKey = `pro-game-rosters/${gameId}`;
-    const { data: rosters, isLoading: loadingRosters } = useSWR(
-        rostersFetchKey, 
-        () => gamesService.getGameRostersById(gameId)
-    );
+    const allVotesKey = `/fixtures/${fixture.game_id}/pro-game-motm-votes`;
 
-    const allVotesKey = `pro-game-motm-votes/${gameId}`;
     const { data: allVotes, isLoading: loadingAllVotes } = useSWR(
         allVotesKey, 
         () => proMotmService.getGameVote(gameId)

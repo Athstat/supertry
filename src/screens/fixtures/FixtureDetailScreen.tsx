@@ -21,7 +21,6 @@ import PageView from '../../components/ui/containers/PageView';
 import ErrorCard from '../../components/ui/cards/ErrorCard';
 import { Activity } from 'react';
 import PlayerFixtureModal from '../../components/fixture/player_fixture_modal/PlayerFixtureModal';
-import { preloadGameRosters } from '../../hooks/fixtures/useGameRosters';
 
 export default function FixtureDetailScreen() {
 
@@ -43,12 +42,11 @@ function Content() {
   const { fixture, showProfileModal, selectedPlayer, showPlayerMatchModal, closePlayerMatchModal, closePlayerProfileModal } = useFixtureScreen();
   const fixtureId = fixture?.game_id;
 
-  const sportsActionsKey = fixtureId ? `fixtures/${fixtureId}/sports-actions` : null;
+  const sportsActionsKey = fixtureId ? `/fixtures/${fixtureId}/boxscore/sports-actions` : null;
+
   const { data: sportActions, isLoading: loadingSportsActions } = useSWR(sportsActionsKey, () =>
     boxScoreService.getSportActionsByGameId(fixtureId ?? '')
   );
-
-  preloadGameRosters(fixture);
 
   useHideBottomNavBar();
 
