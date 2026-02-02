@@ -71,6 +71,7 @@ export function EditLeagueBannerModal({ isOpen, onClose }: EditLeagueBannerProps
         <BottomSheetView
             hideHandle
             className='max-h-[80vh] p-4 min-h-[60vh] flex flex-col gap-2'
+            onClickOutside={onClose}
         >
             <div className='flex flex-row items-center gap-2 justify-between' >
                 <p className='font-semibold text-lg' >Edit Banner</p>

@@ -14,8 +14,8 @@ type Props = {
 
 /** Renders a fantasy league standings header */
 export default function FantasyLeagueHeader({ handleBack }: Props) {
-    const { league } = useFantasyLeagueGroup();
-    const {toggleEditBanner} = useFantasyLeagueScreen();
+    const { league, isCommissioner } = useFantasyLeagueGroup();
+    const {toggleEditBanner, toggleEditLogo} = useFantasyLeagueScreen();
 
     return (
         <div className='relative'>
@@ -42,17 +42,26 @@ export default function FantasyLeagueHeader({ handleBack }: Props) {
 
                     <div className='flex flex-row items-center gap-2' >
                         <JoinOrInviteButton />
-                        <CircleButton 
+
+                       {isCommissioner && <CircleButton 
                             className='text-white w-9 h-9 dark:text-white bg-blue-600 dark:bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-700 border border-primary-500 dark:border-primary-500' 
                             onClick={toggleEditBanner}
                         >
                             <Edit2 className='w-5 h-5' />
-                        </CircleButton>
+                        </CircleButton>}
+
                     </div>
                 </div>
 
                 <div className='absolute -bottom-3 left-5' >
-                    <LeagueGroupLogo className='w-16 h-16 dark:drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)]' league={league} />
+                    
+                    <LeagueGroupLogo 
+                        isEditable={isCommissioner}
+                        className='w-16 h-16 dark:drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)]'
+                        league={league} 
+                        onEdit={toggleEditLogo}
+                    />
+
                 </div>
             </div>
         </div>

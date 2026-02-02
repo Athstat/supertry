@@ -16,6 +16,7 @@ import FantasyLeagueScreenProvider from "../../contexts/fantasy/FantasyLeagueScr
 import { EditLeagueBannerModal } from "../../components/fantasy_league/commissioner/EditLeagueBannerModal";
 import { EditLeagueInfoModal } from "../../components/fantasy_league/commissioner/EditLeagueInfoModal";
 import EditLeagueLogoModal from "../../components/fantasy_league/commissioner/EditLeagueLogoModal";
+import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 
 /** Renders a fantasy League screen */
 export default function FantasyLeagueScreen() {
@@ -134,6 +135,7 @@ function LoadingSkeleton() {
 
 function Modals() {
 
+    const {league} = useFantasyLeagueGroup();
     const { showEditBanner, showEditInfo, showEditLogo, toggleEditBanner, toggleEditLogo, toggleShowEditInfo } = useFantasyLeagueScreen();
 
     return (
@@ -141,6 +143,7 @@ function Modals() {
             <EditLeagueInfoModal
                 isOpen={showEditInfo}
                 onClose={toggleShowEditInfo}
+                key={league?.id}
             />
 
             <EditLeagueBannerModal
