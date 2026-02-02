@@ -7,7 +7,7 @@ export const gameplayModalData: GameplayModalData = {
   "subTopics": [
     {
       "title": "Pick 6 Players",
-      "description": "Build your ultimate fantasy squad by selecting 6 rugby players. Balance is everything, the right mix will give you the edge.",
+      "description": "Build your ultimate rugby fantasy squad by selecting 5 starting players. Select a Super Sub in case one of your players gets injured or left off the squad last minute. Balance is everything, the right mix will give you the edge! Make sure to check team rosters before play starts for updates and important information on player's status.",
       "emoji": "👥",
       "subTopics": [
         {
@@ -46,7 +46,7 @@ export const gameplayModalData: GameplayModalData = {
     {
       "title": "Weekly Gameplay",
       "emoji": "🚀",
-      "description": "Scrummy is fast-paced and week-focused. Every week is a new chance to win, making it exciting from the very first match to the last.",
+      "description": "SCRUMMY is fast-paced and week-focused. Every week is a new chance to win, making it exciting from the very first match to the last.",
       "subTopics": [
         {
           "title": "One Week at a Time",
