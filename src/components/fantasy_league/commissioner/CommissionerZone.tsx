@@ -49,8 +49,6 @@ export default function CommissionerZone() {
                                 <Pencil className='w-4 h-4' />
                                 <p>Edit League Info</p>
                             </div>
-
-                            <SecondaryText>Edit your leagues banner</SecondaryText>
                         </div>
 
                         <div>
@@ -70,8 +68,6 @@ export default function CommissionerZone() {
                                 <Image className='w-4 h-4' />
                                 <p>Edit Banner</p>
                             </div>
-
-                            <SecondaryText>Edit your league's banner</SecondaryText>
                         </div>
 
                         <div>
@@ -92,8 +88,6 @@ export default function CommissionerZone() {
                                 <Image className='w-4 h-4' />
                                 <p>Edit League Logo</p>
                             </div>
-
-                            <SecondaryText>Edit your league's logo</SecondaryText>
                         </div>
 
                         <div>
