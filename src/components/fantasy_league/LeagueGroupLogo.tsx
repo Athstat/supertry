@@ -4,6 +4,7 @@ import { twMerge } from "tailwind-merge";
 import { Country, countryFlags } from "../../types/countries";
 import { useSeasonTeams } from "../../hooks/seasons/useSeasonTeams";
 import { Edit2 } from "lucide-react";
+import { getCountryFlagImageUrl } from "../../utils/countryUtils";
 
 type Props = {
     league?: FantasyLeagueGroup,
@@ -96,7 +97,7 @@ function getLogoUrlForCountryLeague(leagueGroup?: FantasyLeagueGroup) {
 
 
     if (country) {
-        const url = `https://dp7xhssw324ru.cloudfront.net/${country.code.toLowerCase()}.png`
+        const url = getCountryFlagImageUrl(country.code);
         return url;
     }
 

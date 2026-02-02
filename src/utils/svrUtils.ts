@@ -15,3 +15,20 @@ export function getCountryEmojiFlag(country: string | undefined, matchStartsWith
 
     return flag?.flag;
 }
+
+
+/** Returns a country object by name */
+export function getCountryByName(countryName: string | undefined, matchStartsWith: boolean = false) {
+
+    if (countryName === undefined || countryName === null) return;
+
+    const country = countryFlags.find((c) => {
+        const notNull = c.name && countryName;
+        const matchCode = c.code === countryName;
+        const matchesStart = countryName.startsWith(c.name);
+        const matches = notNull && c.name.toUpperCase() === countryName.toUpperCase();
+        return matches || matchCode || (matchStartsWith && matchesStart);
+    })
+
+    return country;
+}
