@@ -24,6 +24,7 @@ export function EditLeagueInfoModal({ isOpen, onClose }: EditInfoProps) {
     const { league, mutateLeague } = useFantasyLeagueGroup();
     const { inView: isTopButtonInView } = useInView();
 
+    
     const initialForm: EditLeagueForm = {
         title: league?.title ?? "",
         description: league?.description,
@@ -82,6 +83,7 @@ export function EditLeagueInfoModal({ isOpen, onClose }: EditInfoProps) {
         <BottomSheetView
             className='max-h-[90vh] p-4 '
             hideHandle
+            onClickOutside={onClose}
         >
             <div className='flex flex-row items-center justify-between gap-2' >
                 <div className='flex flex-row items-center gap-2' >

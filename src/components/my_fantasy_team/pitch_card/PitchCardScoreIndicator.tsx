@@ -33,9 +33,8 @@ export function PitchCardScoreIndicator({ player }: PlayerPointsScoreProps) {
         seasonTeam?.athstat_id
     );
 
-    const showScore = !isLoading && isLocked;
-    const showNextMatchInfo = !isLoading && !showAvailabilityWarning && homeOrAway && opponent && !showScore;
-
+    const showScore = Boolean(!isLoading && isLocked);
+    const showNextMatchInfo = !showAvailabilityWarning && Boolean(homeOrAway) && Boolean(opponent) && !showScore;
     return (
         <>
             <div className={twMerge(
@@ -53,7 +52,7 @@ export function PitchCardScoreIndicator({ player }: PlayerPointsScoreProps) {
                     <p className=" text-[8px] md:text-[10px] max-w-[100px] font-medium truncate" >vs {opponent?.athstat_name} {homeOrAway}</p>
                 </Activity>
 
-                <Activity mode={showAvailabilityWarning ? "visible" : "hidden"} >
+                <Activity mode={(showAvailabilityWarning && !showScore) ? "visible" : "hidden"} >
                     <div className="w-full flex flex-row gap-1 text-center items-center justify-center" >
                         <p className="text-[8px] md:text-[10px] font-medium" >{reportTitle}</p>
                         <TriangleAlert className="w-3 h-3" />

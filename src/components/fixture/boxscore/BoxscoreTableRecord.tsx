@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import useSWR from "swr";
 import { twMerge } from "tailwind-merge";
-import { athleteService } from "../../../services/athletes/athletesService";
 import SecondaryText from "../../ui/typography/SecondaryText";
 import { BoxscoreListRecordItem } from "../../../types/boxScore";
 import { useFixtureScreen } from "../../../hooks/fixtures/useFixture";
 import RoundedCard from "../../ui/cards/RoundedCard";
+import { useAthlete } from "../../../hooks/athletes/useAthlete";
 
 type TableRecordProps = {
     record: BoxscoreListRecordItem,
@@ -16,10 +15,7 @@ type TableRecordProps = {
 export function BoxscoreTableRecord({ record, index, className }: TableRecordProps) {
 
     const { athleteId } = record;
-    const key = `/athletes/${athleteId}`;
-    const { data: info, isLoading: loadingInfo, } = useSWR(key, () => athleteService.getAthleteById(athleteId), {
-        revalidateOnFocus: false
-    });
+    const {athlete: info, isLoading: loadingInfo} = useAthlete(athleteId);
 
     const { openPlayerMatchModal } = useFixtureScreen();
 

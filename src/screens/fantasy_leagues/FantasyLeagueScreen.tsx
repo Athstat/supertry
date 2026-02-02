@@ -2,16 +2,21 @@ import { ArrowLeft } from "lucide-react";
 import CircleButton from "../../components/ui/buttons/BackButton";
 import PageView from "../../components/ui/containers/PageView";
 import { useNavigate, useParams } from "react-router-dom";
-import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
+import { useHideBottomNavBar, useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
 import { FantasyLeagueStandingsTab } from "../../components/fantasy_league/standings/FantasyLeagueStandingsTab";
 import RoundedCard from "../../components/ui/cards/RoundedCard";
 import FantasyLeagueGroupDataProvider from "../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider";
-import FantasyLeagueHeader from "../../components/fantasy_league/standings/FantasyLeagueHeader";
+import FantasyLeagueHeader from "../../components/fantasy_league/header/FantasyLeagueHeader";
 import { TabSwitchContainer, TabSwitchOption } from "../../components/ui/buttons/TabSwitchOption";
-import { Activity, useState } from "react";
+import { Activity } from "react";
 import FantasyLeagueDetailsTab from "../../components/fantasy_league/commissioner/FantasyLeagueDetailsTab";
-
-type LocalViewModel = "standings" | "details";
+import { useFantasyLeagueScreen } from "../../hooks/fantasy/useFantasyLeagueScreen";
+import { FantasyLeagueViewMode } from "../../types/fantasyLeague";
+import FantasyLeagueScreenProvider from "../../contexts/fantasy/FantasyLeagueScreenContext";
+import { EditLeagueBannerModal } from "../../components/fantasy_league/commissioner/EditLeagueBannerModal";
+import { EditLeagueInfoModal } from "../../components/fantasy_league/commissioner/EditLeagueInfoModal";
+import EditLeagueLogoModal from "../../components/fantasy_league/commissioner/EditLeagueLogoModal";
+import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 
 /** Renders a fantasy League screen */
 export default function FantasyLeagueScreen() {
@@ -22,7 +27,9 @@ export default function FantasyLeagueScreen() {
             leagueId={leagueId}
             loadingFallback={<LoadingSkeleton />}
         >
-            <Content />
+            <FantasyLeagueScreenProvider>
+                <Content />
+            </FantasyLeagueScreenProvider>
         </FantasyLeagueGroupDataProvider>
     )
 }
@@ -31,11 +38,11 @@ export default function FantasyLeagueScreen() {
 function Content() {
 
     const navigate = useNavigate();
-    const [viewModal, setViewMode] = useState<LocalViewModel>('standings');
+    const { viewMode, setViewMode } = useFantasyLeagueScreen();
 
     const handleChangeViewMode = (newMode?: string) => {
         if (newMode) {
-            setViewMode(newMode as LocalViewModel);
+            setViewMode(newMode as FantasyLeagueViewMode);
         }
     }
 
@@ -44,6 +51,7 @@ function Content() {
     }
 
     useHideTopNavBar();
+    useHideBottomNavBar();
 
     return (
         <PageView className=" flex flex-col gap-0 overflow-x-hidden" >
@@ -55,25 +63,27 @@ function Content() {
                         label="Standings"
                         value="standings"
                         onSelect={handleChangeViewMode}
-                        current={viewModal}
+                        current={viewMode}
                     />
 
                     <TabSwitchOption
                         label="Details"
                         value="details"
                         onSelect={handleChangeViewMode}
-                        current={viewModal}
+                        current={viewMode}
                     />
                 </TabSwitchContainer>
             </div>
 
-            <Activity mode={viewModal === 'standings' ? 'visible' : 'hidden'} >
+            <Activity mode={viewMode === 'standings' ? 'visible' : 'hidden'} >
                 <FantasyLeagueStandingsTab />
             </Activity>
 
-            <Activity mode={viewModal === 'details' ? 'visible' : 'hidden'} >
+            <Activity mode={viewMode === 'details' ? 'visible' : 'hidden'} >
                 <FantasyLeagueDetailsTab />
             </Activity>
+
+            <Modals />
 
         </PageView>
     )
@@ -121,5 +131,31 @@ function LoadingSkeleton() {
             </div>
 
         </PageView>
+    )
+}
+
+function Modals() {
+
+    const {league} = useFantasyLeagueGroup();
+    const { showEditBanner, showEditInfo, showEditLogo, toggleEditBanner, toggleEditLogo, toggleShowEditInfo } = useFantasyLeagueScreen();
+
+    return (
+        <>
+            <EditLeagueInfoModal
+                isOpen={showEditInfo}
+                onClose={toggleShowEditInfo}
+                key={league?.id}
+            />
+
+            <EditLeagueBannerModal
+                isOpen={showEditBanner}
+                onClose={toggleEditBanner}
+            />
+
+            <EditLeagueLogoModal
+                isOpen={showEditLogo}
+                onClose={toggleEditLogo}
+            />
+        </>
     )
 }

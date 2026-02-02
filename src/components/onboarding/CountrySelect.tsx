@@ -15,9 +15,17 @@ export function CountrySelect({ value, onChange, className }: CountrySelectProps
   const dropdownRef = useRef<HTMLDivElement>(null);
 
 
-  const filteredCountries = countryFlags.filter((country) =>
-    country.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredCountries = countryFlags
+    .sort((a, b) => {
+      // Moves USA up the list
+      const aBias = a.code === "USA" ? 1 : 0;
+      const bBias = b.code === "USA" ? 1 : 0;
+
+      return bBias - aBias;
+    })
+    .filter((country) =>
+      country.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
