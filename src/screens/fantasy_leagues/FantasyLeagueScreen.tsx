@@ -2,7 +2,7 @@ import { ArrowLeft } from "lucide-react";
 import CircleButton from "../../components/ui/buttons/BackButton";
 import PageView from "../../components/ui/containers/PageView";
 import { useNavigate, useParams } from "react-router-dom";
-import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
+import { useHideBottomNavBar, useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
 import { FantasyLeagueStandingsTab } from "../../components/fantasy_league/standings/FantasyLeagueStandingsTab";
 import RoundedCard from "../../components/ui/cards/RoundedCard";
 import FantasyLeagueGroupDataProvider from "../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider";
@@ -51,6 +51,7 @@ function Content() {
     }
 
     useHideTopNavBar();
+    useHideBottomNavBar();
 
     return (
         <PageView className=" flex flex-col gap-0 overflow-x-hidden" >
