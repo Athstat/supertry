@@ -6,14 +6,14 @@ import { usePlayerRoundAvailability } from "../../hooks/fantasy/usePlayerRoundAv
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import { useAthleteRoundScore } from "../../hooks/fantasy/useAthleteRoundScore";
 import { AppColours } from "../../types/constants";
-import { IFantasyLeagueRound } from "../../types/fantasyLeague";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { formatPosition } from "../../utils/athletes/athleteUtils";
-import { isLeagueRoundLocked } from "../../utils/leaguesUtils";
+import { isSeasonRoundLocked } from "../../utils/leaguesUtils";
 import { sanitizeStat } from "../../utils/stringUtils";
 import PlayerMugshot from "../player/PlayerMugshot";
 import SecondaryText from "../ui/typography/SecondaryText";
 import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams";
+import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 
 
 type Props = {
@@ -93,7 +93,7 @@ export default function TeamBenchDrawer({ onPlayerClick }: Props) {
 
 type SubPlayerProps = {
   player: IFantasyTeamAthlete,
-  round: IFantasyLeagueRound
+  round: ISeasonRound
   onClick: () => void
 }
 
@@ -107,7 +107,7 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
   const { isNotAvailable, isTeamNotPlaying } = usePlayerRoundAvailability(
     player.tracking_id,
     league?.season_id ?? "",
-    round?.start_round ?? 0,
+    round?.round_number ?? 0,
     seasonTeam?.athstat_id
   );
 
@@ -192,14 +192,14 @@ function EmptySuperSubSlot() {
 }
 
 type PlayerPointsScoreProps = {
-    round: IFantasyLeagueRound,
+    round: ISeasonRound,
     player: IFantasyTeamAthlete,
 }
 
 function SubPlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
-    const isLocked = isLeagueRoundLocked(round);
-    const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, round.season_id, round?.start_round ?? 0);
+    const isLocked = isSeasonRoundLocked(round);
+    const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, round.season, round?.round_number ?? 0);
     const { league } = useFantasyLeagueGroup();
 
     const isLoading = loadingScore;
@@ -208,7 +208,7 @@ function SubPlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
     const { isNotAvailable, isTeamNotPlaying, nextMatch } = usePlayerRoundAvailability(
         player.tracking_id,
         league?.season_id ?? "",
-        round?.start_round ?? 0,
+        round?.round_number ?? 0,
         seasonTeam?.athstat_id
     );
 
