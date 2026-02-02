@@ -2,10 +2,12 @@ import { createContext, Dispatch, ReactNode, SetStateAction, useState } from "re
 import { FantasyLeagueViewMode } from "../../types/fantasyLeague";
 
 type FantasyLeagueScreenContextProps = {
-  showEditBannerModal: boolean,
-  showEditLogoModal: boolean,
-  setShowEditBannerModal: Dispatch<SetStateAction<boolean>>,
-  setShowEditLogoModal: Dispatch<SetStateAction<boolean>>,
+  showEditBanner: boolean,
+  showEditLogo: boolean,
+  showEditInfo: boolean,
+  setShowEditBanner: Dispatch<SetStateAction<boolean>>,
+  setShowEditLogo: Dispatch<SetStateAction<boolean>>,
+  setShowEditInfo: Dispatch<SetStateAction<boolean>>,
   viewMode: FantasyLeagueViewMode,
   setViewMode: Dispatch<SetStateAction<FantasyLeagueViewMode>>
 }
@@ -22,17 +24,18 @@ type Props = {
 export default function FantasyLeagueScreenProvider({ children }: Props) {
 
   const [viewMode, setViewMode] = useState<FantasyLeagueViewMode>("standings");
+  const [showEditInfo, setShowEditInfo] = useState<boolean>(false);
 
-  const [showEditBannerModal, setShowEditBannerModal] = useState<boolean>(false);
-  const [showEditLogoModal, setShowEditLogoModal] = useState<boolean>(true);
+  const [showEditBanner, setShowEditBanner] = useState<boolean>(false);
+  const [showEditLogo, setShowEditLogo] = useState<boolean>(false);
   
 
   return (
     <FantasyLeagueScreenContext.Provider
       value={{
-        showEditBannerModal, showEditLogoModal,
-        setShowEditBannerModal, setShowEditLogoModal,
-        viewMode, setViewMode
+        showEditBanner, showEditLogo,
+        setShowEditBanner, setShowEditLogo,
+        viewMode, setViewMode, showEditInfo, setShowEditInfo
       }}
     >
       {children}

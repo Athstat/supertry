@@ -1,6 +1,5 @@
 import { ChevronRight, Image, Pencil } from 'lucide-react'
 import SecondaryText from '../../ui/typography/SecondaryText'
-import { useState } from 'react'
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup'
 import RoundedCard from '../../ui/cards/RoundedCard'
 import { ShieldUser } from 'lucide-react'
@@ -8,6 +7,7 @@ import { useAuth } from '../../../contexts/AuthContext'
 import { EditLeagueInfoModal } from './EditLeagueInfoModal'
 import { EditLeagueBannerModal } from './EditLeagueBannerModal'
 import EditLeagueLogoModal from './EditLeagueLogoModal'
+import { useFantasyLeagueScreen } from '../../../hooks/fantasy/useFantasyLeagueScreen'
 
 export default function CommissionerZone() {
 
@@ -16,13 +16,10 @@ export default function CommissionerZone() {
 
     const isCommissioner = authUser?.kc_id === league?.creator_id;
 
-    const [showEditInfo, setShowEditInfo] = useState(false);
-    const [showEditBanner, setShowEditBanner] = useState(false);
-    const [showEditLogo, setShowEditLogo] = useState(false);
-
-    const toggleShowEditInfo = () => setShowEditInfo(prev => !prev);
-    const toggleEditBanner = () => setShowEditBanner(prev => !prev);
-    const toggleEditLogo = () => setShowEditLogo(prev => !prev);
+    const {
+        toggleEditBanner, toggleEditLogo, toggleShowEditInfo,
+        showEditBanner, showEditInfo, showEditLogo
+    } = useFantasyLeagueScreen();
 
     if (!isCommissioner) {
         return;

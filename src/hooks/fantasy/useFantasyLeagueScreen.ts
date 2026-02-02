@@ -10,17 +10,22 @@ export function useFantasyLeagueScreen() {
         throw new Error("useFantasyLeagueScreen used outside FantasyLeagueScreenProvider")
     } 
 
-    const toggleEditBannerModal = () => {
-        context.setShowEditBannerModal(prev => !prev);
+    const toggleEditBanner = () => {
+        context.setShowEditBanner(prev => !prev);
     }
 
-    const toggleEditLogoModal = () => {
-        context.setShowEditLogoModal(prev => !prev);
+    const toggleEditLogo = () => {
+        context.setShowEditLogo(prev => !prev);
+    }
+    
+    const toggleShowEditInfo = () => {
+        context.setShowEditInfo(prev => !prev);
     }
 
     return {
         ...context,
-        toggleEditBannerModal,
-        toggleEditLogoModal
+        toggleEditBanner,
+        toggleEditLogo,
+        toggleShowEditInfo
     };
 }
