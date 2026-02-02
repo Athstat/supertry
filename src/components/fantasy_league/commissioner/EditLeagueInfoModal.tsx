@@ -31,8 +31,6 @@ export function EditLeagueInfoModal({ isOpen, onClose }: EditInfoProps) {
         is_private: league?.is_private ?? false
     }
 
-    console.log("Initial Form ", initialForm);
-
     const [form, setForm] = useState<EditLeagueForm>(initialForm);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>();
