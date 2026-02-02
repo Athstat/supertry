@@ -2,7 +2,7 @@ import { ChevronRight } from "lucide-react";
 import { gameplayModalData } from "../../../data/gameplayModalData";
 import { GameplayTopic } from "../../../types/gameplayModal";
 import SecondaryText from "../../ui/typography/SecondaryText";
-import PrimaryButton, { TranslucentButton } from "../../ui/buttons/PrimaryButton";
+import PrimaryButton from "../../ui/buttons/PrimaryButton";
 import ScrummyLogo from "../scrummy_logo";
 import RoundedCard from "../../ui/cards/RoundedCard";
 import { useNavigate } from "react-router-dom";
@@ -49,26 +49,31 @@ export default function GameplayOverview({ onTopicSelect, onClose }: Props) {
                     <RoundedCard
                         key={index}
                         onClick={() => onTopicSelect(topic, index)}
-                        className="p-3 cursor-pointer flex flex-row items-center justify-between gap-2"
+                        className="p-3 cursor-pointer flex flex-col items-start gap-2"
                     >
-                        <div className="flex items-center flex-1">
+                        <div className="flex flex-row items-center justify-between w-full gap-2">
 
-                            <TranslucentButton className="w-fit flex flex-col items-center justify-center" >
-                                <span className="text-xl">{topic.emoji}</span>
-                            </TranslucentButton>
+                            <div className="flex flex-row items-center gap-2" >
+                                <p className="text-xl">{topic.emoji}</p>
 
+                                <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
+                                    {topic.title}
+                                </h3>
+                            </div>
+
+                            <div>
+                                <ChevronRight className="w-5 h-5 text-gray-500 ml-2 flex-shrink-0" />
+                            </div>
                         </div>
 
                         <div className="flex flex-col">
-                            <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
-                                {topic.title}
-                            </h3>
+
                             <SecondaryText className="text-xs">
                                 {topic.description}
                             </SecondaryText>
                         </div>
 
-                        <ChevronRight className="w-5 h-5 text-gray-500 ml-2 flex-shrink-0" />
+
                     </RoundedCard>
                 ))}
 
