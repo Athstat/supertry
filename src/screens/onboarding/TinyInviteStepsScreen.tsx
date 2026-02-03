@@ -10,7 +10,6 @@ import { PillCard } from "../../components/ui/buttons/PillTag";
 import { GooglePlayButton, AppStoreButton } from 'react-mobile-app-button';
 import { APP_GOOGLE_PLAYSTORE_LINK, APP_IOS_APPSTORE_LINK } from '../../types/constants';
 import { useStoreLinks } from "../../hooks/marketing/useStoreLinks";
-import { useTheme } from "../../contexts/ThemeContext";
 import { Activity, useCallback, useMemo } from "react";
 import { Download } from "lucide-react";
 import { isMobile } from "react-device-detect";
@@ -23,6 +22,7 @@ import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
 import TempGuestUserProvider from "../../components/auth/guest/TempGuestUserProvider";
 import ScrummyLoadingState from "../../components/ui/ScrummyLoadingState";
+import { useTheme } from "../../contexts/app_state/ThemeContext";
 
 
 export default function TinyInviteStepsScreen() {
