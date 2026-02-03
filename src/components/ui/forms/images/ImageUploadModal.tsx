@@ -6,6 +6,7 @@ import ImageUploadProvider from "../../../../contexts/ui/ImageUploadContext"
 import { useImageUpload } from "../../../../hooks/ui/useImageUpload"
 import FileInput from "../FileInput"
 import ImageCropper from "./ImageCropper"
+import { ReactNode } from "react"
 
 type Props = {
   title?: string,
@@ -14,7 +15,8 @@ type Props = {
   aspect?: number,
   minHeight?: number,
   minWidth?: number,
-  initFileUrl?: string
+  initFileUrl?: string,
+  children?: ReactNode
 
   onClose?: () => void,
   onUpload?: (file: File) => void,
