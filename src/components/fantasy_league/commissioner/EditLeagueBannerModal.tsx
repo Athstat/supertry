@@ -69,6 +69,7 @@ export function EditLeagueBannerModal({ isOpen, onClose }: EditLeagueBannerProps
                 <>
                     <section className="text-xs" >
                         <p className="text-sm" >Banner image tips:</p>
+                        <SecondaryText>- Use an image with a ration of 16:7 in resolution</SecondaryText>
                         <SecondaryText>- Avoid using images with any transparencies!</SecondaryText>
                         <SecondaryText>- Max image size is 5MB. For the best look, pick a banner that both matches your brand/identity and the colours and vibe of the app</SecondaryText>
                     </section>
