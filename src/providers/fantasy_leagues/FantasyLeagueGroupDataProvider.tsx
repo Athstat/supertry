@@ -71,6 +71,7 @@ function Fetcher({ children, leagueId, loadingFallback, skipCache = false, fetch
     fetcher(leagueId ?? '', fetchMembers)
   , {
     revalidateOnFocus: false,
+    revalidateIfStale: true
   });
 
   const league = leagueData?.league;
