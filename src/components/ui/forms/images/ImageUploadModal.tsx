@@ -63,7 +63,7 @@ function Header({ onClose, title, showSave = false }: HeaderProps) {
 
 function BodySection() {
 
-  const {file, setFile} = useImageUpload();  
+  const {file, setFile, uploadFile, isLoading} = useImageUpload();  
   const inputFiles = file ? [file] : [];
 
   const handleSetFiles = (inputFiles: File[]) => {
@@ -72,9 +72,14 @@ function BodySection() {
     }
   }
 
-  const handleUploadNewFile = () => {
-    setFile(undefined);
+  const handleUploadFile = (file: File) => {
+    if (uploadFile) {
+      setFile(file);
+      uploadFile(file);
+    }
   }
+
+
 
   return (
     <div className="" >
@@ -89,14 +94,9 @@ function BodySection() {
       {file && (
         <ImageCropper 
           file={file}
-          setFile={setFile}
+          onConfirmCrop={handleUploadFile}
+          isLoading={isLoading}
         />
-      )}
-
-      {file && (
-        <PrimaryButton onClick={handleUploadNewFile} >
-          Upload New Image
-        </PrimaryButton>
       )}
 
     </div>

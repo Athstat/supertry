@@ -86,7 +86,7 @@ function Content() {
 
             <Modals />
 
-            <ImageUploadModal 
+            <ImageUploadModal
                 title="Edit Logo"
                 isOpen
             />

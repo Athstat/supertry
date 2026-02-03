@@ -2,17 +2,16 @@ import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import 'react-image-crop/dist/ReactCrop.css'
 import ReactCrop, { centerCrop, makeAspectCrop, PixelCrop } from 'react-image-crop'
 import PrimaryButton from '../../buttons/PrimaryButton';
-import { CropIcon } from 'lucide-react';
-
 type Props = {
     file: File,
-    setFile?: (file: File) => void,
+    onConfirmCrop?: (file: File) => void,
+    isLoading?: boolean,
     aspect?: number,
     minWidth?: number
     minHeight?: number
 }
 
-export default function ImageCropper({ file, setFile, aspect = 1, minWidth = 100, minHeight = 100 }: Props) {
+export default function ImageCropper({ file, onConfirmCrop, aspect = 1, minWidth = 100, minHeight = 100, isLoading }: Props) {
 
     const imageRef = useRef<HTMLImageElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -20,14 +19,11 @@ export default function ImageCropper({ file, setFile, aspect = 1, minWidth = 100
     const [crop, setCrop] = useState<PixelCrop>();
     const imageSrc = URL.createObjectURL(file);
 
-    const [isCropping, setIsCropping] = useState(true);
-    const toggleIsCropping = () => setIsCropping(prev => !prev);
-
     const handleConfirmCrop = async () => {
         const image = imageRef.current;
         const canvas = canvasRef.current;
 
-        if (!image || !canvas || !crop || !setFile) {
+        if (!image || !canvas || !crop || !onConfirmCrop) {
             return null;
         }
 
@@ -39,8 +35,7 @@ export default function ImageCropper({ file, setFile, aspect = 1, minWidth = 100
             return null;
         }
 
-        setIsCropping(false);
-        setFile(newFile);
+        onConfirmCrop(newFile);
     }
 
     const handleImageLoad = (e: SyntheticEvent<HTMLImageElement, Event>) => {
@@ -69,13 +64,7 @@ export default function ImageCropper({ file, setFile, aspect = 1, minWidth = 100
     return (
         <div className='flex flex-col gap-3' >
 
-            <Controls
-                isCropping={isCropping}
-                onStartCrop={toggleIsCropping}
-                onConfirmCrop={handleConfirmCrop}
-            />
-
-            {isCropping && <ReactCrop
+            <ReactCrop
                 crop={crop}
                 onChange={(crop) => setCrop(crop)}
                 aspect={aspect}
@@ -83,58 +72,23 @@ export default function ImageCropper({ file, setFile, aspect = 1, minWidth = 100
                 minHeight={minHeight}
             >
                 <img ref={imageRef} src={imageSrc} onLoad={handleImageLoad} />
-            </ReactCrop>}
+            </ReactCrop>
 
-            {!isCropping &&
-                <img src={imageSrc} onLoad={handleImageLoad} />
-            }
+            <canvas style={{ display: "none" }} ref={canvasRef} />
 
-            <canvas style={{display: "none"}} ref={canvasRef} />
-
+            <PrimaryButton
+                onClick={handleConfirmCrop}
+                disabled={isLoading}
+                isLoading={isLoading}
+            >
+                Crop & Save
+            </PrimaryButton>
         </div>
     )
 }
 
-type ControlsProps = {
-    onStartCrop?: () => void,
-    isCropping?: boolean,
-    onConfirmCrop?: () => void
-}
+async function createCroppedImage(image: HTMLImageElement, canvas: HTMLCanvasElement, crop: PixelCrop, file: File): Promise<File | undefined> {
 
-function Controls({ isCropping, onStartCrop, onConfirmCrop }: ControlsProps) {
-
-    const handleCrop = () => {
-        if (!isCropping && onStartCrop) {
-            onStartCrop();
-            return;
-        }
-
-        if (isCropping && onConfirmCrop) {
-            onConfirmCrop();
-            return;
-        }
-    }
-
-    return (
-        <div className='flex flex-row items-center justify-between' >
-            <div></div>
-
-            <div>
-                <PrimaryButton
-                    slate
-                    className='text-xs w-fit'
-                    onClick={handleCrop}
-                >
-                    <CropIcon className='w-4 h-4' />
-                    <p>{isCropping ? 'Apply Crop' : 'Crop Image'}</p>
-                </PrimaryButton>
-            </div>
-        </div>
-    )
-}
-
-async function createCroppedImage(image: HTMLImageElement, canvas: HTMLCanvasElement, crop: PixelCrop, file: File) : Promise<File | undefined> {
-    
     const ctx = canvas.getContext("2d");
 
     if (!ctx) {
@@ -175,7 +129,7 @@ async function createCroppedImage(image: HTMLImageElement, canvas: HTMLCanvasEle
         canvas.toBlob(resolve, fileType, 0.95);
     });
 
-    const newFile = new File([blob as Blob], `${file.name}`, {type: fileType});
+    const newFile = new File([blob as Blob], `${file.name}`, { type: fileType });
     return newFile || undefined;
 
 }
