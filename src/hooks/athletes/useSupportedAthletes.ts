@@ -1,4 +1,5 @@
-import { useAthletes } from "../../contexts/AthleteContext";
+import { useAthletes } from "../../contexts/data/AthleteContext";
+
 
 /** 
  * Hook that reads and filters for supported athletes from

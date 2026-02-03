@@ -1,14 +1,10 @@
  
 import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
-import { useAthletes } from './AthleteContext';
-import { analytics } from '../services/analytics/anayticsService';
 import { useLocation } from 'react-router-dom';
-import {
-  isAppStateValid,
-  attemptStateRecovery,
-  registerRecoveryListener,
-} from '../utils/appStateUtils';
-import { logger } from '../services/logger';
+import { analytics } from '../../services/analytics/anayticsService';
+import { logger } from '../../services/logger';
+import { attemptStateRecovery, isAppStateValid, registerRecoveryListener } from '../../utils/appStateUtils';
+import { useAthletes } from '../data/AthleteContext';
 
 interface AppStateContextType {
   isActive: boolean;
