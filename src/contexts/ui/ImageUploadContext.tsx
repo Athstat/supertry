@@ -1,17 +1,17 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useRef, useState } from "react"
+import { createContext, Dispatch, ReactNode, SetStateAction, useEffect, useRef, useState } from "react"
 
 type ImageUploadContextProps = {
-    file?: File,
-    setFile: Dispatch<SetStateAction<File | undefined>>,
     error?: string,
+    aspect?: number,
+    fileUrl?: string,
+    minWidth?: number,
+    minHeight?: number,
+    isLoading?: boolean,
+
+    setFile: (file: File | undefined) => void,
     setError?: Dispatch<SetStateAction<string | undefined>>,
     uploadFile?: () => void,
-    isLoading?: boolean,
     setCroppedFile: (file: File) => void,
-    aspect?: number,
-    minHeight?: number,
-    minWidth?: number,
-    initFileUrl?: string
 }
 
 export const ImageUploadContext = createContext<ImageUploadContextProps | null>(null);
@@ -31,7 +31,7 @@ export default function ImageUploadProvider({ children, onUploadFile, isLoading,
 
     const croppedFileRef = useRef<File>(null);
 
-    const [file, setFile] = useState<File | undefined>();
+    const [fileUrl, setFileUrl] = useState<string | undefined>(initFileUrl);
     const [error, setError] = useState<string>();
 
     const handleUpload = () => {
@@ -44,10 +44,30 @@ export default function ImageUploadProvider({ children, onUploadFile, isLoading,
         croppedFileRef.current = file;
     }
 
+    const setFile = (file: File | undefined) => {
+        if (file === undefined) {
+            setFileUrl(undefined);
+            return;
+        }
+
+        const src = URL.createObjectURL(file);
+        setFileUrl(src);
+    }
+
+    useEffect(() => {
+        
+        return () => {   
+            if (fileUrl) {
+                URL.revokeObjectURL(fileUrl);
+            }
+        }
+
+    }, [fileUrl]);
+
     return (
         <ImageUploadContext.Provider
             value={{
-                file, setFile,
+                fileUrl, setFile,
                 error, setError,
                 uploadFile: handleUpload,
                 isLoading,
@@ -55,7 +75,6 @@ export default function ImageUploadProvider({ children, onUploadFile, isLoading,
                 minHeight,
                 minWidth,
                 aspect,
-                initFileUrl
             }}
         >
             {children}

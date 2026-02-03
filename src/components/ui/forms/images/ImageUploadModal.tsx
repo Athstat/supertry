@@ -6,19 +6,18 @@ import ImageUploadProvider from "../../../../contexts/ui/ImageUploadContext"
 import { useImageUpload } from "../../../../hooks/ui/useImageUpload"
 import FileInput from "../FileInput"
 import ImageCropper from "./ImageCropper"
-import { useEffect } from "react"
 
 type Props = {
   title?: string,
-  initFile?: File,
   isOpen?: boolean,
   isLoading?: boolean
-  onClose?: () => void,
-  onUpload?: (file: File) => void,
   aspect?: number,
   minHeight?: number,
   minWidth?: number,
   initFileUrl?: string
+
+  onClose?: () => void,
+  onUpload?: (file: File) => void,
 }
 
 /** Renders a modal for uploading an image */
@@ -42,53 +41,29 @@ export default function ImageUploadModal({ isOpen, onClose, title, isLoading, on
         hideHandle
         onClickOutside={onClose}
       >
-        <Header onClose={onClose} title={title} showSave />
-        <BodySection />
+        <Content 
+          title={title}
+          onClose={onClose}
+        />
       </BottomSheetView>
     </ImageUploadProvider>
   )
 }
 
-type HeaderProps = {
-  onClose?: () => void,
+type ContentProps = {
   title?: string,
-  showSave?: boolean
+  onClose?: () => void
 }
 
-function Header({ onClose, title, showSave = false }: HeaderProps) {
+function Content({ onClose, title }: ContentProps) {
 
-  const { uploadFile, isLoading } = useImageUpload();
+  const { 
+    uploadFile, isLoading, fileUrl, 
+    setFile, aspect, minHeight, 
+    minWidth, setCroppedFile
+  } = useImageUpload();
 
-  return (
-    <div className="flex flex-row items-center justify-between" >
-      <div className="flex flex-row items-center gap-2" >
-
-        <CircleButton
-          onClick={onClose}
-        >
-          <X />
-        </CircleButton>
-
-        <p className="font-semibold text-lg" >{title}</p>
-      </div>
-
-      {showSave && <div>
-        <PrimaryButton
-          onClick={uploadFile}
-          isLoading={isLoading}
-          disabled={isLoading}
-        >
-          Save
-        </PrimaryButton>
-      </div>}
-    </div>
-  )
-}
-
-function BodySection() {
-
-  const { file, setFile, setCroppedFile, aspect, minHeight, minWidth, initFileUrl } = useImageUpload();
-  const inputFiles = file ? [file] : [];
+  const showSave = Boolean(fileUrl);
 
   const handleSetFiles = (inputFiles: File[]) => {
     if (inputFiles.length > 0) {
@@ -96,40 +71,51 @@ function BodySection() {
     }
   }
 
-  const imageUrl = file ? URL.createObjectURL(file) : initFileUrl;
-
-  useEffect(() => {
-
-    if (!(imageUrl && file)) {
-      return;
-    }
-
-    return () => {
-      URL.revokeObjectURL(imageUrl)
-    }
-  }, [file, imageUrl]);
-
-
   return (
-    <div className="" >
+    <div className="flex flex-col gap-6" >
+      <div className="flex flex-row items-center justify-between" >
+        <div className="flex flex-row items-center gap-2" >
 
-      {!file && (
-        <FileInput
-          files={inputFiles}
-          setFiles={handleSetFiles}
-        />
-      )}
+          <CircleButton
+            onClick={onClose}
+          >
+            <X />
+          </CircleButton>
 
-      {imageUrl && (
-        <ImageCropper
-          onConfirmCrop={setCroppedFile}
-          aspect={aspect}
-          minHeight={minHeight}
-          minWidth={minWidth}
-          imageUrl={imageUrl}
-        />
-      )}
+          <p className="font-semibold text-lg" >{title}</p>
+        </div>
 
+        {showSave && <div>
+          <PrimaryButton
+            onClick={uploadFile}
+            isLoading={isLoading}
+            disabled={isLoading}
+          >
+            Save
+          </PrimaryButton>
+        </div>}
+      </div>
+
+      <div className="" >
+
+        {!fileUrl && (
+          <FileInput
+            files={[]}
+            setFiles={handleSetFiles}
+          />
+        )}
+
+        {fileUrl && (
+          <ImageCropper
+            onConfirmCrop={setCroppedFile}
+            aspect={aspect}
+            minHeight={minHeight}
+            minWidth={minWidth}
+            imageUrl={fileUrl}
+          />
+        )}
+
+      </div>
     </div>
   )
 }

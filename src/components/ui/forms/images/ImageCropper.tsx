@@ -1,7 +1,6 @@
-import { SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
 import 'react-image-crop/dist/ReactCrop.css'
+import { SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
 import ReactCrop, { centerCrop, makeAspectCrop, PixelCrop } from 'react-image-crop'
-import { randomUUID } from 'crypto';
 
 type Props = {
     imageUrl: string,
@@ -130,7 +129,9 @@ async function createCroppedImage(image: HTMLImageElement, canvas: HTMLCanvasEle
     });
     
     const fileType = (blob as Blob).type;
-    const fileName = `${randomUUID()}.${fileType.split('/').at(1)}`
+    const fileName = `image_${new Date().valueOf()}.${fileType.split('/').at(1)}`;
+
+    console.log("File Name ", fileName);
     
     const newFile = new File([blob as Blob], `${fileName}`, { type: fileType });
     return newFile || undefined;
