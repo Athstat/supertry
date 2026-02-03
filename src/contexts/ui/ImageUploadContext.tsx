@@ -10,13 +10,14 @@ type ImageUploadContextProps = {
 export const ImageUploadContext = createContext<ImageUploadContextProps | null>(null);
 
 type Props = {
-    children?: ReactNode
+    children?: ReactNode,
+    initFile?: File
 }
 
 /** Provides context for image uploading */
-export default function ImageUploadProvider({ children }: Props) {
+export default function ImageUploadProvider({ children, initFile }: Props) {
 
-    const [file, setFile] = useState<File>();
+    const [file, setFile] = useState<File | undefined>(initFile);
     const [error, setError] = useState<string>();
 
     return (

@@ -88,6 +88,7 @@ function Content() {
 
             <ImageUploadModal 
                 title="Edit Logo"
+                isOpen
             />
 
         </PageView>
