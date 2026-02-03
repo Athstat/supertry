@@ -2,7 +2,7 @@ import useSWR from "swr";
 import { sbrService } from "../../services/sbr/sbrService";
 import { ISbrFixture } from "../../types/sbr";
 import { useMemo } from "react";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/auth/AuthContext";
 
 export function useSbrFixtureVotes(fixture: ISbrFixture, shouldFetch: boolean = true) {
 

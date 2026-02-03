@@ -85,7 +85,7 @@ function SeasonTeamGridList({ onSuccess }: SeasonTeamListProps) {
         />
       )}
 
-      <div className="grid grid-cols-3 gap-2" >
+      <div className="grid grid-cols-4 gap-2" >
         {teams.map((t) => {
           return (
             <TeamItem
@@ -118,7 +118,7 @@ function TeamItem({ team, onClick }: TeamItemProps) {
     <RoundedCard onClick={handleOnClick} className="dark:border-none cursor-pointer p-2 h-[90px] flex flex-col items-center justify-center gap-2" >
       <TeamLogo
         url={team.image_url}
-        className="w-8 h-8"
+        className="w-7 h-7"
       />
       <SecondaryText className="text-[10px] text-center" >{team.athstat_name}</SecondaryText>
     </RoundedCard>

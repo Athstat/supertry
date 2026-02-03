@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useDeviceId } from '../web/useDeviceId';
-import { useAuth } from '../../contexts/AuthContext';
 import { authService } from '../../services/authService';
+import { useAuth } from '../../contexts/auth/AuthContext';
 
 /**
  * Syncs the current device's realDeviceId/storedDeviceId to the backend

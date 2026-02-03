@@ -17,7 +17,7 @@ import TeamHistoryProvider from "../../providers/fantasy_teams/TeamHistoryProvid
 import FantasyTeamProvider from "../../providers/fantasy_teams/FantasyTeamProvider";
 import NoTeamCreatedFallback from "../../components/fantasy-leagues/NoTeamCreatedFallback";
 import PitchViewLoadingSkeleton from "../../components/my_fantasy_team/PitchViewLoadingSkeleton";
-import MyTeamScreenProvider from "../../contexts/MyTeamScreenContext";
+import MyTeamScreenProvider from "../../contexts/ui/MyTeamScreenContext";
 
 
 export default function LeagueMemberTeamScreen() {

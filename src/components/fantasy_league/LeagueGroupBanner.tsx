@@ -27,7 +27,7 @@ export default function LeagueGroupBanner({league} : Props) {
           onError={() => setError(true)}
           src={bannerUrl}
           alt={`${altTitle} Banner`}
-          className="w-full h-full object-right"
+          className="w-full h-full"
         />
       </div>
     )

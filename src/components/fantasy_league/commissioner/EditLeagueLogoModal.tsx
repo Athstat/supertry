@@ -1,13 +1,9 @@
-import { X, Upload } from "lucide-react";
 import { useState, useCallback } from "react";
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
 import { fantasyLeagueGroupsService } from "../../../services/fantasy/fantasyLeagueGroupsService";
 import { logger } from "../../../services/logger";
-import CircleButton from "../../ui/buttons/BackButton";
-import PrimaryButton from "../../ui/buttons/PrimaryButton";
-import ImageFileInput from "../../ui/forms/FileInput";
-import BottomSheetView from "../../ui/modals/BottomSheetView";
-import { Toast } from "../../ui/Toast";
+import ImageUploadModal from "../../ui/forms/images/ImageUploadModal";
+import ErrorCard from "../../ui/cards/ErrorCard";
 import SecondaryText from "../../ui/typography/SecondaryText";
 
 type Props = {
@@ -16,7 +12,7 @@ type Props = {
 }
 
 export default function EditLeagueLogoModal({ isOpen, onClose }: Props) {
-    const [files, setFiles] = useState<File[]>([]);
+
     const [isUploading, setUploading] = useState(false);
     const [error, setError] = useState<string>();
 
@@ -24,33 +20,34 @@ export default function EditLeagueLogoModal({ isOpen, onClose }: Props) {
 
     const handleClose = useCallback(() => {
         if (onClose) {
-            setFiles([]);
             onClose();
+            setError(undefined);
         }
     }, [onClose]);
 
-    const handleUpload = useCallback(async () => {
+    const handleUpload = useCallback(async (logo: File) => {
+
         try {
 
-            setError(undefined);
 
-            if (files.length === 0 || !league?.id) {
+            if (!league) {
                 return;
             }
 
+            setError(undefined);
             setUploading(true);
 
-            const logo = files[0];
-            const updatedLeague = await fantasyLeagueGroupsService.updateBannerAndLogo(league?.id || '', undefined, logo);
+            const updatedLeague = await fantasyLeagueGroupsService.updateBannerAndLogo(league.id || '', undefined, logo);
 
             if (updatedLeague) {
+
                 mutateLeague(updatedLeague);
                 setUploading(false);
                 handleClose();
                 return;
             }
 
-            setError("Something went wrong uploading the logo")
+            setError("Something went wrong uploading the logo");
 
         } catch (err) {
             logger.error("Error handling upload ", err);
@@ -59,61 +56,40 @@ export default function EditLeagueLogoModal({ isOpen, onClose }: Props) {
             setUploading(false);
         }
 
-    }, [files, league, mutateLeague, handleClose]);
+    }, [league, mutateLeague, handleClose]);
 
     if (!isOpen) {
         return null;
     }
 
     return (
-        <BottomSheetView
-            hideHandle
-            className='max-h-[80vh] p-4 min-h-[40vh] flex flex-col gap-2'
-            onClickOutside={onClose}
-        >
-            <div className='flex flex-row items-center gap-2 justify-between' >
-                <p className='font-semibold text-lg' >Edit Logo</p>
-
-                <div>
-                    <CircleButton onClick={handleClose}>
-                        <X />
-                    </CircleButton>
-                </div>
-            </div>
-
-            <section className="text-xs" >
-                <p className="text-sm" >Logo image tips:</p>
-                <SecondaryText>- Any square image, but 500 x 500 resolution works best</SecondaryText>
-                <SecondaryText>- Max image size is 5MB. For the best look, use an image that fits well inside a circular or square frame.</SecondaryText>
-            </section>
-
-            <form className="py-4" >
-                <ImageFileInput
-                    files={files}
-                    setFiles={setFiles}
-                    previewSize={100}
-                />
-            </form>
-
-            <PrimaryButton
-                className="py-3 flex flex-row items-center gap-2"
-                onClick={() => handleUpload()}
+        <>
+            <ImageUploadModal
+                title="Edit Logo"
+                isOpen={isOpen}
+                onClose={onClose}
+                onUpload={handleUpload}
                 isLoading={isUploading}
-                disabled={files.length === 0 || isUploading}
+                minHeight={200}
             >
-                <p>Upload Logo</p>
-                <Upload />
-            </PrimaryButton>
 
-            {error && (
-                <Toast
-                    message={error}
-                    isVisible={true}
-                    type="error"
-                    onClose={() => setError(undefined)}
-                />
-            )}
+                <>
 
-        </BottomSheetView>
+                    <section className="text-xs" >
+                        <p className="text-sm" >Logo image tips:</p>
+                        <SecondaryText>- Use a sqaure image</SecondaryText>
+                        <SecondaryText>- Max image size is 5MB. For the best look, pick an image that can be framed inside a circle, like a profile picture</SecondaryText>
+                    </section>
+
+                    {error && <ErrorCard
+                        error="Failed to Upload Image"
+                        message={error}
+                        className="items-start justify-start"
+                    />}
+
+                </>
+            </ImageUploadModal>
+
+        </>
     )
 }

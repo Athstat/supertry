@@ -1,11 +1,11 @@
  
 import { createContext, ReactNode, useMemo, useState } from "react"
-import { IProAthlete } from "../types/athletes"
-import { IProSeason } from "../types/season"
-import useSWR from "swr"
-import { athleteService } from "../services/athletes/athletesService"
-import { swrFetchKeys } from "../utils/swrKeys"
-import { IFixture } from "../types/games"
+import useSWR from "swr";
+import { athleteService } from "../../services/athletes/athletesService";
+import { IProAthlete } from "../../types/athletes";
+import { IFixture } from "../../types/games";
+import { IProSeason } from "../../types/season";
+import { swrFetchKeys } from "../../utils/swrKeys";
 
 type ContextProps = {
     player: IProAthlete,

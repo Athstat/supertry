@@ -1,4 +1,3 @@
-import { useAuth } from '../../../contexts/AuthContext';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
 import { useUserRoundTeam } from '../../../hooks/fantasy/useUserRoundTeam';
 import { DashboardHeroLoadingSkeleton, DashboardHeroFrame, DashboardHeroHeader, DashboardHeroScoreSection, DashboardHeroCTASection } from './DashboardHeroSections';
@@ -6,6 +5,7 @@ import { useFeaturedLeague } from '../../../hooks/leagues/useFeaturedLeague';
 import FantasyLeagueGroupDataProvider from '../../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider';
 import TrophyStartIcon from '../../ui/icons/TrophyStartIcon';
 import { useFantasySeasons } from '../../../hooks/dashboard/useFantasySeasons';
+import { useAuth } from '../../../contexts/auth/AuthContext';
 
 /** Renders the dashboard hero */
 export default function DashboardHero() {

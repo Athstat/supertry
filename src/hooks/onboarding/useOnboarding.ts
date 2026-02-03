@@ -2,7 +2,7 @@ import { atom, useAtomValue } from 'jotai';
 import { IProAthlete } from '../../types/athletes';
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
 import { useContext } from 'react';
-import { OnboardingContext } from '../../contexts/OnboardingContext';
+import { OnboardingContext } from '../../contexts/ui/OnboardingContext';
 
 export const featuredPlayersAtom = atom<IProAthlete[]>([]);
 export const featuredLeagueAtom = atom<FantasyLeagueGroup>();

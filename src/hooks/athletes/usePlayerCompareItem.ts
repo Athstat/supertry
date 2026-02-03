@@ -1,5 +1,5 @@
 import { useContext, useMemo } from "react";
-import { PlayerCompareItemContext } from "../../contexts/PlayerCompareItemContext";
+import { PlayerCompareItemContext } from "../../contexts/ui/PlayerCompareItemContext";
 
 /** Hook that provides access to the PlayerCompareItemContext */
 export function usePlayerCompareItem() {

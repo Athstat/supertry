@@ -5,10 +5,10 @@ import PrimaryButton from "../../ui/buttons/PrimaryButton";
 import { useInternalUserProfile } from "../../../hooks/auth/useInternalUserProfile";
 import { useOnboarding } from "../../../hooks/onboarding/useOnboarding";
 import { UpdatedUserInternalProfileReq } from "../../../types/auth";
-import { useAuth } from "../../../contexts/AuthContext";
 import InputField from "../../ui/forms/InputField";
 import { useEditAccountInfo } from "../../../hooks/auth/useEditAccountInfo";
 import ErrorCard from "../../ui/cards/ErrorCard";
+import { useAuth } from "../../../contexts/auth/AuthContext";
 
 export function OnboardingCTASlide() {
 

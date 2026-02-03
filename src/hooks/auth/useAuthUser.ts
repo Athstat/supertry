@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
 import useSWR from 'swr';
 import { authService } from '../../services/authService';
+import { useAuth } from '../../contexts/auth/AuthContext';
 
 export function useAuthUser() {
   const navigate = useNavigate();

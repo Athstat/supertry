@@ -6,9 +6,9 @@ import MyFantasyTeamScreenHeader from '../../components/fantasy_league/MyFantasy
 import { twMerge } from 'tailwind-merge';
 import { AppColours } from '../../types/constants';
 import TeamHistoryProvider from '../../providers/fantasy_teams/TeamHistoryProvider';
-import { useAuth } from '../../contexts/AuthContext';
 import PitchViewLoadingSkeleton from '../../components/my_fantasy_team/PitchViewLoadingSkeleton';
 import RoundedCard from '../../components/ui/cards/RoundedCard';
+import { useAuth } from '../../contexts/auth/AuthContext';
 
 /** Renders my fantasy team screen */
 export function MyFantasyTeamScreen() {

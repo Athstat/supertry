@@ -4,9 +4,9 @@ import { BottomNav } from "../components/ui/navigation/BottomNav";
 import { Header } from "../components/ui/navigation/Header";
 import RouteErrorBoundary from "../components/ui/navigation/RouteErrorBoundary";
 import ScrollToTop from "../components/ui/navigation/ScrollToTop";
-import { useAuth } from "../contexts/AuthContext";
 import { AppColours } from "../types/constants";
 import { ReactNode } from "react";
+import { useAuth } from "../contexts/auth/AuthContext";
 
 type LayoutProps = {
     children?: ReactNode

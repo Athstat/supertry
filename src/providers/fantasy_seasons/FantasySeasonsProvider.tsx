@@ -10,7 +10,7 @@ import { logger } from '../../services/logger';
 import { useDebounced } from '../../hooks/web/useDebounced';
 import useSWR from 'swr';
 import { CACHING_CONFIG, SELECTED_SEASON_ID_KEY } from '../../types/constants';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/auth/AuthContext';
 
 type Props = {
   children?: ReactNode;

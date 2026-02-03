@@ -10,11 +10,11 @@ import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
 import { useJoinLeague } from '../../hooks/leagues/useJoinLeague';
 import { Toast } from '../ui/Toast';
 import { motion } from 'framer-motion';
-import { useAuth } from '../../contexts/AuthContext';
 import WarningCard from '../ui/cards/WarningCard';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
+import { useAuth } from '../../contexts/auth/AuthContext';
 
 
 export default function JoinLeagueByCode() {

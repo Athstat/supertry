@@ -1,6 +1,5 @@
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
 import LearnScrummyNoticeCard from '../branding/help/LearnScrummyNoticeCard';
-import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
 import BlueGradientCard from '../ui/cards/BlueGradientCard';
@@ -14,6 +13,7 @@ import { smartRoundUp } from '../../utils/intUtils';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 import { useUserRoundTeam } from '../../hooks/fantasy/useUserRoundTeam';
 import { ISeasonRound } from '../../types/fantasy/fantasySeason';
+import { useAuth } from '../../contexts/auth/AuthContext';
 
 type Props = {
   leagueGroup: FantasyLeagueGroup;

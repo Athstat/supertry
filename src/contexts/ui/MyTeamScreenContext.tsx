@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext } from "react"
-import { IFantasyLeagueTeam } from "../types/fantasyLeague"
+import { IFantasyLeagueTeam } from "../../types/fantasyLeague";
 
 type MyTeamScreenContextProps = {
     onUpdateTeam: (team: IFantasyLeagueTeam) => void,

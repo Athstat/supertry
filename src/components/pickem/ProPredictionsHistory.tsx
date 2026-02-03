@@ -10,7 +10,7 @@ import { ProGameVote } from "../../types/proPredictions";
 import { gamesService } from "../../services/gamesService";
 import FixtureCard from "../fixture/FixtureCard";
 import RoundedCard from "../ui/cards/RoundedCard";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/auth/AuthContext";
 
 export default function UserProPredictionsHistoryTab() {
 

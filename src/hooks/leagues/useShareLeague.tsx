@@ -1,4 +1,4 @@
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/auth/AuthContext";
 import { analytics } from "../../services/analytics/anayticsService";
 import { leagueInviteService } from "../../services/fantasy/leagueInviteService";
 import { DjangoUserMinimal } from "../../types/auth";

@@ -1,7 +1,7 @@
 import { useCallback, useContext, useMemo } from "react";
-import { SeasonTeamsContext } from "../../contexts/SeasonTeamsContext";
 import { IAthleteTeam, IProAthlete } from "../../types/athletes";
 import { useFantasySeasons } from "../dashboard/useFantasySeasons";
+import { SeasonTeamsContext } from "../../contexts/data/SeasonTeamsContext";
 
 export function useSeasonTeams() {
 

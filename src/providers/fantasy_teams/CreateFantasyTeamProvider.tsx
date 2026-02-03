@@ -1,8 +1,8 @@
 import { ReactNode, useEffect, useState } from "react"
 import { IFantasyLeagueTeam } from "../../types/fantasyLeague"
-import { useAuth } from "../../contexts/AuthContext";
 import FantasyTeamProvider from "./FantasyTeamProvider";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
+import { useAuth } from "../../contexts/auth/AuthContext";
 
 
 type Props = {

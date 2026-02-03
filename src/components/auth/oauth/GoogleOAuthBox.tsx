@@ -4,9 +4,9 @@ import { authService } from "../../../services/authService"
 import { isFirstVisitCompleted, markFirstVisitCompleted } from "../../../utils/firstVisitUtils"
 import { Fragment, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { ErrorMessage } from "../../ui/ErrorState"
 import PrimaryButton from "../../ui/buttons/PrimaryButton"
-import { useAuth } from "../../../contexts/AuthContext"
+import { useAuth } from "../../../contexts/auth/AuthContext"
+import ErrorCard from "../../ui/cards/ErrorCard"
 
 type Props = {
     className?: string
@@ -96,7 +96,7 @@ export default function GoogleOAuthBox({ className }: Props) {
             </PrimaryButton>
 
             {error && (
-                <ErrorMessage message={error} />
+                <ErrorCard message={error} />
             )}
 
         </Fragment>

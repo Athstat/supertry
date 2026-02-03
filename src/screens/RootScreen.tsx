@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
 import { WelcomeScreen } from "./auth/WelcomeScreen";
 import { isFirstAppVisit, markAppVisited } from "../utils/firstVisitUtils";
 import RouteErrorBoundary from "../components/ui/navigation/RouteErrorBoundary";
 import { analytics } from "../services/analytics/anayticsService";
+import { useAuth } from "../contexts/auth/AuthContext";
 
 // First Visit handler component
 export function RootScreen() {
