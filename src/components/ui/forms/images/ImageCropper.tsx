@@ -1,6 +1,6 @@
-import { SyntheticEvent, useEffect, useState } from 'react';
+import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import 'react-image-crop/dist/ReactCrop.css'
-import ReactCrop, { makeAspectCrop, type Crop } from 'react-image-crop'
+import ReactCrop, { centerCrop, makeAspectCrop, PixelCrop } from 'react-image-crop'
 import PrimaryButton from '../../buttons/PrimaryButton';
 import { CropIcon } from 'lucide-react';
 
@@ -14,14 +14,33 @@ type Props = {
 
 export default function ImageCropper({ file, setFile, aspect = 1, minWidth = 100, minHeight = 100 }: Props) {
 
-    const [crop, setCrop] = useState<Crop>();
+    const imageRef = useRef<HTMLImageElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+
+    const [crop, setCrop] = useState<PixelCrop>();
     const imageSrc = URL.createObjectURL(file);
 
     const [isCropping, setIsCropping] = useState(true);
     const toggleIsCropping = () => setIsCropping(prev => !prev);
 
-    const handleConfirmCrop = () => {
+    const handleConfirmCrop = async () => {
+        const image = imageRef.current;
+        const canvas = canvasRef.current;
+
+        if (!image || !canvas || !crop || !setFile) {
+            return null;
+        }
+
+        const newFile = await createCroppedImage(
+            image, canvas, crop, file
+        );
+
+        if (!newFile) {
+            return null;
+        }
+
         setIsCropping(false);
+        setFile(newFile);
     }
 
     const handleImageLoad = (e: SyntheticEvent<HTMLImageElement, Event>) => {
@@ -36,7 +55,9 @@ export default function ImageCropper({ file, setFile, aspect = 1, minWidth = 100
             height: minHeight
         }, aspect, width, height);
 
-        setCrop(defaultCrop);
+        const centeredCrop = centerCrop(defaultCrop, width, height)
+
+        setCrop(centeredCrop);
     }
 
     useEffect(() => {
@@ -61,12 +82,14 @@ export default function ImageCropper({ file, setFile, aspect = 1, minWidth = 100
                 minWidth={minWidth}
                 minHeight={minHeight}
             >
-                <img src={imageSrc} onLoad={handleImageLoad} />
+                <img ref={imageRef} src={imageSrc} onLoad={handleImageLoad} />
             </ReactCrop>}
 
             {!isCropping &&
                 <img src={imageSrc} onLoad={handleImageLoad} />
             }
+
+            <canvas style={{display: "none"}} ref={canvasRef} />
 
         </div>
     )
@@ -108,4 +131,51 @@ function Controls({ isCropping, onStartCrop, onConfirmCrop }: ControlsProps) {
             </div>
         </div>
     )
+}
+
+async function createCroppedImage(image: HTMLImageElement, canvas: HTMLCanvasElement, crop: PixelCrop, file: File) : Promise<File | undefined> {
+    
+    const ctx = canvas.getContext("2d");
+
+    if (!ctx) {
+        return undefined;
+    }
+
+    const pixelRatio = window.devicePixelRatio;
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
+
+    canvas.width = Math.floor(crop.width * scaleX * pixelRatio);
+    canvas.height = Math.floor(crop.height * scaleY * pixelRatio);
+
+    ctx.scale(pixelRatio, pixelRatio);
+    ctx.imageSmoothingQuality = "high";
+    ctx.save();
+
+    const cropX = crop.x * scaleX;
+    const cropY = crop.y * scaleY;
+
+    ctx.translate(-cropX, cropY);
+    ctx.drawImage(
+        image,
+        0,
+        0,
+        image.naturalWidth,
+        image.naturalHeight,
+        0,
+        0,
+        image.naturalWidth,
+        image.naturalHeight
+    );
+
+    ctx.restore();
+
+    const fileType = file.type;
+    const blob = await new Promise((resolve) => {
+        canvas.toBlob(resolve, fileType, 0.95);
+    });
+
+    const newFile = new File([blob as Blob], `${file.name}`, {type: fileType});
+    return newFile || undefined;
+
 }
