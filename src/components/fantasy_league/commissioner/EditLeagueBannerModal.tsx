@@ -61,7 +61,7 @@ export function EditLeagueBannerModal({ isOpen, onClose }: EditLeagueBannerProps
                 title="Edit Banner"
                 onClose={onClose}
                 onUpload={handleUpload}
-                aspect={3/1}
+                aspect={16/7}
                 minHeight={150}
                 minWidth={undefined}
                 isLoading={isUploading}

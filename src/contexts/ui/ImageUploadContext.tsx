@@ -7,6 +7,7 @@ type ImageUploadContextProps = {
     minWidth?: number,
     minHeight?: number,
     isLoading?: boolean,
+    croppedFile?: File
 
     setFile: (file: File | undefined) => void,
     setError?: Dispatch<SetStateAction<string | undefined>>,
@@ -34,6 +35,8 @@ export default function ImageUploadProvider({ children, onUploadFile, isLoading,
     const [fileUrl, setFileUrl] = useState<string | undefined>(initFileUrl);
     const [error, setError] = useState<string>();
 
+    const [croppedFile, setCroppedFile] = useState<File>();
+
     const handleUpload = () => {
 
         if (onUploadFile && croppedFileRef.current) {
@@ -43,6 +46,7 @@ export default function ImageUploadProvider({ children, onUploadFile, isLoading,
 
     const handleConfirmCrop = (file: File) => {
         croppedFileRef.current = file;
+        setCroppedFile(file);
     }
 
     const setFile = (file: File | undefined) => {
@@ -76,6 +80,7 @@ export default function ImageUploadProvider({ children, onUploadFile, isLoading,
                 minHeight,
                 minWidth,
                 aspect,
+                croppedFile
             }}
         >
             {children}

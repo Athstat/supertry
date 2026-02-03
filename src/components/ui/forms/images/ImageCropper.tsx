@@ -115,7 +115,7 @@ async function createCroppedImage(image: HTMLImageElement, canvas: HTMLCanvasEle
     const cropX = crop.x * scaleX;
     const cropY = crop.y * scaleY;
 
-    ctx.translate(-cropX, cropY);
+    ctx.translate(-cropX, -cropY);
     ctx.drawImage(
         image,
         0,
