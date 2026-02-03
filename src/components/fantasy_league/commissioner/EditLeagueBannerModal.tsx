@@ -30,6 +30,7 @@ export function EditLeagueBannerModal({ isOpen, onClose }: EditLeagueBannerProps
             if (!league) {
                 return;
             }
+            
 
             setError(undefined);
             setUploading(true);
