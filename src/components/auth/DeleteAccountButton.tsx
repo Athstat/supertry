@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react'
-import { useAuth } from '../../contexts/AuthContext';
 import { logger } from '../../services/logger';
+import { useAuth } from '../../contexts/auth/AuthContext';
 
 type Props = {
     isGuestAccount?: boolean

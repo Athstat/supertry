@@ -3,14 +3,14 @@ import { Fragment, useState } from 'react'
 import { authService } from '../../../services/authService';
 import { isFirstVisitCompleted, markFirstVisitCompleted } from '../../../utils/firstVisitUtils';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../contexts/AuthContext';
 import AppleSignin from "react-apple-signin-auth";
-import { ErrorMessage } from '../../ui/ErrorState';
 import PrimaryButton from '../../ui/buttons/PrimaryButton';
 import { isInProduction } from '../../../utils/webUtils';
 import WarningCard from '../../ui/cards/WarningCard';
 import { TriangleAlert } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
+import { useAuth } from '../../../contexts/auth/AuthContext';
+import ErrorCard from '../../ui/cards/ErrorCard';
 
 type Props = {
     className?: string
@@ -121,7 +121,7 @@ export default function AppleOAuthBox({className} : Props) {
             />
 
             {error && (
-                <ErrorMessage message={error} />
+                <ErrorCard message={error} />
             )}
         </Fragment>
     )

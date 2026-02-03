@@ -1,11 +1,11 @@
 import { createContext, useContext, ReactNode, useCallback, Activity, useState, useEffect } from 'react';
-import { authService } from '../services/authService';
-import { useAuthToken } from '../providers/AuthTokenProvider';
 import useSWR, { KeyedMutator } from 'swr';
-import { AuthStatus, DjangoAuthUser } from '../types/auth';
-import ScrummyLoadingState from '../components/ui/ScrummyLoadingState';
-import { analytics } from '../services/analytics/anayticsService';
-import { CACHING_CONFIG } from '../types/constants';
+import ScrummyLoadingState from '../../components/ui/ScrummyLoadingState';
+import { useAuthToken } from '../../providers/AuthTokenProvider';
+import { analytics } from '../../services/analytics/anayticsService';
+import { authService } from '../../services/authService';
+import { DjangoAuthUser, AuthStatus } from '../../types/auth';
+import { CACHING_CONFIG } from '../../types/constants';
 
 type AuthContextType = {
   isAuthenticated: boolean;

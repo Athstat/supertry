@@ -1,7 +1,5 @@
 import { createContext, ReactNode, useState } from "react"
-import { Country, countryFlags } from "../types/countries"
-import { OnboardingFavouriteTeam } from "../types/onboarding"
-import { useGeoLocation } from "../hooks/web/useGeoLocation"
+import { OnboardingFavouriteTeam } from "../../types/onboarding";
 
 type OnboardingContextType = {
     favouriteTeams: OnboardingFavouriteTeam[],

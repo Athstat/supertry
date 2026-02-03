@@ -3,8 +3,8 @@ import { isSeasonRoundLocked } from "../../utils/leaguesUtils";
 import { swrFetchKeys } from "../../utils/swrKeys";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 import { fantasySeasonTeamService } from "../../services/fantasy/fantasySeasonTeamService";
-import { useAuth } from "../../contexts/AuthContext";
 import { useFantasySeasons } from "../dashboard/useFantasySeasons";
+import { useAuth } from "../../contexts/auth/AuthContext";
 
 /** Returns a summary of a user round scoring  */
 export function useRoundScoringSummaryV2(seasonRound?: ISeasonRound) {

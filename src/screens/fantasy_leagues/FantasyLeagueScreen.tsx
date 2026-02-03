@@ -17,6 +17,7 @@ import { EditLeagueBannerModal } from "../../components/fantasy_league/commissio
 import { EditLeagueInfoModal } from "../../components/fantasy_league/commissioner/EditLeagueInfoModal";
 import EditLeagueLogoModal from "../../components/fantasy_league/commissioner/EditLeagueLogoModal";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
+import ImageUploadModal from "../../components/ui/forms/images/ImageUploadModal";
 
 /** Renders a fantasy League screen */
 export default function FantasyLeagueScreen() {
@@ -84,6 +85,10 @@ function Content() {
             </Activity>
 
             <Modals />
+
+            <ImageUploadModal 
+                title="Edit Logo"
+            />
 
         </PageView>
     )

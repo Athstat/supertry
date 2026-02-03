@@ -4,7 +4,6 @@ import {
 } from '../../../types/fantasyLeagueGroups';
 import SecondaryText from '../../ui/typography/SecondaryText';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { useAuth } from '../../../contexts/AuthContext';
 import RoundedCard from '../../ui/cards/RoundedCard';
 import { useLeagueGroupStandings } from '../../../hooks/fantasy/standings/useLeagueGroupOverallStandings';
 import { fantasyAnalytics } from '../../../services/analytics/fantasyAnalytics';
@@ -14,6 +13,7 @@ import { LeagueStandingsTableRow } from './LeagueStandingsTableRow';
 import StickyUserRankingCard from './StickyUserRankingCard';
 import { isSeasonRoundLocked } from '../../../utils/leaguesUtils';
 import { ISeasonRound } from '../../../types/fantasy/fantasySeason';
+import { useAuth } from '../../../contexts/auth/AuthContext';
 
 type Props = {
   round?: ISeasonRound

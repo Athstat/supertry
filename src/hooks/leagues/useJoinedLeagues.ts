@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import useSWR from "swr";
 import { fantasyLeagueGroupsService } from "../../services/fantasy/fantasyLeagueGroupsService";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/auth/AuthContext";
 
 /** Hook that fetches a user's joined leagues */
 export function useJoinedLeagues(fantasySeasonId?: string) {

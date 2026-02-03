@@ -1,9 +1,9 @@
 import { useCallback, useContext, useState } from "react";
-import { InternalUserProfileContext } from "../../contexts/InternalUserProfileContext";
 import { UpdatedUserInternalProfileReq } from "../../types/auth";
 import { logger } from "../../services/logger";
 import { userService } from "../../services/userService";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/auth/AuthContext";
+import { InternalUserProfileContext } from "../../contexts/auth/InternalUserProfileContext";
 
 export function useInternalUserProfile() {
 

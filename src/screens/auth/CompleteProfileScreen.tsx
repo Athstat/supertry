@@ -16,7 +16,6 @@ import FormStepIndicator from '../../components/ui/forms/FormStepIndicator';
 import InputField, { PasswordInputField } from '../../components/ui/forms/InputField';
 import NoContentCard from '../../components/ui/typography/NoContentMessage';
 import SecondaryText from '../../components/ui/typography/SecondaryText';
-import { useAuth } from '../../contexts/AuthContext';
 import { useEmailUniqueValidator } from '../../hooks/useEmailUniqueValidator';
 import { authAnalytics } from '../../services/analytics/authAnalytics';
 import { authService } from '../../services/authService';
@@ -25,6 +24,7 @@ import { ClaimGuestAccountReq } from '../../types/auth';
 import { validatePassword } from '../../utils/authUtils';
 import { emailValidator } from '../../utils/stringUtils';
 import ErrorCard from '../../components/ui/cards/ErrorCard';
+import { useAuth } from '../../contexts/auth/AuthContext';
 
 export function CompleteProfileScreen() {
   const atoms = [authUserAtom, isGuestUserAtom];

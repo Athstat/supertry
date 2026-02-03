@@ -1,7 +1,7 @@
 import { Navigate, useLocation, useSearchParams } from "react-router-dom";
 import ScrummyLoadingState from "../../ui/ScrummyLoadingState";
 import RouteErrorBoundary from "../../ui/navigation/RouteErrorBoundary";
-import { useAuth } from "../../../contexts/AuthContext";
+import { useAuth } from "../../../contexts/auth/AuthContext";
 
 // Protected route component with error boundary
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {

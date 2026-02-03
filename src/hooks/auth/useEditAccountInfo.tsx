@@ -1,8 +1,8 @@
 import { useState, useMemo, useCallback } from "react";
-import { useAuth } from "../../contexts/AuthContext";
 import { logger } from "../../services/logger";
 import { userService } from "../../services/userService";
 import { EditAccountInfoForm } from "../../types/auth";
+import { useAuth } from "../../contexts/auth/AuthContext";
 
 export function useEditAccountInfo() {
     const { authUser, refreshAuthUser } = useAuth();

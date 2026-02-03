@@ -1,12 +1,12 @@
 import { IFantasyLeagueTeam } from './../../types/fantasyLeague';
 import { useCallback, useState } from "react";
-import { useAuth } from "../../contexts/AuthContext";
 import { analytics } from "../../services/analytics/anayticsService";
 import { ICreateFantasyTeamAthleteItem } from "../../types/fantasyTeamAthlete";
 import { useCreateFantasyTeam } from "./useCreateFantasyTeam";
 import { fantasySeasonTeamService } from '../../services/fantasy/fantasySeasonTeamService';
 import { useLeagueConfig } from '../useLeagueConfig';
-import { useMyTeamScreen } from '../../contexts/MyTeamScreenContext';
+import { useAuth } from '../../contexts/auth/AuthContext';
+import { useMyTeamScreen } from '../../contexts/ui/MyTeamScreenContext';
 
 /** Hook for submitting a fantasy league team */
 export function useSubmitTeam(onSuccess?: (createdTeam:IFantasyLeagueTeam) => void) {

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
-export function useScrollTo(ref: React.RefObject<HTMLElement>) {
-  useEffect(() => {
+export function useScrollTo(ref: React.RefObject<HTMLElement | null>) {
+  useEffect(() => { 
     if (ref.current) {
       ref.current.scrollIntoView({ behavior: 'smooth' });
     }

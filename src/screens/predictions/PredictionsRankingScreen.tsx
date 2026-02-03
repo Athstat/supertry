@@ -7,7 +7,7 @@ import { IStatCard, TopicPageView } from "../../components/ui/containers/PageVie
 import ProPredictionsLeaderboard from "../../components/pickem/ProPredictionsLeaderboard";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../../components/ui/tabs/TabView";
 import UserProPredictionsHistoryTab from "../../components/pickem/ProPredictionsHistory";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/auth/AuthContext";
 
 export default function PredictionsRankingScreen() {
 

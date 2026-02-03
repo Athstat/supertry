@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { useAuth } from "../../contexts/AuthContext"
 import { requestPushPermissions } from "../../utils/bridgeUtils";
+import { useAuth } from "../../contexts/auth/AuthContext";
 
 /** Function that will check if a user has been alerted to enable
  * notifications before and if not prompts user to enable them 

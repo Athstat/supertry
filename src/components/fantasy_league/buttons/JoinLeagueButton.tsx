@@ -4,10 +4,10 @@ import { Activity, Fragment, useMemo } from 'react'
 import { Toast } from '../../ui/Toast'
 import { useJoinLeague } from '../../../hooks/leagues/useJoinLeague'
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup'
-import { useAuth } from '../../../contexts/AuthContext'
 import useSWR from 'swr'
 import { fantasyLeagueGroupsService } from '../../../services/fantasy/fantasyLeagueGroupsService'
 import LeagueInviteButton from './LeagueInviteButton'
+import { useAuth } from '../../../contexts/auth/AuthContext'
 
 type Props = {
     league: FantasyLeagueGroup

@@ -12,8 +12,8 @@ import { Toast } from "../ui/Toast";
 import UnsavedChangesWarningModal from "../ui/modals/UnsavedChangesModal";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 import { fantasySeasonTeamService } from "../../services/fantasy/fantasySeasonTeamService";
-import { useAuth } from "../../contexts/AuthContext";
-import { useMyTeamScreen } from "../../contexts/MyTeamScreenContext";
+import { useAuth } from "../../contexts/auth/AuthContext";
+import { useMyTeamScreen } from "../../contexts/ui/MyTeamScreenContext";
 
 type Props = {
     onTeamUpdated: () => Promise<void>

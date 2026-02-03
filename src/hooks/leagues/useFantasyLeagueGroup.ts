@@ -10,8 +10,8 @@ import {
 import { useMemo } from 'react';
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
 import { fantasyLeagueGroupsService } from '../../services/fantasy/fantasyLeagueGroupsService';
-import { useAuth } from '../../contexts/AuthContext';
 import { isLeagueRoundLocked } from '../../utils/leaguesUtils';
+import { useAuth } from '../../contexts/auth/AuthContext';
 
 /** Hook that provides fantasy league group info. Should be used with in the fantasy league group provider */
 export function useFantasyLeagueGroup() {

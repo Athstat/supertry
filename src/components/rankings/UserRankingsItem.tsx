@@ -1,7 +1,7 @@
 import { UserRanking } from "../../types/userRanking"
 import { Medal, UserCircle } from "lucide-react";
 import { twMerge } from "tailwind-merge";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/auth/AuthContext";
 
 type Props = {
     index: number,

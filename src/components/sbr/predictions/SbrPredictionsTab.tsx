@@ -5,8 +5,8 @@ import { BowArrow } from "lucide-react";
 import { XCircle } from "lucide-react";
 import { Percent } from "lucide-react";
 import SbrPredictionsTabLeaderboard from "./SbrPredictionsTabLeaderboard";
-import { useAuth } from "../../../contexts/AuthContext";
 import useSWR from "swr";
+import { useAuth } from "../../../contexts/auth/AuthContext";
 
 export default function SbrPredictionsTab() {
 

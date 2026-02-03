@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { RegisterUserReq } from '../../types/auth';
-import { useAuth } from '../../contexts/AuthContext';
 import { analytics } from '../../services/analytics/anayticsService';
 import { authService } from '../../services/authService';
 import { ProgressIndicator } from '../../components/auth/signup/ProgressIndicator';
@@ -10,6 +9,7 @@ import { OnboardingStep2Email } from '../../components/auth/signup/OnboardingSte
 import { OnboardingStep3Password } from '../../components/auth/signup/OnboardingStep3Password';
 import { OnboardingStep4Review } from '../../components/auth/signup/OnboardingStep4Review';
 import { AuthLayout } from '../../components/auth/layouts/AuthLayout';
+import { useAuth } from '../../contexts/auth/AuthContext';
 
 interface OnboardingState {
   username: string;
