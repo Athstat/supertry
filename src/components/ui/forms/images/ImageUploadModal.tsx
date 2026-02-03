@@ -8,16 +8,19 @@ import FileInput from "../FileInput"
 import ImageCropper from "./ImageCropper"
 
 type Props = {
-  isOpen?: boolean,
-  onClose?: () => void,
   title?: string,
-  onUpload?: (file: File) => void,
   initFile?: File,
+  isOpen?: boolean,
   isLoading?: boolean
+  onClose?: () => void,
+  onUpload?: (file: File) => void,
+  aspect?: number,
+  minHeight?: number,
+  minWidth?: number
 }
 
 /** Renders a modal for uploading an image */
-export default function ImageUploadModal({ isOpen, onClose, title, initFile, isLoading, onUpload }: Props) {
+export default function ImageUploadModal({ isOpen, onClose, title, initFile, isLoading, onUpload, minHeight, minWidth, aspect }: Props) {
 
   if (!isOpen) {
     return null;
@@ -28,6 +31,9 @@ export default function ImageUploadModal({ isOpen, onClose, title, initFile, isL
       initFile={initFile}
       onUploadFile={onUpload}
       isLoading={isLoading}
+      minHeight={minHeight}
+      minWidth={minWidth}
+      aspect={aspect}
     >
       <BottomSheetView
         className="max-h-[90vh] min-h-[90vh] border-t border-slate-600 p-4 flex flex-col gap-6"
@@ -79,7 +85,7 @@ function Header({ onClose, title, showSave = false }: HeaderProps) {
 
 function BodySection() {
 
-  const { file, setFile, setCroppedFile } = useImageUpload();
+  const { file, setFile, setCroppedFile, aspect, minHeight, minWidth } = useImageUpload();
   const inputFiles = file ? [file] : [];
 
   const handleSetFiles = (inputFiles: File[]) => {
@@ -102,6 +108,9 @@ function BodySection() {
         <ImageCropper
           file={file}
           onConfirmCrop={setCroppedFile}
+          aspect={aspect}
+          minHeight={minHeight}
+          minWidth={minWidth}
         />
       )}
 

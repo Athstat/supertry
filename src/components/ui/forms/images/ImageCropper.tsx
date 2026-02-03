@@ -10,7 +10,7 @@ type Props = {
     onConfirmCrop?: (file: File) => void,
 }
 
-export default function ImageCropper({ file, onConfirmCrop, aspect = 1, minWidth = 100, minHeight = 100 }: Props) {
+export default function ImageCropper({ file, onConfirmCrop, aspect = 1, minWidth = 500, minHeight = 500}: Props) {
 
     const imageRef = useRef<HTMLImageElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);

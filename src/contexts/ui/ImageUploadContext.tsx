@@ -8,6 +8,9 @@ type ImageUploadContextProps = {
     uploadFile?: () => void,
     isLoading?: boolean,
     setCroppedFile: (file: File) => void,
+    aspect?: number,
+    minHeight?: number,
+    minWidth?: number
 }
 
 export const ImageUploadContext = createContext<ImageUploadContextProps | null>(null);
@@ -16,11 +19,14 @@ type Props = {
     children?: ReactNode,
     initFile?: File,
     onUploadFile?: (file: File) => void,
-    isLoading?: boolean
+    isLoading?: boolean,
+    aspect?: number,
+    minHeight?: number,
+    minWidth?: number
 }
 
 /** Provides context for image uploading */
-export default function ImageUploadProvider({ children, initFile, onUploadFile, isLoading }: Props) {
+export default function ImageUploadProvider({ children, initFile, onUploadFile, isLoading, aspect, minHeight, minWidth }: Props) {
 
     const croppedFileRef = useRef<File>(null);
 
@@ -42,9 +48,12 @@ export default function ImageUploadProvider({ children, initFile, onUploadFile, 
             value={{
                 file, setFile,
                 error, setError,
-                uploadFile: handleUpload, 
+                uploadFile: handleUpload,
                 isLoading,
-                setCroppedFile: handleConfirmCrop
+                setCroppedFile: handleConfirmCrop,
+                minHeight,
+                minWidth,
+                aspect
             }}
         >
             {children}
