@@ -1,7 +1,7 @@
 import React from 'react';
 import ErrorBoundary, { FallbackProps } from './ErrorBoundary';
 import { useLocation } from 'react-router-dom';
-import { useAppReload } from '../../../contexts/AppStateContext';
+import { useAppReload } from '../../../contexts/app_state/AppStateContext';
 
 interface RouteErrorBoundaryProps {
   children: React.ReactNode;
