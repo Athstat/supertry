@@ -44,7 +44,7 @@ export default function ImageCropper({ imageUrl, onConfirmCrop, aspect = 1, minW
             x: 0,
             y: 0,
             unit: 'px',
-            width: minHeight * aspect,
+            width: minWidth,
             height: minHeight
         }, aspect, width, height);
 
@@ -60,7 +60,7 @@ export default function ImageCropper({ imageUrl, onConfirmCrop, aspect = 1, minW
 
         const timeout = setTimeout(() => {
             handleConfirmCrop(crop);
-        }, 500);
+        }, 50);
 
         return () => {
             clearTimeout(timeout);
