@@ -10,7 +10,7 @@ type Props = {
     onConfirmCrop?: (file: File) => void,
 }
 
-export default function ImageCropper({ imageUrl, onConfirmCrop, aspect = 1, minWidth = 500, minHeight = 500}: Props) {
+export default function ImageCropper({ imageUrl, onConfirmCrop, aspect = 1, minWidth = 500, minHeight = 500 }: Props) {
 
     const imageRef = useRef<HTMLImageElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -78,11 +78,11 @@ export default function ImageCropper({ imageUrl, onConfirmCrop, aspect = 1, minW
                 minWidth={minWidth}
                 minHeight={minHeight}
             >
-                
-                <img 
-                    ref={imageRef} 
-                    src={imageUrl} 
-                    onLoad={handleImageLoad} 
+
+                <img
+                    ref={imageRef}
+                    src={imageUrl}
+                    onLoad={handleImageLoad}
                     key={imageUrl}
                 />
 
@@ -129,16 +129,14 @@ async function createCroppedImage(image: HTMLImageElement, canvas: HTMLCanvasEle
     );
 
     ctx.restore();
-
+    
     const blob = await new Promise((resolve) => {
-        canvas.toBlob(resolve, fileType, 0.95);
+        canvas.toBlob(resolve, "image/webp", 0.95);
     });
     
     const fileType = (blob as Blob).type;
     const fileName = `image_${new Date().valueOf()}.${fileType.split('/').at(1)}`;
 
-    console.log("File Name ", fileName);
-    
     const newFile = new File([blob as Blob], `${fileName}`, { type: fileType });
     return newFile || undefined;
 

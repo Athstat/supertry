@@ -35,6 +35,7 @@ export default function ImageUploadProvider({ children, onUploadFile, isLoading,
     const [error, setError] = useState<string>();
 
     const handleUpload = () => {
+
         if (onUploadFile && croppedFileRef.current) {
             onUploadFile(croppedFileRef.current)
         }
