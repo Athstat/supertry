@@ -62,7 +62,7 @@ function Content({ onClose, title }: ContentProps) {
   const { 
     uploadFile, isLoading, fileUrl, 
     setFile, aspect, minHeight, 
-    minWidth, setCroppedFile, croppedFile
+    minWidth, setCroppedFile
   } = useImageUpload();
 
   const showSave = Boolean(fileUrl);
@@ -72,8 +72,6 @@ function Content({ onClose, title }: ContentProps) {
       setFile(inputFiles[0]);
     }
   }
-
-  const croppedFileUrl = croppedFile ? URL.createObjectURL(croppedFile) : null;
 
   return (
     <div className="flex flex-col gap-6" >
@@ -126,13 +124,6 @@ function Content({ onClose, title }: ContentProps) {
           >
             Select Different Image
           </PrimaryButton>
-        )}
-
-        {croppedFileUrl && (
-          <img 
-            src={croppedFileUrl}
-            alt="preview"
-          />
         )}
 
       </div>
