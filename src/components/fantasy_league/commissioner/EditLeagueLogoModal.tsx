@@ -32,11 +32,13 @@ export default function EditLeagueLogoModal({ isOpen, onClose }: Props) {
             setError(undefined);
             setUploading(true);
 
+            if (league?.id) {
+                return;
+            }
+
             const updatedLeague = await fantasyLeagueGroupsService.updateBannerAndLogo(league?.id || '', undefined, logo);
 
             if (updatedLeague) {
-
-                console.log("It Worked!", updatedLeague);
 
                 mutateLeague(updatedLeague);
                 setUploading(false);

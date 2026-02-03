@@ -44,7 +44,7 @@ export default function ImageCropper({ imageUrl, onConfirmCrop, aspect = 1, minW
             x: 0,
             y: 0,
             unit: 'px',
-            width: minWidth,
+            width: minHeight * aspect,
             height: minHeight
         }, aspect, width, height);
 
@@ -60,7 +60,7 @@ export default function ImageCropper({ imageUrl, onConfirmCrop, aspect = 1, minW
 
         const timeout = setTimeout(() => {
             handleConfirmCrop(crop);
-        }, 50);
+        }, 500);
 
         return () => {
             clearTimeout(timeout);
@@ -133,9 +133,14 @@ async function createCroppedImage(image: HTMLImageElement, canvas: HTMLCanvasEle
     const blob = await new Promise((resolve) => {
         canvas.toBlob(resolve, "image/webp", 0.95);
     });
+
+    if (!blob) {
+        return undefined;
+    }
     
     const fileType = (blob as Blob).type;
     const fileName = `image_${new Date().valueOf()}.${fileType.split('/').at(1)}`;
+
 
     const newFile = new File([blob as Blob], `${fileName}`, { type: fileType });
     return newFile || undefined;

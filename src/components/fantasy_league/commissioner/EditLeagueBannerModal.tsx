@@ -30,7 +30,11 @@ export function EditLeagueBannerModal({ isOpen, onClose }: EditLeagueBannerProps
             setError(undefined);
             setUploading(true);
 
-            const updatedLeague = await fantasyLeagueGroupsService.updateBannerAndLogo(league?.id || '', banner);
+            if (league?.id) {
+                return;
+            }
+
+            const updatedLeague = await fantasyLeagueGroupsService.updateBannerAndLogo(league?.id || '', banner, undefined);
 
             if (updatedLeague) {
                 mutateLeague(updatedLeague);
