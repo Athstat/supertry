@@ -96,7 +96,7 @@ function Content({ onClose, title }: ContentProps) {
         </div>}
       </div>
 
-      <div className="" >
+      <div className="flex flex-col gap-4" >
 
         {!fileUrl && (
           <FileInput
@@ -113,6 +113,15 @@ function Content({ onClose, title }: ContentProps) {
             minWidth={minWidth}
             imageUrl={fileUrl}
           />
+        )}
+
+        {fileUrl && (
+          <PrimaryButton
+            slate
+            onClick={() => setFile(undefined)}
+          >
+            Select Different Image
+          </PrimaryButton>
         )}
 
       </div>

@@ -49,7 +49,6 @@ export default function ImageCropper({ imageUrl, onConfirmCrop, aspect = 1, minW
         }, aspect, width, height);
 
         const centeredCrop = centerCrop(defaultCrop, width, height)
-
         setCrop(centeredCrop);
     }
 
@@ -70,7 +69,7 @@ export default function ImageCropper({ imageUrl, onConfirmCrop, aspect = 1, minW
     }, [crop, handleConfirmCrop]);
 
     return (
-        <div className='flex flex-col gap-3' >
+        <div className='flex flex-col gap-3 items-center justify-center' >
 
             <ReactCrop
                 crop={crop}
@@ -79,7 +78,14 @@ export default function ImageCropper({ imageUrl, onConfirmCrop, aspect = 1, minW
                 minWidth={minWidth}
                 minHeight={minHeight}
             >
-                <img ref={imageRef} src={imageUrl} onLoad={handleImageLoad} />
+                
+                <img 
+                    ref={imageRef} 
+                    src={imageUrl} 
+                    onLoad={handleImageLoad} 
+                    key={imageUrl}
+                />
+
             </ReactCrop>
 
             <canvas style={{ display: "none" }} ref={canvasRef} />
