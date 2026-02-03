@@ -60,7 +60,6 @@ export default function EditLeagueLogoModal({ isOpen, onClose }: Props) {
             onClose={onClose}
             onUpload={handleUpload}
             isLoading={isUploading}
-            initFileUrl={league?.logo}
         />
     )
 }
