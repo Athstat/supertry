@@ -29,14 +29,15 @@ export default function EditLeagueLogoModal({ isOpen, onClose }: Props) {
 
         try {
 
-            setError(undefined);
-            setUploading(true);
 
-            if (league?.id) {
+            if (!league) {
                 return;
             }
 
-            const updatedLeague = await fantasyLeagueGroupsService.updateBannerAndLogo(league?.id || '', undefined, logo);
+            setError(undefined);
+            setUploading(true);
+
+            const updatedLeague = await fantasyLeagueGroupsService.updateBannerAndLogo(league.id || '', undefined, logo);
 
             if (updatedLeague) {
 
