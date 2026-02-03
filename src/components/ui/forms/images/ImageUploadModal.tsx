@@ -6,6 +6,7 @@ import ImageUploadProvider from "../../../../contexts/ui/ImageUploadContext"
 import { useImageUpload } from "../../../../hooks/ui/useImageUpload"
 import FileInput from "../FileInput"
 import ImageCropper from "./ImageCropper"
+import { useEffect } from "react"
 
 type Props = {
   title?: string,
@@ -16,11 +17,12 @@ type Props = {
   onUpload?: (file: File) => void,
   aspect?: number,
   minHeight?: number,
-  minWidth?: number
+  minWidth?: number,
+  initFileUrl?: string
 }
 
 /** Renders a modal for uploading an image */
-export default function ImageUploadModal({ isOpen, onClose, title, initFile, isLoading, onUpload, minHeight, minWidth, aspect }: Props) {
+export default function ImageUploadModal({ isOpen, onClose, title, isLoading, onUpload, minHeight, minWidth, aspect, initFileUrl }: Props) {
 
   if (!isOpen) {
     return null;
@@ -28,12 +30,12 @@ export default function ImageUploadModal({ isOpen, onClose, title, initFile, isL
 
   return (
     <ImageUploadProvider
-      initFile={initFile}
       onUploadFile={onUpload}
       isLoading={isLoading}
       minHeight={minHeight}
       minWidth={minWidth}
       aspect={aspect}
+      initFileUrl={initFileUrl}
     >
       <BottomSheetView
         className="max-h-[90vh] min-h-[90vh] border-t border-slate-600 p-4 flex flex-col gap-6"
@@ -61,8 +63,8 @@ function Header({ onClose, title, showSave = false }: HeaderProps) {
     <div className="flex flex-row items-center justify-between" >
       <div className="flex flex-row items-center gap-2" >
 
-        <CircleButton 
-          onClick={onClose} 
+        <CircleButton
+          onClick={onClose}
         >
           <X />
         </CircleButton>
@@ -85,7 +87,7 @@ function Header({ onClose, title, showSave = false }: HeaderProps) {
 
 function BodySection() {
 
-  const { file, setFile, setCroppedFile, aspect, minHeight, minWidth } = useImageUpload();
+  const { file, setFile, setCroppedFile, aspect, minHeight, minWidth, initFileUrl } = useImageUpload();
   const inputFiles = file ? [file] : [];
 
   const handleSetFiles = (inputFiles: File[]) => {
@@ -93,6 +95,20 @@ function BodySection() {
       setFile(inputFiles[0]);
     }
   }
+
+  const imageUrl = file ? URL.createObjectURL(file) : initFileUrl;
+
+  useEffect(() => {
+
+    if (!(imageUrl && file)) {
+      return;
+    }
+
+    return () => {
+      URL.revokeObjectURL(imageUrl)
+    }
+  }, [file, imageUrl]);
+
 
   return (
     <div className="" >
@@ -104,13 +120,13 @@ function BodySection() {
         />
       )}
 
-      {file && (
+      {imageUrl && (
         <ImageCropper
-          file={file}
           onConfirmCrop={setCroppedFile}
           aspect={aspect}
           minHeight={minHeight}
           minWidth={minWidth}
+          imageUrl={imageUrl}
         />
       )}
 
