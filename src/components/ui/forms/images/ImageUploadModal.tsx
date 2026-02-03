@@ -23,7 +23,7 @@ type Props = {
 }
 
 /** Renders a modal for uploading an image */
-export default function ImageUploadModal({ isOpen, onClose, title, isLoading, onUpload, minHeight, minWidth, aspect, initFileUrl }: Props) {
+export default function ImageUploadModal({ isOpen, onClose, title, isLoading, onUpload, minHeight, minWidth, aspect, initFileUrl, children }: Props) {
 
   if (!isOpen) {
     return null;
@@ -43,10 +43,14 @@ export default function ImageUploadModal({ isOpen, onClose, title, isLoading, on
         hideHandle
         onClickOutside={onClose}
       >
+
         <Content 
           title={title}
           onClose={onClose}
-        />
+        >
+          {children}
+        </Content>
+
       </BottomSheetView>
     </ImageUploadProvider>
   )
@@ -54,10 +58,11 @@ export default function ImageUploadModal({ isOpen, onClose, title, isLoading, on
 
 type ContentProps = {
   title?: string,
-  onClose?: () => void
+  onClose?: () => void,
+  children?: ReactNode
 }
 
-function Content({ onClose, title }: ContentProps) {
+function Content({ onClose, title, children }: ContentProps) {
 
   const { 
     uploadFile, isLoading, fileUrl, 
@@ -96,6 +101,10 @@ function Content({ onClose, title }: ContentProps) {
             Save
           </PrimaryButton>
         </div>}
+      </div>
+
+      <div>
+        {children}
       </div>
 
       <div className="flex flex-col gap-4" >

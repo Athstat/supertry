@@ -2,9 +2,9 @@ import { useCallback, useState } from "react";
 import { fantasyLeagueGroupsService } from "../../../services/fantasy/fantasyLeagueGroupsService";
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
 import { logger } from "../../../services/logger";
-import { Toast } from "../../ui/Toast";
 import SecondaryText from "../../ui/typography/SecondaryText";
 import ImageUploadModal from "../../ui/forms/images/ImageUploadModal";
+import ErrorCard from "../../ui/cards/ErrorCard";
 
 type EditLeagueBannerProps = {
     isOpen?: boolean,
@@ -61,26 +61,26 @@ export function EditLeagueBannerModal({ isOpen, onClose }: EditLeagueBannerProps
                 title="Edit Banner"
                 onClose={onClose}
                 onUpload={handleUpload}
-                aspect={16/7}
+                aspect={16 / 7}
                 minHeight={150}
                 minWidth={undefined}
                 isLoading={isUploading}
             >
-                <section className="text-xs" >
-                    <p className="text-sm" >Banner image tips:</p>
-                    <SecondaryText>- 1920 × 1080 resolution works best, and avoid using images with any transparencies</SecondaryText>
-                    <SecondaryText>- Max image size is 5MB. For the best look, pick a banner that both matches your brand/identity and the colours and vibe of the app</SecondaryText>
-                </section>
-            </ImageUploadModal>
+                <>
+                    <section className="text-xs" >
+                        <p className="text-sm" >Banner image tips:</p>
+                        <SecondaryText>- Avoid using images with any transparencies!</SecondaryText>
+                        <SecondaryText>- Max image size is 5MB. For the best look, pick a banner that both matches your brand/identity and the colours and vibe of the app</SecondaryText>
+                    </section>
 
-            {error && (
-                <Toast
-                    message={error}
-                    isVisible={true}
-                    type="error"
-                    onClose={() => setError(undefined)}
-                />
-            )}
+                    {error && <ErrorCard
+                        error="Failed to Upload Image"
+                        message={error}
+                        className="items-start justify-start"
+                    />}
+                </>
+
+            </ImageUploadModal>
         </>
     )
 }

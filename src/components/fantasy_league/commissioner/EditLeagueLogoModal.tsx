@@ -3,6 +3,8 @@ import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGr
 import { fantasyLeagueGroupsService } from "../../../services/fantasy/fantasyLeagueGroupsService";
 import { logger } from "../../../services/logger";
 import ImageUploadModal from "../../ui/forms/images/ImageUploadModal";
+import ErrorCard from "../../ui/cards/ErrorCard";
+import SecondaryText from "../../ui/typography/SecondaryText";
 
 type Props = {
     isOpen?: boolean,
@@ -12,7 +14,7 @@ type Props = {
 export default function EditLeagueLogoModal({ isOpen, onClose }: Props) {
 
     const [isUploading, setUploading] = useState(false);
-    const [, setError] = useState<string>();
+    const [error, setError] = useState<string>();
 
     const { league, mutateLeague } = useFantasyLeagueGroup();
 
@@ -24,6 +26,7 @@ export default function EditLeagueLogoModal({ isOpen, onClose }: Props) {
     }, [onClose]);
 
     const handleUpload = useCallback(async (logo: File) => {
+
         try {
 
             setError(undefined);
@@ -32,13 +35,16 @@ export default function EditLeagueLogoModal({ isOpen, onClose }: Props) {
             const updatedLeague = await fantasyLeagueGroupsService.updateBannerAndLogo(league?.id || '', undefined, logo);
 
             if (updatedLeague) {
+
+                console.log("It Worked!", updatedLeague);
+
                 mutateLeague(updatedLeague);
                 setUploading(false);
                 handleClose();
                 return;
             }
 
-            setError("Something went wrong uploading the logo")
+            setError("Something went wrong uploading the logo");
 
         } catch (err) {
             logger.error("Error handling upload ", err);
@@ -54,13 +60,33 @@ export default function EditLeagueLogoModal({ isOpen, onClose }: Props) {
     }
 
     return (
-        <ImageUploadModal
-            title="Edit Logo"
-            isOpen={isOpen}
-            onClose={onClose}
-            onUpload={handleUpload}
-            isLoading={isUploading}
-            minHeight={200}
-        />
+        <>
+            <ImageUploadModal
+                title="Edit Logo"
+                isOpen={isOpen}
+                onClose={onClose}
+                onUpload={handleUpload}
+                isLoading={isUploading}
+                minHeight={200}
+            >
+
+                <>
+
+                    <section className="text-xs" >
+                        <p className="text-sm" >Logo image tips:</p>
+                        <SecondaryText>- Use a sqaure image</SecondaryText>
+                        <SecondaryText>- Max image size is 5MB. For the best look, pick an image that can be framed inside a circle, like a profile picture</SecondaryText>
+                    </section>
+
+                    {error && <ErrorCard
+                        error="Failed to Upload Image"
+                        message={error}
+                        className="items-start justify-start"
+                    />}
+
+                </>
+            </ImageUploadModal>
+
+        </>
     )
 }
