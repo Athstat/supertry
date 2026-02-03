@@ -6,7 +6,6 @@ import ImageUploadProvider from "../../../../contexts/ui/ImageUploadContext"
 import { useImageUpload } from "../../../../hooks/ui/useImageUpload"
 import FileInput from "../FileInput"
 import ImageCropper from "./ImageCropper"
-import { useState } from "react"
 
 type Props = {
   isOpen?: boolean,
@@ -73,6 +72,10 @@ function BodySection() {
     }
   }
 
+  const handleUploadNewFile = () => {
+    setFile(undefined);
+  }
+
   return (
     <div className="" >
 
@@ -88,6 +91,12 @@ function BodySection() {
           file={file}
           setFile={setFile}
         />
+      )}
+
+      {file && (
+        <PrimaryButton onClick={handleUploadNewFile} >
+          Upload New Image
+        </PrimaryButton>
       )}
 
     </div>
