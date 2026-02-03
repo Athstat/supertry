@@ -1,17 +1,16 @@
-import { SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
 import 'react-image-crop/dist/ReactCrop.css'
 import ReactCrop, { centerCrop, makeAspectCrop, PixelCrop } from 'react-image-crop'
-import PrimaryButton from '../../buttons/PrimaryButton';
+
 type Props = {
     file: File,
-    onConfirmCrop?: (file: File) => void,
-    isLoading?: boolean,
     aspect?: number,
     minWidth?: number
     minHeight?: number
+    onConfirmCrop?: (file: File) => void,
 }
 
-export default function ImageCropper({ file, onConfirmCrop, aspect = 1, minWidth = 100, minHeight = 100, isLoading }: Props) {
+export default function ImageCropper({ file, onConfirmCrop, aspect = 1, minWidth = 100, minHeight = 100 }: Props) {
 
     const imageRef = useRef<HTMLImageElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -19,7 +18,7 @@ export default function ImageCropper({ file, onConfirmCrop, aspect = 1, minWidth
     const [crop, setCrop] = useState<PixelCrop>();
     const imageSrc = URL.createObjectURL(file);
 
-    const handleConfirmCrop = async () => {
+    const handleConfirmCrop = useCallback(async (crop: PixelCrop) => {
         const image = imageRef.current;
         const canvas = canvasRef.current;
 
@@ -36,7 +35,7 @@ export default function ImageCropper({ file, onConfirmCrop, aspect = 1, minWidth
         }
 
         onConfirmCrop(newFile);
-    }
+    }, [file, onConfirmCrop]);
 
     const handleImageLoad = (e: SyntheticEvent<HTMLImageElement, Event>) => {
         const width = e.currentTarget.width;
@@ -61,6 +60,22 @@ export default function ImageCropper({ file, onConfirmCrop, aspect = 1, minWidth
         }
     }, [imageSrc]);
 
+    useEffect(() => {
+
+        if (!crop) {
+            return;
+        }
+
+        const timeout = setTimeout(() => {
+            handleConfirmCrop(crop);
+        }, 500);
+
+        return () => {
+            clearTimeout(timeout);
+        }
+
+    }, [crop, handleConfirmCrop]);
+
     return (
         <div className='flex flex-col gap-3' >
 
@@ -75,14 +90,6 @@ export default function ImageCropper({ file, onConfirmCrop, aspect = 1, minWidth
             </ReactCrop>
 
             <canvas style={{ display: "none" }} ref={canvasRef} />
-
-            <PrimaryButton
-                onClick={handleConfirmCrop}
-                disabled={isLoading}
-                isLoading={isLoading}
-            >
-                Crop & Save
-            </PrimaryButton>
         </div>
     )
 }

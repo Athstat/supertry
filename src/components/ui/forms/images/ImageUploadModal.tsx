@@ -12,18 +12,23 @@ type Props = {
   onClose?: () => void,
   title?: string,
   onUpload?: (file: File) => void,
-  initFile?: File
+  initFile?: File,
+  isLoading?: boolean
 }
 
 /** Renders a modal for uploading an image */
-export default function ImageUploadModal({ isOpen, onClose, title, initFile }: Props) {
+export default function ImageUploadModal({ isOpen, onClose, title, initFile, isLoading, onUpload }: Props) {
 
   if (!isOpen) {
     return null;
   }
 
   return (
-    <ImageUploadProvider initFile={initFile} >
+    <ImageUploadProvider
+      initFile={initFile}
+      onUploadFile={onUpload}
+      isLoading={isLoading}
+    >
       <BottomSheetView
         className="max-h-[90vh] min-h-[90vh] border-t border-slate-600 p-4 flex flex-col gap-6"
         hideHandle
@@ -43,11 +48,16 @@ type HeaderProps = {
 }
 
 function Header({ onClose, title, showSave = false }: HeaderProps) {
+
+  const { uploadFile, isLoading } = useImageUpload();
+
   return (
     <div className="flex flex-row items-center justify-between" >
       <div className="flex flex-row items-center gap-2" >
 
-        <CircleButton onClick={onClose} >
+        <CircleButton 
+          onClick={onClose} 
+        >
           <X />
         </CircleButton>
 
@@ -55,7 +65,13 @@ function Header({ onClose, title, showSave = false }: HeaderProps) {
       </div>
 
       {showSave && <div>
-        <PrimaryButton>Save</PrimaryButton>
+        <PrimaryButton
+          onClick={uploadFile}
+          isLoading={isLoading}
+          disabled={isLoading}
+        >
+          Save
+        </PrimaryButton>
       </div>}
     </div>
   )
@@ -63,7 +79,7 @@ function Header({ onClose, title, showSave = false }: HeaderProps) {
 
 function BodySection() {
 
-  const {file, setFile, uploadFile, isLoading} = useImageUpload();  
+  const { file, setFile, setCroppedFile } = useImageUpload();
   const inputFiles = file ? [file] : [];
 
   const handleSetFiles = (inputFiles: File[]) => {
@@ -72,30 +88,20 @@ function BodySection() {
     }
   }
 
-  const handleUploadFile = (file: File) => {
-    if (uploadFile) {
-      setFile(file);
-      uploadFile(file);
-    }
-  }
-
-
-
   return (
     <div className="" >
 
       {!file && (
-        <FileInput 
+        <FileInput
           files={inputFiles}
           setFiles={handleSetFiles}
         />
       )}
 
       {file && (
-        <ImageCropper 
+        <ImageCropper
           file={file}
-          onConfirmCrop={handleUploadFile}
-          isLoading={isLoading}
+          onConfirmCrop={setCroppedFile}
         />
       )}
 
