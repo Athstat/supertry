@@ -27,8 +27,8 @@ export default function ProFixturesScreen() {
   const { fixtures, isLoading } = useProFixtures();
 
   const {
-    handleJumpToCurrentWeek, handleNextWeek, handlePreviousWeek,
-    weekStart, weekHeader, hasAnyFixtures, isCurrentWeek,
+    handleNextWeek,
+    weekStart, hasAnyFixtures,
     weekFixtures
   } = useFixtureCursor({
     fixtures, isLoading
@@ -58,18 +58,11 @@ export default function ProFixturesScreen() {
 
   return (
     <Fragment>
-      <PageView className="dark:text-white lg:w-[60%] p-4 md:p-6 flex flex-col gap-4 pb-28 md:pb-32">
+      <PageView className="dark:text-white flex flex-col gap-4 pb-28 md:pb-32">
 
         <ProMatchCenterHeader
           viewMode={viewMode}
-          onMoveNextWeek={handleNextWeek}
-          onMovePreviousWeek={handlePreviousWeek}
-          onMoveToCurrentWeek={handleJumpToCurrentWeek}
-          hasAnyFixtures={hasAnyFixtures}
-          isCurrentWeek={isCurrentWeek}
           onChangeViewMode={setViewMode}
-          weekHeader={weekHeader}
-          searchQuery={defferedSearchQuery}
         />
 
         {!defferedSearchQuery && <div className="w-full mx-auto">
@@ -113,4 +106,3 @@ export default function ProFixturesScreen() {
     </Fragment>
   );
 }
-
