@@ -91,7 +91,7 @@ function Content() {
       className: ""
     },
     {
-      label: 'Team Rosters',
+      label: 'Team Lineups',
       tabKey: 'rosters',
       disabled: false,
       className: ""

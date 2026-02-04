@@ -3,10 +3,6 @@ import { ErrorInfo, ReactNode, useEffect, useState } from "react"
 import ErrorBoundary, { FallbackProps } from "./components/ui/navigation/ErrorBoundary";
 import NetworkStatusProvider from "./components/network/NetworkStatusProvider";
 import SportActionsDefinitionsProvider from "./providers/SportActionsDefinitionsProvider";
-import { AppStateProvider } from "./contexts/AppStateContext";
-import { AthleteProvider } from "./contexts/AthleteContext";
-import { AuthProvider } from "./contexts/AuthContext";
-import { ThemeProvider } from "./contexts/ThemeContext";
 import AuthTokenProvider from "./providers/AuthTokenProvider";
 import NavigationBarsProvider from "./providers/navigation/NavigationBarsProvider";
 import BrowserHistoryProvider from "./providers/web/BrowserHistoryProvider";
@@ -15,11 +11,15 @@ import FantasySeasonsProvider from "./providers/fantasy_seasons/FantasySeasonsPr
 import CacheProvider from "./providers/caching/CacheProvider";
 import AppErrorFallback from "./components/ui/navigation/AppErrorFallback";
 import TooltipProvider from "./providers/ui/TooltipProvider";
-import SeasonTeamsProvider from "./contexts/SeasonTeamsContext";
 import { FantasySeasonsPickerModal } from "./components/fantasy-seasons/FantasySeasonsPickerModal";
-import GeoLocationProvider from "./contexts/GeoLocationContext";
-import InternalUserProfileProvider from "./contexts/InternalUserProfileContext";
 import { preloadRugbyPitches } from "./components/ui/containers/RugbyPitch";
+import { AppStateProvider } from "./contexts/app_state/AppStateContext";
+import GeoLocationProvider from "./contexts/app_state/GeoLocationContext";
+import { ThemeProvider } from "./contexts/app_state/ThemeContext";
+import { AuthProvider } from "./contexts/auth/AuthContext";
+import InternalUserProfileProvider from "./contexts/auth/InternalUserProfileContext";
+import { AthleteProvider } from "./contexts/data/AthleteContext";
+import SeasonTeamsProvider from "./contexts/data/SeasonTeamsContext";
 
 type Props = {
     children?: ReactNode

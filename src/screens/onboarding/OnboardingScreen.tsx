@@ -8,10 +8,10 @@ import { OnboardingCTASlide } from '../../components/onboarding/slides/Onboardin
 import { OnboardingFriendsSlide } from '../../components/onboarding/slides/OnboardingFriendsSlide';
 import { OnboardingWelcomeSlide } from '../../components/onboarding/slides/OnboardingWelcomeSlide';
 import OnboardingFavouriteTeamSlide from '../../components/onboarding/slides/OnboardingFavouriteTeamSlide';
-import OnboardingProvider from '../../contexts/OnboardingContext';
 import { OnboardingFixturesSlide } from '../../components/onboarding/slides/OnboardingFixturesSlide';
 import { OnboardingPickemSlide } from '../../components/onboarding/slides/OnboardingPickemSlide';
 import { preload } from 'react-dom';
+import OnboardingProvider from '../../contexts/ui/OnboardingContext';
 
 
 /** Renders the onboarding screen */

@@ -1,13 +1,13 @@
 import React, { createContext, useContext, useEffect, useMemo, useState, useTransition } from "react";
 import useSWR from "swr";
-import { swrFetchKeys } from "../utils/swrKeys";
-import { athleteService } from "../services/athletes/athletesService";
-import { IProTeam } from "../types/team";
-import { IProAthlete } from "../types/athletes";
-import { getAthletesSummary } from "../utils/athletes/athleteUtils";
-import { useFantasySeasons } from "../hooks/dashboard/useFantasySeasons";
-import { IProSeason } from "../types/season";
-import { seasonService } from "../services/seasonsService";
+import { useFantasySeasons } from "../../hooks/dashboard/useFantasySeasons";
+import { athleteService } from "../../services/athletes/athletesService";
+import { seasonService } from "../../services/seasonsService";
+import { IProAthlete } from "../../types/athletes";
+import { IProSeason } from "../../types/season";
+import { IProTeam } from "../../types/team";
+import { getAthletesSummary } from "../../utils/athletes/athleteUtils";
+import { swrFetchKeys } from "../../utils/swrKeys";
 
 interface AthleteContextType {
   athletes: IProAthlete[];

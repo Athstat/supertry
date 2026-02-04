@@ -4,10 +4,10 @@ import PlayerCompareSeasonStatsList from '../season_stats/PlayerCompareSeasonSta
 import PlayerPointsHistoryList from '../../../player/player_profile_modal/points_history/PlayerPointsHistoryList';
 import SecondaryText from '../../../ui/typography/SecondaryText';
 import MatchPrCard from '../../../rankings/MatchPrCard';
-import PlayerCompareItemProvider from '../../../../contexts/PlayerCompareItemContext';
 import { usePlayerCompareItem } from '../../../../hooks/athletes/usePlayerCompareItem';
 import RoundedCard from '../../../ui/cards/RoundedCard';
 import PlayerFixtureModal from '../../../fixture/player_fixture_modal/PlayerFixtureModal';
+import PlayerCompareItemProvider from '../../../../contexts/ui/PlayerCompareItemContext';
 
 type Props = {
   player: IProAthlete;

@@ -3,8 +3,8 @@ import SecondaryText from '../../ui/typography/SecondaryText'
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup'
 import RoundedCard from '../../ui/cards/RoundedCard'
 import { ShieldUser } from 'lucide-react'
-import { useAuth } from '../../../contexts/AuthContext'
 import { useFantasyLeagueScreen } from '../../../hooks/fantasy/useFantasyLeagueScreen'
+import { useAuth } from '../../../contexts/auth/AuthContext'
 
 export default function CommissionerZone() {
 

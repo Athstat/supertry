@@ -4,7 +4,7 @@ import { IProSeason } from "../../types/season"
 import { swrFetchKeys } from "../../utils/swrKeys";
 import { athleteService } from "../../services/athletes/athletesService";
 import { ReactNode, useContext, useMemo, useState } from "react";
-import PlayerSeasonStatsProvider, { PlayerSeasonStatsContext } from "../../contexts/PlayerSeasonStatsContext";
+
 import { StatCard2 } from "../ui/cards/StatCard";
 import { Target } from "lucide-react";
 import { ClockFading } from "lucide-react";
@@ -13,6 +13,7 @@ import Collapsable from "../ui/containers/Collapsable";
 import SportActionCard from "./SportActionCard";
 import { useSportActions } from "../../hooks/useSportActions";
 import { MdSportsRugby } from "react-icons/md";
+import PlayerSeasonStatsProvider, { PlayerSeasonStatsContext } from "../../contexts/ui/PlayerSeasonStatsContext";
 
 type Props = {
   season: IProSeason,

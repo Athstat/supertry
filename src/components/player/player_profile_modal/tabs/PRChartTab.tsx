@@ -13,9 +13,9 @@ import {
   ChartOptions,
 } from 'chart.js';
 import usePowerRankings from '../../../../hooks/athletes/usePowerRankings';
-import { useTheme } from '../../../../contexts/ThemeContext';
 import { format } from 'date-fns';
 import { IProAthlete } from '../../../../types/athletes';
+import { useTheme } from '../../../../contexts/app_state/ThemeContext';
 
 // Register ChartJS components
 ChartJS.register(

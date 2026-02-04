@@ -6,8 +6,8 @@ import { authService } from '../../../services/authService';
 import { useNavigate } from 'react-router-dom';
 import WarningCard from '../../ui/cards/WarningCard';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useAuth } from '../../../contexts/AuthContext';
 import ErrorCard from '../../ui/cards/ErrorCard';
+import { useAuth } from '../../../contexts/auth/AuthContext';
 
 export default function EmailPasswordLoginBox() {
   const [email, setEmail] = useState<string>();

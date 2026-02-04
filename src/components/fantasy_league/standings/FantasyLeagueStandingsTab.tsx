@@ -1,6 +1,5 @@
 import { EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../contexts/AuthContext';
 import { isGuestUser } from '../../../utils/deviceId/deviceIdUtils';
 import LeagueStandingsTable from './LeagueStandingsTable';
 import ClaimAccountNoticeCard from '../../auth/guest/ClaimAccountNoticeCard';
@@ -11,6 +10,7 @@ import LeagueStandingsFilter from './StandingsFilter';
 import { LeagueRoundCountdown2 } from '../LeagueCountdown';
 import RoundedCard from '../../ui/cards/RoundedCard';
 import { useFantasySeasons } from '../../../hooks/dashboard/useFantasySeasons';
+import { useAuth } from '../../../contexts/auth/AuthContext';
 
 
 /** Renders fantasy league group standings */

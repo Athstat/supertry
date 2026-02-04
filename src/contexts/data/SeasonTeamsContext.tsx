@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createContext, ReactNode, useCallback, useMemo } from "react"
-import { IProTeam } from "../types/team"
 import useSWR from "swr";
-import { useFantasySeasons } from "../hooks/dashboard/useFantasySeasons";
-import ScrummyLoadingState from "../components/ui/ScrummyLoadingState";
-import { CACHING_CONFIG } from "../types/constants";
-import { IProSeason } from "../types/season";
-import { swrFetchKeys } from "../utils/swrKeys";
-import { seasonService } from "../services/seasonsService";
+import ScrummyLoadingState from "../../components/ui/ScrummyLoadingState";
+import { useFantasySeasons } from "../../hooks/dashboard/useFantasySeasons";
+import { seasonService } from "../../services/seasonsService";
+import { CACHING_CONFIG } from "../../types/constants";
+import { IProSeason } from "../../types/season";
+import { IProTeam } from "../../types/team";
+import { swrFetchKeys } from "../../utils/swrKeys";
 
 type ContextProps = {
     teams: IProTeam[],

@@ -1,7 +1,7 @@
 import { ReactNode } from "react"
 import { twMerge } from "tailwind-merge";
-import { useTheme } from "../../../contexts/ThemeContext";
 import { AppColours } from "../../../types/constants";
+import { useTheme } from "../../../contexts/app_state/ThemeContext";
 
 type Props = {
     children?: ReactNode,

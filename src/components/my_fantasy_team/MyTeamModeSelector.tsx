@@ -11,7 +11,7 @@ import CreateFantasyTeamView from './CreateTeamView';
 import { useLeagueConfig } from '../../hooks/useLeagueConfig';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 import { useUserRoundTeam } from '../../hooks/fantasy/useUserRoundTeam';
-import MyTeamScreenProvider from '../../contexts/MyTeamScreenContext';
+import MyTeamScreenProvider from '../../contexts/ui/MyTeamScreenContext';
 
 
 /** Renders the right team view based on the view mode  */

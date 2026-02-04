@@ -1,8 +1,8 @@
 import { createContext, ReactNode } from "react"
-import { UserLocation } from "../types/web"
-import { geolocationService } from "../services/web/geolocationService";
-import ScrummyLoadingState from "../components/ui/ScrummyLoadingState";
 import useSWRImmutable from 'swr/immutable';
+import ScrummyLoadingState from "../../components/ui/ScrummyLoadingState";
+import { geolocationService } from "../../services/web/geolocationService";
+import { UserLocation } from "../../types/web";
 
 type GeoLocationContextProps = {
     userLocation?: UserLocation

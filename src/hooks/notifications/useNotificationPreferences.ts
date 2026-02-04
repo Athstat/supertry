@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { useAuth } from "../../contexts/AuthContext";
 import { logger } from "../../services/logger";
 import { notificationService } from "../../services/notificationsService";
 import { NotificationProfile, UpdateNotificationProfileReq } from "../../types/notifications";
 import { compareProfiles } from "../../utils/notificationUtils";
 import { useDebounced } from "../web/useDebounced";
+import { useAuth } from "../../contexts/auth/AuthContext";
 
 export function useNotificationPreferences() {
     const { authUser } = useAuth();

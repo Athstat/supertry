@@ -7,6 +7,7 @@ import { AppColours } from '../../../types/constants'
 import LeagueGroupBanner from '../LeagueGroupBanner'
 import LeagueGroupLogo from '../LeagueGroupLogo'
 import { useFantasyLeagueScreen } from '../../../hooks/fantasy/useFantasyLeagueScreen'
+import { LeagueGoldCheckMark } from '../../fantasy-leagues/card/LeagueBadge'
 
 type Props = {
     handleBack?: () => void
@@ -35,8 +36,9 @@ export default function FantasyLeagueHeader({ handleBack }: Props) {
                             <ArrowLeft />
                         </CircleButton>
 
-                        <div>
+                        <div className='flex flex-row items-center gap-1' >
                             <p className='font-semibold text-lg' >{league?.title}</p>
+                            <LeagueGoldCheckMark clickable size='20' leagueGroup={league} />
                         </div>
                     </div>
 

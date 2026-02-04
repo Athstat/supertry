@@ -13,10 +13,10 @@ import { mutate } from "swr";
 import { useState } from "react";
 import { Loader } from "lucide-react";
 import { getProAthleteMotmVoteTally } from "../../../utils/proMotmUtils";
-import { useAuth } from "../../../contexts/AuthContext";
 import PlayerMugshot from "../../player/PlayerMugshot";
 import { formatPosition } from "../../../utils/athletes/athleteUtils";
 import { fixtureAnalytics } from "../../../services/analytics/fixtureAnalytics";
+import { useAuth } from "../../../contexts/auth/AuthContext";
 
 type Props = {
     roster: IRosterItem[];

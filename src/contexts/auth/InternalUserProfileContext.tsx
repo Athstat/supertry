@@ -1,8 +1,8 @@
 import { createContext, ReactNode } from "react"
-import { InternalUserProfile } from "../types/auth"
 import { useAuth } from "./AuthContext";
 import useSWR, { KeyedMutator } from "swr";
-import { userService } from "../services/userService";
+import { userService } from "../../services/userService";
+import { InternalUserProfile } from "../../types/auth";
 
 type InternalUserProfileContextProps = {
     internalProfile?: InternalUserProfile,

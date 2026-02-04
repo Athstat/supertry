@@ -4,7 +4,6 @@ import { TrophyIcon } from "lucide-react";
 import { ReactNode, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Fragment } from "react/jsx-runtime";
-import { useAuth } from "../../../contexts/AuthContext";
 import { useRoundScoringSummaryV2 } from "../../../hooks/fantasy/useRoundScoringSummary";
 import { IFantasyLeagueTeam } from "../../../types/fantasyLeague";
 import { formatCountdown } from "../../../utils/countdown";
@@ -15,6 +14,7 @@ import { smartRoundUp } from "../../../utils/intUtils";
 import RoundedCard from "../../ui/cards/RoundedCard";
 import { trimSeasonYear } from "../../../utils/stringUtils";
 import { twMerge } from "tailwind-merge";
+import { useAuth } from "../../../contexts/auth/AuthContext";
 
 
 export function DashboardHeroLoadingSkeleton() {

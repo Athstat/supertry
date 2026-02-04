@@ -7,8 +7,8 @@ import { twMerge } from "tailwind-merge";
 import { User } from "lucide-react";
 import { isEmail } from "../../utils/stringUtils";
 import NoContentCard from "../ui/typography/NoContentMessage";
-import { useAuth } from "../../contexts/AuthContext";
 import { useMemo } from "react";
+import { useAuth } from "../../contexts/auth/AuthContext";
 
 // TODO: Reuse or Deprecate component
 export default function ProPredictionsLeaderboard() {

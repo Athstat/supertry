@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { useScrollTo } from "../../hooks/web/useScrollTo";
 import { UserRanking } from "../../types/userRanking"
 import UserRankingsItem from "./UserRankingsItem";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/auth/AuthContext";
 
 type Props = {
     rankings: UserRanking[]
@@ -25,8 +25,7 @@ export default function UserRankingFocusShort({ rankings }: Props) {
     const ref = useRef<HTMLDivElement>(null)
     useScrollTo(ref);
 
-
-        if (rankIndex === -1) return;
+    if (rankIndex === -1) return;
     if (userRanking.rank <= 15) return;
 
     return (

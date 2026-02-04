@@ -6,9 +6,9 @@ import { LoadingIndicator } from "../ui/LoadingIndicator";
 import { getRankingBorderColor } from "../../utils/fantasy/rankingUtils";
 import { PickemOverallRankingItem } from "../../types/pickem";
 import { useMemo } from "react";
-import { useAuth } from "../../contexts/AuthContext";
 import { twMerge } from "tailwind-merge";
 import NoContentCard from "../ui/typography/NoContentMessage";
+import { useAuth } from "../../contexts/auth/AuthContext";
 
 /** Renders a pro pick'em leaderboard */
 export default function ProPickemLeaderboard() {

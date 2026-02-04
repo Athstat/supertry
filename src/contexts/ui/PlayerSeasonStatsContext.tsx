@@ -1,6 +1,6 @@
  
 import { createContext, ReactNode } from "react"
-import { SportAction } from "../types/sports_actions"
+import { SportAction } from "../../types/sports_actions";
 
 type ContextProps = {
     seasonStats: SportAction[],

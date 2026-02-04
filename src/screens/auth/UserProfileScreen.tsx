@@ -11,11 +11,11 @@ import QaNoticeCard from '../../components/auth/user_profile/settings/QaNoticeCa
 import { useNavigate } from 'react-router-dom';
 import ProfileSettingCard from '../../components/auth/user_profile/settings/ProfileSettingCard';
 import { UserCircle, Moon, Sun, HelpCircle } from 'lucide-react';
-import { useTheme } from '../../contexts/ThemeContext';
 import ScrummyGamePlayModal from '../../components/branding/help/ScrummyGamePlayModal';
 import { useState } from 'react';
 import LogoutButton from '../../components/auth/login/LogoutButton';
 import UserProfileHeader from '../../components/auth/user_profile/UserProfileHeader';
+import { useTheme } from '../../contexts/app_state/ThemeContext';
 
 export function UserProfileScreen() {
 

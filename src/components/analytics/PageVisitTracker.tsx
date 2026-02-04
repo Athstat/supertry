@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { analytics } from '../../services/analytics/anayticsService';
-import { useAppState } from '../../contexts/AppStateContext';
 import { logger } from '../../services/logger';
+import { useAppState } from '../../contexts/app_state/AppStateContext';
 
 const reffererIdKey = 'rfr';
 

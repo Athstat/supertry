@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from "react";
 import { useSetAtom } from "jotai";
 import { authUserAtom } from "../../state/authUser.atoms";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/auth/AuthContext";
 
 type Props = {
     children?: ReactNode

@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { pickemService } from "../../services/pickemService";
 import { useMemo } from "react";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/auth/AuthContext";
 
 /** Hook that fectches pickem overall rankings for a specific season */
 export function usePickemOverallRanking(seasonId?: string) {
