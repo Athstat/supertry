@@ -129,7 +129,7 @@ function CTAButtons({ leagueRound, userRoundTeam }: CTAButtonProps) {
 
   const navigate = useNavigate();
 
-  const isCurrentLocked = isSeasonRoundLocked(leagueRound) || true;
+  const isCurrentLocked = isSeasonRoundLocked(leagueRound);
   const isUserHasTeam = Boolean(userRoundTeam);
 
   const showManageTeam = !isCurrentLocked && isUserHasTeam;
