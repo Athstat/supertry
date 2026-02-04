@@ -59,22 +59,23 @@ export default function ProFixturesScreen() {
 
   return (
     <Fragment>
-      <PageView className="dark:text-white flex flex-col gap-6 pb-28 md:pb-32">
+      <PageView className="dark:text-white flex flex-col gap-8 py-2 pb-28 md:pb-32">
 
-        <ProMatchCenterHeader
-          viewMode={viewMode}
-          onChangeViewMode={setViewMode}
-        />
+        <div className='px-4 flex flex-col gap-3' >
 
-        <div className='px-4' >
-          <SearchInput 
-            placeholder='Search pro fixtures' 
+          <ProMatchCenterHeader
+            viewMode={viewMode}
+            onChangeViewMode={setViewMode}
+          />
+
+          <SearchInput
+            placeholder='Search pro fixtures'
             value={searchQuery}
             onChange={(s) => setSearchQuery(s || '')}
           />
         </div>
 
-        <WeekCursor 
+        <WeekCursor
           weekHeader={weekHeader}
           onNext={handleNextWeek}
           onPrevious={handlePreviousWeek}

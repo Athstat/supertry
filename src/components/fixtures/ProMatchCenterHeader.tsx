@@ -3,15 +3,17 @@ import { FixtureListViewMode } from "../../types/games"
 import TextHeading from "../ui/typography/TextHeading"
 import IconCircle from "../ui/icons/IconCircle"
 import FixtureCalendarIcon from "../ui/icons/FixtureCalendarIcon"
+import { twMerge } from "tailwind-merge"
 
 type Props = {
     viewMode: FixtureListViewMode,
     onChangeViewMode?: (mode: FixtureListViewMode) => void,
+    className?: string
 }
 
 /** Renders the Header for the fixture screen */
 export default function ProMatchCenterHeader({
-    viewMode, onChangeViewMode
+    viewMode, onChangeViewMode, className
 } : Props) {
     
     const handleChangeViewMode = (value: FixtureListViewMode | string) => {
@@ -21,7 +23,9 @@ export default function ProMatchCenterHeader({
     }
     
     return (
-        <div className="px-4" >
+        <div className={twMerge(
+            className
+        )} >
             <div className="flex flex-row items-center justify-between gap-4">
                 <div className="flex flex-row items-center gap-2">
                     <IconCircle>
