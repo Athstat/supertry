@@ -38,7 +38,7 @@ export default function FantasyLeagueHeader({ handleBack }: Props) {
 
                         <div className='flex flex-row items-center gap-1' >
                             <p className='font-semibold text-lg' >{league?.title}</p>
-                            <LeagueGoldCheckMark clickable size='20' fill='white' leagueGroup={league} />
+                            <LeagueGoldCheckMark clickable size='20' leagueGroup={league} />
                         </div>
                     </div>
 

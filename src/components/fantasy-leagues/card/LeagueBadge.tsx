@@ -67,7 +67,7 @@ type GoldCheckMarkProps = {
 }
 
 /** Renders a verified League Gold Check Mark */
-export function LeagueGoldCheckMark({ leagueGroup, size = "12", checkFill = "#14171A", fill = "#DDAE00", clickable }: GoldCheckMarkProps) {
+export function LeagueGoldCheckMark({ leagueGroup, size = "13", checkFill = "#14171A", fill = "#DDAE00", clickable }: GoldCheckMarkProps) {
 
     const isOfficial = isLeagueOfficial(leagueGroup);
     const { openTooltipModal } = useTooltip();
@@ -76,8 +76,8 @@ export function LeagueGoldCheckMark({ leagueGroup, size = "12", checkFill = "#14
 
         if (clickable && leagueGroup) {
             openTooltipModal(
-                'Official League',
-                `${leagueGroup?.title} Fantasy League is officially verified by SCRUMMY`
+                'Official Fantasy League',
+                `'${leagueGroup?.title}' Fantasy League is officially verified by SCRUMMY`
             )
         }
     }

@@ -6,6 +6,7 @@ import { twMerge } from 'tailwind-merge';
 import { useJoinLeague } from '../../../hooks/leagues/useJoinLeague';
 import RoundedCard from '../../ui/cards/RoundedCard';
 import LeagueGroupLogo from '../../fantasy_league/LeagueGroupLogo';
+import { LeagueGoldCheckMark } from './LeagueBadge';
 
 interface JoinLeagueCardProps {
   leagueGroup: FantasyLeagueGroup
@@ -42,8 +43,9 @@ export function JoinLeagueCard({ leagueGroup }: JoinLeagueCardProps) {
           />
 
           <div className='flex flex-col gap-1' >
-            <div className='flex flex-row items-center gap-2' >
+            <div className='flex flex-row items-center gap-1' >
               <h3 className="text-sm">{name}</h3>
+              <LeagueGoldCheckMark clickable leagueGroup={leagueGroup} />
             </div>
 
             {leagueGroup.members_count && <div className="flex items-center gap-1 text-sm text-gray-400">
