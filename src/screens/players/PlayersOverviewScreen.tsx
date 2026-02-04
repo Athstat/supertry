@@ -34,7 +34,7 @@ export default function PlayersOverviewScreen() {
             <PlayersIcon />
           </IconCircle>
 
-          <TextHeading className='text-2xl font-bold' >Players</TextHeading>
+          <TextHeading className='text-xl font-bold' >Players</TextHeading>
 
         </div>
 

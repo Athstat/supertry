@@ -25,7 +25,7 @@ export function FantasyScreen() {
           <FantasyTrophyIcon />
         </IconCircle>
 
-        <TextHeading className="text-2xl">Fantasy</TextHeading>
+        <TextHeading className="text-xl">Fantasy</TextHeading>
       </div>
 
       <Activity mode={isLoading ? "visible" : "hidden"} >
