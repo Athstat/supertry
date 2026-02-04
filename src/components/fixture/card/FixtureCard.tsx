@@ -1,18 +1,19 @@
 import { twMerge } from 'tailwind-merge';
-import { IFixture } from '../../types/games';
+import { IFixture } from '../../../types/games';
 import { format } from 'date-fns';
 import { useState } from 'react';
-import TeamLogo from '../team/TeamLogo';
+import TeamLogo from '../../team/TeamLogo';
 import { useNavigate } from 'react-router-dom';
-import { fixtureSummary, isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
+import { fixtureSummary, isGameLive, formatGameStatus } from '../../../utils/fixtureUtils';
 import { Info } from 'lucide-react';
-import WarningCard from '../ui/cards/WarningCard';
-import GameHighlightsCard from '../ui/video/GameHighlightsCard';
-import { analytics } from '../../services/analytics/anayticsService';
-import { useLiveFixture } from '../../hooks/fixtures/useLiveFixture';
-import { useLiveGameClock } from '../../hooks/fixtures/useLiveGameClock';
-import DialogModal from '../ui/modals/DialogModal';
-import { abbreviateSeasonName } from '../../utils/stringUtils';
+import WarningCard from '../../ui/cards/WarningCard';
+import GameHighlightsCard from '../../ui/video/GameHighlightsCard';
+import { analytics } from '../../../services/analytics/anayticsService';
+import { useLiveFixture } from '../../../hooks/fixtures/useLiveFixture';
+import { useLiveGameClock } from '../../../hooks/fixtures/useLiveGameClock';
+import DialogModal from '../../ui/modals/DialogModal';
+import { abbreviateSeasonName } from '../../../utils/stringUtils';
+
 type Props = {
   fixture: IFixture;
   className?: string;

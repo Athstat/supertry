@@ -8,7 +8,7 @@ import { ErrorState } from "../ui/ErrorState";
 import NoContentCard from "../ui/typography/NoContentMessage";
 import { ProGameVote } from "../../types/proPredictions";
 import { gamesService } from "../../services/gamesService";
-import FixtureCard from "../fixture/FixtureCard";
+import FixtureCard from "../fixture/card/FixtureCard";
 import RoundedCard from "../ui/cards/RoundedCard";
 import { useAuth } from "../../contexts/auth/AuthContext";
 

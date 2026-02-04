@@ -4,7 +4,7 @@ import { IProTeam } from "../../types/team"
 import { fixtureSummary } from "../../utils/fixtureUtils"
 import SecondaryText from "../ui/typography/SecondaryText"
 import { Activity, useMemo, useState } from "react"
-import { FixtureCardModal } from "../fixture/FixtureCard"
+import { FixtureCardModal } from "../fixture/card/FixtureCard"
 import TeamLogo from "./TeamLogo"
 
 type Props = {
