@@ -45,7 +45,11 @@ export default function FixtureSearchResults({ searchQuery, viewMode }: Props) {
     const hasAnyFixtures = results.length > 0;
 
     return (
-        <div>
+        <div  className="px-6 flex flex-col gap-6">
+
+            <div>
+                <p>Results for '{searchQuery}'</p>
+            </div>
 
             {results.length === 0 && searchQuery && (
                 <NoContentCard message="No fixtures match your search" />
@@ -61,6 +65,7 @@ export default function FixtureSearchResults({ searchQuery, viewMode }: Props) {
                 <GroupedFixturesList 
                     fixtures={results}
                     viewMode={viewMode}
+                    hideCompetitionName
                 />
             )}
 

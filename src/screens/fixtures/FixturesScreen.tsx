@@ -59,7 +59,7 @@ export default function ProFixturesScreen() {
 
   return (
     <Fragment>
-      <PageView className="dark:text-white flex flex-col gap-8 py-2 pb-28 md:pb-32">
+      <PageView className="dark:text-white flex flex-col gap-6 py-2 pb-28 md:pb-32">
 
         <div className='px-4 flex flex-col gap-3' >
 
@@ -75,13 +75,13 @@ export default function ProFixturesScreen() {
           />
         </div>
 
-        <WeekCursor
+        {!searchQuery && <WeekCursor
           weekHeader={weekHeader}
           onNext={handleNextWeek}
           onPrevious={handlePreviousWeek}
           roundNumber={round}
           className='px-6'
-        />
+        />}
 
         {!defferedSearchQuery && <div className="w-full mx-auto">
           <Activity mode={viewMode === "fixtures" ? "visible" : "hidden"} >
