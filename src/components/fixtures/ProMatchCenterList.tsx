@@ -2,6 +2,7 @@ import NoContentCard from '../ui/typography/NoContentMessage';
 import { ChevronRight } from 'lucide-react';
 import { FixtureListViewMode, IFixture } from '../../types/games';
 import GroupedFixturesList from './GroupedFixturesList';
+import { twMerge } from 'tailwind-merge';
 
 
 type Props = {
@@ -10,18 +11,22 @@ type Props = {
   onViewModeChange: (mode: FixtureListViewMode) => void;
   onMoveNextWeek: () => void,
   displayFixtures: IFixture[],
-  hasAnyFixtures?: boolean
+  hasAnyFixtures?: boolean,
+  className?: string
 };
 
 /** Renders a list of pro matches */
-export default function ProMatchCenterList({ onMoveNextWeek, displayFixtures, hasAnyFixtures }: Props) {
+export default function ProMatchCenterList({ onMoveNextWeek, displayFixtures, hasAnyFixtures, className }: Props) {
 
   const handleJumpToNextFixtures = () => {
     onMoveNextWeek();
   };
 
   return (
-    <div className="flex flex-col gap-6 w-full">
+    <div className={twMerge(
+      "flex flex-col gap-6 w-full ",
+      className
+    )}>
       {displayFixtures.length === 0 && hasAnyFixtures && (
         <div className="flex flex-col gap-3 items-center">
           <NoContentCard message="No fixtures found for this week" />
@@ -40,6 +45,7 @@ export default function ProMatchCenterList({ onMoveNextWeek, displayFixtures, ha
       <GroupedFixturesList 
         fixtures={displayFixtures}
         viewMode={"fixtures"}
+        hideCompetitionName
       />
 
     </div>

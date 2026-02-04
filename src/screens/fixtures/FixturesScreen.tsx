@@ -2,7 +2,6 @@ import { Fragment, useState, useEffect, Activity, useMemo } from 'react';
 import FixtureSearchResults from '../../components/fixtures/FixtureSearchResults';
 import ProMatchCenterHeader from '../../components/fixtures/ProMatchCenterHeader';
 import ProMatchCenterList from '../../components/fixtures/ProMatchCenterList';
-import FloatingSearchBar from '../../components/players/FloatingSearchBar';
 import PageView from '../../components/ui/containers/PageView';
 import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
 import { useFixtureCursor } from '../../hooks/fixtures/useFixtureCursor';
@@ -12,6 +11,7 @@ import { useQueryState } from '../../hooks/web/useQueryState';
 import FixturesProPickemView from '../../components/fixtures/pro_match_center/ProPickemView';
 import WeekCursor from '../../components/fixtures/WeekCursor';
 import { searchFixturesPredicate } from '../../utils/fixtureUtils';
+import SearchInput from '../../components/ui/forms/SearchInput';
 
 /** Renders Pro Rugby Fixtures Screen */
 export default function ProFixturesScreen() {
@@ -59,12 +59,20 @@ export default function ProFixturesScreen() {
 
   return (
     <Fragment>
-      <PageView className="dark:text-white flex flex-col gap-4 pb-28 md:pb-32">
+      <PageView className="dark:text-white flex flex-col gap-6 pb-28 md:pb-32">
 
         <ProMatchCenterHeader
           viewMode={viewMode}
           onChangeViewMode={setViewMode}
         />
+
+        <div className='px-4' >
+          <SearchInput 
+            placeholder='Search pro fixtures' 
+            value={searchQuery}
+            onChange={(s) => setSearchQuery(s || '')}
+          />
+        </div>
 
         <WeekCursor 
           weekHeader={weekHeader}
@@ -83,6 +91,7 @@ export default function ProFixturesScreen() {
               onMoveNextWeek={handleNextWeek}
               displayFixtures={displayFixtures}
               hasAnyFixtures={hasAnyFixtures}
+              className='px-6'
             />
           </Activity>
 
@@ -105,13 +114,6 @@ export default function ProFixturesScreen() {
 
       </PageView>
 
-      <FloatingSearchBar
-        value={searchQuery ?? ''}
-        onChange={setSearchQuery}
-        placeholder="Search fixtures..."
-        showFilterButton={false}
-        showCompareButton={false}
-      />
     </Fragment>
   );
 }
