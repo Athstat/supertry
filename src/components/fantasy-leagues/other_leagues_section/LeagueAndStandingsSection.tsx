@@ -11,6 +11,7 @@ import CreateLeagueModal from "../create_league_modal/CreateLeagueModal"
 import RoundedCard from "../../ui/cards/RoundedCard"
 import LeagueGroupsSection from "../LeagueGroupsSection"
 import PodiumStepsIcon from "../../ui/icons/PodiumStepsIcon"
+import Heading1 from "../../ui/typography/Heading"
 
 type Props = {
     fantasySeason: IFantasySeason
@@ -65,8 +66,7 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
                         <PodiumStepsIcon />
                     </div>
 
-                    <p className="text-lg font-bold" >Leagues And Standings</p>
-                    {/* <GamePlayHelpButton className="" iconHw="w-4 h-4" /> */}
+                    <Heading1 className="" >Leagues And Standings</Heading1>
                 </div>
             </div>
 
