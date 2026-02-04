@@ -1,8 +1,7 @@
-import { Fragment, useState, useEffect, Activity } from 'react';
+import { Fragment, useState, useEffect, Activity, useMemo } from 'react';
 import FixtureSearchResults from '../../components/fixtures/FixtureSearchResults';
 import ProMatchCenterHeader from '../../components/fixtures/ProMatchCenterHeader';
 import ProMatchCenterList from '../../components/fixtures/ProMatchCenterList';
-import PickEmCardSkeleton from '../../components/pickem/PickEmCardSkeleton';
 import FloatingSearchBar from '../../components/players/FloatingSearchBar';
 import PageView from '../../components/ui/containers/PageView';
 import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
@@ -11,6 +10,8 @@ import { useProFixtures } from '../../hooks/fixtures/useProFixtures';
 import { useDebounced } from '../../hooks/web/useDebounced';
 import { useQueryState } from '../../hooks/web/useQueryState';
 import FixturesProPickemView from '../../components/fixtures/pro_match_center/ProPickemView';
+import WeekCursor from '../../components/fixtures/WeekCursor';
+import { searchFixturesPredicate } from '../../utils/fixtureUtils';
 
 /** Renders Pro Rugby Fixtures Screen */
 export default function ProFixturesScreen() {
@@ -27,32 +28,32 @@ export default function ProFixturesScreen() {
   const { fixtures, isLoading } = useProFixtures();
 
   const {
-    handleNextWeek,
-    weekStart, hasAnyFixtures,
-    weekFixtures
+    handleNextWeek, weekStart, hasAnyFixtures,
+    weekFixtures, handlePreviousWeek,
+    weekHeader
   } = useFixtureCursor({
     fixtures, isLoading
   });
 
-  // Scroll to top when date range changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [weekStart]);
 
-  if (isLoading) {
-    // Show different loading states based on view mode
-    if (viewMode === 'pickem') {
-      return (
-        <div className="flex flex-col gap-3 w-full">
-          {[...Array(5)].map((_, index) => (
-            <PickEmCardSkeleton
-              key={index}
-              className="rounded-xl border w-full dark:border-slate-700"
-            />
-          ))}
-        </div>
-      );
+  const displayFixtures = useMemo(() => {
+
+    if (defferedSearchQuery) {
+      return fixtures.filter((f) => {
+        return searchFixturesPredicate(f, defferedSearchQuery);
+      })
     }
+
+    return weekFixtures;
+
+  }, [defferedSearchQuery, fixtures, weekFixtures]);
+
+  const round = displayFixtures.at(0)?.round;
+
+  if (isLoading) {
     return <LoadingIndicator />;
   }
 
@@ -65,6 +66,14 @@ export default function ProFixturesScreen() {
           onChangeViewMode={setViewMode}
         />
 
+        <WeekCursor 
+          weekHeader={weekHeader}
+          onNext={handleNextWeek}
+          onPrevious={handlePreviousWeek}
+          roundNumber={round}
+          className='px-6'
+        />
+
         {!defferedSearchQuery && <div className="w-full mx-auto">
           <Activity mode={viewMode === "fixtures" ? "visible" : "hidden"} >
             <ProMatchCenterList
@@ -72,7 +81,7 @@ export default function ProFixturesScreen() {
               viewMode={viewMode}
               onViewModeChange={setViewMode}
               onMoveNextWeek={handleNextWeek}
-              displayFixtures={weekFixtures}
+              displayFixtures={displayFixtures}
               hasAnyFixtures={hasAnyFixtures}
             />
           </Activity>
