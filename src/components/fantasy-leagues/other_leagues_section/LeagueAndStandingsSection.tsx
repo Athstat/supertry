@@ -55,9 +55,9 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
     }
 
     return (
-        <div className="flex flex-col gap-4 dark:border-none" >
+        <div className="flex flex-col gap-2 dark:border-none" >
 
-            <div className="flex flex-row items-center justify-between px-4" >
+            <div className="flex flex-row items-center justify-between px-4 pb-2" >
 
                 <div className="flex flex-row items-center gap-2" >
 
@@ -77,12 +77,7 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
                 </PrimaryButton>
             </div>
 
-
-            {/* <div>
-                <SecondaryText>Click on a league to view it's standings</SecondaryText>
-            </div> */}
-
-            <div className="flex flex-col gap-4 mt-4" >
+            <div className="flex flex-col gap-4 mt-4 mx-2" >
 
                 <LeagueGroupsSection
                     title="My Leagues"

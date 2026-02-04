@@ -33,7 +33,7 @@ export default function LeagueGroupsSection({leagues, title, description, isVeri
     });
     
     return (
-        <section className="flex flex-col gap-2 py-6 rounded-none px-4 bg-slate-50 dark:bg-dark-800/40 border-none" >
+        <section className="flex flex-col gap-2 py-6 px-4 dark:bg-dark-800/40 border border-slate-100/90 rounded-xl dark:border-slate-700" >
 
             <div>
                 <div className='flex flex-row items-center gap-1' >
