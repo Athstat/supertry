@@ -20,7 +20,7 @@ export function PitchCardScoreIndicator({ player }: PlayerPointsScoreProps) {
     const {leagueRound} = useFantasyTeam();
 
     const isLocked = leagueRound && isSeasonRoundLocked(leagueRound);
-    const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, leagueRound?.season || '', leagueRound?.round_number ?? 0, !isLocked);
+    const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, leagueRound?.season || '', leagueRound?.round_number ?? 0, isLocked);
     const { league } = useFantasyLeagueGroup();
 
     const isLoading = loadingScore;
@@ -56,8 +56,8 @@ export function PitchCardScoreIndicator({ player }: PlayerPointsScoreProps) {
                         <p className="text-[8px] md:text-[10px] font-medium" >{reportTitle}</p>
                         <TriangleAlert className="w-3 h-3" />
                     </div>
-                </Activity>
-}
+                </Activity>}
+
                 {!isLoading && <Activity mode={showScore ? 'visible' : 'hidden'}  >
                     <div>
                         <p className='text-[10px] md:text-[10px] font-bold' >{sanitizeStat(score)}</p>
