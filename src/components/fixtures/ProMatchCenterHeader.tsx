@@ -31,7 +31,7 @@ export default function ProMatchCenterHeader({
                     <IconCircle>
                         <FixtureCalendarIcon />
                     </IconCircle>
-                    <TextHeading className="text-2xl">Fixtures (Pro)</TextHeading>
+                    <TextHeading className="text-xl">Fixtures (Pro)</TextHeading>
                 </div>
 
                 <SegmentedControl
