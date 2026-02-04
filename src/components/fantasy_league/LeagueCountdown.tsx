@@ -255,19 +255,15 @@ export function LeagueRoundCountdown3({ leagueRound, className, leagueTitleClass
             {isTimeLeft && <div className="flex flex-row items-center gap-2">
                 {timeBlocks.map((block, index) => {
 
-                    if (days > 30 && (block.label === "Seconds" || block.label === "Minutes")) {
+                    if (days > 30 && (block.label === "secs" || block.label === "min")) {
                         return;
                     }
 
-                    if (hours > 0 && (block.label === "Seconds")) {
+                    if (block.label === "days" && block.value === 0) {
                         return;
                     }
 
-                    if (block.label === "Days" && block.value === 0) {
-                        return;
-                    }
-
-                    if (block.label === "Hours" && block.value === 0 && (days === 0)) {
+                    if (block.label === "hrs" && block.value === 0 && (days === 0)) {
                         return;
                     }
 

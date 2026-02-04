@@ -48,7 +48,8 @@ export default function MyFantasyTeamPreview({ leagueGroup }: Props) {
 
 
         <div className='border-t border-b mx-4 flex flex-col items-center justify-center py-4' >
-          <div className='flex flex-row items-center gap-2 font-semibold' >
+
+          {scoringRound && <div className='flex flex-row items-center gap-2 font-semibold' >
             <p>{leagueGroup.title}</p>
             <Dot className='dark:bg-white' />
             <p>{scoringRound?.round_title}</p>
@@ -57,7 +58,14 @@ export default function MyFantasyTeamPreview({ leagueGroup }: Props) {
               <Dot className='dark:bg-white' />
               <p>{smartRoundUp(userScore)} Points</p>
             </>}
-          </div>
+          </div>}
+
+          {currentRound && <div className='flex flex-row items-center gap-2 font-semibold' >
+            <p>{leagueGroup.title}</p>
+            <Dot className='dark:bg-white' />
+            <p>{currentRound?.round_title}</p>
+          </div>}
+
         </div>
 
         {nextDeadlineRound && (
@@ -79,7 +87,7 @@ export default function MyFantasyTeamPreview({ leagueGroup }: Props) {
                 team={userTeam}
                 readOnly
               >
-                <FantasyTeamFormation3D className='mt-0 -top-10 flex flex-col items-center justify-center' onPlayerClick={() => { }} />
+                <FantasyTeamFormation3D className='mt-0 -top-8 flex flex-col items-center justify-center' onPlayerClick={() => { }} />
               </FantasyTeamProvider>
             </TeamHistoryProvider>
           </div>
