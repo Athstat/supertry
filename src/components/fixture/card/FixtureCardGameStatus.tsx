@@ -29,14 +29,16 @@ export default function FixtureCardGameStatus({ fixture, hideDate = false }: Pro
 
 
     return (
-        <div className="flex-1 text-slate-700 dark:text-slate-400 flex flex-col items-center text-center justify-center">
-            {/* <p className='text-xs' >{fixture.venue}</p> */}
-            {!hideDate && kickoff_time && (
-                <p className="text-xs">{format(kickoff_time, 'EEE, dd MMM yyyy')}</p>
-            )}
+        <div className="flex-1 text-slate-700 dark:text-slate-300 gap-1 flex flex-col items-center text-center justify-center">
+
             {kickoff_time && (
                 <p className="text-sm font-semibold">{format(kickoff_time, 'h:mm a')}</p>
             )}
+
+            {!hideDate && kickoff_time && (
+                <p className="text-xs">{format(kickoff_time, 'EEE, dd MMM')}</p>
+            )}
+
 
             {isGameLive(game_status) && (
                 <div className="flex flex-col items-center gap-0.5">

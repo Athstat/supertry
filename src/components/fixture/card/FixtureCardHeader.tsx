@@ -1,3 +1,4 @@
+import { twMerge } from "tailwind-merge";
 import { useLiveFixture } from "../../../hooks/fixtures/useLiveFixture";
 import { IFixture } from "../../../types/games"
 
@@ -20,15 +21,23 @@ export default function FixtureCardHeader({ fixture, showCompetition = false, sh
     } = displayFixture;
 
     return (
-        <div className="w-full items-center justify-center flex flex-col">
-            {showCompetition && competition_name && (
-                <p className="text-[10px] lg:text-sm text-gray-600 dark:text-slate-400">
-                    {competition_name}
-                    {round !== null ? `, Week ${round}` : ''}
-                </p>
+        <div className={twMerge(
+            "w-full items-center justify-center text-[10px] lg:text-sm text-gray-600 dark:text-slate-400 flex flex-row gap-1",
+            "text-[#011E5C] dark:text-slate-200"
+        )}>
+            
+            {showCompetition && competition_name && round && (
+                <>
+                    <p className="font-medium">
+                        {competition_name} |
+                    </p>
+
+                    <p>Round 1{round} |</p>
+                </>
             )}
+
             {showVenue && (
-                <p className="text-[10px] lg:text-sm text-gray-600 dark:text-slate-400">{venue}</p>
+                <p className="">{venue}</p>
             )}
         </div>
     )

@@ -58,7 +58,7 @@ function FixtureItem({ fixture, viewMode, className }: FixtureItemProps) {
     return (
         <>
             {viewMode === 'fixtures' && (
-                <FixtureCard fixture={fixture} showLogos showCompetition className={className} />
+                <FixtureCard fixture={fixture} showLogos showCompetition showVenue className={className} />
             )}
             {viewMode === 'pickem' && <PickEmCard fixture={fixture} className={className} />}
         </>
