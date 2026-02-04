@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { IFantasySeason } from '../../types/fantasy/fantasySeason';
-import ManageTeamCTA from '../fantasy-leagues/ManageTeamCTA';
+import MyFantasyTeamPreview from '../fantasy-leagues/MyFantasyTeamPreview';
 import { useFeaturedLeague } from '../../hooks/leagues/useFeaturedLeague';
 import LeagueAndStandingsSection from '../fantasy-leagues/other_leagues_section/LeagueAndStandingsSection';
 import RoundedCard from '../ui/cards/RoundedCard';
@@ -34,7 +34,7 @@ export function FantasySeasonDashboard({ fantasySeason }: Props) {
 
       {featuredGroup && (
         <div className='px-4' >
-          <ManageTeamCTA
+          <MyFantasyTeamPreview
             leagueGroup={featuredGroup}
           />
         </div>

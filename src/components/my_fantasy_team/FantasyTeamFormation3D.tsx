@@ -28,7 +28,7 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN, firstRowMargin
 
 
   return (
-    <div className="relative w-full mt-10  flex flex-col justify-center">
+    <div className="relative w-full  flex flex-col justify-center">
 
       <RugbyPitch3DRaster className={twMerge(
         'mt-12',
