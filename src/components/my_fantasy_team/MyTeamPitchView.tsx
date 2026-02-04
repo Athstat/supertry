@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import TeamBenchDrawer from './TeamBenchDrawer';
 import { AnimatePresence } from 'framer-motion';
 import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
-import { useHideBottomNavBar } from '../../hooks/navigation/useNavigationBars';
 import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import PlayerProfileModal from '../player/PlayerProfileModal';
@@ -21,7 +20,6 @@ type Props = {
 /** Renders my team pitch view */
 export default function MyTeamPitchView({ className, hideBenchPlayer = false, firstRowCN, pitchCN }: Props) {
 
-  useHideBottomNavBar();
 
   const { slots, team, leagueRound } = useFantasyTeam();
   const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete>();
