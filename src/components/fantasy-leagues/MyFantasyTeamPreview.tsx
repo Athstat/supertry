@@ -75,8 +75,9 @@ export default function MyFantasyTeamPreview({ leagueGroup }: Props) {
           />
         )}
 
-        {userTeam && currentRound && (
-          <div className='max-h-[160px] overflow-clip relative' key={currentRound?.id} >
+        <div className='max-h-[160px] min-h-[60px] overflow-clip relative' key={currentRound?.id} >
+          {userTeam && currentRound && (
+
             <TeamHistoryProvider
               initRoundNumber={currentRound?.round_number}
               user={authUser}
@@ -88,8 +89,8 @@ export default function MyFantasyTeamPreview({ leagueGroup }: Props) {
                 <FantasyTeamFormation3D className='mt-0 -top-8 flex flex-col items-center justify-center' onPlayerClick={() => { }} />
               </FantasyTeamProvider>
             </TeamHistoryProvider>
-          </div>
-        )}
+          )}
+        </div>
 
         <div className='absolute bottom-0 left-0 w-full h-[160px] flex flex-col items-center justify-end pb-4 bg-gradient-to-b to-[#011E5C] from-transparent' >
           {currentRound && <CTAButtons
@@ -128,7 +129,7 @@ function CTAButtons({ leagueRound, userRoundTeam }: CTAButtonProps) {
 
   const navigate = useNavigate();
 
-  const isCurrentLocked = isSeasonRoundLocked(leagueRound);
+  const isCurrentLocked = isSeasonRoundLocked(leagueRound) || true;
   const isUserHasTeam = Boolean(userRoundTeam);
 
   const showManageTeam = !isCurrentLocked && isUserHasTeam;
@@ -141,16 +142,16 @@ function CTAButtons({ leagueRound, userRoundTeam }: CTAButtonProps) {
   }
 
   return (
-    <div className='flex flex-col gap-2' >
+    <div className='flex flex-col gap-2 px-4' >
 
-      <TranslucentButton className='bg-gradient-to-tr w-fit border-white rounded-md px-2 py-3 from-[#051635] to-[#143B62]' onClick={handleManageTeam} >
+      {!showSorryMessage && <TranslucentButton className='bg-gradient-to-tr w-fit border-white rounded-md px-2 py-3 from-[#051635] to-[#143B62]' onClick={handleManageTeam} >
         {showManageTeam && <p>Manage My Team</p>}
         {showViewTeam && <p>View My Team</p>}
         {showCreateTeam && <p>Create My Team</p>}
-      </TranslucentButton>
+      </TranslucentButton>}
 
       {showSorryMessage && (
-        <TranslucentButton className='text-xs lg:text-sm w0fit font-normal text-start' >
+        <TranslucentButton className='text-xs lg:text-sm w0fit font-normal text-start px-6' >
           <p>Whoops! You missed the team deadline for <strong>{leagueRound.round_title}</strong>. You will have to wait for the next round to create your team</p>
         </TranslucentButton>
       )}
