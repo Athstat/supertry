@@ -10,11 +10,12 @@ import { EmptySlotPitchCard } from './pitch_card/EmptySlotPitchCard';
 interface TeamFormationProps {
   onPlayerClick: (player: IFantasyTeamAthlete) => void;
   marginCN?: string,
-  firstRowMargin?: string
+  firstRowMargin?: string,
+  className?: string
 }
 
 /** Renders a 3 Dimensional-looking pitch view */
-export function FantasyTeamFormation3D({ onPlayerClick, marginCN, firstRowMargin }: TeamFormationProps) {
+export function FantasyTeamFormation3D({ onPlayerClick, marginCN, firstRowMargin, className }: TeamFormationProps) {
 
   const { slots } = useFantasyTeam();
 
@@ -28,11 +29,15 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN, firstRowMargin
 
 
   return (
-    <div className="relative w-full mt-10  flex flex-col justify-center">
+    <div className={twMerge(
+      "relative w-full  flex flex-col justify-center",
+      className
+    )}>
 
       <RugbyPitch3DRaster className={twMerge(
         'mt-12',
-        marginCN
+        marginCN,
+        
       )} />
 
       <div className='top-0  left-0 absolute w-full p-3 flex flex-col items-center justify-center gap-0' >

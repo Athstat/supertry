@@ -16,7 +16,7 @@ export default function SegmentedControl({ options, value, onChange, className }
   return (
     <div
       className={twMerge(
-        'inline-flex p-1 bg-slate-100 dark:bg-slate-800 rounded-lg gap-1',
+        'inline-flex bg-slate-100 dark:bg-slate-800 border border-slate-800 dark:border-slate-700 rounded-[20px]',
         className
       )}
     >
@@ -25,10 +25,10 @@ export default function SegmentedControl({ options, value, onChange, className }
           key={option.value}
           onClick={() => onChange(option.value)}
           className={twMerge(
-            'px-3 py-1.5 text-sm font-medium rounded-md transition-all duration-200',
+            'px-4 py-2.5 text-sm font-medium rounded-[20px] transition-all duration-200',
             value === option.value
-              ? 'bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
-              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+              ? 'bg-[#19336C] text-white dark:bg-slate-600 shadow-sm'
+              : 'text-slate-600 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700'
           )}
         >
           {option.label}

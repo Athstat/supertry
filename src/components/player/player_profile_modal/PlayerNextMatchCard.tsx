@@ -1,5 +1,5 @@
 import { usePlayerNextMatch } from "../../../hooks/athletes/usePlayerNextMatch"
-import FixtureCard from "../../fixture/FixtureCard"
+import FixtureCard from "../../fixture/card/FixtureCard"
 import RoundedCard from "../../ui/cards/RoundedCard"
 import NoContentCard from "../../ui/typography/NoContentMessage"
 

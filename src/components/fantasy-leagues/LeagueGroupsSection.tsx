@@ -2,6 +2,7 @@ import { BadgeCheck } from 'lucide-react'
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups'
 import SecondaryText from '../ui/typography/SecondaryText'
 import LeagueGroupsTable from './LeagueGroupsTable'
+import TextHeading from '../ui/typography/TextHeading'
 
 type Props = {
     title?: string,
@@ -33,11 +34,13 @@ export default function LeagueGroupsSection({leagues, title, description, isVeri
     });
     
     return (
-        <section className="flex flex-col gap-2 py-6 rounded-none px-4 bg-slate-50 dark:bg-dark-800/40 border-none" >
+        <section className="flex flex-col gap-3 py-6 px-4 dark:bg-dark-800/40 border border-slate-100/90 rounded-xl dark:border-slate-700" >
 
-            <div>
+            <div className='flex flex-col gap-2' >
                 <div className='flex flex-row items-center gap-1' >
-                    <p className="font-semibold" >{title}</p>
+
+                    <TextHeading className="font-semibold text-xl" >{title}</TextHeading>
+
                     {isVerified && (
                         <BadgeCheck className='w-4 h-4' />
                     )}

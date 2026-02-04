@@ -1,40 +1,46 @@
-import { Trophy } from 'lucide-react';
-import { FantasySeasonDashboard } from '../../components/fantasy-seasons/FantasyCompetitionDashboard';
-import FantasySeasonOptionsList from '../../components/fantasy-seasons/FantasySeasonOptionsList';
+import { Activity } from 'react';
 import PageView from '../../components/ui/containers/PageView';
 import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
-import { Activity } from 'react';
 import AutoJoinLeagueModal from '../../components/fantasy-leagues/AutoJoinLeagueModal';
+import MyFantasyTeamPreview from '../../components/fantasy-leagues/MyFantasyTeamPreview';
+import LeagueAndStandingsSection from '../../components/fantasy-leagues/other_leagues_section/LeagueAndStandingsSection';
+import { useFeaturedLeague } from '../../hooks/leagues/useFeaturedLeague';
+import TextHeading from '../../components/ui/typography/TextHeading';
+import FantasyTrophyIcon from '../../components/ui/icons/FantasyTrophyIcon';
+import IconCircle from '../../components/ui/icons/IconCircle';
 
 /** Renders the Fantasy/League Screen */
 export function FantasyScreen() {
-  const { selectedSeason, isLoading } = useFantasySeasons();
+  const { selectedSeason } = useFantasySeasons();
+  const { featuredLeague, isLoading: loadingFeatureGroup } = useFeaturedLeague();
 
-  const showLoading = isLoading;
-  const showFantasySeasonDashboard = (isLoading === false) && (selectedSeason !== undefined);
-  const showSeasonsOverview = (isLoading === false) && (selectedSeason === undefined);
+  const isLoading = loadingFeatureGroup;
 
   return (
-    <PageView className="pt-4 flex flex-col gap-3">
-
+    <PageView className="pt-1 flex flex-col gap-3" key={selectedSeason?.id} >
 
       <div className="flex flex-row items-center gap-2 px-4">
-        <Trophy className="w-5 h-5" />
-        <h1 className="font-bold text-xl">Fantasy</h1>
+        <IconCircle>
+          <FantasyTrophyIcon />
+        </IconCircle>
+
+        <TextHeading className="text-2xl">Fantasy</TextHeading>
       </div>
 
-      <Activity mode={showLoading ? "visible" : "hidden"} >
+      <Activity mode={isLoading ? "visible" : "hidden"} >
         <LoadingIndicator />
       </Activity>
 
-      <Activity mode={showFantasySeasonDashboard ? 'visible' : 'hidden'}>
-        {selectedSeason && <FantasySeasonDashboard fantasySeason={selectedSeason} />}
-      </Activity>
+      {featuredLeague && (
+        <MyFantasyTeamPreview
+          leagueGroup={featuredLeague}
+        />
+      )}
 
-      <Activity mode={showSeasonsOverview ? "visible" : "hidden"} >
-        <FantasySeasonOptionsList />
-      </Activity>
+      {selectedSeason && <LeagueAndStandingsSection
+        fantasySeason={selectedSeason}
+      />}
 
       <AutoJoinLeagueModal />
 

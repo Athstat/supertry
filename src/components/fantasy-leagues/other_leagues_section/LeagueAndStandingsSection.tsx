@@ -1,4 +1,4 @@
-import { Plus, Trophy } from "lucide-react"
+import { Plus } from "lucide-react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import SuggestedLeaguesSections from "./SuggestedLeaguesSection"
@@ -10,6 +10,8 @@ import NoContentCard from "../../ui/typography/NoContentMessage"
 import CreateLeagueModal from "../create_league_modal/CreateLeagueModal"
 import RoundedCard from "../../ui/cards/RoundedCard"
 import LeagueGroupsSection from "../LeagueGroupsSection"
+import PodiumStepsIcon from "../../ui/icons/PodiumStepsIcon"
+import TextHeading from "../../ui/typography/TextHeading"
 
 type Props = {
     fantasySeason: IFantasySeason
@@ -54,14 +56,17 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
     }
 
     return (
-        <div className="flex flex-col gap-4 dark:border-none" >
+        <div className="flex flex-col gap-2 dark:border-none" >
 
-            <div className="flex flex-row items-center justify-between px-4" >
+            <div className="flex flex-row items-center justify-between px-4 pb-2" >
 
                 <div className="flex flex-row items-center gap-2" >
-                    <Trophy className="w-4 h-4" />
-                    <p className="text-lg font-bold" >Leagues & Standings</p>
-                    {/* <GamePlayHelpButton className="" iconHw="w-4 h-4" /> */}
+
+                    <div className="bg-[#F1F3F7] dark:bg-slate-700 w-12 h-12 flex flex-col items-center justify-center rounded-full" >
+                        <PodiumStepsIcon />
+                    </div>
+
+                    <TextHeading className="" >Leagues And Standings</TextHeading>
                 </div>
             </div>
 
@@ -72,12 +77,7 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
                 </PrimaryButton>
             </div>
 
-
-            {/* <div>
-                <SecondaryText>Click on a league to view it's standings</SecondaryText>
-            </div> */}
-
-            <div className="flex flex-col gap-4 mt-4" >
+            <div className="flex flex-col gap-4 mt-4 mx-2" >
 
                 <LeagueGroupsSection
                     title="My Leagues"

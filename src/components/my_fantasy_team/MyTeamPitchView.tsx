@@ -2,18 +2,24 @@ import { useEffect, useState } from 'react';
 import TeamBenchDrawer from './TeamBenchDrawer';
 import { AnimatePresence } from 'framer-motion';
 import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
-import { useHideBottomNavBar } from '../../hooks/navigation/useNavigationBars';
 import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import PlayerProfileModal from '../player/PlayerProfileModal';
 import PointsBreakdownModal from '../points_breakdown/PointsBreakdownModal';
 import { FantasyTeamFormation3D } from './FantasyTeamFormation3D';
 import { PlayerActionModal } from './PlayerActionModal';
+import { twMerge } from 'tailwind-merge';
+
+type Props = {
+  className?: string,
+  hideBenchPlayer?: boolean,
+  firstRowCN?: string,
+  pitchCN?: string
+}
 
 /** Renders my team pitch view */
-export default function MyTeamPitchView() {
+export default function MyTeamPitchView({ className, hideBenchPlayer = false, firstRowCN, pitchCN }: Props) {
 
-  useHideBottomNavBar();
 
   const { slots, team, leagueRound } = useFantasyTeam();
   const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete>();
@@ -70,19 +76,31 @@ export default function MyTeamPitchView() {
 
 
   return (
-    <div className=" h-ful ">
+    <div className={twMerge(
+      " h-full ",
+      className
+    )}>
       <div className='flex flex-col relative'>
 
 
         {leagueRound && starters.length > 0 && (
-          <FantasyTeamFormation3D marginCN='mt-0' firstRowMargin='' onPlayerClick={handlePlayerClick} />
+          <FantasyTeamFormation3D
+            marginCN={twMerge(
+              'mt-0',
+              pitchCN
+            )}
+            firstRowMargin={twMerge(
+              '',
+              firstRowCN
+            )}
+            onPlayerClick={handlePlayerClick}
+          />
         )}
 
         {/* Super Substitute */}
-        {leagueRound && superSubSlot && (
+        {leagueRound && superSubSlot && !hideBenchPlayer && (
           <TeamBenchDrawer
             onPlayerClick={handlePlayerClick}
-            
           />
         )}
 

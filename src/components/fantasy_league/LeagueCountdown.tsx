@@ -191,3 +191,102 @@ export function LeagueRoundCountdown2({ leagueRound, className, leagueTitleClass
         </div>
     )
 } 
+
+/** Renders a league count down 2 */
+export function LeagueRoundCountdown3({ leagueRound, className, leagueTitleClassName, title }: Props) {
+
+    const deadlineMillis = getSeasonRoundDeadline(leagueRound)?.valueOf() || 0;
+    const dateNow = new Date().valueOf();
+    const startMillis = deadlineMillis - dateNow;
+
+    const [secondsLeft, setSecondsLeft] = useState(Math.floor(startMillis / 1000)); // total seconds
+
+    useEffect(() => {
+
+        if (secondsLeft <= 0) {
+            return () => { }; // nothing to clean up
+        }
+
+        const timer = setInterval(() => {
+            setSecondsLeft(prev => Math.max(prev - 1, 0));
+        }, 1000);
+
+        if (secondsLeft <= 0) {
+            clearInterval(secondsLeft);
+            return;
+        };
+
+        return () => clearInterval(timer);
+
+    }, [secondsLeft]);
+
+    const isCountdownFinished = secondsLeft <= 0;
+
+    const days = !isCountdownFinished ? Math.floor(secondsLeft / (60 * 60 * 24)) : 0;
+    const hours = !isCountdownFinished ? Math.floor((secondsLeft % (60 * 60 * 24)) / (60 * 60)) : 0;
+    const minutes = !isCountdownFinished ? Math.floor((secondsLeft % (60 * 60)) / 60) : 0;
+    const seconds = !isCountdownFinished ? secondsLeft % 60 : 0;
+
+    const timeBlocks = useMemo(() => {
+        return [
+            { value: days, label: 'days' },
+            { value: hours, label: 'hrs' },
+            { value: minutes, label: 'min' },
+            { value: seconds, label: 'secs' },
+        ];
+    }, [days, hours, minutes, seconds]);
+
+    const isTimeLeft = days + hours + minutes + seconds > 0;
+
+    return (
+        <div className={twMerge(
+            'flex flex-row gap-2 min-h-[30px] max-h-[30px] items-center justify-between',
+            className
+        )} >
+
+            {/* <p className='font-medium text-lg' >{currentRound?.title} Deadline</p> */}
+            <div>
+                <p className={twMerge(
+                    "font-semibold",
+                    leagueTitleClassName
+                )} > {title ? title : `⏰ GW ${leagueRound.round_title} Deadline`}</p>
+            </div>
+
+            {isTimeLeft && <div className="flex flex-row items-center gap-2">
+                {timeBlocks.map((block, index) => {
+
+                    if (days > 30 && (block.label === "secs" || block.label === "min")) {
+                        return;
+                    }
+
+                    if (block.label === "days" && block.value === 0) {
+                        return;
+                    }
+
+                    if (block.label === "hrs" && block.value === 0 && (days === 0)) {
+                        return;
+                    }
+
+                    return (
+                        <div
+                            key={index}
+                            className="flex flex-row gap-1"
+                        >
+                            <p className="font-bold text-sm">
+                                {block.value.toString().padStart(2, '0')}
+                            </p>
+                            <p className="text-sm dark:text-primary-100">{block.label}</p>
+                        </div>
+                    )
+                })}
+            </div>}
+
+            {!isTimeLeft && (
+                <div>
+                    <p>Times Up!</p>
+                </div>
+            )}
+
+        </div>
+    )
+} 

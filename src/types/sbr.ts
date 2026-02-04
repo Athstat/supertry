@@ -1,6 +1,7 @@
+import { BaseFixture } from "./games"
 import { ISbrTeam } from "./sbrTeam"
 
-export type ISbrFixture = {
+export type ISbrFixture = BaseFixture & {
     home_team_id: string,
     away_team_id: string,
     home_team: ISbrTeam
@@ -8,12 +9,9 @@ export type ISbrFixture = {
     fixture_id: string,
     home_score?: number,
     away_score?: number,
-    status?: string,
-    kickoff_time?: Date,
-    round: number,
+    status?: "completed" | "not_started",
     season?: string,
     country?: string,
-    venue?: string,
     is_feature_game?: boolean
 }
 

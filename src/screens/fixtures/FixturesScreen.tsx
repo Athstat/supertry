@@ -1,9 +1,7 @@
-import { Fragment, useState, useEffect, Activity } from 'react';
+import { Fragment, useState, useEffect, Activity, useMemo } from 'react';
 import FixtureSearchResults from '../../components/fixtures/FixtureSearchResults';
 import ProMatchCenterHeader from '../../components/fixtures/ProMatchCenterHeader';
 import ProMatchCenterList from '../../components/fixtures/ProMatchCenterList';
-import PickEmCardSkeleton from '../../components/pickem/PickEmCardSkeleton';
-import FloatingSearchBar from '../../components/players/FloatingSearchBar';
 import PageView from '../../components/ui/containers/PageView';
 import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
 import { useFixtureCursor } from '../../hooks/fixtures/useFixtureCursor';
@@ -11,6 +9,9 @@ import { useProFixtures } from '../../hooks/fixtures/useProFixtures';
 import { useDebounced } from '../../hooks/web/useDebounced';
 import { useQueryState } from '../../hooks/web/useQueryState';
 import FixturesProPickemView from '../../components/fixtures/pro_match_center/ProPickemView';
+import WeekCursor from '../../components/fixtures/WeekCursor';
+import { searchFixturesPredicate } from '../../utils/fixtureUtils';
+import SearchInput from '../../components/ui/forms/SearchInput';
 
 /** Renders Pro Rugby Fixtures Screen */
 export default function ProFixturesScreen() {
@@ -27,50 +28,60 @@ export default function ProFixturesScreen() {
   const { fixtures, isLoading } = useProFixtures();
 
   const {
-    handleJumpToCurrentWeek, handleNextWeek, handlePreviousWeek,
-    weekStart, weekHeader, hasAnyFixtures, isCurrentWeek,
-    weekFixtures
+    handleNextWeek, weekStart, hasAnyFixtures,
+    weekFixtures, handlePreviousWeek,
+    weekHeader
   } = useFixtureCursor({
     fixtures, isLoading
   });
 
-  // Scroll to top when date range changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [weekStart]);
 
-  if (isLoading) {
-    // Show different loading states based on view mode
-    if (viewMode === 'pickem') {
-      return (
-        <div className="flex flex-col gap-3 w-full">
-          {[...Array(5)].map((_, index) => (
-            <PickEmCardSkeleton
-              key={index}
-              className="rounded-xl border w-full dark:border-slate-700"
-            />
-          ))}
-        </div>
-      );
+  const displayFixtures = useMemo(() => {
+
+    if (defferedSearchQuery) {
+      return fixtures.filter((f) => {
+        return searchFixturesPredicate(f, defferedSearchQuery);
+      })
     }
+
+    return weekFixtures;
+
+  }, [defferedSearchQuery, fixtures, weekFixtures]);
+
+  const round = displayFixtures.at(0)?.round;
+
+  if (isLoading) {
     return <LoadingIndicator />;
   }
 
   return (
     <Fragment>
-      <PageView className="dark:text-white lg:w-[60%] p-4 md:p-6 flex flex-col gap-4 pb-28 md:pb-32">
+      <PageView className="dark:text-white flex flex-col gap-6 py-2 pb-28 md:pb-32">
 
-        <ProMatchCenterHeader
-          viewMode={viewMode}
-          onMoveNextWeek={handleNextWeek}
-          onMovePreviousWeek={handlePreviousWeek}
-          onMoveToCurrentWeek={handleJumpToCurrentWeek}
-          hasAnyFixtures={hasAnyFixtures}
-          isCurrentWeek={isCurrentWeek}
-          onChangeViewMode={setViewMode}
+        <div className='px-4 flex flex-col gap-3' >
+
+          <ProMatchCenterHeader
+            viewMode={viewMode}
+            onChangeViewMode={setViewMode}
+          />
+
+          <SearchInput
+            placeholder='Search pro fixtures'
+            value={searchQuery}
+            onChange={(s) => setSearchQuery(s || '')}
+          />
+        </div>
+
+        {!searchQuery && <WeekCursor
           weekHeader={weekHeader}
-          searchQuery={defferedSearchQuery}
-        />
+          onNext={handleNextWeek}
+          onPrevious={handlePreviousWeek}
+          roundNumber={round}
+          className='px-6'
+        />}
 
         {!defferedSearchQuery && <div className="w-full mx-auto">
           <Activity mode={viewMode === "fixtures" ? "visible" : "hidden"} >
@@ -79,8 +90,9 @@ export default function ProFixturesScreen() {
               viewMode={viewMode}
               onViewModeChange={setViewMode}
               onMoveNextWeek={handleNextWeek}
-              displayFixtures={weekFixtures}
+              displayFixtures={displayFixtures}
               hasAnyFixtures={hasAnyFixtures}
+              className='px-6'
             />
           </Activity>
 
@@ -103,14 +115,6 @@ export default function ProFixturesScreen() {
 
       </PageView>
 
-      <FloatingSearchBar
-        value={searchQuery ?? ''}
-        onChange={setSearchQuery}
-        placeholder="Search fixtures..."
-        showFilterButton={false}
-        showCompareButton={false}
-      />
     </Fragment>
   );
 }
-

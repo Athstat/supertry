@@ -1,4 +1,4 @@
-import { ArrowRight, BicepsFlexed, Binoculars, Shield, Users, WandSparkles } from 'lucide-react'
+import { BicepsFlexed, Shield, WandSparkles } from 'lucide-react'
 import PageView from '../../components/ui/containers/PageView'
 import SearchInput from '../../components/ui/forms/SearchInput'
 import RoundedCard from "../../components/ui/cards/RoundedCard"
@@ -13,6 +13,10 @@ import { TrendingUpDown } from 'lucide-react'
 import { useDebounced } from '../../hooks/web/useDebounced'
 import PlayersTeamsGridList from '../../components/players/teams/PlayersTeamsGridList'
 import PlayersCountryGridList from '../../components/players/nationality/PlayersCountryGridList'
+import PlayersIcon from '../../components/ui/icons/PlayersIcon'
+import IconCircle from '../../components/ui/icons/IconCircle'
+import TextHeading from '../../components/ui/typography/TextHeading'
+import ScoutingIcon from '../../components/ui/icons/ScoutingIcon'
 
 export default function PlayersOverviewScreen() {
 
@@ -21,19 +25,26 @@ export default function PlayersOverviewScreen() {
 
 
   return (
-    <PageView className='px-6 flex flex-col gap-4 py-4' >
-      <div>
-        <div className='flex flex-row items-center gap-2' >
-          <Users />
-          <p className='text-lg font-bold' >Players</p>
-        </div>
-      </div>
+    <PageView className='px-4 flex flex-col gap-8 py-2' >
 
-      <div className='flex flex-row items-center gap-2 w-full h-[40px]' >
-        <SearchInput
-          value={searchQuery}
-          onChange={setSearchQuery}
-        />
+      <div className='flex flex-col gap-4' >
+        <div className='flex flex-row items-center gap-2' >
+
+          <IconCircle>
+            <PlayersIcon />
+          </IconCircle>
+
+          <TextHeading className='text-2xl font-bold' >Players</TextHeading>
+
+        </div>
+
+        <div className='flex flex-row items-center gap-2 w-full h-[40px]' >
+          <SearchInput
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder='Search players by name'
+          />
+        </div>
       </div>
 
       <Activity mode={debouncedQuery ? "hidden" : "visible"} >
@@ -69,80 +80,79 @@ function Content() {
 
   return (
     <Fragment>
-      <div className='flex flex-col gap-2' >
+      <div className='flex flex-col gap-4' >
 
-        <RoundedCard
-          className='flex cursor-pointer py-3 px-4 dark:border-none flex-row items-center gap-2 justify-between'
-          onClick={handleViewAll}
-        >
-          <p className='text-sm' >View All Players</p>
-          <div>
-            <ArrowRight />
-          </div>
-        </RoundedCard>
+        <div className='flex flex-row items-center gap-2' >
+          <RoundedCard
+            className='flex flex-1 cursor-pointer py-3 px-4 dark:border-none flex-col items-center gap-2 justify-between'
+            onClick={handleViewAll}
+          >
+            <p className='text-sm' >View All Players</p>
+
+            <PlayersIcon lightFill='#1196F5' darkFill='#1196F5' />
+
+          </RoundedCard>
 
 
-        <RoundedCard
-          className='flex cursor-pointer py-3 px-4 dark:border-none flex-row items-center gap-2 justify-between'
-          onClick={handleViewScoutingList}
-        >
+          <RoundedCard
+            className='flex flex-1 cursor-pointer py-3 px-4 dark:border-none flex-col items-center gap-2 justify-between'
+            onClick={handleViewScoutingList}
+          >
 
-          <div className='flex flex-row items-center gap-2' >
-            <Binoculars />
             <p className='text-sm' >View Scouting List</p>
-          </div>
+            <ScoutingIcon lightFill='#1196F5' darkFill='#1196F5' />
 
-          <ArrowRight />
-
-        </RoundedCard>
-
+          </RoundedCard>
+        </div>
 
       </div>
 
-      <div>
-        <p className='font-bold text-md' >By Position</p>
-      </div>
+      <div className='flex flex-col gap-4' >
+        <div>
+          <p className='font-bold text-md' >By Position</p>
+        </div>
 
-      <div className='grid grid-cols-2 gap-4' >
-        <PositionCard
-          positionClass='front-row'
-          title='Front Row'
-          showViewMoreButton
-          onClick={handlePositionCardClick}
-          icon={<BicepsFlexed className='w-20 h-20 text-yellow-500' />}
-        />
+        <div className='grid grid-cols-2 gap-4' >
+          <PositionCard
+            positionClass='front-row'
+            title='Front Row'
+            showViewMoreButton
+            onClick={handlePositionCardClick}
+            icon={<BicepsFlexed className='w-20 h-20 text-yellow-500' />}
+          />
 
-        <PositionCard
-          positionClass='second-row'
-          title='Second Row'
-          showViewMoreButton
-          onClick={handlePositionCardClick}
-          icon={<TrendingUpDown className='w-20 h-20 text-yellow-500' />}
-        />
+          <PositionCard
+            positionClass='second-row'
+            title='Second Row'
+            showViewMoreButton
+            onClick={handlePositionCardClick}
+            icon={<TrendingUpDown className='w-20 h-20 text-yellow-500' />}
+          />
 
-        <PositionCard
-          positionClass='back-row'
-          title='Back Row'
-          showViewMoreButton
-          onClick={handlePositionCardClick}
-          icon={<Shield className='w-20 h-20 text-red-500' />}
-        />
+          <PositionCard
+            positionClass='back-row'
+            title='Back Row'
+            showViewMoreButton
+            onClick={handlePositionCardClick}
+            icon={<Shield className='w-20 h-20 text-red-500' />}
+          />
 
-        <PositionCard
-          positionClass='half-back'
-          title='Half Backs'
-          showViewMoreButton
-          onClick={handlePositionCardClick}
-          icon={<WandSparkles className='w-20 h-20 text-green-500' />}
-        />
+          <PositionCard
+            positionClass='half-back'
+            title='Half Backs'
+            showViewMoreButton
+            onClick={handlePositionCardClick}
+            icon={<WandSparkles className='w-20 h-20 text-green-500' />}
+          />
 
-        <PositionCard
-          positionClass='back'
-          title='Backs'
-          showViewMoreButton
-          onClick={handlePositionCardClick}
-          icon={<FastForward className='w-20 h-20 text-blue-500' />}
-        />
+          <PositionCard
+            positionClass='back'
+            title='Backs'
+            showViewMoreButton
+            onClick={handlePositionCardClick}
+            icon={<FastForward className='w-20 h-20 text-blue-500' />}
+          />
+        </div>
       </div>
 
 

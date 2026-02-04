@@ -21,9 +21,9 @@ export default function SearchInput({value, onChange, className, placeholder = "
               className
             )}
 
-            inputCn=""
+            inputCn="rounded-[20px] px-6"
             placeholder={placeholder}
-            icon={<Search />}
+            icon={<Search className="mr-2" />}
             value={value}
             onChange={onChange}
         />

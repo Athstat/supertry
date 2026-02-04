@@ -5,7 +5,7 @@ import TeamLogo from '../team/TeamLogo';
 import { fixtureSummary, isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
 import { Fragment, useState } from 'react';
 import { analytics } from '../../services/analytics/anayticsService';
-import { FixtureCardModal } from './FixtureCard';
+import { FixtureCardModal } from './card/FixtureCard';
 import { twMerge } from 'tailwind-merge';
 import ProFixtureVotingBox from '../pickem/voting/ProFixtureVotingBox';
 
