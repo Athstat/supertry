@@ -38,7 +38,7 @@ export default function SuggestedLeaguesSections({ fantasySeason }: Props) {
     }
 
     return (
-        <div className='flex flex-col gap-2 px-4' >
+        <div className='flex flex-col gap-2 bg-[#F0F3F7] dark:bg-slate-700/30 rounded-lg py-6 px-4' >
 
             <div className='flex flex-row items-center justify-between gap-2' >
                 <div className="flex flex-col" >
