@@ -45,7 +45,7 @@ export default function Dropdown({ onChange, value, options, className, selected
     return (
         <div
             className={twMerge(
-                "w-[130px]",
+                "w-[130px] relative",
                 className
             )}
 
@@ -82,16 +82,16 @@ function SelectedIndicator({ option, isOpen, onClick, className }: SelectedProps
     return (
         <RoundedCard
             className={twMerge(
-                "dark:bg-slate-700/60 cursor-pointer px-2 text-sm dark:border-slate-600 flex flex-row items-center justify-between relative w-full h-[35px] rounded-md",
+                "dark:bg-slate-700/60 cursor-pointer px-4 text-sm dark:border-slate-600 flex flex-row items-center justify-between relative h-[35px] rounded-md",
                 className
             )}
             onClick={onClick}
         >
-            <p>{option.label}</p>
+            <p className="text-[16px]" >{option.label}</p>
 
             <div className="" >
                 <ChevronDown className={twMerge(
-                    "w-4 h-4 transition-all ease-in delay-150",
+                    "w-7 h-7 transition-all ease-in delay-150",
                     isOpen && "rotate-180"
                 )} />
 

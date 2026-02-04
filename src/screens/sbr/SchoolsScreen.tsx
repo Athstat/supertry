@@ -1,4 +1,4 @@
-import { Fragment, useMemo } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import PageView from '../../components/ui/containers/PageView';
 import { useQueryState } from '../../hooks/web/useQueryState';
 import SbrMatchCenter from '../../components/fixtures/SbrMatchCenter';
@@ -9,20 +9,23 @@ import { useFixtureCursor } from '../../hooks/fixtures/useFixtureCursor';
 import { useSbrFixtures } from '../../hooks/fixtures/useSbrFixtures';
 import WeekCursor from '../../components/fixtures/WeekCursor';
 import { searchSbrFixturePredicate } from '../../utils/sbrUtils';
-import { SeasonFilterBarItem } from '../../types/games';
 import { useDebounced } from '../../hooks/web/useDebounced';
+import SbrSeasonFilter from './SbrSeasonFilter';
 
 export default function SchoolsScreen() {
+
   const [searchQuery, setSearchQuery] = useQueryState<string>('query', { init: '' });
   const { fixtures, isLoading } = useSbrFixtures();
 
+  const [seasonId, setSeasonId] = useState<string>("all");
+
   const debouncedQuery = useDebounced(searchQuery, 500);
 
-  const seasons: SeasonFilterBarItem[] = [];
+  const seasons: string[] = [];
 
   fixtures.forEach(f => {
-    if (f.season && !seasons.some(s => s.id === f.season)) {
-      seasons.push({ name: f.season, id: f.season });
+    if (f.season && !seasons.some(s => s === f.season)) {
+      seasons.push(f.season);
     }
   });
 
@@ -45,7 +48,7 @@ export default function SchoolsScreen() {
 
   return (
     <Fragment>
-      <PageView className="dark:text-white flex flex-col gap-4 pb-28 md:pb-32">
+      <PageView className="dark:text-white overflow-x-hidden flex flex-col gap-4 pb-28 md:pb-32">
 
 
         <div className="flex flex-row justify-between px-4">
@@ -68,6 +71,13 @@ export default function SchoolsScreen() {
             onChange={setSearchQuery}
           />
         </div>
+
+        <SbrSeasonFilter 
+          seasons={seasons}
+          onChange={setSeasonId}
+          value={seasonId}
+          className="px-4"
+        />
 
         <WeekCursor
           weekHeader={weekHeader}
