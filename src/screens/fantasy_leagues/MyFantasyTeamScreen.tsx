@@ -9,10 +9,26 @@ import TeamHistoryProvider from '../../providers/fantasy_teams/TeamHistoryProvid
 import PitchViewLoadingSkeleton from '../../components/my_fantasy_team/PitchViewLoadingSkeleton';
 import RoundedCard from '../../components/ui/cards/RoundedCard';
 import { useAuth } from '../../contexts/auth/AuthContext';
+import { useQueryValue } from '../../hooks/web/useQueryState';
+import { useEffect } from 'react';
+import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 
 /** Renders my fantasy team screen */
 export function MyFantasyTeamScreen() {
   const { authUser } = useAuth();
+
+  const {getSeasonById, setSelectedSeason} = useFantasySeasons();
+  const seasonId = useQueryValue('season_id')
+
+  useEffect(() => {
+    if (seasonId) {
+      const season = getSeasonById(seasonId);
+      if (season) {
+        setSelectedSeason(season);
+      }
+    }
+    
+  }, [getSeasonById, seasonId, setSelectedSeason]);
 
   return (
     <TeamHistoryProvider 

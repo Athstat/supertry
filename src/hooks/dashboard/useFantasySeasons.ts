@@ -82,6 +82,12 @@ export function useFantasySeasons() {
 
     }, [currentRound, previousRound, scoringRound, seasonRounds])
 
+    const getSeasonById = (seasonId: string) => {
+        return fantasySeasons.find((s) => {
+            return s.id === seasonId;
+        })
+    }
+
     return {
         fantasySeasons,
         currentSeason,
@@ -97,7 +103,8 @@ export function useFantasySeasons() {
         pastAndPresentRounds,
         showDrawer, 
         setShowDrawer,
-        nextDeadlineRound
+        nextDeadlineRound,
+        getSeasonById
     }
 
 }
