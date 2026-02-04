@@ -118,7 +118,7 @@ function TeamItem({ team, onClick }: TeamItemProps) {
     <RoundedCard onClick={handleOnClick} className="dark:border-none cursor-pointer p-2 h-[90px] flex flex-col items-center justify-center gap-2" >
       <TeamLogo
         url={team.image_url}
-        className="w-7 h-7"
+        className="w-9 h-9"
       />
       <SecondaryText className="text-[10px] text-center" >{team.athstat_name}</SecondaryText>
     </RoundedCard>

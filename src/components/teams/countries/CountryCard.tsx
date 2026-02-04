@@ -28,7 +28,7 @@ export default function CountryCard({ countryName, onClick, isSelected = false }
     return (
         <RoundedCard
             className={twMerge(
-                "h-[80px] cursor-pointer dark:border-none p-4 flex flex-col items-center justify-center gap-2",
+                "h-[90px] cursor-pointer dark:border-none p-4 flex flex-col items-center justify-center gap-2",
                 isSelected && "bg-blue-500 dark:bg-blue-500 text-white"
             )}
             onClick={handleOnClick}
@@ -36,7 +36,7 @@ export default function CountryCard({ countryName, onClick, isSelected = false }
             
             <CountryFlag 
                 countryCode={country?.code}
-                className="w-6 h-6"
+                className="w-8 h-8"
             />
 
             <SecondaryText className={twMerge(
