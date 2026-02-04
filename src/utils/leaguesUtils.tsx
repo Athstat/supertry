@@ -164,3 +164,8 @@ export function leaguesOnClockFilter(leagues: FantasyLeagueGroup[]) {
     firstLeagueOnClock: leagueOnTheClock,
   };
 }
+
+
+export function isLeagueOfficial(league?: FantasyLeagueGroup) {
+  return league?.type === "official_league" || league?.type === "system_created";
+}
