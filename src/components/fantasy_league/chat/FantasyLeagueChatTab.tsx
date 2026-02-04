@@ -1,11 +1,11 @@
 import { useMemo, useRef, useState } from 'react';
 import { MessageSquare, Send } from 'lucide-react';
-import { useAuth } from '../../../contexts/AuthContext';
 import { useFantasyLeagueGroup } from '../../../hooks/leagues/useFantasyLeagueGroup';
 import { useRealtimeChat } from '../../../hooks/chat/useRealtimeChat';
 import { useChatScroll } from '../../../hooks/chat/useChatScroll';
 import { SupabaseChatMessage } from '../../../types/chat';
 import PrimaryButton from '../../ui/buttons/PrimaryButton';
+import { useAuth } from '../../../contexts/auth/AuthContext';
 
 export default function FantasyLeagueChatTab() {
   const { league } = useFantasyLeagueGroup();
