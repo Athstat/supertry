@@ -8,7 +8,7 @@ type Props = {
 
 /** Renders a standard heading */
 
-export default function Heading1({ children, className }: Props) {
+export default function TextHeading({ children, className }: Props) {
     return (
         <h1
             className={twMerge(
