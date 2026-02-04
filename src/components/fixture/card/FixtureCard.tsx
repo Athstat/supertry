@@ -46,7 +46,7 @@ export default function FixtureCard({
       <div
         onClick={handleClick}
         className={twMerge(
-          'p-4 flex cursor-pointer justify-center flex-col bg-white shadow-sm border border-slate-300 dark:border-slate-700 text-white hover:bg-slate-50/50 gap-1 dark:hover:bg-dark-800/50 dark:bg-slate-800/40 transition-colors',
+          'p-4 flex cursor-pointer justify-center flex-col gap-6 bg-white shadow-sm border border-slate-300 dark:border-slate-700 text-white hover:bg-slate-50/50  dark:hover:bg-dark-800/50 dark:bg-slate-800/40 transition-colors',
           className
         )}
       >

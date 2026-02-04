@@ -29,20 +29,28 @@ export default function SchoolsScreen() {
     }
   });
 
+  const filteredFixtures = fixtures.filter((f) => {
+    if (seasonId === "all") {
+      return true;
+    }
+
+    return f.season === seasonId;
+  })
+
   const initDateVal = new Date();
   const {
     weekFixtures, handleNextWeek, handlePreviousWeek, weekHeader
-  } = useFixtureCursor({ fixtures, isLoading, initDateVal });
+  } = useFixtureCursor({ fixtures: filteredFixtures, isLoading, initDateVal });
 
   const displayFixture = useMemo(() => {
     if (debouncedQuery) {
-      return fixtures.filter((f) => {
+      return filteredFixtures.filter((f) => {
         return searchSbrFixturePredicate(debouncedQuery, f);
       })
     }
 
     return weekFixtures;
-  }, [debouncedQuery, fixtures, weekFixtures]);
+  }, [debouncedQuery, filteredFixtures, weekFixtures]);
 
   const round = displayFixture.at(0)?.round;
 
