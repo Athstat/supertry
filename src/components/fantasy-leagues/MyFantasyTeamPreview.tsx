@@ -33,8 +33,6 @@ export default function MyFantasyTeamPreview({ leagueGroup }: Props) {
   const isLoading = loadingScore || loadingUserTeam;
   const showUserScore = (Boolean(userScore) && Boolean(scoringRound));
 
-  console.log("User Team ", userTeam);
-
   if (!leagueGroup) return;
 
   if (isLoading) {
