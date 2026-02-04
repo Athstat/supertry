@@ -20,7 +20,9 @@ export function PitchCardScoreIndicator({ player }: PlayerPointsScoreProps) {
     const {leagueRound} = useFantasyTeam();
 
     const isLocked = leagueRound && isSeasonRoundLocked(leagueRound);
-    const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, leagueRound?.season || '', leagueRound?.round_number ?? 0, isLocked);
+    const shouldFetchScore = isLocked;
+
+    const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, leagueRound?.season || '', leagueRound?.round_number ?? 0, shouldFetchScore);
     const { league } = useFantasyLeagueGroup();
 
     const isLoading = loadingScore;
@@ -32,6 +34,7 @@ export function PitchCardScoreIndicator({ player }: PlayerPointsScoreProps) {
         leagueRound?.round_number ?? 0,
         seasonTeam?.athstat_id
     );
+
 
     const showScore = Boolean(!isLoading && isLocked);
     const showNextMatchInfo = !isLoading && (!showAvailabilityWarning && Boolean(homeOrAway) && Boolean(opponent) && !showScore);
