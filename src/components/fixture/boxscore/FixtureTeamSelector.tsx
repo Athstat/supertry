@@ -22,7 +22,7 @@ export default function FixtureTeamSelector({ fixture, className, onChange, valu
   }
 
   if (!team || !opposition_team) {
-    return;
+    return null;
   }
 
   return (
@@ -58,16 +58,20 @@ type SingleTeamButtonProps = {
 
 function SingleTeamButton({ value, team, onClick }: SingleTeamButtonProps) {
   
-  return (
-    <div
+  const isCurrent = value?.athstat_id === team.athstat_id;
 
+  return (
+    <button
+      type="button"
       onClick={onClick}
       className={twMerge(
         "flex flex-1 flex-row truncate justify-center cursor-pointer rounded-full h-[35px] border-b-2 border-transparent  items-center gap-2",
         "hover:bg-slate-100 hover:dark:bg-slate-800/50",
-        value?.athstat_id === team.athstat_id && 'bg-blue-500 dark:bg-blue-600 text-white hover:bg-blue-500 dark:hover:bg-blue-600',
-        
+        isCurrent && 'bg-blue-500 dark:bg-blue-600 text-white hover:bg-blue-500 dark:hover:bg-blue-600',
+  
       )}
+
+      aria-pressed={isCurrent}
 
     >
 
@@ -84,6 +88,6 @@ function SingleTeamButton({ value, team, onClick }: SingleTeamButtonProps) {
         {team.athstat_name}
       </SecondaryText>
 
-    </div>
+    </button>
   )
 }
