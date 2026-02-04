@@ -8,7 +8,7 @@ import RoundedCard from "../../components/ui/cards/RoundedCard";
 import FantasyLeagueGroupDataProvider from "../../providers/fantasy_leagues/FantasyLeagueGroupDataProvider";
 import FantasyLeagueHeader from "../../components/fantasy_league/header/FantasyLeagueHeader";
 import { TabSwitchContainer, TabSwitchOption } from "../../components/ui/buttons/TabSwitchOption";
-import { Activity } from "react";
+import { Activity, useEffect } from "react";
 import FantasyLeagueDetailsTab from "../../components/fantasy_league/commissioner/FantasyLeagueDetailsTab";
 import { useFantasyLeagueScreen } from "../../hooks/fantasy/useFantasyLeagueScreen";
 import { FantasyLeagueViewMode } from "../../types/fantasyLeague";
@@ -17,6 +17,7 @@ import { EditLeagueBannerModal } from "../../components/fantasy_league/commissio
 import { EditLeagueInfoModal } from "../../components/fantasy_league/commissioner/EditLeagueInfoModal";
 import EditLeagueLogoModal from "../../components/fantasy_league/commissioner/EditLeagueLogoModal";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
+import FantasyLeagueChatTab from "../../components/fantasy_league/chat/FantasyLeagueChatTab";
 
 /** Renders a fantasy League screen */
 export default function FantasyLeagueScreen() {
@@ -39,6 +40,9 @@ function Content() {
 
     const navigate = useNavigate();
     const { viewMode, setViewMode } = useFantasyLeagueScreen();
+    const { league } = useFantasyLeagueGroup();
+
+    const isChatEnabled = league?.is_private === true && league?.type === 'user_created';
 
     const handleChangeViewMode = (newMode?: string) => {
         if (newMode) {
@@ -53,6 +57,12 @@ function Content() {
     useHideTopNavBar();
     useHideBottomNavBar();
 
+    useEffect(() => {
+        if (!isChatEnabled && viewMode === 'chat') {
+            setViewMode('standings');
+        }
+    }, [isChatEnabled, viewMode, setViewMode]);
+
     return (
         <PageView className=" flex flex-col gap-0 overflow-x-hidden" >
             <FantasyLeagueHeader handleBack={handleBack} />
@@ -66,6 +76,15 @@ function Content() {
                         current={viewMode}
                     />
 
+                    {isChatEnabled && (
+                        <TabSwitchOption
+                            label="Chat"
+                            value="chat"
+                            onSelect={handleChangeViewMode}
+                            current={viewMode}
+                        />
+                    )}
+
                     <TabSwitchOption
                         label="Details"
                         value="details"
@@ -78,6 +97,12 @@ function Content() {
             <Activity mode={viewMode === 'standings' ? 'visible' : 'hidden'} >
                 <FantasyLeagueStandingsTab />
             </Activity>
+
+            {isChatEnabled && (
+                <Activity mode={viewMode === 'chat' ? 'visible' : 'hidden'} >
+                    <FantasyLeagueChatTab />
+                </Activity>
+            )}
 
             <Activity mode={viewMode === 'details' ? 'visible' : 'hidden'} >
                 <FantasyLeagueDetailsTab />

@@ -38,3 +38,5 @@ The missing environment variable will be mentioned in the error.
 |VITE_FEATURE_LEAGUE_GROUP_ID| The featured fantasy league group's ID that will be used on the onboarding screen|Scrummy Django Dashboard|`45031b65-31df-419b-8693-29199ebfe08c`|
 |VITE_GOOGLE_CLIENT_ID| Google Client ID for Google Auth|Google Cloud Dashboard|somekey.apps.googleusercontent.com|
 |VITE_APPLE_CLIENT_ID| Client ID for Apple Sign In| Apple Developer Dashboard|`com.some-domain.web`|
+|VITE_SUPABASE_URL| Supabase project URL for chat | Supabase Dashboard | `https://example.supabase.co`|
+|VITE_SUPABASE_PUBLISHABLE_OR_ANON_KEY| Supabase publishable/anon key for chat | Supabase Dashboard | `sb_publishable_xxxxx`|

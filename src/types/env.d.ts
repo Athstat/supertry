@@ -11,6 +11,8 @@ interface ImportMetaEnv {
   readonly VITE_SCOPE: string;
   readonly VITE_SEND_BIRD_APP_ID: string;
   readonly VITE_APP_ENV: "production" | "qa" | "development";
+  readonly VITE_SUPABASE_URL: string;
+  readonly VITE_SUPABASE_PUBLISHABLE_OR_ANON_KEY: string;
   // more env variables...
 }
 

@@ -121,4 +121,4 @@ export type FantasyLeaguesSortField = "name" | "size";
 export type FantasyLeagueFilterField = "official" | "user_created";
 
 /** Represents the view mode of the fantasy league screen */
-export type FantasyLeagueViewMode = "standings" | "details";
+export type FantasyLeagueViewMode = "standings" | "chat" | "details";

@@ -19,3 +19,11 @@ export interface ChatUser {
   avatar: string;
   isAdmin?: boolean;
 }
+
+export type SupabaseChatMessage = {
+  id: string;
+  created_at: string;
+  content: string;
+  username: string;
+  room_id: string;
+};

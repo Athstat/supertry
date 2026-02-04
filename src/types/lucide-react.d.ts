@@ -155,6 +155,8 @@ declare module "lucide-react" {
   export const Upload : CIP;
   export const Image : CIP;
   export const Verified : CIP;
+  export const MessageSquare : CIP;
+  export const Send : CIP;
   export const CropIcon : CIP;
   
 }
