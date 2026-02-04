@@ -13,6 +13,9 @@ import { useLiveFixture } from '../../../hooks/fixtures/useLiveFixture';
 import { useLiveGameClock } from '../../../hooks/fixtures/useLiveGameClock';
 import DialogModal from '../../ui/modals/DialogModal';
 import { abbreviateSeasonName } from '../../../utils/stringUtils';
+import FixtureCardHeader from './FixtureCardHeader';
+import FixtureCardTeam from './FixtureCardTeam';
+import FixtureCardGameStatus from './FixtureCardGameStatus';
 
 type Props = {
   fixture: IFixture;
@@ -26,40 +29,9 @@ type Props = {
 };
 
 export default function FixtureCard({
-  fixture,
-  className,
-  showCompetition,
-  showLogos,
-  showVenue,
-  message,
-  hideDate,
+  fixture, className, showCompetition,
+  showLogos, showVenue, message, hideDate,
 }: Props) {
-  // Use live fixture polling hook
-  const { liveFixture } = useLiveFixture({ fixture });
-
-  // Use the live fixture data if available, otherwise use prop fixture
-  const displayFixture = liveFixture || fixture;
-
-  // Use live game clock hook
-  const liveGameClock = useLiveGameClock({
-    gameStatus: displayFixture.game_status,
-    serverGameClock: displayFixture.game_clock,
-  });
-
-  const {
-    team_score,
-    competition_name,
-    kickoff_time,
-    round,
-    game_status,
-    opposition_score,
-    venue,
-  } = displayFixture;
-
-  const matchFinal = game_status === 'completed' && team_score && opposition_score;
-
-  const homeTeamWon = matchFinal ? team_score > opposition_score : false;
-  const awayTeamWon = matchFinal ? team_score < opposition_score : false;
 
   const [showModal, setShowModal] = useState(false);
   const toogle = () => setShowModal(!showModal);
@@ -68,8 +40,6 @@ export default function FixtureCard({
     toogle();
     analytics.trackFixtureCardClicked(fixture);
   };
-
-  const { gameKickedOff } = fixtureSummary(displayFixture);
 
   return (
     <>
@@ -80,109 +50,30 @@ export default function FixtureCard({
           className
         )}
       >
-        {
-          <div className="w-full items-center justify-center flex flex-col">
-            {showCompetition && competition_name && (
-              <p className="text-[10px] lg:text-sm text-gray-600 dark:text-slate-400">
-                {competition_name}
-                {round !== null ? `, Week ${round}` : ''}
-              </p>
-            )}
-            {showVenue && (
-              <p className="text-[10px] lg:text-sm text-gray-600 dark:text-slate-400">{venue}</p>
-            )}
-          </div>
-        }
+
+        <FixtureCardHeader
+          fixture={fixture}
+          showCompetition={showCompetition}
+          showVenue={showVenue}
+        />
 
         <div className="flex flex-row">
-          <div className="flex-1 flex text-slate-700 dark:text-white flex-col items-end justify-center">
-            <div className="flex flex-row gap-2 items-center w-full justify-start">
-              <div className="flex flex-col gap-4 items-center w-full justify-start">
-                {showLogos && (
-                  <TeamLogo
-                    url={fixture?.team?.image_url}
-                    teamName={fixture?.team?.athstat_name}
-                    className="w-10 h-10"
-                  />
-                )}
+          <FixtureCardTeam
+            fixture={fixture}
+            showLogo={showLogos}
+            isHome={true}
+          />
 
-                <p className={twMerge('text-xs md:text-sm w-fit text-center', awayTeamWon && '')}>
-                  {fixture?.team?.athstat_name}
-                </p>
-              </div>
+          <FixtureCardGameStatus 
+            fixture={fixture}
+            hideDate={hideDate}
+          />
 
-              {gameKickedOff && fixture.team_score !== null && fixture.opposition_score !== null ? (
-                <div
-                  className={twMerge(
-                    'flex items-center justify-start px-2 py-1 rounded-full text-slate-700 dark:text-slate-200 text-md',
-                    homeTeamWon && 'font-bold'
-                  )}
-                >
-                  {fixture.team_score}
-                </div>
-              ) : null}
-            </div>
-          </div>
-
-          <div className="flex-1 text-slate-700 dark:text-slate-400 flex flex-col items-center text-center justify-center">
-            {/* <p className='text-xs' >{fixture.venue}</p> */}
-            {!hideDate && kickoff_time && (
-              <p className="text-xs">{format(kickoff_time, 'EEE, dd MMM yyyy')}</p>
-            )}
-            {kickoff_time && (
-              <p className="text-sm font-semibold">{format(kickoff_time, 'h:mm a')}</p>
-            )}
-
-            {isGameLive(game_status) && (
-              <div className="flex flex-col items-center gap-0.5">
-                <div className="flex flex-row items-center gap-1">
-                  <div className="w-2 h-2 bg-green-500 animate-pulse dark:bg-green-400 rounded-full " />
-                  <span className="text-sm text-green-600 dark:text-green-400 font-bold">
-                    {formatGameStatus(game_status)}
-                  </span>
-                </div>
-                {liveGameClock && (
-                  <span className="text-xs text-green-600 dark:text-green-400 font-semibold">
-                    {liveGameClock}
-                  </span>
-                )}
-              </div>
-            )}
-          </div>
-
-          <div className="flex-1 flex text-slate-700 dark:text-white flex-col items-end justify-center">
-            <div className="flex flex-row gap-2 items-center w-full justify-start">
-              {gameKickedOff && fixture.team_score !== null && fixture.opposition_score !== null ? (
-                <div
-                  className={twMerge(
-                    'flex items-center justify-start px-2 py-1 rounded-full text-slate-700 dark:text-slate-200 text-md',
-                    awayTeamWon && 'font-bold'
-                  )}
-                >
-                  {fixture.opposition_score}
-                </div>
-              ) : null}
-
-              <div className="flex flex-col gap-4 items-center w-full justify-end">
-                {showLogos && (
-                  <TeamLogo
-                    url={fixture?.opposition_team?.image_url ?? fixture?.opposition_team?.image_url}
-                    teamName={fixture?.opposition_team?.athstat_name}
-                    className="w-10 h-10"
-                  />
-                )}
-
-                <p
-                  className={twMerge(
-                    'text-xs md:text-sm w-fit text-wrap text-center',
-                    awayTeamWon && ''
-                  )}
-                >
-                  {fixture?.opposition_team?.athstat_name}
-                </p>
-              </div>
-            </div>
-          </div>
+          <FixtureCardTeam
+            fixture={fixture}
+            showLogo={showLogos}
+            isHome={false}
+          />
         </div>
 
         {/* Voting Section */}
