@@ -78,17 +78,19 @@ function SbrFixtureCardContent({
       )}
     >
 
-      <div className='flex flex-row items-center justify-center text-xs gap-2 text-slate-700 dark:text-slate-400' >
-        {showCompetition && fixture.season && <p className="text-[10px]">{fixture.season}</p>}
-        <p>|</p>
-        {showCompetition && fixture.season && <p className="text-[10px]">Round {fixture.round}</p>}
+      <div className='flex flex-row items-center justify-center w-full ' >
+        <div className='flex flex-row items-center justify-center text-xs w-fit bg-[#F0F3F7] px-2 rounded-full dark:bg-slate-800 gap-2 text-[#102C66] dark:text-slate-400' >
+          {showCompetition && fixture.season && <p className="text-[10px] font-medium">{fixture.season}</p>}
+          <p>|</p>
+          {showCompetition && fixture.season && <p className="text-[10px]">Round {fixture.round}</p>}
 
-        {showCompetition && fixture.venue && (
-          <>
-            <p>|</p>
-            <p className="text-[10px]">{fixture.venue}</p>
-          </>
-        )}
+          {showCompetition && fixture.venue && (
+            <>
+              <p>|</p>
+              <p className="text-[10px]">{fixture.venue}</p>
+            </>
+          )}
+        </div>
       </div>
 
       <SbrFixtureStatsStatusCard fixture={fixture} />

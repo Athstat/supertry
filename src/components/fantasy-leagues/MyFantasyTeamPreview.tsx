@@ -78,7 +78,7 @@ export default function MyFantasyTeamPreview({ leagueGroup }: Props) {
         )}
 
         {userTeam && currentRound && (
-          <div className='max-h-[190px] overflow-clip relative' key={currentRound?.id} >
+          <div className='max-h-[160px] overflow-clip relative' key={currentRound?.id} >
             <TeamHistoryProvider
               initRoundNumber={currentRound?.round_number}
               user={authUser}

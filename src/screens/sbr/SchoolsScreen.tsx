@@ -80,7 +80,7 @@ export default function SchoolsScreen() {
           />
         </div>
 
-        <SbrSeasonFilter 
+        <SbrSeasonFilter
           seasons={seasons}
           onChange={setSeasonId}
           value={seasonId}
@@ -95,11 +95,11 @@ export default function SchoolsScreen() {
           className='px-6'
         />
 
-          <SbrMatchCenter 
-            searchQuery={searchQuery}  
-            fixtures={displayFixture}
-            className='mx-6'
-          />
+        <SbrMatchCenter
+          searchQuery={searchQuery}
+          fixtures={displayFixture}
+          className='mx-6'
+        />
       </PageView>
 
     </Fragment>
