@@ -14,8 +14,8 @@ import { ISeasonRound } from '../../types/fantasy/fantasySeason';
 import { useAuth } from '../../contexts/auth/AuthContext';
 import Dot from '../ui/icons/Dot';
 import FantasyTeamProvider from '../../providers/fantasy_teams/FantasyTeamProvider';
-import MyTeamPitchView from '../my_fantasy_team/MyTeamPitchView';
 import TeamHistoryProvider from '../../providers/fantasy_teams/TeamHistoryProvider';
+import { FantasyTeamFormation3D } from '../my_fantasy_team/FantasyTeamFormation3D';
 
 type Props = {
   leagueGroup: FantasyLeagueGroup;
@@ -27,11 +27,13 @@ export default function MyFantasyTeamPreview({ leagueGroup }: Props) {
   const { authUser } = useAuth();
   const { currentRound, previousRound, scoringRound, nextDeadlineRound } = useFantasySeasons();
 
-  const { roundTeam: userTeam, isLoading: loadingUserTeam } = useUserRoundTeam(authUser?.kc_id, currentRound?.round_number);
+  const { roundTeam: userTeam, isLoading: loadingUserTeam } = useUserRoundTeam(authUser?.kc_id, currentRound?.round_number, true);
   const { userScore, isLoading: loadingScore } = useRoundScoringSummaryV2(scoringRound);
 
   const isLoading = loadingScore || loadingUserTeam;
   const showUserScore = (Boolean(userScore) && Boolean(scoringRound));
+
+  console.log("User Team ", userTeam);
 
   if (!leagueGroup) return;
 
@@ -40,7 +42,7 @@ export default function MyFantasyTeamPreview({ leagueGroup }: Props) {
   }
 
   return (
-    <div className="flex flex-col gap-4 relative">
+    <div className="flex flex-col gap-4 relative" key={currentRound?.id} >
 
       <BlueGradientCard className='flex flex-col gap-4 p-0 pt-6 rounded-none bg-gradient-to-r from-[#0B68BA] to-[#011E5C]' >
 
@@ -67,16 +69,17 @@ export default function MyFantasyTeamPreview({ leagueGroup }: Props) {
           />
         )}
 
-        {userTeam && (
-          <div className='max-h-[190px] overflow-clip relative' >
-            <TeamHistoryProvider>
+        {userTeam && currentRound && (
+          <div className='max-h-[190px] overflow-clip relative' key={currentRound?.id} >
+            <TeamHistoryProvider
+              initRoundNumber={currentRound?.round_number}
+              user={authUser}
+            >
               <FantasyTeamProvider
                 team={userTeam}
+                readOnly
               >
-                <MyTeamPitchView
-                  className='top-5'
-                  hideBenchPlayer
-                />
+                <FantasyTeamFormation3D className='mt-0 -top-10 flex flex-col items-center justify-center' onPlayerClick={() => { }} />
               </FantasyTeamProvider>
             </TeamHistoryProvider>
           </div>

@@ -19,16 +19,17 @@ type Props = {
     children?: ReactNode,
     user?: DjangoUserMinimal,
     loadingFallback?: ReactNode,
+    initRoundNumber?: number
 }
 
 /** Component that provides team history to its child components. 
  * Provder depends on the FantasyLeagueGroupProvider
  */
-export default function TeamHistoryProvider({ children, user }: Props) {
+export default function TeamHistoryProvider({ children, user, initRoundNumber }: Props) {
     const {seasonRounds, currentRound} = useFantasySeasons();
 
     const [roundNumber, setRoundNumber] = useQueryState(queryParamKeys.ROUND_NUMBER_QUERY_KEY, {
-        init: currentRound?.round_number.toString()
+        init: initRoundNumber?.toString() || currentRound?.round_number.toString()
     });
 
     const maxIndex = useMemo(() => {

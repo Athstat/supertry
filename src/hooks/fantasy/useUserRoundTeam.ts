@@ -12,8 +12,10 @@ export function useUserRoundTeam(userId?: string, roundNumber?: number | string,
     const fetchKey = finalShouldFetch ? `/fantasy-seasons/${seasonId}/users/${userId}/teams/${roundNumber}` : null;
     
     const { data: roundTeam, isLoading, error, mutate } = useSWR(fetchKey, () => fantasySeasonTeamService.getRoundTeam(seasonId ?? '',userId ?? "", roundNumber || ''), {
-        revalidateOnFocus: false
+        revalidateOnFocus: false,
+        revalidateIfStale: true
     });
+
     const hasTeam = roundTeam !== undefined && roundTeam !== null;
 
     return {
