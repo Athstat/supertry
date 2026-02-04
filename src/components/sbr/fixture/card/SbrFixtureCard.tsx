@@ -1,19 +1,19 @@
 import { useNavigate } from 'react-router-dom';
-import { ISbrFixture } from '../../types/sbr';
-import SbrTeamLogo from './fixtures/SbrTeamLogo';
+import { ISbrFixture } from '../../../../types/sbr';
+import SbrTeamLogo from '../../fixtures/SbrTeamLogo';
 import { twMerge } from 'tailwind-merge';
-import SbrFixturePredictionBox from './predictions/SbrFixturePredictionBox';
+import SbrFixturePredictionBox from '../../predictions/SbrFixturePredictionBox';
 import { useAtomValue } from 'jotai';
 import {
   sbrFixtureAtom,
   sbrFixtureBoxscoreAtom,
   sbrFixtureTimelineAtom,
-} from '../../state/sbrFixtureScreen.atoms';
+} from '../../../../state/sbrFixtureScreen.atoms';
 import { ScopeProvider } from 'jotai-scope';
 import { format } from 'date-fns';
-import SbrFixtureStatsStatusCard from './card/SbrFixtureStatsStatusCard';
-import { isGameLive, formatGameStatus } from '../../utils/fixtureUtils';
-import SbrFixtureDataProvider from '../../providers/SbrFixtureDataProvider';
+import SbrFixtureStatsStatusCard from '../../card/SbrFixtureStatsStatusCard';
+import { isGameLive, formatGameStatus } from '../../../../utils/fixtureUtils';
+import SbrFixtureDataProvider from '../../../../providers/SbrFixtureDataProvider';
 
 type Props = {
   fixture: ISbrFixture;
@@ -77,6 +77,7 @@ function SbrFixtureCardContent({
   };
 
   const gameCompleted = fixture.status === 'completed';
+  const showScores = gameCompleted && hasScores;
 
   return (
     <div

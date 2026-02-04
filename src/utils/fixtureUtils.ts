@@ -1,5 +1,5 @@
 import { endOfDay, startOfDay, startOfWeek, endOfWeek, getWeek, getYear, format, addDays, subDays } from 'date-fns';
-import { IFixture } from '../types/games';
+import { BaseFixture, IFixture } from '../types/games';
 import { ISbrFixture } from '../types/sbr';
 import { IProAthlete } from '../types/athletes';
 import { SortDirection } from '../types/playerSorting';
@@ -358,11 +358,11 @@ export function formatWeekHeader(
 
 /** Get fixtures for a specific week */
 export function getFixturesForWeek(
-  fixtures: IFixture[],
+  fixtures: BaseFixture[],
   weekStart: Date,
   weekEnd: Date,
   sortDirection: SortDirection = "asc"
-): IFixture[] {
+): BaseFixture[] {
 
   return fixtures
     .filter((f) => {
@@ -413,7 +413,7 @@ export function getSbrFixturesForWeek<T extends { kickoff_time?: Date }>(
 }
 
 /** Find the next week with fixtures (searches forward up to maxWeeks) */
-export function findNextWeekPivotWithFixtures(fixtures: IFixture[], pivotDate: Date, maxWeeks: number = 12): Date | null {
+export function findNextWeekPivotWithFixtures(fixtures: BaseFixture[], pivotDate: Date, maxWeeks: number = 12): Date | null {
   let currPivot = pivotDate || new Date();
   currPivot = addDays(currPivot, 7);
 
@@ -465,7 +465,7 @@ export function findNextWeekWithSbrFixtures<T extends { kickoff_time?: Date }>(
 }
 
 /** Find the previous week pivot with fixtures (searches backward up to maxWeeks) */
-export function findPreviousWeekPivotWithFixtures(fixtures: IFixture[], pivotDate: Date, maxWeeks: number = 26): Date | null {
+export function findPreviousWeekPivotWithFixtures(fixtures: BaseFixture[], pivotDate: Date, maxWeeks: number = 26): Date | null {
 
   let currPivot = pivotDate || new Date();
   currPivot = subDays(currPivot, 7);
@@ -519,7 +519,7 @@ export function findPreviousWeekWithSbrFixtures<T extends { kickoff_time?: Date 
 
 /** Find the closest week with fixtures (checks current, then forward, then backward) */
 export function findClosestWeekWithFixtures(
-  fixtures: IFixture[],
+  fixtures: BaseFixture[],
   pivotDate: Date
 ): Date | null | undefined {
 

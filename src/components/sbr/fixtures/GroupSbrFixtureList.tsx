@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { ISbrFixture } from "../../../types/sbr";
 import { searchSbrFixturesPredicate } from "../../../utils/fixtureUtils";
-import SbrFixtureCard from "../SbrFixtureCard";
+import SbrFixtureCard from "../fixture/card/SbrFixtureCard";
 
 type Props = {
     fixtures: ISbrFixture[],
