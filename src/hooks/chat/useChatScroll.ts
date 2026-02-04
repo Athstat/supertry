@@ -9,5 +9,6 @@ export function useChatScroll(
     if (!element) return;
 
     element.scrollTop = element.scrollHeight;
-  }, [scrollRef, otherDeps]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scrollRef, ...otherDeps]);
 }
