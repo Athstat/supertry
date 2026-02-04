@@ -59,7 +59,7 @@ function SbrFixtureCardContent({
   className,
   showKickOffTime,
 }: ContentProps) {
-  
+
   const navigate = useNavigate();
   const fixture = useAtomValue(sbrFixtureAtom);
 
@@ -77,8 +77,18 @@ function SbrFixtureCardContent({
         className
       )}
     >
-      <div className="text-center w-full flex flex-col items-center justify-center text-xs text-slate-700 dark:text-slate-400">
+
+      <div className='flex flex-row items-center justify-center text-xs gap-2 text-slate-700 dark:text-slate-400' >
         {showCompetition && fixture.season && <p className="text-[10px]">{fixture.season}</p>}
+        <p>|</p>
+        {showCompetition && fixture.season && <p className="text-[10px]">Round {fixture.round}</p>}
+
+        {showCompetition && fixture.venue && (
+          <>
+            <p>|</p>
+            <p className="text-[10px]">{fixture.venue}</p>
+          </>
+        )}
       </div>
 
       <SbrFixtureStatsStatusCard fixture={fixture} />
@@ -93,7 +103,7 @@ function SbrFixtureCardContent({
         />
 
         {/* Kick off information */}
-        <SbrFixtureGameStatus 
+        <SbrFixtureGameStatus
           fixture={fixture}
           showKickOffTime={showKickOffTime}
         />
