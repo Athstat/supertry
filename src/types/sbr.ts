@@ -9,7 +9,7 @@ export type ISbrFixture = BaseFixture & {
     fixture_id: string,
     home_score?: number,
     away_score?: number,
-    status?: string,
+    status?: "completed" | "not_started",
     season?: string,
     country?: string,
     is_feature_game?: boolean

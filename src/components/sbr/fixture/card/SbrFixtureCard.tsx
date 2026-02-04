@@ -1,19 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import { ISbrFixture } from '../../../../types/sbr';
-import SbrTeamLogo from '../../fixtures/SbrTeamLogo';
 import { twMerge } from 'tailwind-merge';
 import SbrFixturePredictionBox from '../../predictions/SbrFixturePredictionBox';
 import { useAtomValue } from 'jotai';
-import {
-  sbrFixtureAtom,
-  sbrFixtureBoxscoreAtom,
-  sbrFixtureTimelineAtom,
-} from '../../../../state/sbrFixtureScreen.atoms';
+import { sbrFixtureAtom, sbrFixtureBoxscoreAtom, sbrFixtureTimelineAtom } from '../../../../state/sbrFixtureScreen.atoms';
 import { ScopeProvider } from 'jotai-scope';
-import { format } from 'date-fns';
 import SbrFixtureStatsStatusCard from '../../card/SbrFixtureStatsStatusCard';
-import { isGameLive, formatGameStatus } from '../../../../utils/fixtureUtils';
 import SbrFixtureDataProvider from '../../../../providers/SbrFixtureDataProvider';
+import SbrFixtureCardTeam from './SbrFixtureCardTeam';
+import SbrFixtureGameStatus from './SbrFixtureGameStatus';
 
 type Props = {
   fixture: ISbrFixture;
@@ -64,20 +59,15 @@ function SbrFixtureCardContent({
   className,
   showKickOffTime,
 }: ContentProps) {
+  
   const navigate = useNavigate();
   const fixture = useAtomValue(sbrFixtureAtom);
 
   if (!fixture) return;
 
-  const { home_score, away_score } = fixture;
-  const hasScores = home_score !== null && away_score !== null;
-
   const handleClick = () => {
     navigate(`/sbr/fixtures/${fixture.fixture_id}`);
   };
-
-  const gameCompleted = fixture.status === 'completed';
-  const showScores = gameCompleted && hasScores;
 
   return (
     <div
@@ -95,68 +85,26 @@ function SbrFixtureCardContent({
 
       <div onClick={handleClick} className="flex flex-row">
         {/* Home Team */}
-        <div className="flex-1 flex gap-2 flex-col items-center justify-start">
-          {showLogos && (
-            <SbrTeamLogo
-              className="w-10 h-10 lg:w-10 lg:h-10"
-              teamName={fixture.home_team.team_name}
-            />
-          )}
-          <p className="text-[10px] md:text-xs lg-text-sm truncate text-wrap text-center">
-            {fixture.home_team.team_name}
-          </p>
-          <p className="text-slate-700 text-xs dark:text-slate-400">
-            {gameCompleted && home_score !== undefined ? home_score : '-'}
-          </p>
-        </div>
+
+        <SbrFixtureCardTeam
+          fixture={fixture}
+          isHome
+          showLogos={showLogos}
+        />
+
         {/* Kick off information */}
-        <div className="flex-1 flex flex-col items-center gap-1 justify-center dark:text-slate-400 text-slate-700 ">
-          {!hasScores &&
-            !showKickOffTime &&
-            !isGameLive(fixture.status) &&
-            fixture.status !== 'completed' && <p className="text-sm">vs</p>}
-          {fixture.status === 'completed' && !showKickOffTime && (
-            <div className="flex w-full text-xs flex-row items-center justify-center gap-1">
-              <div>Final</div>
-            </div>
-          )}
+        <SbrFixtureGameStatus 
+          fixture={fixture}
+          showKickOffTime={showKickOffTime}
+        />
 
-          <div className="flex flex-col items-center justify-center">
-            {showKickOffTime && fixture.kickoff_time && (
-              <p className="text-[10px]">{format(fixture.kickoff_time, 'HH:mm')}</p>
-            )}
-            {showKickOffTime && fixture.kickoff_time && (
-              <p className="text-[10px]">{format(fixture.kickoff_time, 'EEE, dd MMM yyyy')}</p>
-            )}
-            {!showKickOffTime && fixture.kickoff_time && (
-              <p className="text-sm font-semibold">{format(fixture.kickoff_time, 'HH:mm')}</p>
-            )}
-          </div>
-
-          {isGameLive(fixture.status) && (
-            <div className="flex flex-row items-center gap-1">
-              <div className="w-2 h-2 bg-green-500 animate-pulse dark:bg-green-400 rounded-full " />
-              <span className="text-xs text-green-600 dark:text-green-400 font-bold">
-                {formatGameStatus(fixture.status)}
-              </span>
-            </div>
-          )}
-        </div>
         {/* Away Team */}
-        <div className="flex-1 flex w-1/3 gap-2 flex-col items-center justify-end">
-          {showLogos && (
-            <SbrTeamLogo
-              className="w-10 h-10 lg:w-10 lg:h-10"
-              teamName={fixture.away_team.team_name}
-            />
-          )}
-          <p className="text-[10px] md:text-xs lg-text-sm truncate text-wrap text-center">
-            {fixture.away_team.team_name}
-          </p>
-          <p className="text-slate-700 text-xs dark:text-slate-400">
-            {gameCompleted && away_score !== undefined ? away_score : '-'}
-          </p>
-        </div>
+
+        <SbrFixtureCardTeam
+          fixture={fixture}
+          isHome={false}
+          showLogos={showLogos}
+        />
       </div>
 
       <SbrFixturePredictionBox fixture={fixture} hide={hideVoting} />
