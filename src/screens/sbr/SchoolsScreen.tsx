@@ -2,7 +2,6 @@ import { Fragment, useMemo } from 'react';
 import PageView from '../../components/ui/containers/PageView';
 import { useQueryState } from '../../hooks/web/useQueryState';
 import SbrMatchCenter from '../../components/fixtures/SbrMatchCenter';
-import FloatingSearchBar from '../../components/players/FloatingSearchBar';
 import IconCircle from '../../components/ui/icons/IconCircle';
 import SbrIcon from '../../components/ui/icons/SbrIcon';
 import SearchInput from '../../components/ui/forms/SearchInput';
@@ -11,10 +10,13 @@ import { useSbrFixtures } from '../../hooks/fixtures/useSbrFixtures';
 import WeekCursor from '../../components/fixtures/WeekCursor';
 import { searchSbrFixturePredicate } from '../../utils/sbrUtils';
 import { SeasonFilterBarItem } from '../../types/games';
+import { useDebounced } from '../../hooks/web/useDebounced';
 
 export default function SchoolsScreen() {
   const [searchQuery, setSearchQuery] = useQueryState<string>('query', { init: '' });
   const { fixtures, isLoading } = useSbrFixtures();
+
+  const debouncedQuery = useDebounced(searchQuery, 500);
 
   const seasons: SeasonFilterBarItem[] = [];
 
@@ -30,14 +32,14 @@ export default function SchoolsScreen() {
   } = useFixtureCursor({ fixtures, isLoading, initDateVal });
 
   const displayFixture = useMemo(() => {
-    if (searchQuery) {
+    if (debouncedQuery) {
       return fixtures.filter((f) => {
-        return searchSbrFixturePredicate(searchQuery, f);
+        return searchSbrFixturePredicate(debouncedQuery, f);
       })
     }
 
     return weekFixtures;
-  }, [fixtures, searchQuery, weekFixtures]);
+  }, [debouncedQuery, fixtures, weekFixtures]);
 
   const round = displayFixture.at(0)?.round;
 
@@ -62,6 +64,8 @@ export default function SchoolsScreen() {
         <div className='px-4' >
           <SearchInput
             placeholder='Search school fixtures'
+            value={searchQuery}
+            onChange={setSearchQuery}
           />
         </div>
 
@@ -80,13 +84,6 @@ export default function SchoolsScreen() {
           />
       </PageView>
 
-      <FloatingSearchBar
-        value={searchQuery ?? ''}
-        onChange={setSearchQuery}
-        placeholder="Search fixtures..."
-        showFilterButton={false}
-        showCompareButton={false}
-      />
     </Fragment>
   );
 }
