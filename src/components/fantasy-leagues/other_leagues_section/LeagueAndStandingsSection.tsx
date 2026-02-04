@@ -1,4 +1,4 @@
-import { Plus, Trophy } from "lucide-react"
+import { Plus } from "lucide-react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import SuggestedLeaguesSections from "./SuggestedLeaguesSection"
@@ -10,6 +10,7 @@ import NoContentCard from "../../ui/typography/NoContentMessage"
 import CreateLeagueModal from "../create_league_modal/CreateLeagueModal"
 import RoundedCard from "../../ui/cards/RoundedCard"
 import LeagueGroupsSection from "../LeagueGroupsSection"
+import PodiumStepsIcon from "../../ui/icons/PodiumStepsIcon"
 
 type Props = {
     fantasySeason: IFantasySeason
@@ -59,8 +60,12 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
             <div className="flex flex-row items-center justify-between px-4" >
 
                 <div className="flex flex-row items-center gap-2" >
-                    <Trophy className="w-4 h-4" />
-                    <p className="text-lg font-bold" >Leagues & Standings</p>
+
+                    <div className="bg-[#F1F3F7] dark:bg-slate-700 w-12 h-12 flex flex-col items-center justify-center rounded-full" >
+                        <PodiumStepsIcon />
+                    </div>
+
+                    <p className="text-lg font-bold" >Leagues And Standings</p>
                     {/* <GamePlayHelpButton className="" iconHw="w-4 h-4" /> */}
                 </div>
             </div>
