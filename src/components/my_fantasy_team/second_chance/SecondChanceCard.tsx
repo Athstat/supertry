@@ -12,8 +12,8 @@ export default function SecondChanceCard() {
     });
 
     return (
-        <div className="flex flex-row items-center justify-center" >
-            <WarningCard className="w-full flex flex-row text-sm" >
+        <div className="flex flex-row items-center justify-center " >
+            <WarningCard className="w-full flex flex-row text-sm mt-0" >
 
                 <div>
                     <p>

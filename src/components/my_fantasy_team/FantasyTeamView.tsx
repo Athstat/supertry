@@ -15,12 +15,12 @@ type Props = {
   onBack?: () => void;
   onTeamUpdated: () => Promise<void>;
   onEditChange?: (isEditing: boolean) => void;
+  pitchCN?: string
 }
 
 /** Renders a fantasy team view, with editor capabilities */
-export default function FantasyTeamView({ onTeamUpdated, leagueRound }: Props) {
+export default function FantasyTeamView({ onTeamUpdated, leagueRound, pitchCN }: Props) {
 
-  
 
   const { cancelSwap, slots, swapState, completeSwap, swapPlayer, budgetRemaining } =
     useFantasyTeam();
@@ -61,7 +61,9 @@ export default function FantasyTeamView({ onTeamUpdated, leagueRound }: Props) {
         onTeamUpdated={onTeamUpdated}
       />
 
-      <MyTeamPitchView />
+      <MyTeamPitchView 
+        className={pitchCN}
+      />
 
       <PlayerPicker
         isOpen={isPlayerPickerOpen}

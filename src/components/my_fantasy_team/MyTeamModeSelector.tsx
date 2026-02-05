@@ -64,6 +64,7 @@ export default function MyTeamModeSelector() {
                 leagueConfig={leagueConfig}
                 onTeamUpdated={async () => { await mutate() }}
                 onBack={() => { }}
+                pitchCN='mt-5'
               />
             </FantasyTeamProvider>
           )}
