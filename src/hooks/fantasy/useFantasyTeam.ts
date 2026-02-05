@@ -309,14 +309,12 @@ export function useFantasyTeam() {
     }, [swapPlayer?.purchase_price, totalSpent]);
 
 
-    const isSlotLocked = (slot: IFantasyLeagueTeamSlot) => {
+    const isPlayerLocked = (athlete?: IProAthlete) => {
         const isLocked = leagueRound && isSeasonRoundLocked(leagueRound);
 
         if (isLocked) {
             return true;
         }
-
-        const athlete = slot.athlete?.athlete;
 
         const seasonTeamIds = athlete?.athlete_teams?.filter((t) => {
             return t.season_id === leagueRound?.season;
@@ -325,19 +323,19 @@ export function useFantasyTeam() {
         const eligibleTeamIds: string[] = [];
 
         roundFixtures
-        .filter((f) => {
-            return f.game_status === "not_started";
-        })
-        .forEach((f) => {
+            .filter((f) => {
+                return f.game_status === "not_started";
+            })
+            .forEach((f) => {
 
-            if (f.team?.athstat_id && !eligibleTeamIds.includes(f.team?.athstat_id)) {
-                eligibleTeamIds.push(f.team.athstat_id);
-            }
+                if (f.team?.athstat_id && !eligibleTeamIds.includes(f.team?.athstat_id)) {
+                    eligibleTeamIds.push(f.team.athstat_id);
+                }
 
-            if (f.opposition_team?.athstat_id && !eligibleTeamIds.includes(f.opposition_team?.athstat_id)) {
-                eligibleTeamIds.push(f.opposition_team.athstat_id);
-            }
-        });
+                if (f.opposition_team?.athstat_id && !eligibleTeamIds.includes(f.opposition_team?.athstat_id)) {
+                    eligibleTeamIds.push(f.opposition_team.athstat_id);
+                }
+            });
 
         const playerIsEditable = seasonTeamIds?.reduce((flag, curr) => {
             return eligibleTeamIds.includes(curr) || flag;
@@ -345,6 +343,10 @@ export function useFantasyTeam() {
 
         return !playerIsEditable;
 
+    }
+
+    const isSlotLocked = (slot: IFantasyLeagueTeamSlot) => {
+        return isPlayerLocked(slot.athlete?.athlete);
     }
 
     return {
@@ -373,6 +375,7 @@ export function useFantasyTeam() {
         leagueRound,
         isReadOnly,
         roundFixtures,
-        isSlotLocked
+        isSlotLocked,
+        isPlayerLocked
     }
 }
