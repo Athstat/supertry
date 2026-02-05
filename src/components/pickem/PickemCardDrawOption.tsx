@@ -60,7 +60,7 @@ export default function PickemCardDrawOption({ fixture, fetchGameVotes, onVote, 
                 {clickedButton === 'draw' && isVoting ? (
                     <Loader className="w-5 h-5 animate-spin text-slate-600 dark:text-slate-300" />
                 ) : (
-                    <span className="text-xs font-bold text-slate-600 dark:text-slate-300">DRAW  {showVote ? `(${votePerc}%)` : null}</span>
+                    <span className="text-[10px] font-bold text-slate-600 dark:text-slate-300">DRAW  {showVote ? `(${votePerc}%)` : null}</span>
                 )}
             </div>
         </button>
