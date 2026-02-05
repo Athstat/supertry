@@ -8,7 +8,7 @@ import { useAthleteRoundScore } from "../../hooks/fantasy/useAthleteRoundScore";
 import { AppColours } from "../../types/constants";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { formatPosition } from "../../utils/athletes/athleteUtils";
-import { isSeasonRoundLocked } from "../../utils/leaguesUtils";
+import { isSeasonRoundStarted } from "../../utils/leaguesUtils";
 import { sanitizeStat } from "../../utils/stringUtils";
 import PlayerMugshot from "../player/PlayerMugshot";
 import SecondaryText from "../ui/typography/SecondaryText";
@@ -198,7 +198,7 @@ type PlayerPointsScoreProps = {
 
 function SubPlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
-    const isLocked = isSeasonRoundLocked(round);
+    const isLocked = isSeasonRoundStarted(round);
     const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, round.season, round?.round_number ?? 0);
     const { league } = useFantasyLeagueGroup();
 
