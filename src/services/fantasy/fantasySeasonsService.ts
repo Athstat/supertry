@@ -1,3 +1,4 @@
+import { IProAthlete } from "../../types/athletes";
 import { IFantasySeason } from "../../types/fantasy/fantasySeason";
 import { FantasyLeagueGroup, FantasyPointsScoredRankingItem, IPlayerPercentageSelected, MostSelectedRankingItem, PlayerPointsHistoryItem, PlayerSportActionRankingItem } from "../../types/fantasyLeagueGroups";
 import { getAuthHeader, getUri } from "../../utils/backendUtils";
@@ -155,5 +156,22 @@ export const fantasySeasonsService = {
         }
 
         return [];
+    },
+
+    getRoundEligibles: async (seasonId: string, roundNumber: string | number) : Promise<IProAthlete[]> => {
+        try {
+            const uri = getUri(`/api/v1/fantasy-seasons/${seasonId}/rounds/${roundNumber}/eligibles`);
+            const res = await fetch(uri, {
+                headers: getAuthHeader()
+            });
+
+            if (res.ok) {
+                return (await res.json()) as IProAthlete[];
+            }
+        } catch (err) {
+            console.log("Error fetching eligibles ", err);
+        }
+
+        return []
     }
 }
