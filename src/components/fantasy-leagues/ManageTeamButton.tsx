@@ -18,9 +18,8 @@ export function ManageTeamButton({ leagueRound, userRoundTeam, nextRound }: CTAB
     const isUserHasTeam = Boolean(userRoundTeam);
 
     const showManageTeam = !isCurrentLocked && isUserHasTeam;
-    const showViewTeam = isCurrentLocked && isUserHasTeam;
     const showCreateTeam = !isCurrentLocked && !isUserHasTeam;
-    const showSorryMessage = isCurrentLocked && !isUserHasTeam;
+    const showSorryMessage = isCurrentLocked && !isUserHasTeam && nextRound;
 
     const handleManageTeam = () => {
 
@@ -33,23 +32,22 @@ export function ManageTeamButton({ leagueRound, userRoundTeam, nextRound }: CTAB
     }
 
     return (
-        <div className='flex flex-col gap-2 px-4 items-center justify-center' >
+        <div className='flex flex-col gap-3 px-4 items-center justify-center' >
 
-            {!showSorryMessage && <TranslucentButton className='bg-gradient-to-tr w-fit border-white rounded-md px-2 py-3 from-[#051635] to-[#143B62]' onClick={handleManageTeam} >
-                {showManageTeam && <p>Manage My Team</p>}
-                {showViewTeam && <p>View My Team</p>}
-                {showCreateTeam && <p>Create My Team</p>}
+            {!showSorryMessage && <TranslucentButton className='bg-gradient-to-tr capitalize w-fit border-white rounded-md px-2 py-3 from-[#051635] to-[#143B62]' onClick={handleManageTeam} >
+                {showManageTeam && <p>MANAGE MY TEAM</p>}
+                {showCreateTeam && <p>CREATE MY TEAM</p>}
             </TranslucentButton>}
 
             {showSorryMessage && (
-                <TranslucentButton className='text-xs lg:text-sm w0fit font-normal text-start px-6' >
+                <TranslucentButton className='text-[13px] text-center lg:text-sm w0fit font-normal px-6' >
                     <p>Whoops! You missed the team deadline for <strong>{leagueRound.round_title}</strong>. In the mean time, you can pick your team for the next round.</p>
                 </TranslucentButton>
             )}
 
             {showSorryMessage && nextRound && (
-                <TranslucentButton className='bg-gradient-to-tr w-fit border-white rounded-md px-2 py-3 from-[#051635] to-[#143B62]' onClick={handleManageTeam} >
-                    <p>Pick Team for {nextRound.round_title}</p>
+                <TranslucentButton className='bg-gradient-to-tr capitalize w-fit border-white rounded-md px-4 py-3 from-[#051635] to-[#143B62]' onClick={handleManageTeam} >
+                    <p className="" >PICK TEAM FOR {nextRound.round_title.toUpperCase()}</p>
                 </TranslucentButton>
             )}
 
