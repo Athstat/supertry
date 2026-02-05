@@ -1,5 +1,5 @@
 import { Check, Info, Loader, Shield } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAtomValue } from "jotai";
 import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
@@ -13,12 +13,17 @@ import { useNavigateBack } from "../../hooks/web/useNavigateBack";
 import { useNavigationGuard } from "../../hooks/web/useNavigationGuard";
 import UnsavedChangesWarningModal from "../ui/modals/UnsavedChangesModal";
 import { useLeagueConfig } from "../../hooks/useLeagueConfig";
+import { useTutorial } from "../../hooks/tutorials/useTutorial";
+import { TUTORIAL_IDS } from "../../tutorials/tutorialIds";
+import { getCreateTeamTutorialSteps, CREATE_TEAM_TUTORIAL_STEP_INDEX } from "../../tutorials/createTeamTutorial";
 
 
 /** Renders Create Team View Header */
 export default function CreateTeamViewHeader() {
     const {leagueConfig} = useLeagueConfig();
     const { totalSpent, selectedCount, leagueRound, isTeamFull, resetToOriginalTeam, setTeam: setRoundTeam } = useFantasyTeam();
+    const { isActive, isFreeRoam, resumeTutorialAtStep, completeTutorial } = useTutorial();
+    const isCreateTeamTutorialActive = isActive(TUTORIAL_IDS.CREATE_TEAM);
 
     const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
     const [showClaimAccountModal, setShowClaimAccountModal] = useState<boolean>(false);
@@ -32,10 +37,6 @@ export default function CreateTeamViewHeader() {
     const isGuestAccount = useAtomValue(isGuestUserAtom);
 
     const { handleSave, isSaving, saveError, clearSaveError } = useSubmitTeam(handleSuccess);
-
-    if (!leagueRound || !leagueConfig) {
-        return;
-    }
 
     const onSaveTeam = () => {
         handleSave();
@@ -51,6 +52,10 @@ export default function CreateTeamViewHeader() {
         if (createdTeam) {
             setRoundTeam(createdTeam)
         }
+
+        if (isCreateTeamTutorialActive) {
+            completeTutorial(TUTORIAL_IDS.CREATE_TEAM);
+        }
     }
 
     const handleCancelClaimAccount = () => {
@@ -59,6 +64,30 @@ export default function CreateTeamViewHeader() {
 
     const handleCloseClaimAccountModal = () => {
         setShowClaimAccountModal(false);
+    }
+
+    useEffect(() => {
+        if (!isCreateTeamTutorialActive) {
+            return;
+        }
+
+        if (!isTeamFull) {
+            return;
+        }
+
+        if (!isFreeRoam) {
+            return;
+        }
+
+        resumeTutorialAtStep(
+            TUTORIAL_IDS.CREATE_TEAM,
+            getCreateTeamTutorialSteps(),
+            CREATE_TEAM_TUTORIAL_STEP_INDEX.FINAL_BANNER
+        );
+    }, [isCreateTeamTutorialActive, isTeamFull, isFreeRoam, resumeTutorialAtStep]);
+
+    if (!leagueRound || !leagueConfig) {
+        return;
     }
 
 
@@ -112,6 +141,7 @@ export default function CreateTeamViewHeader() {
                     disabled={!isTeamFull}
                     isLoading={isSaving}
                     onClick={onSaveTeam}
+                    dataTutorial="create-team-button"
                 >
                     Create Team
                 </PrimaryButton>
@@ -138,6 +168,7 @@ export default function CreateTeamViewHeader() {
             {/* Success Modal */}
             {showSuccessModal && (
                 <SuccessModal
+                    showCoachMessage={isCreateTeamTutorialActive}
                     onContinue={handleCloseSuccessModal}
                 />
             )}
@@ -166,10 +197,11 @@ export default function CreateTeamViewHeader() {
 
 
 type SuccessModalProps = {
-    onContinue?: () => void
+    onContinue?: () => void,
+    showCoachMessage?: boolean
 }
 
-function SuccessModal({ onContinue }: SuccessModalProps) {
+function SuccessModal({ onContinue, showCoachMessage }: SuccessModalProps) {
 
     const { leagueRound } = useFantasyTeam();
 
@@ -181,10 +213,15 @@ function SuccessModal({ onContinue }: SuccessModalProps) {
                         <Check className="w-8 h-8" />
                     </div>
                     <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Team Submitted!</h2>
-                    <p className="text-gray-600 dark:text-gray-400 mb-6">
+                    <p className="text-gray-600 dark:text-gray-400 mb-4">
                         Your team has been successfully submitted
                         {leagueRound ? ` to ${leagueRound.season}` : ''}
                     </p>
+                    {showCoachMessage && (
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                            Great job! Next you can create a league and invite your friends.
+                        </p>
+                    )}
                     <PrimaryButton
                         className="w-full"
                         onClick={onContinue}

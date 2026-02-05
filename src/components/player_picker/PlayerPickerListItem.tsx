@@ -14,11 +14,12 @@ import { useInView } from "react-intersection-observer";
 type PlayerListItemProps = {
     player: IProAthlete,
     onViewPlayerProfile?: (player: IProAthlete) => void,
-    onSelectPlayer?: (player: IProAthlete) => void
+    onSelectPlayer?: (player: IProAthlete) => void,
+    dataTutorial?: string
 }
 
 /** Renders a player picker list item */
-export function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer }: PlayerListItemProps) {
+export function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer, dataTutorial }: PlayerListItemProps) {
 
     const { remainingBudget } = usePlayerPicker();
     const { inView, ref } = useInView({ triggerOnce: true });
@@ -44,7 +45,7 @@ export function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer }: 
     }, [onSelectPlayer, player, isAffordable]);
 
     return (
-        <tr ref={ref} className={twMerge(
+        <tr ref={ref} data-tutorial={dataTutorial} className={twMerge(
             "hover:bg-slate-50 items-center w-[100%]",
             !isAffordable && 'opacity-50',
             "dark:hover:bg-slate-800/50 hover:bg-slate-200"

@@ -120,7 +120,7 @@ export default function PlayerPickerPlayerList({ onSelect }: Props) {
                                 <SecondaryText className="text-xs" >Player</SecondaryText>
                             </div>
                         </th>
-                        <th onClick={() => handleSort("price")} className="w-[14%]" >
+                        <th onClick={() => handleSort("price")} className="w-[14%]" data-tutorial="player-picker-price-column" >
 
                             <div className="flex flex-row items-center gap-1" >
                                 <SecondaryText className="text-xs" >Price</SecondaryText>
@@ -129,7 +129,7 @@ export default function PlayerPickerPlayerList({ onSelect }: Props) {
 
                         </th>
 
-                        <th onClick={() => handleSort("power_rank_rating")} className="w-[11%]" >
+                        <th onClick={() => handleSort("power_rank_rating")} className="w-[11%]" data-tutorial="player-picker-pr-column" >
                             <div className="flex flex-row items-center gap-1" >
                                 <SecondaryText className="text-xs" >PR</SecondaryText>
                                 <ChevronsUpDown className="w-3 h-3" />
@@ -140,13 +140,14 @@ export default function PlayerPickerPlayerList({ onSelect }: Props) {
                 </thead>
 
                 <tbody>
-                    {filteredAthletes.map((a) => {
+                    {filteredAthletes.map((a, index) => {
                         return (
                             <PlayerListItem
                                 player={a}
                                 key={a.tracking_id}
                                 onViewPlayerProfile={handleViewPlayerProfile}
                                 onSelectPlayer={onSelect}
+                                dataTutorial={index === 0 ? 'player-picker-first-row' : undefined}
                             />
                         )
                     })}

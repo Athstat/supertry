@@ -7,10 +7,11 @@ type OptionProps = {
     current?: string,
     onSelect?: (val: string) => void,
     icon?: ReactNode,
-    className?: string
+    className?: string,
+    dataTutorial?: string
 }
 
-export function TabSwitchOption({ label, current, value, onSelect, icon, className }: OptionProps) {
+export function TabSwitchOption({ label, current, value, onSelect, icon, className, dataTutorial }: OptionProps) {
 
     const isCurrent = current === value;
 
@@ -31,6 +32,7 @@ export function TabSwitchOption({ label, current, value, onSelect, icon, classNa
                 className
             )}
             onClick={handleOnClick}
+            data-tutorial={dataTutorial}
         >
             <p className="">{label}</p>
             {icon}

@@ -101,6 +101,8 @@ function SlotCard({ slot, onPlayerClick, position }: SlotCardProps) {
   };
 
 
+  const dataTutorial = slot.slotNumber === 1 ? 'team-slot-1-player' : undefined;
+
   return (
     <div
       className="absolute"
@@ -109,14 +111,13 @@ function SlotCard({ slot, onPlayerClick, position }: SlotCardProps) {
         top: `${position.y}%`,
         transform: 'translate(-50%, -50%)',
       }}
+      data-tutorial={dataTutorial}
     >
-
       <PlayerPitchCard
         player={athlete}
         onClick={onPlayerClick}
         key={slot.slotNumber}
       />
-
     </div>
   )
 }
