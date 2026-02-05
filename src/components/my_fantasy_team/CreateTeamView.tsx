@@ -269,7 +269,6 @@ export default function CreateFantasyTeamView() {
 
   const handleCompleteSwap = (player: IProAthlete) => {
     completeSwap(player);
-    onClosePickerModal();
     console.log("Ran complete Swap Function! ", player);
   }
 

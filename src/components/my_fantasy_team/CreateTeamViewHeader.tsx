@@ -87,7 +87,7 @@ export default function CreateTeamViewHeader() {
     }, [isCreateTeamTutorialActive, isTeamFull, isFreeRoam, resumeTutorialAtStep]);
 
     if (!leagueRound || !leagueConfig) {
-        return;
+        return null;
     }
 
 

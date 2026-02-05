@@ -60,7 +60,7 @@ export default defineConfig(({ mode }) => {
       ],
       proxy: {
         '/api/v1': {
-          target: env.VITE_API_BASE_URL,
+          target: env.VITE_API_BASE_URL || 'http://localhost:8000',
           changeOrigin: true,
           secure: false,
           rewrite: path => path.replace(/^\/api\/v1/, '/api/v1'),
