@@ -34,7 +34,7 @@ export function useSeasonRoundFixtures( seasonId?: string, roundNumber?: number 
     const {selectedSeason, currentRound} = useFantasySeasons();
 
     const finalSeasonId = seasonId || selectedSeason?.id;
-    const finalRound = currentRound?.round_number || roundNumber;
+    const finalRound = roundNumber || currentRound?.round_number;
     const shouldFetch = finalSeasonId && finalRound;
 
     const key = shouldFetch ? `/seasons/${finalSeasonId}/rounds/${finalRound}/fixtures` : null;
