@@ -37,7 +37,9 @@ function trackShare(link: string, source: string) {
 }
 
 async function copyToClipboard(text: string): Promise<boolean> {
-  if (!navigator?.clipboard?.writeText) return false;
+  if (typeof navigator === 'undefined' || !navigator.clipboard?.writeText) {
+    return false;
+  }
 
   try {
     await navigator.clipboard.writeText(text);
@@ -55,7 +57,10 @@ export function useShareApp() {
   );
 
   const handleShare = useCallback(async (): Promise<ShareOutcome> => {
-    const isMobileShareAvailable = isMobileWebView() && Boolean(window.CAN_USE_MOBILE_SHARE_API);
+    const hasWindow = typeof window !== 'undefined';
+    const hasNavigator = typeof navigator !== 'undefined';
+    const isMobileShareAvailable =
+      hasWindow && isMobileWebView() && Boolean(window.CAN_USE_MOBILE_SHARE_API);
 
     if (isMobileShareAvailable && window.ReactNativeWebView) {
       const jsonObj = { message: shareMessage };
@@ -71,7 +76,7 @@ export function useShareApp() {
       return 'shared';
     }
 
-    if (navigator.share) {
+    if (hasNavigator && navigator.share) {
       try {
         await navigator.share({ text: shareMessage });
         trackShare(shareDetails.link, shareDetails.source);

@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import ProfileSettingCard from '../../components/auth/user_profile/settings/ProfileSettingCard';
 import { UserCircle, Moon, Sun, HelpCircle, Share2 } from 'lucide-react';
 import ScrummyGamePlayModal from '../../components/branding/help/ScrummyGamePlayModal';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import LogoutButton from '../../components/auth/login/LogoutButton';
 import UserProfileHeader from '../../components/auth/user_profile/UserProfileHeader';
 import { useTheme } from '../../contexts/app_state/ThemeContext';
@@ -56,7 +56,10 @@ function Content() {
     setIsGameplayModalOpen(false);
   }
 
-  const handleShareApp = async () => {
+  const handleShareApp = useCallback(async () => {
+    setShowShareSuccess(false);
+    setShowShareError(false);
+
     const result = await handleShare();
 
     if (result === 'shared') {
@@ -67,7 +70,7 @@ function Content() {
     if (result === 'error') {
       setShowShareError(true);
     }
-  }
+  }, [handleShare]);
 
   return (
     <main className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
