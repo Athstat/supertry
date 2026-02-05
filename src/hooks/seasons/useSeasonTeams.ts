@@ -80,4 +80,3 @@ export function usePlayerSeasonTeam(player?: IProAthlete) {
         playerImageUrl: athleteSeasonTeamRecord?.player_image_url || player?.image_url
     }
 }
-

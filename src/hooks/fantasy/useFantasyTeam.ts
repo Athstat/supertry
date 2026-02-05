@@ -1,7 +1,7 @@
 import { useAtom, useAtomValue } from "jotai";
 import { useMemo, useCallback } from "react";
 import { fantasyAnalytics } from "../../services/analytics/fantasyAnalytics";
-import { fantasyLeagueTeamAtom, fantasyTeamSlotsAtom, swapStateAtom, swapPlayerAtom, fantasyLeagueTeamLeagueRoundAtom, readOnlyAtom } from "../../state/fantasy/fantasyLeagueTeam.atoms";
+import { fantasyLeagueTeamAtom, fantasyTeamSlotsAtom, swapStateAtom, swapPlayerAtom, fantasyLeagueTeamLeagueRoundAtom, readOnlyAtom, roundFixturesAtom } from "../../state/fantasy/fantasyLeagueTeam.atoms";
 import { fantasyTeamAthletesAtom } from "../../state/myTeam.atoms";
 import { IProAthlete, PositionClass } from "../../types/athletes";
 import { MAX_TEAM_BUDGET } from "../../types/constants";
@@ -9,6 +9,7 @@ import { IFantasyLeagueTeamSlot, defaultFantasyPositions } from "../../types/fan
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { Position } from "../../types/position";
 import { sortFantasyTeamAthletes, hashFantasyTeamAthletes } from "../../utils/athletes/athleteUtils";
+import { isSeasonRoundLocked } from '../../utils/leaguesUtils';
 
 /** Hook for accessing data about a fantasy league team */
 export function useFantasyTeam() {
@@ -19,6 +20,7 @@ export function useFantasyTeam() {
     const [swapState, setSwapState] = useAtom(swapStateAtom);
     const [swapPlayer, setSwapPlayer] = useAtom(swapPlayerAtom);
     const leagueRound = useAtomValue(fantasyLeagueTeamLeagueRoundAtom);
+    const roundFixtures = useAtomValue(roundFixturesAtom);
 
     const isReadOnly = useAtomValue(readOnlyAtom);
 
@@ -289,7 +291,7 @@ export function useFantasyTeam() {
 
         // Set slot state
         const pos = toPosition(slot.position, slot.slotNumber - 1);
-        
+
         setSwapPlayer(undefined);
 
         setSwapState({
@@ -305,6 +307,43 @@ export function useFantasyTeam() {
         const swapPlayerFee = swapPlayer?.purchase_price || 0;
         return (MAX_TEAM_BUDGET + swapPlayerFee) - totalSpent;
     }, [swapPlayer?.purchase_price, totalSpent]);
+
+
+    const isSlotLocked = (slot: IFantasyLeagueTeamSlot) => {
+        const isLocked = leagueRound && isSeasonRoundLocked(leagueRound);
+
+        if (isLocked) {
+            return true;
+        }
+
+        const athlete = slot.athlete;
+        const seasonTeamIds = athlete?.athlete?.athlete_teams?.filter((t) => {
+            return t.season_id === leagueRound?.season;
+        }).map((t) => t.team_id);
+
+        const eligibleTeamIds: string[] = [];
+
+        roundFixtures
+        .filter((f) => {
+            return f.game_status === "not_started";
+        })
+        .forEach((f) => {
+            if (f.team?.athstat_id && !eligibleTeamIds.includes(f.team?.athstat_id)) {
+                eligibleTeamIds.push(f.team.athstat_id);
+            }
+
+            if (f.team?.athstat_id && !eligibleTeamIds.includes(f.team?.athstat_id)) {
+                eligibleTeamIds.push(f.team.athstat_id);
+            }
+        });
+
+        const playerIsEditable = seasonTeamIds?.reduce((flag, curr) => {
+            return eligibleTeamIds.includes(curr) || flag;
+        }, false);
+
+        return !playerIsEditable;
+
+    }
 
     return {
         slots, setSlots,
@@ -330,6 +369,8 @@ export function useFantasyTeam() {
         swapState,
         budgetRemaining,
         leagueRound,
-        isReadOnly
+        isReadOnly,
+        roundFixtures,
+        isSlotLocked
     }
 }
