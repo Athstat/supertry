@@ -1,28 +1,15 @@
-import { ISeasonRound } from "../../../types/fantasy/fantasySeason"
 import WarningCard from "../../ui/cards/WarningCard"
-import { useSeasonRoundFixtures } from "../../../hooks/fixtures/useProFixtures"
 import { Link } from "react-router-dom"
-import RoundedCard from "../../ui/cards/RoundedCard"
-
-type Props = {
-    round: ISeasonRound
-}
-
-export default function SecondChanceCard({ round }: Props) {
+import { useFantasyTeam } from "../../../hooks/fantasy/useFantasyTeam"
 
 
-    const { fixtures, isLoading } = useSeasonRoundFixtures(round.season, round.round_number);
+export default function SecondChanceCard() {
+
+    const { roundFixtures: fixtures} = useFantasyTeam();
 
     const liveOrCompleted = fixtures.filter((f) => {
         return f.game_status !== "not_started"
     });
-
-
-    if (isLoading) {
-        return (
-            <RoundedCard className="w-full h-[40px] animate-pulse border-none"  />
-        )
-    }
 
     return (
         <div className="flex flex-row items-center justify-center" >

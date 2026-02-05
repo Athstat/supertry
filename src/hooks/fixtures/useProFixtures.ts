@@ -37,7 +37,7 @@ export function useSeasonRoundFixtures( seasonId?: string, roundNumber?: number 
     const finalRound = currentRound?.round_number || roundNumber;
     const shouldFetch = finalSeasonId && finalRound;
 
-    const key = shouldFetch ? `/seasons/${finalSeasonId}/rounds/${finalRound}` : null;
+    const key = shouldFetch ? `/seasons/${finalSeasonId}/rounds/${finalRound}/fixtures` : null;
     const { data, isLoading, error, mutate } = useSWR(key, () => seasonService.getSeasonFixtures(finalSeasonId || '', roundNumber));
 
     const fixtures = useMemo(() => {
