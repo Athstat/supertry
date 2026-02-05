@@ -946,4 +946,30 @@ describe('test isSeasonRoundLocked() function', () => {
 
         expect(isSeasonRoundLocked(seasonRound)).toBeFalsy();
     });
+
+    test('test when second chance window is active, round is not locked', () => {
+
+        const now = new Date();
+        // games start within lock window (10 minutes from now) but second chance overrides locking
+        const gamesStart = addMinutes(now, 10);
+
+        const seasonRound: ISeasonRound = {
+            id: "test_season_round",
+            round_number: 1,
+            round_title: "Week 1",
+            build_up_start: new Date(),
+            games_start: gamesStart,
+            games_end: new Date(),
+            coverage_end: new Date(),
+            season: "test season",
+            priority: 1,
+            created_at: new Date(),
+            // define a second chance window that includes `now`
+            second_chance_start: subMinutes(now, 5),
+            second_chance_end: addMinutes(now, 20)
+        } as any;
+
+
+        expect(isSeasonRoundLocked(seasonRound)).toBeFalsy();
+    });
 })

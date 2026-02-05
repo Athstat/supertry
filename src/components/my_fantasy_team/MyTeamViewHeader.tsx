@@ -31,7 +31,7 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
 
 
   return (
-    <div className="px-4 flex flex-col " >
+    <div className="px-4 flex flex-col gap-3" >
 
       <div className="flex flex-row  items-center justify-between" >
 
