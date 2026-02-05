@@ -15,9 +15,13 @@ import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 
 /** Renders my fantasy team screen */
 export function MyFantasyTeamScreen() {
+
+  useHideTopNavBar();
+  useHideBottomNavBar();
+
   const { authUser } = useAuth();
 
-  const {getSeasonById, setSelectedSeason} = useFantasySeasons();
+  const { getSeasonById, setSelectedSeason } = useFantasySeasons();
   const seasonId = useQueryValue('season_id')
 
   useEffect(() => {
@@ -27,13 +31,13 @@ export function MyFantasyTeamScreen() {
         setSelectedSeason(season);
       }
     }
-    
+
   }, [getSeasonById, seasonId, setSelectedSeason]);
 
   return (
-    <TeamHistoryProvider 
+    <TeamHistoryProvider
       user={authUser}
-      loadingFallback={<LeagueScreenLoadingSkeleton />} 
+      loadingFallback={<LeagueScreenLoadingSkeleton />}
     >
       <Content />
     </TeamHistoryProvider>
@@ -41,10 +45,6 @@ export function MyFantasyTeamScreen() {
 }
 
 function Content() {
-
-  /** Auto Hides Top Bar to Maximise screen space */
-  useHideTopNavBar();
-  useHideBottomNavBar();
 
   return (
     <PageView className={twMerge(
@@ -59,8 +59,6 @@ function Content() {
 }
 
 function LeagueScreenLoadingSkeleton() {
-  useHideTopNavBar();
-  useHideBottomNavBar();
 
   return (
     <PageView className="animate-pulse overflow-hidden flex flex-col gap-4">
