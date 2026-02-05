@@ -3,12 +3,13 @@ import { Coins } from 'lucide-react';
 import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
 import { useRoundScoringSummaryV2 } from '../../hooks/fantasy/useRoundScoringSummary';
 import { smartRoundUp } from '../../utils/intUtils';
-import { isSeasonRoundLocked } from '../../utils/leaguesUtils';
+import { isInSecondChanceMode, isSeasonRoundLocked } from '../../utils/leaguesUtils';
 import SecondaryText from '../ui/typography/SecondaryText';
 import { Activity } from 'react';
 import { useLeagueConfig } from '../../hooks/useLeagueConfig';
 import { ISeasonRound } from '../../types/fantasy/fantasySeason';
 import { LeagueRoundCountdown2 } from '../fantasy_league/LeagueCountdown';
+import SecondChanceCard from './second_chance/SecondChanceCard';
 
 type Props = {
   onTeamUpdated?: () => Promise<void>;
@@ -18,7 +19,7 @@ type Props = {
 export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
 
   const { leagueConfig } = useLeagueConfig();
-  const { totalSpent, selectedCount, leagueRound } = useFantasyTeam();
+  const { totalSpent, selectedCount, leagueRound, isReadOnly } = useFantasyTeam();
 
   const handleTeamUpdated = async () => {
     if (onTeamUpdated) {
@@ -26,9 +27,11 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
     }
   }
 
+  const isSecondChance = leagueRound && isInSecondChanceMode(leagueRound);
+
 
   return (
-    <div className="px-4 flex flex-col gap-3.5" >
+    <div className="px-4 flex flex-col " >
 
       <div className="flex flex-row  items-center justify-between" >
 
@@ -68,6 +71,11 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
         onTeamUpdated={handleTeamUpdated}
       />}
 
+      {!isReadOnly && isSecondChance && (
+        <SecondChanceCard 
+          round={leagueRound}
+        />
+      )}
     </div>
   );
 }
