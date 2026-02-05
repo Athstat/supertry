@@ -57,7 +57,7 @@ export default function PlayerPickerDataProvider({ children, positionPool, playe
 
     useEffect(() => {
         if (relatedGames) {
-            setRelatedGames(relatedGames);
+            setRelatedGames(relatedGames.filter((f) => f.game_status === "not_started"));
         }
     }, [relatedGames, setRelatedGames]);
 
