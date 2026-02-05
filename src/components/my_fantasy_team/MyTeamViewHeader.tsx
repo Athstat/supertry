@@ -73,7 +73,6 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
 
       {!isReadOnly && isSecondChance && (
         <SecondChanceCard 
-          round={leagueRound}
         />
       )}
     </div>
