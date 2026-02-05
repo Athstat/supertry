@@ -9,7 +9,7 @@ import { IFantasyLeagueTeamSlot, defaultFantasyPositions } from "../../types/fan
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { Position } from "../../types/position";
 import { sortFantasyTeamAthletes, hashFantasyTeamAthletes } from "../../utils/athletes/athleteUtils";
-import { isSeasonRoundLocked } from '../../utils/leaguesUtils';
+import { isInSecondChanceMode, isSeasonRoundLocked } from '../../utils/leaguesUtils';
 
 /** Hook for accessing data about a fantasy league team */
 export function useFantasyTeam() {
@@ -310,10 +310,10 @@ export function useFantasyTeam() {
 
 
     const isPlayerLocked = (athlete?: IProAthlete) => {
-        const isLocked = leagueRound && isSeasonRoundLocked(leagueRound);
 
-        if (isLocked) {
-            return true;
+        /** If second chance mode is off */
+        if (leagueRound && !isInSecondChanceMode(leagueRound)) {
+            return isSeasonRoundLocked(leagueRound)
         }
 
         const seasonTeamIds = athlete?.athlete_teams?.filter((t) => {
