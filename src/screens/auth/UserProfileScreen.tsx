@@ -10,12 +10,14 @@ import Experimental from '../../components/ui/ab_testing/Experimental';
 import QaNoticeCard from '../../components/auth/user_profile/settings/QaNoticeCard';
 import { useNavigate } from 'react-router-dom';
 import ProfileSettingCard from '../../components/auth/user_profile/settings/ProfileSettingCard';
-import { UserCircle, Moon, Sun, HelpCircle } from 'lucide-react';
+import { UserCircle, Moon, Sun, HelpCircle, Share2 } from 'lucide-react';
 import ScrummyGamePlayModal from '../../components/branding/help/ScrummyGamePlayModal';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import LogoutButton from '../../components/auth/login/LogoutButton';
 import UserProfileHeader from '../../components/auth/user_profile/UserProfileHeader';
 import { useTheme } from '../../contexts/app_state/ThemeContext';
+import { useShareApp } from '../../hooks/marketing/useShareApp';
+import { Toast } from '../../components/ui/Toast';
 
 export function UserProfileScreen() {
 
@@ -38,6 +40,9 @@ function Content() {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
   const [isGameplayModalOpen, setIsGameplayModalOpen] = useState(false);
+  const { handleShare } = useShareApp();
+  const [showShareSuccess, setShowShareSuccess] = useState(false);
+  const [showShareError, setShowShareError] = useState(false);
 
   const handleEditUserProfile = () => {
     navigate('/profile/account-info');
@@ -50,6 +55,22 @@ function Content() {
   const handleCloseGameplayModal = () => {
     setIsGameplayModalOpen(false);
   }
+
+  const handleShareApp = useCallback(async () => {
+    setShowShareSuccess(false);
+    setShowShareError(false);
+
+    const result = await handleShare();
+
+    if (result === 'shared') {
+      setShowShareSuccess(true);
+      return;
+    }
+
+    if (result === 'error') {
+      setShowShareError(true);
+    }
+  }, [handleShare]);
 
   return (
     <main className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
@@ -98,9 +119,16 @@ function Content() {
           onClick={handleOpenGameplayModal}
         />
 
+        <QaNoticeCard />
+
         <LicensingModal />
 
-        <QaNoticeCard />
+        <ProfileSettingCard
+          title='Share app'
+          description='Share Scrummy with friends'
+          icon={<Share2 />}
+          onClick={handleShareApp}
+        />
 
         {/* Logout Button */}
         <LogoutButton
@@ -115,6 +143,20 @@ function Content() {
       <ScrummyGamePlayModal
         isOpen={isGameplayModalOpen}
         onClose={handleCloseGameplayModal}
+      />
+
+      <Toast
+        message="Thank you for sharing the app!"
+        type="success"
+        isVisible={showShareSuccess}
+        onClose={() => setShowShareSuccess(false)}
+      />
+
+      <Toast
+        message="Unable to share. Please try again."
+        type="error"
+        isVisible={showShareError}
+        onClose={() => setShowShareError(false)}
       />
     </main>
   )
