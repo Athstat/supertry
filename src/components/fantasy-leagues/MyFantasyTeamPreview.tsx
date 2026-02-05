@@ -58,7 +58,7 @@ export default function MyFantasyTeamPreview({ leagueGroup }: Props) {
             </>}
           </div>}
 
-          {currentRound && <div className='flex flex-row items-center gap-2 font-semibold' >
+          {!scoringRound && currentRound && <div className='flex flex-row items-center gap-2 font-semibold' >
             <p>{leagueGroup.title}</p>
             <Dot className='dark:bg-white' />
             <p>{currentRound?.round_title}</p>
