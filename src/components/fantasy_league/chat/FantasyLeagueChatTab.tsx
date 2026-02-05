@@ -45,7 +45,8 @@ export default function FantasyLeagueChatTab() {
   const headerLabel = useMemo(() => `${leagueTitle} Chat`, [leagueTitle]);
 
   return (
-    <div className="flex flex-col gap-4 px-4 pb-32">
+    <div className="flex flex-col gap-4 px-4 pb-32 py-4 overflow-x-hidden">
+      
       <div className="flex flex-row items-center gap-2">
         <MessageSquare className="text-slate-700 dark:text-slate-300" />
         <p className="text-lg font-bold">{headerLabel}</p>
@@ -80,7 +81,7 @@ export default function FantasyLeagueChatTab() {
 
       <div className="flex flex-col gap-2">
         <textarea
-          className="w-full min-h-[90px] resize-none rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/80 px-4 py-3 text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full min-h-[90px] resize-none rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/80 px-4 py-3 text-base md:text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder={isReady ? 'Type a message...' : 'Chat is unavailable'}
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
