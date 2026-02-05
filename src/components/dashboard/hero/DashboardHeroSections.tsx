@@ -313,6 +313,7 @@ function PlayNowCTAButton({ currentRound, nextRound, roundTeam, hideVerboseInstr
       >
         {isGameweekOpen && isFirstTime && <p>Pick Team</p>}
         {isGameweekOpen && !isFirstTime && <p>Manage Team</p>}
+        {!isGameweekOpen && roundTeam && <p>Manage Team</p>}
         {isPickTeamForNextRound && <p>Pick team for {nextRound.round_title}</p>}
       </button>
 
