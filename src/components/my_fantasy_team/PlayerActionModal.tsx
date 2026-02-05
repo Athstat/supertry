@@ -84,6 +84,7 @@ export function PlayerActionModal({
         "max-h-[640px] min-h-[400px] py-4 px-6 border-t dark:border-slate-700",
         isReadOnly && "max-h-[300px] min-h-[260px]"
       )}
+      dataTutorial="player-action-modal"
       hideHandle
       key={player.tracking_id}
       onClickOutside={onClose}
@@ -181,6 +182,7 @@ export function PlayerActionModal({
           <PrimaryButton
             className="bg-purple-100 text-purple-700 dark:text-purple-300 dark:bg-purple-900/30 dark:hover:bg-purple-900 dark:border-purple-500/50 border-purple-500 hover:bg-purple-200"
             onClick={handleInitSwap}
+            dataTutorial="player-action-swap"
           >
             Swap
             {isLocked && <Lock className="w-4 h-4" />}
@@ -206,6 +208,7 @@ export function PlayerActionModal({
               "border-none hover:dark:text-slate-300 cursor-pointer  bg-slate-200 dark:bg-slate-800 dark:text-slate-400 p-2.5 items-center justify-center flex flex-row gap-1"
             }
             onClick={handleMakePlayerCaptain}
+            dataTutorial="player-action-captain"
           >
             Make Captain
             {isLocked && <Lock className="w-4 h-4" />}
