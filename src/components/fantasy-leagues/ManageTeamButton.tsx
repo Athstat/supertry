@@ -40,7 +40,7 @@ export function ManageTeamButton({ leagueRound, userRoundTeam, nextRound }: CTAB
             </TranslucentButton>}
 
             {showSorryMessage && (
-                <TranslucentButton className='text-[13px] text-center lg:text-sm w0fit font-normal px-6' >
+                <TranslucentButton className='text-[13px] text-center lg:text-sm font-normal px-6' >
                     <p>Whoops! You missed the team deadline for <strong>{leagueRound.round_title}</strong>. In the mean time, you can pick your team for the next round.</p>
                 </TranslucentButton>
             )}
