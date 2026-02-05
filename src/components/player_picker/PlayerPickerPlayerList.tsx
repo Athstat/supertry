@@ -34,6 +34,7 @@ export default function PlayerPickerPlayerList({ onSelect }: Props) {
     } = usePlayerPicker();
 
     const { list, loadingList } = useScoutingList();
+    
     const {athletes, isLoading: loadingAthletes} = useRoundEligiblePlayers();
 
     const [profileModalPlayer, setProfileModalPlayer] = useState<IProAthlete>();
