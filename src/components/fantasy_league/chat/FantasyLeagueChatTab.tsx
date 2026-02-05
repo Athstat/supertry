@@ -45,7 +45,7 @@ export default function FantasyLeagueChatTab() {
   const headerLabel = useMemo(() => `${leagueTitle} Chat`, [leagueTitle]);
 
   return (
-    <div className="flex flex-col gap-4 px-4 pb-32 py-4 overflow-x-hidden">
+    <div className="flex flex-col gap-4 px-4 pb-32 pt-4 overflow-x-hidden">
       
       <div className="flex flex-row items-center gap-2">
         <MessageSquare className="text-slate-700 dark:text-slate-300" />
