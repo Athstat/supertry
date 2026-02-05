@@ -12,6 +12,8 @@ import { useAuth } from '../../contexts/auth/AuthContext';
 import { useQueryValue } from '../../hooks/web/useQueryState';
 import { useEffect } from 'react';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
+import { useTeamHistory } from '../../hooks/fantasy/useTeamHistory';
+import RoundFixturesProvider from '../../providers/fixtures/RoundFixturesProvider';
 
 /** Renders my fantasy team screen */
 export function MyFantasyTeamScreen() {
@@ -46,15 +48,23 @@ export function MyFantasyTeamScreen() {
 
 function Content() {
 
+  const { round } = useTeamHistory();
+
   return (
-    <PageView className={twMerge(
-      "dark:text-white flex flex-col gap-4",
-      AppColours.BACKGROUND
-    )}>
-      <MyFantasyTeamScreenHeader />
-      <LearnScrummyNoticeCard />
-      <MyTeamModeSelector />
-    </PageView>
+
+    <RoundFixturesProvider
+      round={round}
+      loadingFallback={<LeagueScreenLoadingSkeleton />}
+    >
+      <PageView className={twMerge(
+        "dark:text-white flex flex-col gap-4",
+        AppColours.BACKGROUND
+      )}>
+        <MyFantasyTeamScreenHeader />
+        <LearnScrummyNoticeCard />
+        <MyTeamModeSelector />
+      </PageView>
+    </RoundFixturesProvider>
   );
 }
 
