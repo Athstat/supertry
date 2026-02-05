@@ -316,8 +316,9 @@ export function useFantasyTeam() {
             return true;
         }
 
-        const athlete = slot.athlete;
-        const seasonTeamIds = athlete?.athlete?.athlete_teams?.filter((t) => {
+        const athlete = slot.athlete?.athlete;
+
+        const seasonTeamIds = athlete?.athlete_teams?.filter((t) => {
             return t.season_id === leagueRound?.season;
         }).map((t) => t.team_id);
 
@@ -328,12 +329,13 @@ export function useFantasyTeam() {
             return f.game_status === "not_started";
         })
         .forEach((f) => {
+
             if (f.team?.athstat_id && !eligibleTeamIds.includes(f.team?.athstat_id)) {
                 eligibleTeamIds.push(f.team.athstat_id);
             }
 
-            if (f.team?.athstat_id && !eligibleTeamIds.includes(f.team?.athstat_id)) {
-                eligibleTeamIds.push(f.team.athstat_id);
+            if (f.opposition_team?.athstat_id && !eligibleTeamIds.includes(f.opposition_team?.athstat_id)) {
+                eligibleTeamIds.push(f.opposition_team.athstat_id);
             }
         });
 

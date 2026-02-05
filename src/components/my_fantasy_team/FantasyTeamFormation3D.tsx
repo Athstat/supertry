@@ -6,6 +6,7 @@ import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { IFantasyLeagueTeamSlot, SlotCardPosition } from '../../types/fantasyLeagueTeam';
 import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
 import { EmptySlotPitchCard } from './pitch_card/EmptySlotPitchCard';
+import { Lock } from 'lucide-react';
 
 interface TeamFormationProps {
   onPlayerClick: (player: IFantasyTeamAthlete) => void;
@@ -37,7 +38,7 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN, firstRowMargin
       <RugbyPitch3DRaster className={twMerge(
         'mt-12',
         marginCN,
-        
+
       )} />
 
       <div className='top-0  left-0 absolute w-full p-3 flex flex-col items-center justify-center gap-0' >
@@ -81,7 +82,9 @@ type SlotCardProps = {
 
 function SlotCard({ slot, onPlayerClick, position }: SlotCardProps) {
 
+  const { isSlotLocked } = useFantasyTeam();
   const { athlete } = slot;
+  const isLocked = isSlotLocked(slot);
 
   if (!athlete) {
     return (
@@ -110,12 +113,19 @@ function SlotCard({ slot, onPlayerClick, position }: SlotCardProps) {
         transform: 'translate(-50%, -50%)',
       }}
     >
+      <div className='relative' >
+        <PlayerPitchCard
+          player={athlete}
+          onClick={onPlayerClick}
+          key={slot.slotNumber}
+        />
 
-      <PlayerPitchCard
-        player={athlete}
-        onClick={onPlayerClick}
-        key={slot.slotNumber}
-      />
+        {isLocked && (
+          <div className='absolute bg-yellow-500 p-1 rounded-md z-[30] top-5 left-0' >
+            <Lock  className='w-4 h-4 text-black' />
+          </div>
+        )}
+      </div>
 
     </div>
   )
