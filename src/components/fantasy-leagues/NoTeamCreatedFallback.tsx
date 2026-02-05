@@ -12,12 +12,12 @@ type Props = {
 // TODO: Move this to a different component
 
 /** Renders a list of rounds */
-export default function NoTeamCreatedFallback({perspective = "first-person", hideViewStandingsOption} : Props) {
+export default function NoTeamCreatedFallback({ perspective = "first-person", hideViewStandingsOption }: Props) {
 
     const { round, setRound: jumpToRound, manager } = useTeamHistory();
-    const {currentRound} = useFantasySeasons();
+    const { currentRound, nextRound } = useFantasySeasons();
 
-    const {navigate} = useTabView();
+    const { navigate } = useTabView();
     const managerAlias = manager?.username || manager?.first_name || manager?.last_name || "User";
 
     const isOldLeague = round && currentRound && ((round?.round_number ?? 0) < (currentRound?.round_number ?? 0));
@@ -33,16 +33,24 @@ export default function NoTeamCreatedFallback({perspective = "first-person", hid
         navigate("standings")
     }
 
+    const handlePickTeamForNextRound = () => {
+        if (nextRound) {
+            jumpToRound(nextRound);
+        }
+    }
+
+    const canPickNextRoundTeam = Boolean(nextRound);
+
     const oldLeagueDidNotCreateTeamWording = perspective === "first-person" ?
         `You didn't create a team for ${round?.round_title}` : `${managerAlias} didn't create a team for ${round?.round_title}`
 
     const missedDeadlineWording = perspective === "first-person" ?
-        `You missed the deadline for ${round?.round_title}. You can pick your team on the next round` :
+        `You missed the deadline for ${round?.round_title}. ${canPickNextRoundTeam ? "You can pick your team for the next round" : ''}` :
         `${managerAlias} didn't create a team for ${round?.round_title}`;
 
     return (
         <div className="relative flex overflow-hidden flex-col items-center justify-center w-full h-full" >
-            
+
             <div className="opacity-20 w-full" >
                 <PitchViewLoadingSkeleton hideHistoryBar />
             </div>
@@ -59,7 +67,7 @@ export default function NoTeamCreatedFallback({perspective = "first-person", hid
                 </div>}
 
                 {missedDeadline && <div className="font w-2/3 flex flex-col gap-2 items-center justify-center text-center" >
-                    
+
                     <p>
                         {missedDeadlineWording}
                     </p>
@@ -69,6 +77,12 @@ export default function NoTeamCreatedFallback({perspective = "first-person", hid
                     {isOldLeague && !hideViewStandingsOption && (
                         <div>
                             <PrimaryButton onClick={handleViewStandings} >View Standings</PrimaryButton>
+                        </div>
+                    )}
+
+                    {!isOldLeague && !hideViewStandingsOption && nextRound && (
+                        <div>
+                            <PrimaryButton onClick={handlePickTeamForNextRound} >Pick Team for {nextRound?.round_title}</PrimaryButton>
                         </div>
                     )}
                 </div>}

@@ -12,6 +12,7 @@ import { useLeagueConfig } from '../../hooks/useLeagueConfig';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 import { useUserRoundTeam } from '../../hooks/fantasy/useUserRoundTeam';
 import MyTeamScreenProvider from '../../contexts/ui/MyTeamScreenContext';
+import { useHideBottomNavBar } from '../../hooks/navigation/useNavigationBars';
 
 
 /** Renders the right team view based on the view mode  */
@@ -20,6 +21,8 @@ type ViewMode = 'create-team' | 'pitch-view' | 'no-team-locked' | 'error';
 
 /** Component that selects between showing the pitch view or showing the create team view  */
 export default function MyTeamModeSelector() {
+
+  useHideBottomNavBar();
 
   const { round, manager } = useTeamHistory();
   const { selectedSeason } = useFantasySeasons();
