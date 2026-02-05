@@ -1,21 +1,17 @@
 import { FantasyLeagueGroup } from '../../types/fantasyLeagueGroups';
-import { useNavigate } from 'react-router-dom';
 import BlueGradientCard from '../ui/cards/BlueGradientCard';
 import RoundedCard from '../ui/cards/RoundedCard';
-import { IFantasyLeagueTeam } from '../../types/fantasyLeague';
-import { isSeasonRoundLocked } from '../../utils/leaguesUtils';
 import { useRoundScoringSummaryV2 } from '../../hooks/fantasy/useRoundScoringSummary';
 import { LeagueRoundCountdown3 } from '../fantasy_league/LeagueCountdown';
-import { TranslucentButton } from '../ui/buttons/PrimaryButton';
 import { smartRoundUp } from '../../utils/intUtils';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 import { useUserRoundTeam } from '../../hooks/fantasy/useUserRoundTeam';
-import { ISeasonRound } from '../../types/fantasy/fantasySeason';
 import { useAuth } from '../../contexts/auth/AuthContext';
 import Dot from '../ui/icons/Dot';
 import FantasyTeamProvider from '../../providers/fantasy_teams/FantasyTeamProvider';
 import TeamHistoryProvider from '../../providers/fantasy_teams/TeamHistoryProvider';
 import { FantasyTeamFormation3D } from '../my_fantasy_team/FantasyTeamFormation3D';
+import { ManageTeamButton } from './ManageTeamButton';
 
 type Props = {
   leagueGroup: FantasyLeagueGroup;
@@ -25,7 +21,7 @@ type Props = {
 export default function MyFantasyTeamPreview({ leagueGroup }: Props) {
 
   const { authUser } = useAuth();
-  const { currentRound, previousRound, scoringRound, nextDeadlineRound } = useFantasySeasons();
+  const { currentRound, scoringRound, nextDeadlineRound, nextRound } = useFantasySeasons();
 
   const { roundTeam: userTeam, isLoading: loadingUserTeam } = useUserRoundTeam(authUser?.kc_id, currentRound?.round_number, true);
   const { userScore, isLoading: loadingScore } = useRoundScoringSummaryV2(scoringRound);
@@ -75,7 +71,7 @@ export default function MyFantasyTeamPreview({ leagueGroup }: Props) {
           />
         )}
 
-        <div className='max-h-[160px] min-h-[60px] overflow-clip relative' key={currentRound?.id} >
+        <div className='max-h-[160px] min-h-[120px] overflow-clip relative' key={currentRound?.id} >
           {userTeam && currentRound && (
 
             <TeamHistoryProvider
@@ -93,10 +89,10 @@ export default function MyFantasyTeamPreview({ leagueGroup }: Props) {
         </div>
 
         <div className='absolute bottom-0 left-0 w-full h-[160px] flex flex-col items-center justify-end pb-4 bg-gradient-to-b to-[#011E5C] from-transparent' >
-          {currentRound && <CTAButtons
+          {currentRound && <ManageTeamButton
             leagueRound={currentRound}
             userRoundTeam={userTeam}
-            previousRound={previousRound}
+            nextRound={nextRound}
           />}
         </div>
 
@@ -119,43 +115,3 @@ function LoadingSkeleton() {
 
 }
 
-type CTAButtonProps = {
-  leagueRound: ISeasonRound,
-  userRoundTeam?: IFantasyLeagueTeam,
-  previousRound?: ISeasonRound
-}
-
-function CTAButtons({ leagueRound, userRoundTeam }: CTAButtonProps) {
-
-  const navigate = useNavigate();
-
-  const isCurrentLocked = isSeasonRoundLocked(leagueRound);
-  const isUserHasTeam = Boolean(userRoundTeam);
-
-  const showManageTeam = !isCurrentLocked && isUserHasTeam;
-  const showViewTeam = isCurrentLocked && isUserHasTeam;
-  const showCreateTeam = !isCurrentLocked && !isUserHasTeam;
-  const showSorryMessage = isCurrentLocked && !isUserHasTeam;
-
-  const handleManageTeam = () => {
-    navigate(`/my-team`);
-  }
-
-  return (
-    <div className='flex flex-col gap-2 px-4' >
-
-      {!showSorryMessage && <TranslucentButton className='bg-gradient-to-tr w-fit border-white rounded-md px-2 py-3 from-[#051635] to-[#143B62]' onClick={handleManageTeam} >
-        {showManageTeam && <p>Manage My Team</p>}
-        {showViewTeam && <p>View My Team</p>}
-        {showCreateTeam && <p>Create My Team</p>}
-      </TranslucentButton>}
-
-      {showSorryMessage && (
-        <TranslucentButton className='text-xs lg:text-sm w0fit font-normal text-start px-6' >
-          <p>Whoops! You missed the team deadline for <strong>{leagueRound.round_title}</strong>. You will have to wait for the next round to create your team</p>
-        </TranslucentButton>
-      )}
-
-    </div>
-  )
-}

@@ -67,6 +67,18 @@ export function useFantasySeasons() {
         });
     }, [scoringRound, seasonRounds]);
 
+    const nextRound = useMemo(() => {
+        const nextRoundNumber  = currentRound?.round_number;
+
+        if (!nextRoundNumber) {
+            return undefined;
+        }
+
+        return seasonRounds.find((f) => {
+            return f.round_number === nextRoundNumber + 1;
+        })
+    }, [currentRound?.round_number, seasonRounds])
+
     const nextDeadlineRound = useMemo(() => {
 
         if (!previousRound && currentRound) {
@@ -104,7 +116,8 @@ export function useFantasySeasons() {
         showDrawer, 
         setShowDrawer,
         nextDeadlineRound,
-        getSeasonById
+        getSeasonById,
+        nextRound
     }
 
 }
