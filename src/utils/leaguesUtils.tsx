@@ -74,10 +74,6 @@ export function getSeasonRoundDeadline(seasonRound: ISeasonRound) {
 
 export function isSeasonRoundLocked(seasonRound: ISeasonRound) {
 
-  if (seasonRound.round_number === 1) {
-    return true;
-  }
-
   const { games_start } = seasonRound;
 
   if (!games_start) return false;

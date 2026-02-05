@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ISeasonRound } from './../../../../src/types/fantasy/fantasySeason';
-import { addDays, subDays, addMinutes, subMinutes } from "date-fns";
+import { addDays, subDays, addMinutes, subMinutes, addHours } from "date-fns";
 import { getCurrentRound, getPreviousRound, getScoringRound } from "../../../../src/utils/fantasy/seasonRoundsUtils";
+import { isSeasonRoundLocked } from '../../../../src/utils/leaguesUtils';
 
 describe('test getCurrentRound() function', () => {
 
@@ -852,5 +853,97 @@ describe('test getScoringRound() function', () => {
         expect(scoringRound).toBeDefined();
         expect(scoringRound?.round_number).toBe(2);
         expect(scoringRound?.id).toBe("round-2");
+    });
+})
+
+
+describe('test isSeasonRoundLocked() function', () => {
+    test('test when round is locked (Extreme Boundary)', () => {
+
+        const now = new Date();
+        const gamesStart = addMinutes(now, 30);
+
+        const seasonRound: ISeasonRound = {
+            id: "test_season_round",
+            round_number: 1,
+            round_title: "Week 1",
+            build_up_start: new Date(),
+            games_start: gamesStart,
+            games_end: new Date(),
+            coverage_end: new Date(),
+            season: "test season",
+            priority: 1,
+            created_at: new Date()
+        }
+
+
+        expect(isSeasonRoundLocked(seasonRound)).toBeTruthy();
+    });
+
+    test('test when round is locked (Normal)', () => {
+
+        const now = new Date();
+        const gamesStart = addMinutes(now, 20);
+
+        const seasonRound: ISeasonRound = {
+            id: "test_season_round",
+            round_number: 1,
+            round_title: "Week 1",
+            build_up_start: new Date(),
+            games_start: gamesStart,
+            games_end: new Date(),
+            coverage_end: new Date(),
+            season: "test season",
+            priority: 1,
+            created_at: new Date()
+        }
+
+
+        expect(isSeasonRoundLocked(seasonRound)).toBeTruthy();
+    });
+
+
+    test('test when round is not locked (Extreme Boundary)', () => {
+
+        const now = new Date();
+        const gamesStart = addMinutes(now, 31);
+
+        const seasonRound: ISeasonRound = {
+            id: "test_season_round",
+            round_number: 1,
+            round_title: "Week 1",
+            build_up_start: new Date(),
+            games_start: gamesStart,
+            games_end: new Date(),
+            coverage_end: new Date(),
+            season: "test season",
+            priority: 1,
+            created_at: new Date()
+        }
+
+
+        expect(isSeasonRoundLocked(seasonRound)).toBeFalsy();
+    });
+
+    test('test when round is not locked (Normal)', () => {
+
+        const now = new Date();
+        const gamesStart = addHours(now, 28);
+
+        const seasonRound: ISeasonRound = {
+            id: "test_season_round",
+            round_number: 1,
+            round_title: "Week 1",
+            build_up_start: new Date(),
+            games_start: gamesStart,
+            games_end: new Date(),
+            coverage_end: new Date(),
+            season: "test season",
+            priority: 1,
+            created_at: new Date()
+        }
+
+
+        expect(isSeasonRoundLocked(seasonRound)).toBeFalsy();
     });
 })
