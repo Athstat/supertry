@@ -7,7 +7,7 @@ import { usePlayerRoundAvailability } from "../../../hooks/fantasy/usePlayerRoun
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
 import { usePlayerSeasonTeam } from "../../../hooks/seasons/useSeasonTeams";
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete";
-import { isSeasonRoundLocked } from "../../../utils/leaguesUtils";
+import { isSeasonRoundStarted } from "../../../utils/leaguesUtils";
 import { sanitizeStat } from "../../../utils/stringUtils";
 
 type PlayerPointsScoreProps = {
@@ -19,8 +19,8 @@ export function PitchCardScoreIndicator({ player }: PlayerPointsScoreProps) {
 
     const {leagueRound} = useFantasyTeam();
 
-    const isLocked = leagueRound && isSeasonRoundLocked(leagueRound);
-    const shouldFetchScore = isLocked;
+    const hasRoundStarted = leagueRound && isSeasonRoundStarted(leagueRound);
+    const shouldFetchScore = hasRoundStarted;
 
     const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, leagueRound?.season || '', leagueRound?.round_number ?? 0, shouldFetchScore);
     const { league } = useFantasyLeagueGroup();
@@ -36,7 +36,7 @@ export function PitchCardScoreIndicator({ player }: PlayerPointsScoreProps) {
     );
 
 
-    const showScore = Boolean(!isLoading && isLocked);
+    const showScore = Boolean(!isLoading && hasRoundStarted);
     const showNextMatchInfo = !isLoading && (!showAvailabilityWarning && Boolean(homeOrAway) && Boolean(opponent) && !showScore);
     return (
         <>

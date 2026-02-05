@@ -72,8 +72,23 @@ export function getSeasonRoundDeadline(seasonRound: ISeasonRound) {
   return new Date(deadline);
 }
 
-export function isSeasonRoundLocked(seasonRound: ISeasonRound) {
+export function isInSecondChanceMode(seasonRound: ISeasonRound) {
 
+  const { second_chance_end, second_chance_start } = seasonRound;
+
+  if (!second_chance_end || !second_chance_start) {
+    return false;
+  }
+
+  const now = new Date();
+  const start = new Date(second_chance_start);
+  const end = new Date(second_chance_end);
+
+  return (now.valueOf() >= start.valueOf()) && (now.valueOf() <= end.valueOf());
+}
+
+export function isSeasonRoundStarted(seasonRound: ISeasonRound) {
+  /** Returns true if a season round has started */
   const { games_start } = seasonRound;
 
   if (!games_start) return false;
@@ -85,6 +100,17 @@ export function isSeasonRoundLocked(seasonRound: ISeasonRound) {
 
   return now.valueOf() >= deadline;
 }
+
+export function isSeasonRoundLocked(seasonRound: ISeasonRound) {
+
+  if (isInSecondChanceMode(seasonRound)) {
+    return false;
+  }
+
+  return isSeasonRoundStarted(seasonRound);
+}
+
+
 
 export function hasLeagueRoundEnded(leagueRound: IFantasyLeagueRound) {
   const { has_ended } = leagueRound;

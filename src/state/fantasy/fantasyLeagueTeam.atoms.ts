@@ -4,6 +4,7 @@ import { IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { Position } from "../../types/position";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
+import { IFixture } from "../../types/games";
 
 /** Holds the fantasy league team */
 export const fantasyLeagueTeamAtom = atom<IFantasyLeagueTeam>();
@@ -35,3 +36,6 @@ export const swapStateAtom = atom<SwapState>({ open: false, slot: null, position
 
 /** Holds a boolean value whether a pitch view is readonly or not */
 export const readOnlyAtom = atom<boolean>(false);
+
+/** Holds the fixtures for a certain round */
+export const roundFixturesAtom = atom<IFixture[]>([]);

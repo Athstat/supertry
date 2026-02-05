@@ -23,7 +23,7 @@ export function ManageTeamButton({ leagueRound, userRoundTeam, nextRound }: CTAB
 
     const handleManageTeam = () => {
 
-        if (isCurrentLocked && nextRound?.round_number) {
+        if (isCurrentLocked && nextRound?.round_number && !userRoundTeam) {
             navigate(`/my-team?round_number=${nextRound.round_number}`);
             return;
         }
@@ -37,6 +37,9 @@ export function ManageTeamButton({ leagueRound, userRoundTeam, nextRound }: CTAB
             {!showSorryMessage && <TranslucentButton className='bg-gradient-to-tr capitalize w-fit border-white rounded-md px-2 py-3 from-[#051635] to-[#143B62]' onClick={handleManageTeam} >
                 {showManageTeam && <p>MANAGE MY TEAM</p>}
                 {showCreateTeam && <p>CREATE MY TEAM</p>}
+                {isCurrentLocked && userRoundTeam && (
+                    <p>VIEW TEAM</p>
+                )}
             </TranslucentButton>}
 
             {showSorryMessage && (

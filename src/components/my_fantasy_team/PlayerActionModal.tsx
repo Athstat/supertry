@@ -7,7 +7,6 @@ import SecondaryText from "../ui/typography/SecondaryText";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import SuperSubPill from "./SuperSubPill";
 import { Activity, useMemo } from "react";
-import { isSeasonRoundLocked } from "../../utils/leaguesUtils";
 import { twMerge } from "tailwind-merge";
 import { CaptainsArmBand } from "../player/CaptainsArmBand";
 import MatchPrCard from "../rankings/MatchPrCard";
@@ -16,6 +15,7 @@ import QuickActionButton from "../ui/buttons/QuickActionButton";
 import RoundedCard from "../ui/cards/RoundedCard";
 import BottomSheetView from "../ui/modals/BottomSheetView";
 import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams";
+import WarningCard from "../ui/cards/WarningCard";
 
 type PlayerActionModalProps = {
   player: IFantasyTeamAthlete;
@@ -32,8 +32,8 @@ export function PlayerActionModal({
 }: PlayerActionModalProps) {
 
   const { seasonTeam } = usePlayerSeasonTeam(player.athlete);
-  const {leagueRound,  initiateSwap, removePlayerAtSlot, setTeamCaptainAtSlot, slots, teamCaptain, isReadOnly } = useFantasyTeam();
-  
+  const { leagueRound, initiateSwap, removePlayerAtSlot, setTeamCaptainAtSlot, slots, teamCaptain, isReadOnly, isPlayerLocked } = useFantasyTeam();
+
   const isSub = !player.is_starting;
 
   const playerSlot = useMemo(() => {
@@ -43,7 +43,7 @@ export function PlayerActionModal({
   }, [slots, player]);
 
   const isTeamCaptain = teamCaptain?.tracking_id === player.tracking_id;
-  const isLocked = leagueRound && isSeasonRoundLocked(leagueRound);
+  const isLocked = isPlayerLocked(player.athlete);
 
   const handleViewProfile = () => {
     if (onViewProfile) {
@@ -167,6 +167,14 @@ export function PlayerActionModal({
           player={player}
         />
       </div> */}
+
+      {isLocked && (
+        <WarningCard className="text-sm" >
+          <p>
+            <strong>{player.player_name}{player.player_name.endsWith('s') ? "'" : "'s"}</strong> slot is locked, therefore you can't remove or swap {player.gender === "F" ? 'her' : 'him'} out of your team, until the round ends
+          </p>
+        </WarningCard>
+      )}
 
       <Activity mode={isReadOnly ? "hidden" : "visible"} >
 

@@ -13,12 +13,14 @@ import { useNavigateBack } from "../../hooks/web/useNavigateBack";
 import { useNavigationGuard } from "../../hooks/web/useNavigationGuard";
 import UnsavedChangesWarningModal from "../ui/modals/UnsavedChangesModal";
 import { useLeagueConfig } from "../../hooks/useLeagueConfig";
+import SecondChanceCard from "./second_chance/SecondChanceCard";
+import { isInSecondChanceMode } from "../../utils/leaguesUtils";
 
 
 /** Renders Create Team View Header */
 export default function CreateTeamViewHeader() {
-    const {leagueConfig} = useLeagueConfig();
-    const { totalSpent, selectedCount, leagueRound, isTeamFull, resetToOriginalTeam, setTeam: setRoundTeam } = useFantasyTeam();
+    const { leagueConfig } = useLeagueConfig();
+    const { totalSpent, selectedCount, leagueRound, isTeamFull, resetToOriginalTeam, setTeam: setRoundTeam, isReadOnly } = useFantasyTeam();
 
     const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
     const [showClaimAccountModal, setShowClaimAccountModal] = useState<boolean>(false);
@@ -32,6 +34,7 @@ export default function CreateTeamViewHeader() {
     const isGuestAccount = useAtomValue(isGuestUserAtom);
 
     const { handleSave, isSaving, saveError, clearSaveError } = useSubmitTeam(handleSuccess);
+    const isSecondChance = leagueRound && isInSecondChanceMode(leagueRound);
 
     if (!leagueRound || !leagueConfig) {
         return;
@@ -116,6 +119,12 @@ export default function CreateTeamViewHeader() {
                     Create Team
                 </PrimaryButton>
             </div>
+
+            {!isReadOnly && isSecondChance && (
+                <SecondChanceCard
+                    teamCreation
+                />
+            )}
 
 
             {/* Loading Modal */}
