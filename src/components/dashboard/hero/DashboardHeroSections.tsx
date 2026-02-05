@@ -214,6 +214,8 @@ export function DashboardHeroCTASection({ roundTeam, deadlineText, hideVerboseIn
     return deadline ? new Date(deadline) : undefined;
   }, [nextDeadlineRound]);
 
+  const isGameweekOpen = currentRound && !isSeasonRoundLocked(currentRound);
+
   const handleOpenHelpModal = () => {
     setShowHelpModal(true);
   }
@@ -222,15 +224,28 @@ export function DashboardHeroCTASection({ roundTeam, deadlineText, hideVerboseIn
     setShowHelpModal(false);
   }
 
+  const isMissedDeadline = !(nextDeadline && nextDeadlineRound && (roundTeam || isGameweekOpen));
+
 
   return (
     <Fragment>
-      {nextDeadline && nextDeadlineRound && (
+
+      {!isMissedDeadline && (
         <>
           <div className="w-[80%] max-w-sm border border-white/50"></div>
           <p className="text-sm text-white text-center font-bold">
             {deadlineText ? deadlineText : <>Next Deadline: Round {(nextDeadlineRound?.round_number || 0)}</>}<br />
             <span className="font-normal">{formatCountdown(nextDeadline)}</span>
+          </p>
+        </>
+      )}
+
+
+      {isMissedDeadline && nextRound && (
+        <>
+          <div className="w-[80%] max-w-sm border border-white/50"></div>
+          <p className="text-sm text-white text-center max-w-[70%]">
+            You missed the team deadline for {currentRound?.round_title}. You can still pick your team for the next round
           </p>
         </>
       )}
