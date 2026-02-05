@@ -5,6 +5,7 @@ import GroupedFixturesList from "../GroupedFixturesList";
 import { TabSwitchContainer, TabSwitchOption } from "../../ui/buttons/TabSwitchOption";
 import { Activity, useCallback, useState } from "react";
 import ProPickemLeaderboard from "../../pickem/ProPickemLeaderboard";
+import { twMerge } from "tailwind-merge";
 
 type Props = {
   searchQuery: string;
@@ -12,13 +13,14 @@ type Props = {
   onViewModeChange: (mode: FixtureListViewMode) => void;
   onMoveNextWeek: () => void,
   displayFixtures: IFixture[],
-  hasAnyFixtures?: boolean
+  hasAnyFixtures?: boolean,
+  className?: string
 };
 
 type LocalViewMode = "predict" | "leaderboard";
 
 /** Renders a Pro Pick'em view, with fixtures and leaderboard options */
-export default function FixturesProPickemView({ displayFixtures, hasAnyFixtures, onMoveNextWeek }: Props) {
+export default function FixturesProPickemView({ displayFixtures, hasAnyFixtures, onMoveNextWeek, className }: Props) {
 
   const [localView, setLocalView] = useState<LocalViewMode>("predict");
 
@@ -33,7 +35,10 @@ export default function FixturesProPickemView({ displayFixtures, hasAnyFixtures,
   }, [setLocalView]);
 
   return (
-    <div className="flex flex-col gap-4" >
+    <div className={twMerge(
+      "flex flex-col gap-4",
+      className
+    )} >
 
       {displayFixtures.length === 0 && hasAnyFixtures && (
         <div className="flex flex-col gap-3 items-center">

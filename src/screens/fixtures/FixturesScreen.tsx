@@ -104,6 +104,7 @@ export default function ProFixturesScreen() {
               onMoveNextWeek={handleNextWeek}
               displayFixtures={weekFixtures}
               hasAnyFixtures={hasAnyFixtures}
+              className="px-6"
             />
           </Activity>
         </div>}

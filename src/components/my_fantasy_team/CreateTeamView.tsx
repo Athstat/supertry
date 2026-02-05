@@ -10,7 +10,6 @@ import { useTabView } from '../ui/tabs/TabView';
 import PlayerPicker from '../player_picker/PlayerPicker';
 import { useCreateFantasyTeam } from '../../hooks/fantasy/useCreateFantasyTeam';
 import { FantasyTeamFormation3D } from './FantasyTeamFormation3D';
-import { useHideBottomNavBar } from '../../hooks/navigation/useNavigationBars';
 import { IProAthlete } from '../../types/athletes';
 import { PlayerActionModal } from './PlayerActionModal';
 import CreateTeamViewHeader from './CreateTeamViewHeader';
@@ -26,7 +25,6 @@ export default function CreateFantasyTeamView() {
   const [actionModalPlayer, setActionModalPlayer] = useState<IFantasyTeamAthlete>();
 
   const { navigate: tabNavigate } = useTabView();
-  useHideBottomNavBar();
 
   const excludePlayers = useMemo(() => {
     const alreadySelectedPlayers: IFantasyTeamAthlete[] = [];
@@ -99,7 +97,7 @@ export default function CreateFantasyTeamView() {
       <div className='relative' >
         <FantasyTeamFormation3D
           onPlayerClick={handleOpenActionModal}
-          marginCN='mt-0'
+          marginCN='mt-8'
           firstRowMargin='mt-8'
         />
 

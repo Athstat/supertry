@@ -15,6 +15,7 @@ import RoundedCard from "../../ui/cards/RoundedCard";
 import { trimSeasonYear } from "../../../utils/stringUtils";
 import { twMerge } from "tailwind-merge";
 import { useAuth } from "../../../contexts/auth/AuthContext";
+import { ISeasonRound } from "../../../types/fantasy/fantasySeason";
 
 
 export function DashboardHeroLoadingSkeleton() {
@@ -35,7 +36,7 @@ type DashboardFrameProps = {
 }
 
 /** Renders the dashboard frame */
-export function DashboardHeroFrame({ children, imageUrl, cornerImageUrl = '/images/dashboard/beast_screeming.png', cornerImageClassName}: DashboardFrameProps) {
+export function DashboardHeroFrame({ children, imageUrl, cornerImageUrl = '/images/dashboard/beast_screeming.png', cornerImageClassName }: DashboardFrameProps) {
 
   const finalImageUrl = imageUrl || '/images/dashboard/hero-background.jpg';
 
@@ -127,7 +128,7 @@ type ScoreProps = {
 
 export function DashboardHeroScoreSection({ roundTeam, children }: ScoreProps) {
 
-  const {scoringRound} = useFantasySeasons();
+  const { scoringRound } = useFantasySeasons();
 
   const { userScore, averagePointsScored, highestPointsScored } = useRoundScoringSummaryV2(scoringRound);
   const isFirstTime = roundTeam === undefined;
@@ -205,11 +206,8 @@ type CTASectionProps = {
 
 export function DashboardHeroCTASection({ roundTeam, deadlineText, hideVerboseInstructions = false }: CTASectionProps) {
 
-  const navigate = useNavigate();
   const [showHelpModal, setShowHelpModal] = useState(false);
-
-  const { nextDeadlineRound, currentRound } = useFantasySeasons()
-  const isFirstTime = roundTeam === undefined;
+  const { nextDeadlineRound, currentRound, nextRound } = useFantasySeasons()
 
   const nextDeadline = useMemo(() => {
     const deadline = nextDeadlineRound ? getSeasonRoundDeadline(nextDeadlineRound) : undefined;
@@ -217,12 +215,6 @@ export function DashboardHeroCTASection({ roundTeam, deadlineText, hideVerboseIn
   }, [nextDeadlineRound]);
 
   const isGameweekOpen = currentRound && !isSeasonRoundLocked(currentRound);
-
-  const teamUrl = `/my-team`;
-
-  const handlePickTeam = () => {
-    navigate(teamUrl);
-  }
 
   const handleOpenHelpModal = () => {
     setShowHelpModal(true);
@@ -232,63 +224,15 @@ export function DashboardHeroCTASection({ roundTeam, deadlineText, hideVerboseIn
     setShowHelpModal(false);
   }
 
-  const handleManageTeam = () => {
-    navigate(teamUrl)
-  }
-
-
-  if (isFirstTime && !hideVerboseInstructions) {
-    return (
-      <Fragment>
-        {nextDeadline && nextDeadlineRound && (
-          <>
-            <div className="w-[80%] max-w-sm border border-white/50"></div>
-            <p className="text-sm text-white text-center font-bold">
-              {deadlineText ? deadlineText : <>Next Deadline: Round {(nextDeadlineRound?.round_number || 0)}</>}<br />
-              <span className="font-normal">{formatCountdown(nextDeadline)}</span>
-            </p>
-          </>
-        )}
-
-        {/* Action Buttons */}
-        <div className="flex flex-col items-center gap-3 w-full max-w-sm justify-center px-2">
-
-          <p className='text-white max-w-48 text-xs text-center' >Pick your elite team now and start competing!</p>
-
-          {isGameweekOpen && <button
-            onClick={handlePickTeam}
-            disabled={!isGameweekOpen}
-            className={`px-6 w-fit py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30 ${!isGameweekOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            PICK A TEAM
-          </button>}
-
-          {!isGameweekOpen && <button
-            onClick={handlePickTeam}
-            className={`px-6 w-fit py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30`}
-          >
-            Play Now
-          </button>}
-
-          <button
-            onClick={handleOpenHelpModal}
-            className="w-fit font-semibold text-xs underline text-white uppercase shadow-md transition-colors "
-          >
-            HOW TO PLAY
-          </button>
-        </div>
-
-        <ScrummyGamePlayModal isOpen={showHelpModal} onClose={handleCloseHelpModal} />
-      </Fragment>
-    )
-  }
+  const isMissedDeadline = !(nextDeadline && nextDeadlineRound && (roundTeam || isGameweekOpen));
 
 
   return (
     <Fragment>
-      {nextDeadline && nextDeadlineRound && (
+
+      {!isMissedDeadline && (
         <>
-          <div className="w-[80%] max-w-sm border-t-2 border-white/50"></div>
+          <div className="w-[80%] max-w-sm border border-white/50"></div>
           <p className="text-sm text-white text-center font-bold">
             {deadlineText ? deadlineText : <>Next Deadline: Round {(nextDeadlineRound?.round_number || 0)}</>}<br />
             <span className="font-normal">{formatCountdown(nextDeadline)}</span>
@@ -296,13 +240,83 @@ export function DashboardHeroCTASection({ roundTeam, deadlineText, hideVerboseIn
         </>
       )}
 
-      {/* Manage Team Button */}
-      <button
-        onClick={handleManageTeam}
-        className="px-6 py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30"
-      >
-        PLAY NOW
-      </button>
+
+      {isMissedDeadline && nextRound && (
+        <>
+          <div className="w-[80%] max-w-sm border border-white/50"></div>
+          <p className="text-sm text-white text-center max-w-[70%]">
+            You missed the team deadline for {currentRound?.round_title}. You can still pick your team for the next round
+          </p>
+        </>
+      )}
+
+      {/* Action Buttons */}
+      <div className="flex flex-col items-center gap-3 w-full max-w-sm justify-center px-2">
+
+        <PlayNowCTAButton
+          roundTeam={roundTeam}
+          currentRound={currentRound}
+          nextRound={nextRound}
+          hideVerboseInstructions={hideVerboseInstructions}
+        />
+
+        {!hideVerboseInstructions && <button
+          onClick={handleOpenHelpModal}
+          className="w-fit font-semibold text-xs underline text-white uppercase shadow-md transition-colors "
+        >
+          HOW TO PLAY
+        </button>}
+      </div>
+
+      <ScrummyGamePlayModal isOpen={showHelpModal} onClose={handleCloseHelpModal} />
     </Fragment>
+  )
+
+}
+
+type CTAProps = {
+  currentRound?: ISeasonRound,
+  nextRound?: ISeasonRound,
+  roundTeam?: IFantasyLeagueTeam,
+  hideVerboseInstructions?: boolean
+}
+
+function PlayNowCTAButton({ currentRound, nextRound, roundTeam, hideVerboseInstructions }: CTAProps) {
+
+  const navigate = useNavigate();
+
+  const isFirstTime = roundTeam === undefined;
+
+  const isGameweekOpen = currentRound && !isSeasonRoundLocked(currentRound);
+
+  const teamUrl = `/my-team`;
+  const isPickTeamForNextRound = !isGameweekOpen && isFirstTime && nextRound;
+
+  const handlePickTeam = () => {
+
+    if (isPickTeamForNextRound) {
+      navigate(`/my-team?round_number=${nextRound.round_number}`);
+      return;
+    }
+
+    navigate(teamUrl);
+  }
+
+  return (
+    <div className="flex flex-col items-center gap-3 w-full max-w-sm justify-center px-2">
+
+      {!hideVerboseInstructions && <p className='text-white max-w-48 text-xs text-center' >Pick your elite team now and start competing!</p>}
+
+      <button
+        onClick={handlePickTeam}
+        className={`px-6 w-fit py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30`}
+      >
+        {isGameweekOpen && isFirstTime && <p>Pick Team</p>}
+        {isGameweekOpen && !isFirstTime && <p>Manage Team</p>}
+        {!isGameweekOpen && roundTeam && <p>Manage Team</p>}
+        {isPickTeamForNextRound && <p>Pick team for {nextRound.round_title}</p>}
+      </button>
+
+    </div>
   )
 }
