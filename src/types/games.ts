@@ -256,3 +256,5 @@ export type SeasonFilterBarItem = {
 
 
 export type FixtureListViewMode = 'fixtures' | 'pickem';
+
+export type VoteForOption = "home_team" | "away_team" | "draw"
