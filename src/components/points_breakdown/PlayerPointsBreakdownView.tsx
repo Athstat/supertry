@@ -39,7 +39,7 @@ export default function PlayerPointsBreakdownView({ athlete, round: leagueRound,
 
     const finalScore = team?.athletes.find((a) => {
         return a.athlete?.tracking_id === athlete.tracking_id
-    })?.score || rawPoints;
+    })?.score ?? rawPoints;
 
     const multiplierScore = finalScore - rawPoints;
 
