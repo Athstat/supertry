@@ -73,7 +73,7 @@ function Content() {
   }, [handleShare]);
 
   return (
-    <main className="container mx-auto px-4 sm:px-6 py-6 max-w-3xl">
+    <main className="container mx-auto px-4 sm:px-6  max-w-3xl">
       <div className="flex flex-col mb-8">
         <h1 className="text-2xl sm:text-3xl font-bold dark:text-white">Profile</h1>
       </div>
@@ -96,7 +96,7 @@ function Content() {
         <ProfileSettingCard
           title='Account Info'
           description='Edit Username, First Name and Last Name'
-          icon={<UserCircle />}
+          icon={<UserCircle className='w-6 h-6' />}
           onClick={handleEditUserProfile}
           hideForGuestUsers
         />
@@ -108,14 +108,14 @@ function Content() {
         <ProfileSettingCard
           title='Appearance'
           description={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-          icon={theme === 'dark' ? <Sun /> : <Moon />}
+          icon={theme === 'dark' ? <Sun className='w-6 h-6' /> : <Moon className='w-6 h-6' />}
           onClick={toggleTheme}
         />
 
         <ProfileSettingCard
           title='How to Play'
           description='Learn about Scrummy gameplay and fantasy points'
-          icon={<HelpCircle />}
+          icon={<HelpCircle className='w-6 h-6' />}
           onClick={handleOpenGameplayModal}
         />
 
@@ -126,7 +126,7 @@ function Content() {
         <ProfileSettingCard
           title='Share app'
           description='Share Scrummy with friends'
-          icon={<Share2 />}
+          icon={<Share2 className='w-6 h-6' />}
           onClick={handleShareApp}
         />
 

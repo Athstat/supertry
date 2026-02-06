@@ -14,11 +14,11 @@ export default function MyFantasyTeamScreenHeader() {
     }
 
     return (
-        <div className="flex flex-col px-4 pt-6">
+        <div className="flex flex-col px-4 pt-2.5">
 
             <div className="flex relative flex-row items-center justify-center gap-2">
 
-                <div className="flex absolute left-0 flex-col items-start justify-center gap-2">
+                <div className="flex absolute left-0  flex-col items-start justify-center gap-2">
 
                     <CircleButton onClick={handleBackToLeagues} >
                         <ArrowLeft className='w-4 h-4' />

@@ -8,7 +8,7 @@ type Props = {
 export default function SuperSubPill({className} : Props) {
     return (
         <p className={twMerge(
-            "px-2 w-fit  cursor-pointer text-sm rounded-full bg-yellow-100 border border-yellow-500 text-yellow-600 dark:bg-yellow-900/40 dark:text-yellow-500 dark:border-yellow-500/40",
+            "px-2 w-fit  cursor-pointer text-xs rounded-full bg-yellow-100 border border-yellow-500 text-yellow-600 dark:bg-yellow-900/40 dark:text-yellow-500 dark:border-yellow-500/40",
             className
         )}>
             Super Sub

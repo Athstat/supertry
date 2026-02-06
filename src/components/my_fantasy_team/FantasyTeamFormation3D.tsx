@@ -82,9 +82,10 @@ type SlotCardProps = {
 
 function SlotCard({ slot, onPlayerClick, position }: SlotCardProps) {
 
-  const { isSlotLocked, isReadOnly } = useFantasyTeam();
+  const { isShowPlayerLock } = useFantasyTeam();
   const { athlete } = slot;
-  const isLocked = isSlotLocked(slot);
+
+  const showSlotLocked = isShowPlayerLock(slot.athlete?.athlete);
 
   if (!athlete) {
     return (
@@ -120,7 +121,7 @@ function SlotCard({ slot, onPlayerClick, position }: SlotCardProps) {
           key={slot.slotNumber}
         />
 
-        {isLocked && !isReadOnly && (
+        {showSlotLocked && (
           <div className='absolute bg-yellow-500 p-1 rounded-md z-[30] top-5 left-0' >
             <Lock  className='w-4 h-4 text-black' />
           </div>

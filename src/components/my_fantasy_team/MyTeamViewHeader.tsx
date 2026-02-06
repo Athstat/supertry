@@ -3,7 +3,7 @@ import { Coins } from 'lucide-react';
 import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
 import { useRoundScoringSummaryV2 } from '../../hooks/fantasy/useRoundScoringSummary';
 import { smartRoundUp } from '../../utils/intUtils';
-import { isInSecondChanceMode, isSeasonRoundLocked } from '../../utils/leaguesUtils';
+import { isInSecondChanceMode, isSeasonRoundStarted } from '../../utils/leaguesUtils';
 import SecondaryText from '../ui/typography/SecondaryText';
 import { Activity } from 'react';
 import { useLeagueConfig } from '../../hooks/useLeagueConfig';
@@ -86,7 +86,7 @@ type TeamPointsProps = {
 function TeamPointsCard({ leagueRound }: TeamPointsProps) {
 
   const { isReadOnly, team } = useFantasyTeam();
-  const isLocked = isSeasonRoundLocked(leagueRound);
+  const isLocked = isSeasonRoundStarted(leagueRound);
   const { highestPointsScored, averagePointsScored, isLoading } =
     useRoundScoringSummaryV2(leagueRound);
 
@@ -107,7 +107,7 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
           </div>
 
           <div className="flex flex-col items-center justify-center" >
-            <p className="font-black text-md" >{smartRoundUp(team?.overall_score ?? 0)}</p>
+            <p className="font-black text-md" >{smartRoundUp(team?.overall_score)}</p>
             <SecondaryText className="text-[10px]" >Score</SecondaryText>
           </div>
 

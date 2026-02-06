@@ -7,7 +7,7 @@ import { Fragment } from "react/jsx-runtime";
 import { useRoundScoringSummaryV2 } from "../../../hooks/fantasy/useRoundScoringSummary";
 import { IFantasyLeagueTeam } from "../../../types/fantasyLeague";
 import { formatCountdown } from "../../../utils/countdown";
-import { getSeasonRoundDeadline, isSeasonRoundLocked } from "../../../utils/leaguesUtils";
+import { getSeasonRoundDeadline, isSeasonRoundTeamsLocked } from "../../../utils/leaguesUtils";
 import ScrummyGamePlayModal from "../../branding/help/ScrummyGamePlayModal";
 import { useFantasySeasons } from "../../../hooks/dashboard/useFantasySeasons";
 import { smartRoundUp } from "../../../utils/intUtils";
@@ -214,7 +214,7 @@ export function DashboardHeroCTASection({ roundTeam, deadlineText, hideVerboseIn
     return deadline ? new Date(deadline) : undefined;
   }, [nextDeadlineRound]);
 
-  const isGameweekOpen = currentRound && !isSeasonRoundLocked(currentRound);
+  const isGameweekOpen = currentRound && !isSeasonRoundTeamsLocked(currentRound);
 
   const handleOpenHelpModal = () => {
     setShowHelpModal(true);
@@ -287,7 +287,7 @@ function PlayNowCTAButton({ currentRound, nextRound, roundTeam, hideVerboseInstr
 
   const isFirstTime = roundTeam === undefined;
 
-  const isGameweekOpen = currentRound && !isSeasonRoundLocked(currentRound);
+  const isGameweekOpen = currentRound && !isSeasonRoundTeamsLocked(currentRound);
 
   const teamUrl = `/my-team`;
   const isPickTeamForNextRound = !isGameweekOpen && isFirstTime && nextRound;

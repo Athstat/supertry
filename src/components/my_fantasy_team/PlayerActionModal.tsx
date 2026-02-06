@@ -32,7 +32,7 @@ export function PlayerActionModal({
 }: PlayerActionModalProps) {
 
   const { seasonTeam } = usePlayerSeasonTeam(player.athlete);
-  const { leagueRound, initiateSwap, removePlayerAtSlot, setTeamCaptainAtSlot, slots, teamCaptain, isReadOnly, isPlayerLocked } = useFantasyTeam();
+  const { leagueRound, initiateSwap, removePlayerAtSlot, setTeamCaptainAtSlot, slots, teamCaptain, isReadOnly, isPlayerLocked, isShowPlayerLock } = useFantasyTeam();
 
   const isSub = !player.is_starting;
 
@@ -43,7 +43,9 @@ export function PlayerActionModal({
   }, [slots, player]);
 
   const isTeamCaptain = teamCaptain?.tracking_id === player.tracking_id;
+
   const isLocked = isPlayerLocked(player.athlete);
+  const showSlotLockedWarning = isShowPlayerLock(player.athlete);
 
   const handleViewProfile = () => {
     if (onViewProfile) {
@@ -81,7 +83,7 @@ export function PlayerActionModal({
   return (
     <BottomSheetView
       className={twMerge(
-        "max-h-[640px] min-h-[400px] py-4 px-6 border-t dark:border-slate-700",
+        "max-h-[640px] text-sm min-h-[200px] py-4 px-6 border-t dark:border-slate-700",
         isReadOnly && "max-h-[300px] min-h-[260px]"
       )}
       hideHandle
@@ -112,7 +114,7 @@ export function PlayerActionModal({
         <div className="flex flex-row items-center justify-between" >
           <div className="" >
             {<PlayerMugshot
-              className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-800"
+              className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-800"
               url={player.image_url}
               teamId={seasonTeam?.athstat_id}
             />}
@@ -121,13 +123,13 @@ export function PlayerActionModal({
           <div className="flex flex-col items-center justify-center" >
             <div className="flex flex-row items-center gap-1" >
               <p className="text-lg" >{player.purchase_price}</p>
-              <Coins className="text-yellow-500 w-6 h-6" />
+              <Coins className="text-yellow-500 w-4 h-4" />
             </div>
 
-            <SecondaryText>
+            <SecondaryText className="text-xs" >
               Purchase Price
             </SecondaryText>
-            <SecondaryText>(Scrum Coins)</SecondaryText>
+            <SecondaryText className="text-xs" >(Scrum Coins)</SecondaryText>
 
           </div>
 
@@ -168,8 +170,8 @@ export function PlayerActionModal({
         />
       </div> */}
 
-      {isLocked && (
-        <WarningCard className="text-sm" >
+      {showSlotLockedWarning && (
+        <WarningCard className="text-xs lg:text-sm" >
           <p>
             <strong>{player.player_name}{player.player_name.endsWith('s') ? "'" : "'s"}</strong> slot is locked, therefore you can't remove or swap {player.gender === "F" ? 'her' : 'him'} out of your team, until the round ends
           </p>
@@ -209,7 +211,8 @@ export function PlayerActionModal({
         <div className={twMerge(
           isLocked && "opacity-60"
         )} >
-          {!isTeamCaptain && <RoundedCard
+
+          {!isTeamCaptain && !isSub && <RoundedCard
             className={
               "border-none hover:dark:text-slate-300 cursor-pointer  bg-slate-200 dark:bg-slate-800 dark:text-slate-400 p-2.5 items-center justify-center flex flex-row gap-1"
             }
@@ -230,8 +233,6 @@ export function PlayerActionModal({
           </div>}
         </div>
       </Activity>
-
-
 
     </BottomSheetView>
   );

@@ -23,7 +23,7 @@ export default function FixtureCardHeader({ fixture, showCompetition = false, sh
 
     return (
         <div className={twMerge(
-            "w-full items-center justify-center text-[10px] lg:text-sm text-gray-600 dark:text-slate-400 flex flex-row gap-1",
+            "w-full items-center justify-center text-[9px] lg:text-sm text-gray-600 dark:text-slate-400 flex flex-row gap-1",
             "text-[#011E5C] dark:text-slate-200"
         )}>
 

@@ -163,7 +163,7 @@ type VotingResultsProp = {
 function VotingResults({ homePerc, awayPerc, userVote, wasVoteCorrect }: VotingResultsProp) {
 
     return (
-        <div className="flex flex-col gap-2" >
+        <div className="flex flex-col gap-2 text-xs" >
             <div className="flex flex-row items-center gap-1" >
                 <div
                     style={{ width: `${homePerc}%` }}

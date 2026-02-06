@@ -8,11 +8,9 @@ import FixtureStandingsTab from '../../components/fixture/fixture_screen/Fixture
 import FixtureRostersTab from '../../components/fixture/fixture_screen/rosters/FixtureRostersTab';
 import { ProMotmVotingBox } from '../../components/pickem/motm';
 import PlayerProfileModal from '../../components/player/PlayerProfileModal';
-import SportActionsDefinitionsProvider from '../../providers/SportActionsDefinitionsProvider';
 import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
 import PilledTabView from '../../components/ui/tabs/PilledTabView';
 import { TabViewHeaderItem, TabViewPage } from '../../components/ui/tabs/TabView';
-import GameHighlightsCard from '../../components/ui/video/GameHighlightsCard';
 import { useFixtureScreen } from '../../hooks/fixtures/useFixture';
 import { useHideBottomNavBar } from '../../hooks/navigation/useNavigationBars';
 import { FixtureScreenProvider } from '../../providers/fixtures/FixtureScreenProvider';
@@ -30,9 +28,7 @@ export default function FixtureDetailScreen() {
     <FixtureScreenProvider
       fixtureId={fixtureId}
     >
-      <SportActionsDefinitionsProvider>
         <Content />
-      </SportActionsDefinitionsProvider>
     </FixtureScreenProvider>
   )
 }
@@ -46,7 +42,9 @@ function Content() {
 
   const { data: sportActions, isLoading: loadingSportsActions } = useSWR(sportsActionsKey, () =>
     boxScoreService.getSportActionsByGameId(fixtureId ?? '')
-  );
+  , {
+    refreshInterval: 1000 * 2 // 2 minutes
+  });
 
   useHideBottomNavBar();
 
@@ -116,12 +114,9 @@ function Content() {
           <PilledTabView pillTabRowClassName={"px-4"} className='' tabHeaderItems={tabItems}>
 
             <TabViewPage className="flex w-full flex-col gap-5" tabKey="athletes-stats">
-              <GameHighlightsCard link={fixture.highlights_link} />
-
               <Activity mode={sportActions && (sportActions?.length ?? 0) > 0 ? "visible" : "hidden"} >
                 <FixtureBoxscoreTab sportActions={sportActions || []} fixture={fixture} />
               </Activity>
-
             </TabViewPage>
 
             <TabViewPage className="flex flex-col gap-4 px-4" tabKey="kick-off">

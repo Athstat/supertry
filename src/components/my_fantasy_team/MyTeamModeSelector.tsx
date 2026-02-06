@@ -1,7 +1,7 @@
 import { Activity, Fragment, useMemo } from 'react';
 import NoTeamCreatedFallback from '../fantasy-leagues/NoTeamCreatedFallback';
 import { useTeamHistory } from '../../hooks/fantasy/useTeamHistory';
-import { isSeasonRoundLocked } from '../../utils/leaguesUtils';
+import { isSeasonRoundTeamsLocked } from '../../utils/leaguesUtils';
 import CreateFantasyTeamProvider from '../../providers/fantasy_teams/CreateFantasyTeamProvider';
 import FantasyTeamProvider from '../../providers/fantasy_teams/FantasyTeamProvider';
 import FantasyTeamView from './FantasyTeamView';
@@ -28,7 +28,7 @@ export default function MyTeamModeSelector() {
   const { roundTeam, isLoading, mutate } = useUserRoundTeam(manager?.kc_id, round?.round_number);
 
   const isLocked = useMemo(() => {
-    return round && isSeasonRoundLocked(round);
+    return round && isSeasonRoundTeamsLocked(round);
   }, [round]);
 
   const viewMode: ViewMode = useMemo<ViewMode>(() => {

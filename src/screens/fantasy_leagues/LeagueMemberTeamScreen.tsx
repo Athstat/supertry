@@ -9,7 +9,7 @@ import CircleButton from "../../components/ui/buttons/BackButton";
 import { useNavigateBack } from "../../hooks/web/useNavigateBack";
 import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
 import { useUserRoundTeam } from "../../hooks/fantasy/useUserRoundTeam";
-import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
+import { useHideBottomNavBar, useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
 import TeamHistoryBar from "../../components/my_fantasy_team/TeamHistoryBar";
 import FantasyTeamView from "../../components/my_fantasy_team/FantasyTeamView";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
@@ -23,6 +23,8 @@ import MyTeamScreenProvider from "../../contexts/ui/MyTeamScreenContext";
 export default function LeagueMemberTeamScreen() {
 
     useHideTopNavBar();
+    useHideBottomNavBar();
+    
     const { userId } = useParams<{ leagueId?: string, userId?: string }>();
 
     const key = userId ? swrFetchKeys.getUserById(userId) : null;

@@ -77,7 +77,7 @@ export default function MyTeamPitchView({ className, hideBenchPlayer = false, fi
 
   return (
     <div className={twMerge(
-      " h-full ",
+      " h-full",
       className
     )}>
       <div className='flex flex-col relative'>
@@ -131,6 +131,17 @@ export default function MyTeamPitchView({ className, hideBenchPlayer = false, fi
           athlete={selectedPlayer.athlete}
           team={team}
           onClose={handleClosePointsModal}
+          multiplier={selectedPlayer.is_captain ? 1.5 :
+
+            selectedPlayer.is_super_sub ? 0.5 : undefined
+
+          }
+
+          multiplierDescription={
+            selectedPlayer.is_captain ? "Captain Bonus" :
+            selectedPlayer.is_super_sub ? "Super Sub Reduction" : undefined
+          }
+          
         />
       )}
     </div>

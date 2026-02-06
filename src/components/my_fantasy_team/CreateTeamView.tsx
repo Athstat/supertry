@@ -3,7 +3,7 @@ import PrimaryButton from '../ui/buttons/PrimaryButton';
 
 import PlayerProfileModal from '../player/PlayerProfileModal';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
-import { isSeasonRoundLocked } from '../../utils/leaguesUtils';
+import { isSeasonRoundTeamsLocked } from '../../utils/leaguesUtils';
 import NoContentCard from '../ui/typography/NoContentMessage';
 import { useTabView } from '../ui/tabs/TabView';
 
@@ -42,7 +42,7 @@ export default function CreateFantasyTeamView() {
     cancelSwap();
   }
 
-  const isLocked = leagueRound && isSeasonRoundLocked(leagueRound);
+  const isLocked = leagueRound && isSeasonRoundTeamsLocked(leagueRound);
 
   const handleGoToStandings = () => {
     tabNavigate('standings');

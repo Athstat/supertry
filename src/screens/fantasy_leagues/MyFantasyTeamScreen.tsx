@@ -1,6 +1,5 @@
 import PageView from '../../components/ui/containers/PageView';
 import MyTeamModeSelector from '../../components/my_fantasy_team/MyTeamModeSelector';
-import LearnScrummyNoticeCard from '../../components/branding/help/LearnScrummyNoticeCard';
 import { useHideBottomNavBar, useHideTopNavBar } from '../../hooks/navigation/useNavigationBars';
 import MyFantasyTeamScreenHeader from '../../components/fantasy_league/MyFantasyTeamScreenHeader';
 import { twMerge } from 'tailwind-merge';
@@ -57,11 +56,10 @@ function Content() {
       loadingFallback={<LeagueScreenLoadingSkeleton />}
     >
       <PageView className={twMerge(
-        "dark:text-white flex flex-col gap-4",
-        AppColours.BACKGROUND
+        "dark:text-white flex flex-col gap-2",
+        AppColours.BACKGROUND,
       )}>
         <MyFantasyTeamScreenHeader />
-        <LearnScrummyNoticeCard />
         <MyTeamModeSelector />
       </PageView>
     </RoundFixturesProvider>

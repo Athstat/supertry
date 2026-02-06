@@ -33,7 +33,7 @@ export function FantasyLeagueStandingsTab() {
       </div>}
 
       {currentSeasonRound && (
-        <RoundedCard className='p-2 mx-4 mt-4' >
+        <RoundedCard className='p-2 mx-4 ' >
           <LeagueRoundCountdown2 
             leagueRound={currentSeasonRound} 
             key={currentSeasonRound.id}

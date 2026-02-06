@@ -29,7 +29,7 @@ export default function FantasyLeagueHeader({ handleBack }: Props) {
                     'bg-gradient-to-b to-transparent',
                     AppColours.BACKGROUND_GRADIENT,
                 )} >
-                    <div className='flex flex-row items-center gap-2' >
+                    <div className='flex flex-row items-center gap-2 ' >
                         <CircleButton
                             onClick={handleBack}
                         >
@@ -37,7 +37,7 @@ export default function FantasyLeagueHeader({ handleBack }: Props) {
                         </CircleButton>
 
                         <div className='flex flex-row items-center gap-1' >
-                            <p className='font-semibold text-lg' >{league?.title}</p>
+                            <p className='font-semibold text-md' >{league?.title}</p>
                             <LeagueGoldCheckMark clickable size='20' leagueGroup={league} />
                         </div>
                     </div>

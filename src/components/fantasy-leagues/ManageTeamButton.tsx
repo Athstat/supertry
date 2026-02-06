@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 import { IFantasyLeagueTeam } from "../../types/fantasyLeague";
-import { isSeasonRoundLocked } from "../../utils/leaguesUtils";
+import { isSeasonRoundTeamsLocked } from "../../utils/leaguesUtils";
 import { TranslucentButton } from "../ui/buttons/PrimaryButton";
 
 type CTAButtonProps = {
@@ -14,7 +14,7 @@ export function ManageTeamButton({ leagueRound, userRoundTeam, nextRound }: CTAB
 
     const navigate = useNavigate();
 
-    const isCurrentLocked = isSeasonRoundLocked(leagueRound);
+    const isCurrentLocked = isSeasonRoundTeamsLocked(leagueRound);
     const isUserHasTeam = Boolean(userRoundTeam);
 
     const showManageTeam = !isCurrentLocked && isUserHasTeam;

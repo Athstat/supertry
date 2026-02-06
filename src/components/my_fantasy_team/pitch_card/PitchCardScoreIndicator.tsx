@@ -1,7 +1,6 @@
 import { TriangleAlert } from "lucide-react";
 import { Activity } from "react";
 import { twMerge } from "tailwind-merge";
-import { useAthleteRoundScore } from "../../../hooks/fantasy/useAthleteRoundScore";
 import { useFantasyTeam } from "../../../hooks/fantasy/useFantasyTeam";
 import { usePlayerRoundAvailability } from "../../../hooks/fantasy/usePlayerRoundAvailability";
 import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
@@ -18,14 +17,14 @@ type PlayerPointsScoreProps = {
 export function PitchCardScoreIndicator({ player }: PlayerPointsScoreProps) {
 
     const {leagueRound} = useFantasyTeam();
-
     const hasRoundStarted = leagueRound && isSeasonRoundStarted(leagueRound);
-    const shouldFetchScore = hasRoundStarted;
 
-    const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, leagueRound?.season || '', leagueRound?.round_number ?? 0, shouldFetchScore);
+    // const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, leagueRound?.season || '', leagueRound?.round_number ?? 0, shouldFetchScore);
+    const score = player.score || 0;
+
     const { league } = useFantasyLeagueGroup();
 
-    const isLoading = loadingScore;
+    const isLoading = false;
     const {seasonTeam} = usePlayerSeasonTeam(player.athlete);
 
     const { showAvailabilityWarning, homeOrAway, opponent, reportTitle } = usePlayerRoundAvailability(

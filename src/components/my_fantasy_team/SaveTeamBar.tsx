@@ -6,7 +6,7 @@ import { useNavigateBack } from "../../hooks/web/useNavigateBack";
 import { useNavigationGuard } from "../../hooks/web/useNavigationGuard";
 import { fantasyAnalytics } from "../../services/analytics/fantasyAnalytics";
 import { AppColours } from "../../types/constants";
-import { isSeasonRoundLocked } from "../../utils/leaguesUtils";
+import { isSeasonRoundTeamsLocked } from "../../utils/leaguesUtils";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import { Toast } from "../ui/Toast";
 import UnsavedChangesWarningModal from "../ui/modals/UnsavedChangesModal";
@@ -28,7 +28,7 @@ export default function SaveTeamBar({ leagueRound }: Props) {
     const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState<boolean>(false);
     const [isSaving, setIsSaving] = useState(false);
     const [saveError, setSaveError] = useState<string | undefined>(undefined);
-    const isLocked = isSeasonRoundLocked(leagueRound);
+    const isLocked = isSeasonRoundTeamsLocked(leagueRound);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     const toggleUnSavedChangesModal = () => {
@@ -130,9 +130,9 @@ export default function SaveTeamBar({ leagueRound }: Props) {
     }
 
     return (
-        <div className="max-h-[50px] min-h-[50px]" >
+        <div className="max-h-[36px] min-h-[36px] mt-3" >
 
-            {isEditing && <div className="mt-4 flex-col gap-2 relative z-[50]">
+            {isEditing && <div className="flex-col gap-2">
                 <div className="flex gap-2 flex-row items-center justify-center">
                     <button
                         type="button"

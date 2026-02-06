@@ -19,10 +19,6 @@ export default function StickyUserRankingCard({ userRanking, onClick }: Props) {
                 "w-full rounded-xl bg-blue-500 dark:shadow-lg text-white shadow-black dark:bg-blue-600 cursor-pointer p-4 flex flex-col gap-2",
             )} >
 
-                <div className="flex flex-row items-center gap-2 justify-between" >
-                    <p className="font-bold" >My Ranking</p>
-                    <p className="text-sm" >Points</p>
-                </div>
 
                 <div className="flex-row items-center gap-2 justify-between flex" >
                     <div className="flex flex-row gap-4 items-center" >

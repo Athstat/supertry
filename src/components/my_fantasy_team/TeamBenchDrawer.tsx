@@ -4,7 +4,6 @@ import { Activity, useMemo } from "react";
 import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
 import { usePlayerRoundAvailability } from "../../hooks/fantasy/usePlayerRoundAvailability";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
-import { useAthleteRoundScore } from "../../hooks/fantasy/useAthleteRoundScore";
 import { AppColours } from "../../types/constants";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { formatPosition } from "../../utils/athletes/athleteUtils";
@@ -101,10 +100,10 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
 
   const { position_class } = player;
   const { league } = useFantasyLeagueGroup();
-  const {isPlayerLocked} = useFantasyTeam();
+  const {isShowPlayerLock} = useFantasyTeam();
 
   const { seasonTeam } = usePlayerSeasonTeam(player.athlete);
-  const isLocked = isPlayerLocked(player.athlete);
+  const showSlotLock = isShowPlayerLock(player.athlete);
 
   const { isNotAvailable, isTeamNotPlaying } = usePlayerRoundAvailability(
     player.tracking_id,
@@ -174,7 +173,7 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
         </div>
       </div>
 
-      {isLocked && (
+      {showSlotLock && (
         <div className='absolute bg-yellow-500 p-1 rounded-md z-[30] -top-6 right-2' >
           <Lock className='w-4 h-4 text-black' />
         </div>
@@ -207,10 +206,10 @@ type PlayerPointsScoreProps = {
 function SubPlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
   const isLocked = isSeasonRoundStarted(round);
-  const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, round.season, round?.round_number ?? 0);
   const { league } = useFantasyLeagueGroup();
 
-  const isLoading = loadingScore;
+  const score = player.score;
+  const isLoading = false;
 
   const { seasonTeam } = usePlayerSeasonTeam(player.athlete)
   const { isNotAvailable, isTeamNotPlaying, nextMatch } = usePlayerRoundAvailability(
@@ -249,7 +248,7 @@ function SubPlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
   return (
     <>
       <div className={twMerge(
-        "w-full overflow-clip items-center justify-center flex flex-row",
+        "w-full overflow-clip items-center justify-center text-xs flex flex-row",
         isLoading && "animate-pulse"
       )} >
 
@@ -261,7 +260,7 @@ function SubPlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
         </Activity>
 
         <Activity mode={showNextMatchInfo ? "visible" : "hidden"} >
-          <p className=" text-sm md:text-[10px] max-w-[100px] font-medium truncate" >{opponent?.athstat_name} {homeOrAway}</p>
+          <p className=" text-[12px] md:text-[10px] max-w-[100px] font-medium truncate" >{opponent?.athstat_name} {homeOrAway}</p>
         </Activity>
 
         {/* <Activity mode={showPrice ? "visible" : "hidden"} >

@@ -101,7 +101,22 @@ export function isSeasonRoundStarted(seasonRound: ISeasonRound) {
   return now.valueOf() >= deadline;
 }
 
-export function isSeasonRoundLocked(seasonRound: ISeasonRound) {
+export function isPastSeasonRound(seasonRound: ISeasonRound) {
+  /** Returns true if a season round is a past round */
+  
+  const { games_end } = seasonRound;
+
+  if (!games_end) {
+    return false;
+  } 
+
+  const now = new Date();
+  const newGamesEnd = new Date(games_end);
+
+  return now.valueOf() >= newGamesEnd.valueOf();
+}
+
+export function isSeasonRoundTeamsLocked(seasonRound: ISeasonRound) {
 
   if (isInSecondChanceMode(seasonRound)) {
     return false;

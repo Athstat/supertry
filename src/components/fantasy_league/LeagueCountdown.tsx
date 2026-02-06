@@ -137,14 +137,14 @@ export function LeagueRoundCountdown2({ leagueRound, className, leagueTitleClass
 
     return (
         <div className={twMerge(
-            'flex flex-row gap-2 min-h-[30px] max-h-[30px] items-center justify-between',
+            'flex flex-row gap-2 min-h-[30px] text-sm max-h-[30px] items-center justify-between',
             className
         )} >
 
             {/* <p className='font-medium text-lg' >{currentRound?.title} Deadline</p> */}
             <div>
                 <p className={twMerge(
-                    "font-semibold",
+                    "font-semibold text-sm",
                     leagueTitleClassName
                 )} > {title ? title : `⏰ GW ${leagueRound.round_title} Deadline`}</p>
             </div>
