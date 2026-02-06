@@ -13,8 +13,9 @@ export function useRoundScoringSummaryV2(seasonRound?: ISeasonRound) {
     const {selectedSeason} = useFantasySeasons();
 
     const userId = authUser?.kc_id;
+    const shouldFetch = (seasonRound !== undefined) && (userId !== undefined) && (selectedSeason !== undefined)
 
-    const key = seasonRound && userId && selectedSeason ? swrFetchKeys.getLeagueRoundScoringOverview(selectedSeason.id, seasonRound.round_number, userId) : null;
+    const key = shouldFetch ? swrFetchKeys.getLeagueRoundScoringOverview(selectedSeason.id, seasonRound.round_number, userId) : null;
     const { data: scoringOverview, isLoading } = useSWR(key, () => fantasySeasonTeamService.getRoundScoringSummary(seasonRound?.season || '',  authUser?.kc_id || '',  seasonRound?.round_number || ""));
     const isLocked = seasonRound && isSeasonRoundLocked(seasonRound);
 
