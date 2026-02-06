@@ -351,7 +351,8 @@ export function useFantasyTeam() {
 
     const isShowPlayerLock = (player?: IProAthlete) => {
         const isLocked = isPlayerLocked(player);
-        return isLocked && !isReadOnly && leagueRound && !isPastSeasonRound(leagueRound);
+        const isSecondChanceMode = leagueRound && isInSecondChanceMode(leagueRound);
+        return isLocked && !isReadOnly && leagueRound && !isPastSeasonRound(leagueRound) && isSecondChanceMode;
     }
 
     return {
