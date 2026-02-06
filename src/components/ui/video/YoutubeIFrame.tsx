@@ -1,10 +1,20 @@
+import { isMobileApp } from "../../../utils/deviceId/deviceIdUtils";
+
 type Props = {
     link: string
 }
 
 export default function YoutubeIFrame({ link }: Props) {
 
+    const isMobile = isMobileApp();
+    const allowYoutube = isMobile ? Boolean(window.ALLOW_YOUTUBE_VIDEO) : true;
+
     const videoId = getYoutubeVideoId(link);
+
+    if (!(videoId && allowYoutube)) {
+        return null;
+    }
+
     return (
         <div style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}>
             <iframe
