@@ -32,7 +32,7 @@ export function PlayerActionModal({
 }: PlayerActionModalProps) {
 
   const { seasonTeam } = usePlayerSeasonTeam(player.athlete);
-  const { leagueRound, initiateSwap, removePlayerAtSlot, setTeamCaptainAtSlot, slots, teamCaptain, isReadOnly, isPlayerLocked } = useFantasyTeam();
+  const { leagueRound, initiateSwap, removePlayerAtSlot, setTeamCaptainAtSlot, slots, teamCaptain, isReadOnly, isPlayerLocked, isShowPlayerLock } = useFantasyTeam();
 
   const isSub = !player.is_starting;
 
@@ -43,8 +43,9 @@ export function PlayerActionModal({
   }, [slots, player]);
 
   const isTeamCaptain = teamCaptain?.tracking_id === player.tracking_id;
+
   const isLocked = isPlayerLocked(player.athlete);
-  const showSlotLockedWarning = isLocked && !isReadOnly;
+  const showSlotLockedWarning = isShowPlayerLock(player.athlete);
 
   const handleViewProfile = () => {
     if (onViewProfile) {

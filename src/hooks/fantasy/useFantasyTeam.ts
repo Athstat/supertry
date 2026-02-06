@@ -9,7 +9,7 @@ import { IFantasyLeagueTeamSlot, defaultFantasyPositions } from "../../types/fan
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { Position } from "../../types/position";
 import { sortFantasyTeamAthletes, hashFantasyTeamAthletes } from "../../utils/athletes/athleteUtils";
-import { isInSecondChanceMode, isSeasonRoundTeamsLocked } from '../../utils/leaguesUtils';
+import { isInSecondChanceMode, isPastSeasonRound, isSeasonRoundTeamsLocked } from '../../utils/leaguesUtils';
 
 /** Hook for accessing data about a fantasy league team */
 export function useFantasyTeam() {
@@ -349,6 +349,11 @@ export function useFantasyTeam() {
         return isPlayerLocked(slot.athlete?.athlete);
     }
 
+    const isShowPlayerLock = (player?: IProAthlete) => {
+        const isLocked = isPlayerLocked(player);
+        return isLocked && !isReadOnly && leagueRound && !isPastSeasonRound(leagueRound);
+    }
+
     return {
         slots, setSlots,
         teamAthletes,
@@ -376,6 +381,7 @@ export function useFantasyTeam() {
         isReadOnly,
         roundFixtures,
         isSlotLocked,
-        isPlayerLocked
+        isPlayerLocked,
+        isShowPlayerLock
     }
 }
