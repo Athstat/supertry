@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { isSeasonRoundLocked } from "../../utils/leaguesUtils";
+import { isSeasonRoundTeamsLocked } from "../../utils/leaguesUtils";
 import { swrFetchKeys } from "../../utils/swrKeys";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 import { fantasySeasonTeamService } from "../../services/fantasy/fantasySeasonTeamService";
@@ -17,7 +17,7 @@ export function useRoundScoringSummaryV2(seasonRound?: ISeasonRound) {
 
     const key = shouldFetch ? swrFetchKeys.getLeagueRoundScoringOverview(selectedSeason.id, seasonRound.round_number, userId) : null;
     const { data: scoringOverview, isLoading } = useSWR(key, () => fantasySeasonTeamService.getRoundScoringSummary(seasonRound?.season || '',  authUser?.kc_id || '',  seasonRound?.round_number || ""));
-    const isLocked = seasonRound && isSeasonRoundLocked(seasonRound);
+    const isLocked = seasonRound && isSeasonRoundTeamsLocked(seasonRound);
 
     const highestPointsScored = scoringOverview?.highest_points_scored;
     const averagePointsScored = scoringOverview?.average_points_scored;

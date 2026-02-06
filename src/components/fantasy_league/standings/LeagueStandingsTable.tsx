@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { ErrorState } from '../../ui/ErrorState';
 import { LeagueStandingsTableRow } from './LeagueStandingsTableRow';
 import StickyUserRankingCard from './StickyUserRankingCard';
-import { isSeasonRoundLocked } from '../../../utils/leaguesUtils';
+import { isSeasonRoundTeamsLocked } from '../../../utils/leaguesUtils';
 import { ISeasonRound } from '../../../types/fantasy/fantasySeason';
 import { useAuth } from '../../../contexts/auth/AuthContext';
 
@@ -98,7 +98,7 @@ export default function LeagueStandingsTable({
     }
   }
 
-  const isRoundLocked = selectedRound && isSeasonRoundLocked(selectedRound);
+  const isRoundLocked = selectedRound && isSeasonRoundTeamsLocked(selectedRound);
 
   if (error) {
     return (

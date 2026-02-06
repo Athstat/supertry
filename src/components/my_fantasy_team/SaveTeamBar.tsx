@@ -6,7 +6,7 @@ import { useNavigateBack } from "../../hooks/web/useNavigateBack";
 import { useNavigationGuard } from "../../hooks/web/useNavigationGuard";
 import { fantasyAnalytics } from "../../services/analytics/fantasyAnalytics";
 import { AppColours } from "../../types/constants";
-import { isSeasonRoundLocked } from "../../utils/leaguesUtils";
+import { isSeasonRoundTeamsLocked } from "../../utils/leaguesUtils";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import { Toast } from "../ui/Toast";
 import UnsavedChangesWarningModal from "../ui/modals/UnsavedChangesModal";
@@ -28,7 +28,7 @@ export default function SaveTeamBar({ leagueRound }: Props) {
     const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState<boolean>(false);
     const [isSaving, setIsSaving] = useState(false);
     const [saveError, setSaveError] = useState<string | undefined>(undefined);
-    const isLocked = isSeasonRoundLocked(leagueRound);
+    const isLocked = isSeasonRoundTeamsLocked(leagueRound);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     const toggleUnSavedChangesModal = () => {

@@ -101,7 +101,7 @@ export function isSeasonRoundStarted(seasonRound: ISeasonRound) {
   return now.valueOf() >= deadline;
 }
 
-export function isSeasonRoundLocked(seasonRound: ISeasonRound) {
+export function isSeasonRoundTeamsLocked(seasonRound: ISeasonRound) {
 
   if (isInSecondChanceMode(seasonRound)) {
     return false;
