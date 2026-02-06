@@ -44,6 +44,7 @@ export function PlayerActionModal({
 
   const isTeamCaptain = teamCaptain?.tracking_id === player.tracking_id;
   const isLocked = isPlayerLocked(player.athlete);
+  const showSlotLockedWarning = isLocked && !isReadOnly;
 
   const handleViewProfile = () => {
     if (onViewProfile) {
@@ -168,7 +169,7 @@ export function PlayerActionModal({
         />
       </div> */}
 
-      {isLocked && (
+      {showSlotLockedWarning && (
         <WarningCard className="text-sm" >
           <p>
             <strong>{player.player_name}{player.player_name.endsWith('s') ? "'" : "'s"}</strong> slot is locked, therefore you can't remove or swap {player.gender === "F" ? 'her' : 'him'} out of your team, until the round ends

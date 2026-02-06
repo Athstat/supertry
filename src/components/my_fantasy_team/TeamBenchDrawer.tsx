@@ -101,10 +101,11 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
 
   const { position_class } = player;
   const { league } = useFantasyLeagueGroup();
-  const {isPlayerLocked} = useFantasyTeam();
+  const {isPlayerLocked, isReadOnly} = useFantasyTeam();
 
   const { seasonTeam } = usePlayerSeasonTeam(player.athlete);
   const isLocked = isPlayerLocked(player.athlete);
+  const showSlotLock = isLocked && !isReadOnly;
 
   const { isNotAvailable, isTeamNotPlaying } = usePlayerRoundAvailability(
     player.tracking_id,
@@ -174,7 +175,7 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
         </div>
       </div>
 
-      {isLocked && (
+      {showSlotLock && (
         <div className='absolute bg-yellow-500 p-1 rounded-md z-[30] -top-6 right-2' >
           <Lock className='w-4 h-4 text-black' />
         </div>
