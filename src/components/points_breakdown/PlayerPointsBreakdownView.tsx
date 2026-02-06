@@ -24,17 +24,24 @@ type Props = {
     /** React Node to render on the header title area */
     headerTitle?: ReactNode,
     hideSubtitle?: boolean,
-    teamScore?: number
+    multiplier?: number,
+    multiplierDesc?: string
 }
 
-export default function PlayerPointsBreakdownView({ athlete, round: leagueRound, game, headerTitle, hideSubtitle }: Props) {
+export default function PlayerPointsBreakdownView({ athlete, round: leagueRound, game, headerTitle, hideSubtitle, team, multiplier, multiplierDesc }: Props) {
 
     const roundNumber = leagueRound?.round_number || game?.round || 0;
     const seasonId = leagueRound?.season || game?.league_id || ''
-    
-    const { pointItems, totalPoints, isLoading: loadingPointsBreakdown } = useAthletePointsBreakdown(
+
+    const { pointItems, totalPoints: rawPoints, isLoading: loadingPointsBreakdown } = useAthletePointsBreakdown(
         athlete, roundNumber, seasonId
     );
+
+    const finalScore = team?.athletes.find((a) => {
+        return a.athlete?.tracking_id === athlete.tracking_id
+    })?.score || rawPoints;
+
+    const multiplierScore = finalScore - rawPoints;
 
     const isLoading = loadingPointsBreakdown;
 
@@ -52,12 +59,14 @@ export default function PlayerPointsBreakdownView({ athlete, round: leagueRound,
                 )}
 
                 <div className="flex flex-row  font-bold flex-1 items-center justify-end" >
-                    {!isLoading && totalPoints && (
+
+                    {!isLoading && rawPoints && (
                         <div className="flex flex-col items-end justify-end" >
-                            <p className="text-lg" >{totalPoints?.toFixed(1)}</p>
+                            <p className="text-lg" >{finalScore?.toFixed(1)}</p>
                             <SecondaryText className="text-xs font-semibold" >Total Points</SecondaryText>
                         </div>
                     )}
+
                     {isLoading && (
                         <RoundedCard
                             className="h-[30px] w-[60px] animate-pulse border-none rounded-xl"
@@ -108,6 +117,13 @@ export default function PlayerPointsBreakdownView({ athlete, round: leagueRound,
 
             {!isLoading && pointItems !== undefined && (
                 <div className="flex flex-col gap-2" >
+
+                    {<MultiplierCard
+                        multipliyer={multiplier}
+                        description={multiplierDesc}
+                        bonus={multiplierScore}
+                    />}
+
                     {pointItems.map((p, index) => {
                         return (
                             <PlayerPointBreakdownItem
@@ -131,7 +147,7 @@ export default function PlayerPointsBreakdownView({ athlete, round: leagueRound,
                         </div>
 
                         <div className="font-bold " >
-                            {totalPoints.toFixed(1)}
+                            {finalScore?.toFixed(1)}
                         </div>
                     </RoundedCard>
                 </div>
@@ -186,7 +202,7 @@ function DefaultHeaderTitle({ athlete }: HeaderProps) {
         <div className="flex flex-row items-center gap-2" >
             {<PlayerMugshot
                 playerPr={athlete.power_rank_rating}
-                url={athlete.image_url}
+                teamId={athlete.team_id}
                 showPrBackground
                 className="w-14 h-14"
             />}
@@ -196,6 +212,40 @@ function DefaultHeaderTitle({ athlete }: HeaderProps) {
                 {athlete.position && athlete.position_class && (
                     <SecondaryText className="" >{formatPosition(athlete.position_class)} | {formatPosition(athlete.position)}</SecondaryText>
                 )}
+            </div>
+        </div>
+    )
+}
+
+type MultiplyerCardProps = {
+    multipliyer?: number,
+    description?: string,
+    bonus?: number
+}
+
+function MultiplierCard({ multipliyer, description, bonus }: MultiplyerCardProps) {
+
+    if (!bonus || !multipliyer || !description) {
+        return null;
+    }
+
+    const isLoss = bonus < 0;
+
+    return (
+        <div className={twMerge(
+            "flex flex-row rounded-2xl px-3 items-center justify-between p-2 bg-blue-500 text-white dark:text-white",
+            isLoss && "bg-red-500 dark:bg-red-600"
+        )} >
+            <div className="flex flex-row gap-2" >
+                
+                <SecondaryText className="dark:text-white font-medium" >{description} (x{multipliyer})</SecondaryText>
+            </div>
+
+            <div className={twMerge(
+                "font-bold text-white",
+                (bonus ?? 0) < 0 && 'text-white'
+            )} >
+                {bonus?.toFixed(1)}
             </div>
         </div>
     )
