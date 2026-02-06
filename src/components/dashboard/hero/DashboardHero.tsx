@@ -38,7 +38,7 @@ function DefaultHero() {
     <DashboardHeroFrame>
       <DashboardHeroHeader />
       <DashboardHeroScoreSection roundTeam={roundTeam} />
-      <DashboardHeroCTASection roundTeam={roundTeam} />
+      <DashboardHeroCTASection hideVerboseInstructions roundTeam={roundTeam} />
     </DashboardHeroFrame>
   )
 }

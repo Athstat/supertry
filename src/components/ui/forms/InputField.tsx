@@ -45,7 +45,7 @@ export default function InputField({value, onChange, label, type, id, inputCn, l
                     type={type}
                     required={required}
                     className={twMerge(
-                        "w-full px-4 py-3 bg-white dark:bg-dark-800/40 border border-gray-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 outline-none focus:border-transparent dark:text-gray-100",
+                        "w-full px-4 py-2.5 bg-white dark:bg-dark-800/40 border border-gray-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 outline-none focus:border-transparent dark:text-gray-100",
                         icon && "pr-12",
                         error && "border-red-500 dark:border-red-500 bg-red-100/60 dark:bg-red-900/20",
                         inputCn

@@ -43,7 +43,7 @@ export function Header() {
               tabIndex={0}
               aria-label="Navigate to home"
             >
-              <ScrummyLogoHorizontal className="" />
+              <ScrummyLogoHorizontal className="w-40" />
             </div>
 
             {isInQa && <BetaTag />}

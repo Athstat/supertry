@@ -28,10 +28,10 @@ export default function ProMatchCenterHeader({
         )} >
             <div className="flex flex-row items-center justify-between gap-4">
                 <div className="flex flex-row items-center gap-2">
-                    <IconCircle>
+                    <IconCircle className="w-9 h-9" >
                         <FixtureCalendarIcon />
                     </IconCircle>
-                    <TextHeading className="text-2xl">Fixtures (Pro)</TextHeading>
+                    <TextHeading className="text-xl">Fixtures (Pro)</TextHeading>
                 </div>
 
                 <SegmentedControl

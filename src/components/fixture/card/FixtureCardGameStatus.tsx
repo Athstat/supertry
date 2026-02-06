@@ -32,7 +32,7 @@ export default function FixtureCardGameStatus({ fixture, hideDate = false }: Pro
         <div className="flex-1 text-slate-700 dark:text-slate-300 gap-1 flex flex-col items-center text-center justify-center">
 
             {kickoff_time && (
-                <p className="text-sm font-semibold">{format(kickoff_time, 'h:mm a')}</p>
+                <p className="text-xs font-semibold">{format(kickoff_time, 'h:mm a')}</p>
             )}
 
             {!hideDate && kickoff_time && (

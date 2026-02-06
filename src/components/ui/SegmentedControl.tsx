@@ -25,7 +25,7 @@ export default function SegmentedControl({ options, value, onChange, className }
           key={option.value}
           onClick={() => onChange(option.value)}
           className={twMerge(
-            'px-3 py-2 text-xs font-medium rounded-2xl transition-all duration-200',
+            'px-3 py-2 text-[10px] font-medium rounded-2xl transition-all duration-200',
             value === option.value
               ? 'bg-[#19336C] text-white dark:bg-slate-600 shadow-sm'
               : 'text-slate-600 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700'
