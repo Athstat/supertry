@@ -16,7 +16,10 @@ export function useRoundScoringSummaryV2(seasonRound?: ISeasonRound) {
     const shouldFetch = (seasonRound !== undefined) && (userId !== undefined) && (selectedSeason !== undefined)
 
     const key = shouldFetch ? swrFetchKeys.getLeagueRoundScoringOverview(selectedSeason.id, seasonRound.round_number, userId) : null;
-    const { data: scoringOverview, isLoading } = useSWR(key, () => fantasySeasonTeamService.getRoundScoringSummary(seasonRound?.season || '',  authUser?.kc_id || '',  seasonRound?.round_number || ""));
+    const { data: scoringOverview, isLoading } = useSWR(key, () => fantasySeasonTeamService.getRoundScoringSummary(seasonRound?.season || '',  authUser?.kc_id || '',  seasonRound?.round_number || ""), {
+        refreshInterval: 1000 * 2 // every 2 minutes
+    });
+    
     const isLocked = seasonRound && isSeasonRoundTeamsLocked(seasonRound);
 
     const highestPointsScored = scoringOverview?.highest_points_scored;

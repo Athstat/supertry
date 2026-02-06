@@ -42,7 +42,9 @@ function Content() {
 
   const { data: sportActions, isLoading: loadingSportsActions } = useSWR(sportsActionsKey, () =>
     boxScoreService.getSportActionsByGameId(fixtureId ?? '')
-  );
+  , {
+    refreshInterval: 1000 * 2 // 2 minutes
+  });
 
   useHideBottomNavBar();
 
