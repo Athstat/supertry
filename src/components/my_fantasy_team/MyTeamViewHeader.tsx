@@ -85,9 +85,9 @@ type TeamPointsProps = {
 
 function TeamPointsCard({ leagueRound }: TeamPointsProps) {
 
-  const { isReadOnly } = useFantasyTeam();
+  const { isReadOnly, team } = useFantasyTeam();
   const isLocked = isSeasonRoundStarted(leagueRound);
-  const { highestPointsScored, averagePointsScored, isLoading, userScore } =
+  const { highestPointsScored, averagePointsScored, isLoading } =
     useRoundScoringSummaryV2(leagueRound);
 
   const showScore = !isLoading && isLocked
@@ -107,7 +107,7 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
           </div>
 
           <div className="flex flex-col items-center justify-center" >
-            <p className="font-black text-md" >{smartRoundUp(userScore)}</p>
+            <p className="font-black text-md" >{smartRoundUp(team?.overall_score)}</p>
             <SecondaryText className="text-[10px]" >Score</SecondaryText>
           </div>
 

@@ -4,7 +4,6 @@ import { Activity, useMemo } from "react";
 import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
 import { usePlayerRoundAvailability } from "../../hooks/fantasy/usePlayerRoundAvailability";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
-import { useAthleteRoundScore } from "../../hooks/fantasy/useAthleteRoundScore";
 import { AppColours } from "../../types/constants";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { formatPosition } from "../../utils/athletes/athleteUtils";
@@ -207,10 +206,10 @@ type PlayerPointsScoreProps = {
 function SubPlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
   const isLocked = isSeasonRoundStarted(round);
-  const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, round.season, round?.round_number ?? 0);
   const { league } = useFantasyLeagueGroup();
 
-  const isLoading = loadingScore;
+  const score = player.score;
+  const isLoading = false;
 
   const { seasonTeam } = usePlayerSeasonTeam(player.athlete)
   const { isNotAvailable, isTeamNotPlaying, nextMatch } = usePlayerRoundAvailability(
