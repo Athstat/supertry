@@ -7,6 +7,7 @@ import { IFantasyLeagueTeamSlot, SlotCardPosition } from '../../types/fantasyLea
 import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
 import { EmptySlotPitchCard } from './pitch_card/EmptySlotPitchCard';
 import { Lock } from 'lucide-react';
+import { isPastSeasonRound } from '../../utils/leaguesUtils';
 
 interface TeamFormationProps {
   onPlayerClick: (player: IFantasyTeamAthlete) => void;
@@ -82,9 +83,10 @@ type SlotCardProps = {
 
 function SlotCard({ slot, onPlayerClick, position }: SlotCardProps) {
 
-  const { isSlotLocked, isReadOnly } = useFantasyTeam();
+  const { isSlotLocked, isReadOnly, leagueRound } = useFantasyTeam();
   const { athlete } = slot;
   const isLocked = isSlotLocked(slot);
+  const showSlotLocked = leagueRound && !isPastSeasonRound(leagueRound) && isLocked && !isReadOnly && isSlotLocked(slot);
 
   if (!athlete) {
     return (
@@ -120,7 +122,7 @@ function SlotCard({ slot, onPlayerClick, position }: SlotCardProps) {
           key={slot.slotNumber}
         />
 
-        {isLocked && !isReadOnly && (
+        {showSlotLocked && (
           <div className='absolute bg-yellow-500 p-1 rounded-md z-[30] top-5 left-0' >
             <Lock  className='w-4 h-4 text-black' />
           </div>
