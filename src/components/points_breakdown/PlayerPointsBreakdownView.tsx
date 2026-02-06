@@ -23,7 +23,8 @@ type Props = {
 
     /** React Node to render on the header title area */
     headerTitle?: ReactNode,
-    hideSubtitle?: boolean
+    hideSubtitle?: boolean,
+    teamScore?: number
 }
 
 export default function PlayerPointsBreakdownView({ athlete, round: leagueRound, game, headerTitle, hideSubtitle }: Props) {
