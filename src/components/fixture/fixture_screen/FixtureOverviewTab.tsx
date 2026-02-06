@@ -27,32 +27,28 @@ export default function FixtureOverviewTab({ fixture }: Props) {
 
         <div className="flex flex-col gap-6" >
             <RoundedCard
-                className="flex dark:border-none flex-col gap-2 p-4 text-sm"
+                className="flex dark:border-none flex-col gap-2 p-3 px-4 text-xs"
             >
-
-                {/* <div>
-                    <h2>Kick Off</h2>
-                </div> */}
 
                 {fixture.competition_name && (
                     <div onClick={goToCompetitionScreen} className="flex hover:underline flex-row gap-2 items-center justify-start" >
-                        <Trophy className="w-5 h-5" />
+                        <Trophy className="w-4 h-4" />
                         <p>{fixture.competition_name}</p>
                     </div>
                 )}
 
                 {fixture.kickoff_time && <div className="flex flex-row gap-2 items-center justify-start" >
-                    <Calendar className="w-5 h-5" />
+                    <Calendar className="w-4 h-4" />
                     <p>{format(fixture.kickoff_time, "EEEE d MMMM yyyy")} ᐧ {format(fixture.kickoff_time, "HH:mm")}</p>
                 </div>}
 
                 {fixture.venue && <div className="flex flex-row gap-2 items-center justify-start" >
-                    <MapPin className="w-5 h-5" />
+                    <MapPin className="w-4 h-4" />
                     <p>{fixture.venue}</p>
                 </div>}
 
                 {fixture.extra_info && <div className="flex flex-row gap-2 items-center justify-start" >
-                    <Info className="w-5 h-5" />
+                    <Info className="w-4 h-4" />
                     <p>{fixture.extra_info}</p>
                 </div>}
 
