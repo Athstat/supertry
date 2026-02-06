@@ -21,7 +21,6 @@ type Props = {
 /** Renders a fantasy team view, with editor capabilities */
 export default function FantasyTeamView({ onTeamUpdated, leagueRound, pitchCN }: Props) {
 
-
   const { cancelSwap, slots, swapState, completeSwap, swapPlayer, budgetRemaining } =
     useFantasyTeam();
 

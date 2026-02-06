@@ -130,9 +130,9 @@ export default function SaveTeamBar({ leagueRound }: Props) {
     }
 
     return (
-        <div className="max-h-[50px] min-h-[50px]" >
+        <div className="max-h-[36px] min-h-[36px] mt-3" >
 
-            {isEditing && <div className="mt-4 flex-col gap-2 relative z-[50]">
+            {isEditing && <div className="flex-col gap-2">
                 <div className="flex gap-2 flex-row items-center justify-center">
                     <button
                         type="button"

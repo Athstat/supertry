@@ -249,7 +249,7 @@ function SubPlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
   return (
     <>
       <div className={twMerge(
-        "w-full overflow-clip items-center justify-center flex flex-row",
+        "w-full overflow-clip items-center justify-center text-xs flex flex-row",
         isLoading && "animate-pulse"
       )} >
 
@@ -261,7 +261,7 @@ function SubPlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
         </Activity>
 
         <Activity mode={showNextMatchInfo ? "visible" : "hidden"} >
-          <p className=" text-sm md:text-[10px] max-w-[100px] font-medium truncate" >{opponent?.athstat_name} {homeOrAway}</p>
+          <p className=" text-[12px] md:text-[10px] max-w-[100px] font-medium truncate" >{opponent?.athstat_name} {homeOrAway}</p>
         </Activity>
 
         {/* <Activity mode={showPrice ? "visible" : "hidden"} >

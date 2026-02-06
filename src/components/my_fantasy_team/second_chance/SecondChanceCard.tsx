@@ -20,11 +20,11 @@ export default function SecondChanceCard({teamCreation = false} : Props) {
 
     return (
         <div className="flex flex-row items-center justify-center " >
-            <WarningCard className="w-full flex flex-row text-sm mt-0" >
+            <WarningCard className="w-full flex flex-row text-xs mt-0" >
 
                 <div>
                     <p>
-
+                        
                         <span>You can't {teamCreation ? "pick" : "swap in or out"} players participating in the following (live or completed) games: </span>
 
                         {liveOrCompleted.map((f) => {

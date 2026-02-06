@@ -77,7 +77,7 @@ export default function MyTeamPitchView({ className, hideBenchPlayer = false, fi
 
   return (
     <div className={twMerge(
-      " h-full ",
+      " h-full",
       className
     )}>
       <div className='flex flex-col relative'>
