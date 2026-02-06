@@ -33,10 +33,10 @@ export default function ProfileSettingCard({ icon, onClick, title, description, 
 
             <div className='flex flex-col items-start justify-center' >
                 <div className='flex flex-row items-center gap-2' >
-                    <span className="font-medium dark:text-gray-100">{title}</span>
+                    <span className="font-medium text-sm dark:text-gray-100">{title}</span>
                     <ChevronRight size={20} className="text-gray-400" />
                 </div>
-                <SecondaryText className='text-xs text-left' >{description}</SecondaryText>
+                <SecondaryText className='text-[11px] text-left' >{description}</SecondaryText>
             </div>
 
 
