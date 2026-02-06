@@ -26,8 +26,6 @@ export default function MyFantasyTeamPreview({ leagueGroup }: Props) {
   const { roundTeam: userTeam, isLoading: loadingUserTeam } = useUserRoundTeam(authUser?.kc_id, currentRound?.round_number, true);
   const { userScore, isLoading: loadingScore } = useRoundScoringSummaryV2(scoringRound);
 
-  console.log("User Score ", userScore);
-
   const isLoading = loadingScore || loadingUserTeam;
   const showUserScore = userScore !== undefined && Boolean(scoringRound);
 

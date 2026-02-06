@@ -7,7 +7,7 @@ export function smartRoundUp(val?: number | null | undefined) {
         return 0;
     }
 
-    return Math.ceil(val);
+    return val.toFixed(1);
 }
 
 // Converts centimeters to feet and inches string, e.g., 170 -> 5'7"
