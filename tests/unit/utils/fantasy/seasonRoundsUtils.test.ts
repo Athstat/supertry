@@ -2,7 +2,7 @@
 import { ISeasonRound } from './../../../../src/types/fantasy/fantasySeason';
 import { addDays, subDays, addMinutes, subMinutes, addHours } from "date-fns";
 import { getCurrentRound, getPreviousRound, getScoringRound } from "../../../../src/utils/fantasy/seasonRoundsUtils";
-import { isSeasonRoundLocked } from '../../../../src/utils/leaguesUtils';
+import { isSeasonRoundTeamsLocked } from '../../../../src/utils/leaguesUtils';
 
 describe('test getCurrentRound() function', () => {
 
@@ -857,7 +857,7 @@ describe('test getScoringRound() function', () => {
 })
 
 
-describe('test isSeasonRoundLocked() function', () => {
+describe('test isSeasonRoundTeamsLocked() function', () => {
     test('test when round is locked (Extreme Boundary)', () => {
 
         const now = new Date();
@@ -877,7 +877,7 @@ describe('test isSeasonRoundLocked() function', () => {
         }
 
 
-        expect(isSeasonRoundLocked(seasonRound)).toBeTruthy();
+        expect(isSeasonRoundTeamsLocked(seasonRound)).toBeTruthy();
     });
 
     test('test when round is locked (Normal)', () => {
@@ -899,7 +899,7 @@ describe('test isSeasonRoundLocked() function', () => {
         }
 
 
-        expect(isSeasonRoundLocked(seasonRound)).toBeTruthy();
+        expect(isSeasonRoundTeamsLocked(seasonRound)).toBeTruthy();
     });
 
 
@@ -922,7 +922,7 @@ describe('test isSeasonRoundLocked() function', () => {
         }
 
 
-        expect(isSeasonRoundLocked(seasonRound)).toBeFalsy();
+        expect(isSeasonRoundTeamsLocked(seasonRound)).toBeFalsy();
     });
 
     test('test when round is not locked (Normal)', () => {
@@ -944,7 +944,7 @@ describe('test isSeasonRoundLocked() function', () => {
         }
 
 
-        expect(isSeasonRoundLocked(seasonRound)).toBeFalsy();
+        expect(isSeasonRoundTeamsLocked(seasonRound)).toBeFalsy();
     });
 
     test('test when second chance window is active, round is not locked', () => {
@@ -970,6 +970,6 @@ describe('test isSeasonRoundLocked() function', () => {
         } as any;
 
 
-        expect(isSeasonRoundLocked(seasonRound)).toBeFalsy();
+        expect(isSeasonRoundTeamsLocked(seasonRound)).toBeFalsy();
     });
 })
