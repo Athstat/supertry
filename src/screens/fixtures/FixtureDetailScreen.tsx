@@ -8,7 +8,6 @@ import FixtureStandingsTab from '../../components/fixture/fixture_screen/Fixture
 import FixtureRostersTab from '../../components/fixture/fixture_screen/rosters/FixtureRostersTab';
 import { ProMotmVotingBox } from '../../components/pickem/motm';
 import PlayerProfileModal from '../../components/player/PlayerProfileModal';
-import SportActionsDefinitionsProvider from '../../providers/SportActionsDefinitionsProvider';
 import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
 import PilledTabView from '../../components/ui/tabs/PilledTabView';
 import { TabViewHeaderItem, TabViewPage } from '../../components/ui/tabs/TabView';
@@ -30,9 +29,7 @@ export default function FixtureDetailScreen() {
     <FixtureScreenProvider
       fixtureId={fixtureId}
     >
-      <SportActionsDefinitionsProvider>
         <Content />
-      </SportActionsDefinitionsProvider>
     </FixtureScreenProvider>
   )
 }
