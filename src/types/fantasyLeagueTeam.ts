@@ -51,3 +51,5 @@ export type UpdateFantasyLeagueTeam = {
     athletes: UpdateFantasyTeamAthleteItem[],
     user_id: string
 }
+
+export type MyTeamSlotType = "obscured" | "athlete" | "empty"
