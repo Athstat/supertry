@@ -1,4 +1,4 @@
-import { PositionClass } from "../../types/athletes";
+import { IProAthlete, PositionClass } from "../../types/athletes";
 import { IFantasyLeagueTeam } from "../../types/fantasyLeague";
 import { defaultFantasyPositions, FantasyPositionName, IFantasyLeagueTeamSlot, IFantasyPosition } from "../../types/fantasyLeagueTeam";
 import { formatPosition } from "../athletes/athleteUtils";
@@ -25,5 +25,37 @@ export function getSlotsFromTeam(team: IFantasyLeagueTeam): IFantasyLeagueTeamSl
             isCaptain: Boolean(a.is_captain),
             position: defaultFantasyPositions.at(a.slot) ?? defaultPosition
         }
+    }).sort((a, b) => {
+        return (a.slotNumber) - (b.slotNumber);
+    })
+}
+
+/** Takes a slot and sets a player at a slot in place */
+export function setPlayerAtSlot(team: IFantasyLeagueTeam, slots: IFantasyLeagueTeamSlot[], slotNumber: number, newPlayer: IProAthlete) : IFantasyLeagueTeamSlot[] {
+    return slots.map((s) => {
+        if (s.slotNumber === slotNumber) {
+            const newSlot = {
+                ...s,
+                athlete: {
+                    ...newPlayer,
+                    is_captain: s.isCaptain,
+                    team_id: team.id,
+                    purchase_price: newPlayer.price ?? 0,
+                    slot: s.slotNumber,
+                    id: new Date().valueOf(), // temporal id,
+                    athlete_id: newPlayer.tracking_id,
+                    is_starting: s.slotNumber < 6,
+                    athlete_team_id: newPlayer.team?.athstat_id,
+                    athlete: newPlayer,
+                    is_super_sub: s.slotNumber >= 6,
+                    score: 0,
+                },
+                purchasePrice: newPlayer.price,
+            }
+
+            return newSlot;
+        }
+
+        return s;
     })
 }
