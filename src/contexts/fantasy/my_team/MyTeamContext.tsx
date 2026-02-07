@@ -5,6 +5,7 @@ import { IFantasyLeagueTeam } from "../../../types/fantasyLeague"
 import { IFantasyLeagueTeamSlot } from "../../../types/fantasyLeagueTeam"
 import { getSlotsFromTeam } from "../../../utils/fantasy/myteamUtils"
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete"
+import { IFixture } from "../../../types/games"
 
 type MyTeamContextProps = {
     team: IFantasyLeagueTeam,
@@ -14,6 +15,8 @@ type MyTeamContextProps = {
     setSlots: Dispatch<SetStateAction<IFantasyLeagueTeamSlot[]>>,
     selectedPlayer?: IFantasyTeamAthlete,
     setSelectedPlayer: (val?: IFantasyTeamAthlete) => void,
+    roundGames: IFixture[],
+    isReadOnly: boolean
 
 }
 
@@ -23,18 +26,23 @@ type Props = {
     team: IFantasyLeagueTeam,
     manager: DjangoUserMinimal,
     round?: ISeasonRound,
-    children?: ReactNode
+    children?: ReactNode,
+    isReadOnly?: boolean,
+    roundGames: IFixture[]
 }
 
-export default function MyTeamProvider({team, manager, round, children} : Props) {
+export default function MyTeamProvider({team, manager, round, children, isReadOnly = false, roundGames = []} : Props) {
     const [slots, setSlots] = useState<IFantasyLeagueTeamSlot[]>(getSlotsFromTeam(team));
     const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete | undefined>(undefined);
+
+
 
     return (
         <MyTeamContext.Provider
             value={{
                 team, manager, round, slots, 
-                setSlots, setSelectedPlayer, selectedPlayer
+                setSlots, setSelectedPlayer, selectedPlayer,
+                isReadOnly, roundGames
             }}
         >
             {children}
