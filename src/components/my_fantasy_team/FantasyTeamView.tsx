@@ -1,14 +1,11 @@
 import { useState } from 'react';
 import MyTeamViewHeader from './MyTeamViewHeader';
-import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
-import { PositionClass } from '../../types/athletes';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { IGamesLeagueConfig } from '../../types/leagueConfig';
 import { requestPushPermissions } from '../../utils/bridgeUtils';
 import PlayerPicker from '../player_picker/PlayerPicker';
 import PushOptInModal from '../ui/PushOptInModal';
 import MyTeamPitchView from './MyTeamPitchView';
-import { useMyTeam } from '../../hooks/fantasy/my_team/useMyTeam';
 import { useMyTeamActions } from '../../hooks/fantasy/my_team/useMyTeamActions';
 
 type Props = {
