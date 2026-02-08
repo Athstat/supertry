@@ -943,6 +943,7 @@ describe('test isSeasonRoundTeamsLocked() function', () => {
             created_at: new Date()
         }
 
+        
 
         expect(isSeasonRoundTeamsLocked(seasonRound)).toBeFalsy();
     });
