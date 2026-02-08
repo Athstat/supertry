@@ -8,7 +8,6 @@ import PrimaryButton from "../ui/buttons/PrimaryButton";
 import SuperSubPill from "./SuperSubPill";
 import { Activity, useMemo } from "react";
 import { twMerge } from "tailwind-merge";
-import { CaptainsArmBand } from "../player/CaptainsArmBand";
 import MatchPrCard from "../rankings/MatchPrCard";
 import QuickActionButton from "../ui/buttons/QuickActionButton";
 import RoundedCard from "../ui/cards/RoundedCard";
@@ -19,6 +18,7 @@ import { useMyTeam } from "../../hooks/fantasy/my_team/useMyTeam";
 import { useMyTeamActions } from "../../hooks/fantasy/my_team/useMyTeamActions";
 import { useMyTeamModals } from "../../hooks/fantasy/my_team/useMyTeamModals";
 import { formatPosition } from "../../utils/athletes/athleteUtils";
+import { isSeasonRoundStarted } from "../../utils/leaguesUtils";
 
 type PlayerActionModalProps = {
   player: IFantasyTeamAthlete;
@@ -49,10 +49,12 @@ export function PlayerActionModal({
 
   const isTeamCaptain = teamCaptain?.athlete?.athlete?.tracking_id === player.tracking_id;
 
-  const isLocked = isPlayerLocked(player.athlete);
+  const isSlotLocked = isPlayerLocked(player.athlete);
   const showSlotLockedWarning = isShowPlayerLock(player.athlete);
 
-  const hideControls = isReadOnly || isLocked;
+  const isTeamCaptainLocked = round && isSeasonRoundStarted(round) && teamCaptain !== undefined;
+
+  const hideControls = isReadOnly || isSlotLocked;
 
   const handleViewProfile = () => {
     if (onViewProfile) {
@@ -68,21 +70,21 @@ export function PlayerActionModal({
 
   const handleInitSwap = () => {
 
-    if (playerSlot && !isLocked) {
+    if (playerSlot && !isSlotLocked) {
       onClose();
       initiateSwap(playerSlot);
     }
   }
 
   const handleRemovePlayer = () => {
-    if (playerSlot && !isLocked) {
+    if (playerSlot && !isSlotLocked) {
       onClose();
       removePlayer(playerSlot.slotNumber);
     }
   }
 
   const handleMakePlayerCaptain = () => {
-    if (playerSlot && !isLocked) {
+    if (playerSlot && !isSlotLocked && !isTeamCaptainLocked) {
       setCaptain(playerSlot.slotNumber);
     }
   }
@@ -184,7 +186,7 @@ export function PlayerActionModal({
       </div> */}
 
       {showSlotLockedWarning && (
-        <WarningCard className="text-xs lg:text-sm" >
+        <WarningCard className="text-sm lg:text-sm" >
           <p>
             <strong>{player.player_name}{player.player_name.endsWith('s') ? "'" : "'s"}</strong> slot is locked, therefore you can't remove or swap {player.gender === "F" ? 'her' : 'him'} out of your team, until the round ends
           </p>
@@ -199,21 +201,21 @@ export function PlayerActionModal({
 
         <div className={twMerge(
           "flex flex-row items-center justify-center gap-2",
-          isLocked && "opacity-60"
+          isSlotLocked && "opacity-60"
         )} >
           <PrimaryButton
             className="bg-purple-100 text-purple-700 dark:text-purple-300 dark:bg-purple-900/30 dark:hover:bg-purple-900 dark:border-purple-500/50 border-purple-500 hover:bg-purple-200"
             onClick={handleInitSwap}
           >
             Swap
-            {isLocked && <Lock className="w-4 h-4" />}
+            {isSlotLocked && <Lock className="w-4 h-4" />}
           </PrimaryButton>
           <PrimaryButton
             className="bg-red-100 text-red-700 dark:text-red-300 dark:bg-red-900/30 dark:hover:bg-red-900 dark:border-red-500/40 border-red-500 hover:bg-red-200"
             onClick={handleRemovePlayer}
           >
             Remove
-            {isLocked && <Lock className="w-4 h-4" />}
+            {isSlotLocked && <Lock className="w-4 h-4" />}
           </PrimaryButton>
         </div>
 
@@ -222,38 +224,33 @@ export function PlayerActionModal({
 
       <Activity mode={(hideControls) ? "hidden" : "visible"} >
         <div className={twMerge(
-          isLocked && "opacity-60"
+          isSlotLocked && "opacity-60"
         )} >
 
-          {!isTeamCaptain && !isSub && <RoundedCard
-            className={
-              "border-none hover:dark:text-slate-300 cursor-pointer  bg-slate-200 dark:bg-slate-800 dark:text-slate-400 p-2.5 items-center justify-center flex flex-row gap-1"
-            }
-            onClick={handleMakePlayerCaptain}
-          >
-            Make Captain
-            {isLocked && <Lock className="w-4 h-4" />}
-          </RoundedCard>}
+          {!isSub && !isTeamCaptainLocked && (
+            <RoundedCard
+              className={
+                "border-none hover:dark:text-slate-300 cursor-pointer  bg-slate-200 dark:bg-slate-800 dark:text-slate-400 p-2.5 items-center justify-center flex flex-row gap-1"
+              }
+              onClick={handleMakePlayerCaptain}
+            >
+              {isTeamCaptain ? "Team Captain" : "Make Team Captain"}
+              {isTeamCaptainLocked && <Lock className="w-4 h-4" />}
+            </RoundedCard>
+          )}
 
-          {isSub && subOutCandidate?.athlete && <RoundedCard
-            className={
-              "border-none hover:dark:text-slate-300 cursor-pointer  bg-slate-200 dark:bg-slate-700 dark:text-slate-200 p-2.5 items-center justify-center flex flex-row gap-1"
-            }
-            onClick={handleSubIn}
-          >
-            Subsitute In for {subOutCandidate?.athlete?.athstat_lastname}
-            {isLocked && <Lock className="w-4 h-4" />}
-          </RoundedCard>}
+          {isSub && subOutCandidate?.athlete && (
+            <RoundedCard
+              className={
+                "border-none hover:dark:text-slate-300 cursor-pointer  bg-slate-200 dark:bg-slate-700 dark:text-slate-200 p-2.5 items-center justify-center flex flex-row gap-1"
+              }
+              onClick={handleSubIn}
+            >
+              Subsitute In for {subOutCandidate?.athlete?.athstat_lastname}
+              {isSlotLocked && <Lock className="w-4 h-4" />}
+            </RoundedCard>
+          )}
 
-          {isTeamCaptain && <div
-            className={
-              "bg-transparent  dark:bg-transparent cursor-pointer dark:text-slate-400 border dark:border-slate-700 rounded-xl p-2.5 items-center justify-center gap-1 flex flex-row"
-            }
-          >
-            Team Captain
-            {isLocked && <Lock className="w-4 h-4" />}
-            <CaptainsArmBand />
-          </div>}
         </div>
       </Activity>
 

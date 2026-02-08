@@ -6,10 +6,8 @@ import { useMyTeam } from "./useMyTeam";
 export function useMyTeamSlot() {
     const context = useContext(MyTeamSlotContext);
 
-    const {isSlotLocked: isSlotLockFunc, isShowPlayerLock} = useMyTeam();
-
     const { setCaptain } = useMyTeamActions();
-    const { teamCaptain } = useMyTeam();
+    const {isSlotLocked: isSlotLockFunc, isShowPlayerLock, teamCaptain} = useMyTeam();
 
     if (context === null) {
         throw new Error("useMyTeamSlot() was used outside the MyTeamSlotProvider")

@@ -3,7 +3,7 @@ import { MyTeamContext } from "../../../contexts/fantasy/my_team/MyTeamContext";
 import { MAX_TEAM_BUDGET } from "../../../types/constants";
 import { IProAthlete } from "../../../types/athletes";
 import { IFantasyLeagueTeamSlot } from "../../../types/fantasyLeagueTeam";
-import { isInSecondChanceMode, isSeasonRoundTeamsLocked, isPastSeasonRound } from "../../../utils/leaguesUtils";
+import { isPastSeasonRound, isSeasonRoundStarted } from "../../../utils/leaguesUtils";
 
 export function useMyTeam() {
     const context = useContext(MyTeamContext);
@@ -32,9 +32,8 @@ export function useMyTeam() {
 
     const isPlayerLocked = (athlete?: IProAthlete) => {
 
-        /** If second chance mode is off */
-        if (context.round && !isInSecondChanceMode(context.round)) {
-            return isSeasonRoundTeamsLocked(context.round)
+        if (context.isReadOnly || !context.round || !isSeasonRoundStarted(context.round)) {
+            return false;
         }
 
         const seasonTeamIds = athlete?.athlete_teams?.filter((t) => {
@@ -72,7 +71,7 @@ export function useMyTeam() {
 
     const isShowPlayerLock = (player?: IProAthlete) => {
         const isLocked = isPlayerLocked(player);
-        const isSecondChanceMode = context.round && isInSecondChanceMode(context.round);
+        const isSecondChanceMode = context.round && isSeasonRoundStarted(context.round);
         return isLocked && !context.isReadOnly && context.round && !isPastSeasonRound(context.round) && isSecondChanceMode;
     }
 
