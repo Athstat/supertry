@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import TeamBenchDrawer from './TeamBenchDrawer';
+import MyTeamBenchDrawer from './MyTeamBenchDrawer';
 import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
 import { FantasyTeamFormation3D } from './FantasyTeamFormation3D';
 import { twMerge } from 'tailwind-merge';
@@ -14,7 +14,7 @@ type Props = {
 }
 
 /** Renders my team pitch view */
-export default function MyTeamPitchView({ className, hideBenchPlayer = false, firstRowCN, pitchCN }: Props) {
+export default function MyTeamPitch({ className, hideBenchPlayer = false, firstRowCN, pitchCN }: Props) {
 
   const { slots, round } = useMyTeam();
   const {handlePlayerClick} = useMyTeamModals();
@@ -48,7 +48,7 @@ export default function MyTeamPitchView({ className, hideBenchPlayer = false, fi
 
         {/* Super Substitute */}
         {round && superSubSlot && !hideBenchPlayer && (
-          <TeamBenchDrawer
+          <MyTeamBenchDrawer
             onPlayerClick={handlePlayerClick}
           />
         )}

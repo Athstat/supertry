@@ -1,12 +1,7 @@
-import { useState } from 'react';
 import MyTeamViewHeader from './MyTeamViewHeader';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { IGamesLeagueConfig } from '../../types/leagueConfig';
-import { requestPushPermissions } from '../../utils/bridgeUtils';
-import PlayerPicker from '../player_picker/PlayerPicker';
-import PushOptInModal from '../ui/PushOptInModal';
-import MyTeamPitchView from './MyTeamPitchView';
-import { useMyTeamActions } from '../../hooks/fantasy/my_team/useMyTeamActions';
+import MyTeamPitch from './MyTeamPitch';
 
 type Props = {
   leagueRound?: IFantasyLeagueRound;
@@ -17,21 +12,13 @@ type Props = {
 }
 
 /** Renders a fantasy team view, with editor capabilities */
-export default function FantasyTeamView({ leagueRound, pitchCN }: Props) {
-
-  const {cancelSwap, slots, swapState, completeSwap, swapBudget} = useMyTeamActions();
-
-  const exludePlayers = slots
-    .filter(s => Boolean(s.athlete))
-    .map(s => {
-      return { tracking_id: s.athlete?.tracking_id ?? '' };
-    })
+export default function FantasyTeamView({ pitchCN }: Props) {
 
   return (
     <div className="w-full h-full">
       <MyTeamViewHeader />
 
-      <MyTeamPitchView 
+      <MyTeamPitch 
         className={pitchCN}
       />
     </div>

@@ -13,7 +13,7 @@ import { FantasyTeamFormation3D } from './FantasyTeamFormation3D';
 import { IProAthlete } from '../../types/athletes';
 import { PlayerActionModal } from './PlayerActionModal';
 import CreateTeamViewHeader from './CreateTeamViewHeader';
-import TeamBenchDrawer from './TeamBenchDrawer';
+import MyTeamBenchDrawer from './MyTeamBenchDrawer';
 
 /** Renders a create team view */
 export default function CreateFantasyTeamView() {
@@ -101,7 +101,7 @@ export default function CreateFantasyTeamView() {
           firstRowMargin='mt-8'
         />
 
-        <TeamBenchDrawer
+        <MyTeamBenchDrawer
           onPlayerClick={handleOpenActionModal}
         />
       </div>

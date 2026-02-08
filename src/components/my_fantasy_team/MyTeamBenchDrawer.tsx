@@ -22,7 +22,7 @@ type Props = {
 }
 
 /** Renders a bottom drawer for team subs */
-export default function TeamBenchDrawer({ onPlayerClick }: Props) {
+export default function MyTeamBenchDrawer({ onPlayerClick }: Props) {
 
   const { round, slots} = useMyTeam();
   const {initiateSwap} = useMyTeamActions();
