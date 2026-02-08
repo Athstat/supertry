@@ -2,13 +2,13 @@
 import { IProAthlete } from "../../../types/athletes";
 import { IFantasyLeagueTeamSlot } from "../../../types/fantasyLeagueTeam";
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete";
-import { setPlayerAtSlot } from "../../../utils/fantasy/myteamUtils";
+import { getSlotsFromTeam, hashCompareFantasyTeams, setPlayerAtSlot } from "../../../utils/fantasy/myteamUtils";
 import { useMyTeam } from "./useMyTeam";
 
 /** Hook that provides functions to perform actions on a fantasy team */
 
 export function useMyTeamActions() {
-    const { setSelectedPlayer, setSlots, team, setSwapState, swapState, slots, budgetRemaining } = useMyTeam();
+    const { setSelectedPlayer, setSlots, team, setSwapState, swapState, slots, budgetRemaining, selectedCount } = useMyTeam();
 
     const viewPlayer = (player?: IFantasyTeamAthlete) => {
         setSelectedPlayer(player);
@@ -128,6 +128,14 @@ export function useMyTeamActions() {
 
     const swapBudget = budgetRemaining + (swapState.slot?.athlete?.purchase_price ?? swapState.slot?.purchasePrice ?? 0);
 
+    const changesDetected = !hashCompareFantasyTeams(team, slots);
+
+    const resetToOriginalTeam = () => {
+        setSlots(getSlotsFromTeam(team));
+    }
+
+    const isTeamFull = selectedCount === 6;
+
     return {
         setSlot,
         removePlayer,
@@ -139,6 +147,9 @@ export function useMyTeamActions() {
         cancelSwap,
         completeSwap,
         slots,
-        swapBudget
+        swapBudget,
+        changesDetected,
+        resetToOriginalTeam,
+        isTeamFull
     }
 }

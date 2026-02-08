@@ -2,7 +2,7 @@ import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { RugbyPitch3DRaster } from '../ui/containers/RugbyPitch';
 import { twMerge } from 'tailwind-merge';
 import { useMyTeam } from '../../hooks/fantasy/my_team/useMyTeam';
-import { SlotCard } from './pitch_card/PitchSlotCard';
+import { MyTeamSlotCard } from './pitch_card/MyTeamSlotCard';
 import MyTeamSlotProvider from '../../contexts/fantasy/my_team/MyTeamSlotContext';
 
 interface TeamFormationProps {
@@ -56,7 +56,7 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN, firstRowMargin
                 slot={slot}
                 key={`${slot.slotNumber}/${slot.athlete?.athlete_id}`}
               >
-                <SlotCard
+                <MyTeamSlotCard
                   slot={slot}
                   position={pos}
                   onPlayerClick={onPlayerClick}

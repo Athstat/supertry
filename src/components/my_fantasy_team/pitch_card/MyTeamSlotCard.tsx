@@ -14,7 +14,8 @@ type SlotCardProps = {
   position: SlotCardPosition
 }
 
-export function SlotCard({ slot, onPlayerClick, position }: SlotCardProps) {
+/** Renders a single slot on a fantasy team */
+export function MyTeamSlotCard({ slot, onPlayerClick, position }: SlotCardProps) {
 
   const { isShowPlayerLock, slotType } = useMyTeamSlot();
   const { athlete } = slot;

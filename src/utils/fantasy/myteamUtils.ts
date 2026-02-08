@@ -1,7 +1,8 @@
 import { IProAthlete, PositionClass } from "../../types/athletes";
 import { IFantasyLeagueTeam } from "../../types/fantasyLeague";
 import { defaultFantasyPositions, FantasyPositionName, IFantasyLeagueTeamSlot, IFantasyPosition } from "../../types/fantasyLeagueTeam";
-import { formatPosition } from "../athletes/athleteUtils";
+import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
+import { formatPosition, hashFantasyTeamAthletes, sortFantasyTeamAthletes } from "../athletes/athleteUtils";
 
 /** Gets storage key for saving team in local storage */
 export function getMyTeamStorageKey(leagueRoundId: string | number, authUserId: string) {
@@ -59,3 +60,24 @@ export function setPlayerAtSlot(team: IFantasyLeagueTeam, slots: IFantasyLeagueT
         return s;
     })
 }
+
+/** Returns true if the hash of a team and its slots are the same */
+export const hashCompareFantasyTeams = (team: IFantasyLeagueTeam, slots: IFantasyLeagueTeamSlot[]) => {
+    let oldAthletes = (team?.athletes) ?? [];
+    let newAthletes: IFantasyTeamAthlete[] = [];
+
+    slots.forEach((s) => {
+        if (s.athlete) {
+            newAthletes.push(s.athlete);
+        }
+    });
+
+    oldAthletes = sortFantasyTeamAthletes(oldAthletes);
+    newAthletes = sortFantasyTeamAthletes(newAthletes);
+
+    const oldAthletesHash = hashFantasyTeamAthletes(oldAthletes);
+    const newAthletesHash = hashFantasyTeamAthletes(newAthletes);
+
+    return oldAthletesHash === newAthletesHash;
+
+};

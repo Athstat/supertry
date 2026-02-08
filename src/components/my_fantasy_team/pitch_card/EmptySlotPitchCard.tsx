@@ -1,8 +1,8 @@
 import { CirclePlus } from "lucide-react";
 import { twMerge } from "tailwind-merge";
-import { useFantasyTeam } from "../../../hooks/fantasy/useFantasyTeam";
 import { IFantasyLeagueTeamSlot } from "../../../types/fantasyLeagueTeam";
 import { formatPosition } from "../../../utils/athletes/athleteUtils";
+import { useMyTeamActions } from "../../../hooks/fantasy/my_team/useMyTeamActions";
 
 type EmptySlotProps = {
     slot: IFantasyLeagueTeamSlot;
@@ -10,13 +10,13 @@ type EmptySlotProps = {
 
 /** Renders an empty slot card */
 export function EmptySlotPitchCard({ slot }: EmptySlotProps) {
-    const { initateSwapOnEmptySlot } = useFantasyTeam();
+    const { initiateSwap } = useMyTeamActions();
 
     const { position } = slot;
     const { position_class } = position;
 
     const handleClick = () => {
-        initateSwapOnEmptySlot(slot);
+        initiateSwap(slot);
     };
 
     return (

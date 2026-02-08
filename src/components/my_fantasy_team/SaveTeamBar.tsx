@@ -1,7 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { Check, Loader } from "lucide-react";
 import { twMerge } from "tailwind-merge";
-import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
 import { useNavigateBack } from "../../hooks/web/useNavigateBack";
 import { useNavigationGuard } from "../../hooks/web/useNavigationGuard";
 import { fantasyAnalytics } from "../../services/analytics/fantasyAnalytics";
@@ -13,7 +12,8 @@ import UnsavedChangesWarningModal from "../ui/modals/UnsavedChangesModal";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 import { fantasySeasonTeamService } from "../../services/fantasy/fantasySeasonTeamService";
 import { useAuth } from "../../contexts/auth/AuthContext";
-import { useMyTeamScreen } from "../../contexts/ui/MyTeamScreenContext";
+import { useMyTeam } from "../../hooks/fantasy/my_team/useMyTeam";
+import { useMyTeamActions } from "../../hooks/fantasy/my_team/useMyTeamActions";
 
 type Props = {
     onTeamUpdated: () => Promise<void>
@@ -23,7 +23,7 @@ type Props = {
 /** Renders Save Team Bar */
 export default function SaveTeamBar({ leagueRound }: Props) {
     const {authUser} = useAuth();
-    const {onUpdateTeam} = useMyTeamScreen();
+    const {onUpdateTeam} = useMyTeam();
 
     const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState<boolean>(false);
     const [isSaving, setIsSaving] = useState(false);
@@ -35,11 +35,8 @@ export default function SaveTeamBar({ leagueRound }: Props) {
         setShowUnsavedChangesModal(prev => !prev);
     }
 
-    const {
-        changesDetected,
-        resetToOriginalTeam,
-        isTeamFull, slots, team, teamCaptain
-    } = useFantasyTeam();
+    const { slots, team, teamCaptain } = useMyTeam();
+    const { changesDetected, resetToOriginalTeam, isTeamFull } = useMyTeamActions();
 
     const {hardPop} = useNavigateBack();
 
@@ -108,7 +105,7 @@ export default function SaveTeamBar({ leagueRound }: Props) {
             });
 
             // Apply optimistic update
-            if (updatedTeam) {
+            if (updatedTeam && onUpdateTeam) {
                 onUpdateTeam(updatedTeam);
             }
 
