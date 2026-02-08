@@ -1,12 +1,6 @@
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { RugbyPitch3DRaster } from '../ui/containers/RugbyPitch';
-import { PlayerPitchCard } from './pitch_card/PlayerPitchCard';
 import { twMerge } from 'tailwind-merge';
-import { IFantasyLeagueRound } from '../../types/fantasyLeague';
-import { IFantasyLeagueTeamSlot, SlotCardPosition } from '../../types/fantasyLeagueTeam';
-import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
-import { EmptySlotPitchCard } from './pitch_card/EmptySlotPitchCard';
-import { Lock } from 'lucide-react';
 import { useMyTeam } from '../../hooks/fantasy/my_team/useMyTeam';
 import { SlotCard } from './pitch_card/PitchSlotCard';
 import MyTeamSlotProvider from '../../contexts/fantasy/my_team/MyTeamSlotContext';
