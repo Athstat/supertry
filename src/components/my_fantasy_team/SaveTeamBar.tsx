@@ -106,7 +106,12 @@ export default function SaveTeamBar({ leagueRound }: Props) {
 
             // Apply optimistic update
             if (updatedTeam && onUpdateTeam) {
-                onUpdateTeam(updatedTeam);
+                await onUpdateTeam(updatedTeam);
+            }
+
+            if (!updatedTeam) {
+                setSaveError("Something Wen't wrong saving your team");
+                return;
             }
 
             setIsSaving(false);
