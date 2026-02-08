@@ -13,6 +13,8 @@ import PlayerMugshot from "../player/PlayerMugshot";
 import SecondaryText from "../ui/typography/SecondaryText";
 import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
+import { useMyTeam } from "../../hooks/fantasy/my_team/useMyTeam";
+import { useMyTeamActions } from "../../hooks/fantasy/my_team/useMyTeamActions";
 
 
 type Props = {
@@ -22,13 +24,14 @@ type Props = {
 /** Renders a bottom drawer for team subs */
 export default function TeamBenchDrawer({ onPlayerClick }: Props) {
 
-  const { leagueRound, slots, initateSwapOnEmptySlot } = useFantasyTeam();
+  const { round, slots} = useMyTeam();
+  const {initiateSwap} = useMyTeamActions();
 
   const superSubSlot = useMemo(() => {
     return slots.find((s) => s.slotNumber === 6);
   }, [slots]);
 
-  if (!superSubSlot || !leagueRound) {
+  if (!superSubSlot || !round) {
     return;
   }
 
@@ -42,7 +45,7 @@ export default function TeamBenchDrawer({ onPlayerClick }: Props) {
       return;
     }
 
-    initateSwapOnEmptySlot(superSubSlot);
+    initiateSwap(superSubSlot);
   }
 
   return (
@@ -73,7 +76,7 @@ export default function TeamBenchDrawer({ onPlayerClick }: Props) {
           {athlete && (
             <SubPlayerCard
               player={athlete}
-              round={leagueRound}
+              round={round}
               onClick={() => { }}
             />
           )}
@@ -88,7 +91,6 @@ export default function TeamBenchDrawer({ onPlayerClick }: Props) {
     </div>
   )
 }
-
 
 type SubPlayerProps = {
   player: IFantasyTeamAthlete,
