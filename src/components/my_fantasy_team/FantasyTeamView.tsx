@@ -27,55 +27,12 @@ export default function FantasyTeamView({ leagueRound, pitchCN }: Props) {
       return { tracking_id: s.athlete?.tracking_id ?? '' };
     })
 
-  const isPlayerPickerOpen = Boolean(swapState.slot);
-
-  const handleOnEnable = async () => {
-    try {
-      await requestPushPermissions();
-    } catch (e) {
-      console.error('Push permission error:', e);
-    } finally {
-      setShowPushModal(false);
-    }
-  }
-
-  const handleOnNotNow = () => {
-    try {
-      localStorage.setItem('push_optin_dismissed', 'true');
-    } catch (err) {
-      console.log('Local Storage error ', err);
-    }
-    setShowPushModal(false);
-  }
-
-  // Push opt-in prompt state
-  const [showPushModal, setShowPushModal] = useState(false);
-
-  console.log("Swap Budget ", swapBudget)
-
   return (
     <div className="w-full h-full">
       <MyTeamViewHeader />
 
       <MyTeamPitchView 
         className={pitchCN}
-      />
-
-      <PlayerPicker
-        isOpen={isPlayerPickerOpen}
-        positionPool={swapState.slot?.position.position_class}
-        remainingBudget={swapBudget}
-        excludePlayers={exludePlayers}
-        onSelectPlayer={completeSwap}
-        onClose={cancelSwap}
-        targetLeagueRound={leagueRound}
-        playerToBeReplaced={swapState.slot?.athlete?.athlete}
-      />
-
-      <PushOptInModal
-        visible={showPushModal}
-        onEnable={handleOnEnable}
-        onNotNow={handleOnNotNow}
       />
     </div>
   );

@@ -1,11 +1,10 @@
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete";
 import { useMyTeam } from "./useMyTeam";
-import { useMyTeamActions } from "./useMyTeamActions";
 
+/** Hook that provides functions for closing and opening */
 export function useMyTeamModals() {
 
-    const { modalsState, setModalsState } = useMyTeam();
-    const {viewPlayer} = useMyTeamActions();
+    const { modalsState, setModalsState, selectedPlayer, setSelectedPlayer: setSelectedPlayer } = useMyTeam();
 
     const { showActionModal, showPointsModal, showProfileModal } = modalsState;
 
@@ -38,13 +37,13 @@ export function useMyTeamModals() {
 
 
     const handlePlayerClick = (player: IFantasyTeamAthlete) => {
-        viewPlayer(player);
+        setSelectedPlayer(player);
         setShowActionModal(true);
     };
 
     const handleCloseActionModal = () => {
         setShowActionModal(false);
-        viewPlayer(undefined);
+        setSelectedPlayer(undefined);
     };
 
     const handleViewProfile = () => {
@@ -81,6 +80,7 @@ export function useMyTeamModals() {
         handleClosePointsModal,
         showActionModal,
         showProfileModal,
-        showPointsModal
+        showPointsModal,
+        selectedPlayer
     }
 }

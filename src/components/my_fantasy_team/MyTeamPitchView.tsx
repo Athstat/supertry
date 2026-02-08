@@ -1,14 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import TeamBenchDrawer from './TeamBenchDrawer';
-import { AnimatePresence } from 'framer-motion';
 import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
-import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
-import PlayerProfileModal from '../player/PlayerProfileModal';
-import PointsBreakdownModal from '../points_breakdown/PointsBreakdownModal';
 import { FantasyTeamFormation3D } from './FantasyTeamFormation3D';
-import { PlayerActionModal } from './PlayerActionModal';
 import { twMerge } from 'tailwind-merge';
 import { useMyTeam } from '../../hooks/fantasy/my_team/useMyTeam';
+import { useMyTeamModals } from '../../hooks/fantasy/my_team/useMyTeamModals';
 
 type Props = {
   className?: string,
@@ -20,49 +16,12 @@ type Props = {
 /** Renders my team pitch view */
 export default function MyTeamPitchView({ className, hideBenchPlayer = false, firstRowCN, pitchCN }: Props) {
 
-  const { slots, team, round, selectedPlayer, setSelectedPlayer } = useMyTeam();
-
-  const [showActionModal, setShowActionModal] = useState(false);
-  const [showProfileModal, setShowProfileModal] = useState(false);
-  const [showPointsModal, setShowPointsModal] = useState(false);
+  const { slots, round } = useMyTeam();
+  const {handlePlayerClick} = useMyTeamModals();
 
   useEffect(() => {
     fantasyAnalytics.trackVisitedTeamPitchView();
   }, []);
-
-  const handlePlayerClick = (player: IFantasyTeamAthlete) => {
-    setSelectedPlayer(player);
-    setShowActionModal(true);
-  };
-
-  const handleCloseActionModal = () => {
-    setShowActionModal(false);
-    setSelectedPlayer(undefined);
-  };
-
-  const handleViewProfile = () => {
-    setShowActionModal(false);
-    setShowPointsModal(false);
-
-    setShowProfileModal(true);
-  };
-
-  const handleViewPointsBreakdown = () => {
-    setShowActionModal(false);
-    setShowProfileModal(false);
-
-    setShowPointsModal(true);
-  };
-
-  const handleCloseProfileModal = () => {
-    setShowProfileModal(false);
-    setShowActionModal(true);
-  };
-
-  const handleClosePointsModal = () => {
-    setShowPointsModal(false);
-    setShowActionModal(true);
-  };
 
   const starters = slots
     .filter((p) => p.slotNumber !== 6)
@@ -95,45 +54,6 @@ export default function MyTeamPitchView({ className, hideBenchPlayer = false, fi
         )}
 
       </div>
-
-      {selectedPlayer && showActionModal && (
-        <AnimatePresence>
-          <PlayerActionModal
-            player={selectedPlayer}
-            onViewPointsBreakdown={handleViewPointsBreakdown}
-            onClose={handleCloseActionModal}
-            onViewProfile={handleViewProfile}
-          />
-        </AnimatePresence>
-      )}
-
-      {selectedPlayer && showProfileModal && (
-        <PlayerProfileModal
-          player={selectedPlayer}
-          isOpen={showProfileModal}
-          onClose={handleCloseProfileModal}
-        />
-      )}
-
-      {selectedPlayer?.athlete && showPointsModal && team && (
-        <PointsBreakdownModal
-          isOpen={showPointsModal}
-          athlete={selectedPlayer.athlete}
-          team={team}
-          onClose={handleClosePointsModal}
-          multiplier={selectedPlayer.is_captain ? 1.5 :
-
-            selectedPlayer.is_super_sub ? 0.5 : undefined
-
-          }
-
-          multiplierDescription={
-            selectedPlayer.is_captain ? "Captain Bonus" :
-            selectedPlayer.is_super_sub ? "Super Sub Reduction" : undefined
-          }
-          
-        />
-      )}
     </div>
   );
 }
