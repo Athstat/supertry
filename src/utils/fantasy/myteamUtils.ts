@@ -1,8 +1,7 @@
-import { useMemo } from "react";
 import { IProAthlete, PositionClass } from "../../types/athletes";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 import { IFantasyLeagueTeam } from "../../types/fantasyLeague";
-import { defaultFantasyPositions, FantasyPositionName, IFantasyLeagueTeamSlot, IFantasyPosition, MyTeamViewMode } from "../../types/fantasyLeagueTeam";
+import { defaultFantasyPositions, FantasyPositionName, IFantasyLeagueTeamSlot, IFantasyPosition } from "../../types/fantasyLeagueTeam";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { formatPosition, hashFantasyTeamAthletes, sortFantasyTeamAthletes } from "../athletes/athleteUtils";
 
