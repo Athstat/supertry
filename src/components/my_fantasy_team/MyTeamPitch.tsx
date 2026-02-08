@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import MyTeamBenchDrawer from './MyTeamBenchDrawer';
 import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
 import { FantasyTeamFormation3D } from './FantasyTeamFormation3D';
 import { twMerge } from 'tailwind-merge';
@@ -14,10 +13,10 @@ type Props = {
 }
 
 /** Renders my team pitch view */
-export default function MyTeamPitch({ className, hideBenchPlayer = false, firstRowCN, pitchCN }: Props) {
+export default function MyTeamPitch({ className, firstRowCN, pitchCN }: Props) {
 
   const { slots, round } = useMyTeam();
-  const {handlePlayerClick} = useMyTeamModals();
+  const { handlePlayerClick } = useMyTeamModals();
 
   useEffect(() => {
     fantasyAnalytics.trackVisitedTeamPitchView();
@@ -27,9 +26,9 @@ export default function MyTeamPitch({ className, hideBenchPlayer = false, firstR
     .filter((p) => p.slotNumber !== 6)
     .map(p => ({ ...p!, is_starting: p!.slotNumber !== 6 }));
 
-  const superSubSlot = slots
-    .find(player => player.slotNumber === 6);
-
+  if (!round) {
+    return null;
+  }
 
   return (
     <div className={twMerge(
@@ -42,13 +41,6 @@ export default function MyTeamPitch({ className, hideBenchPlayer = false, firstR
           <FantasyTeamFormation3D
             marginCN={twMerge('mt-0', pitchCN)}
             firstRowMargin={firstRowCN}
-            onPlayerClick={handlePlayerClick}
-          />
-        )}
-
-        {/* Super Substitute */}
-        {round && superSubSlot && !hideBenchPlayer && (
-          <MyTeamBenchDrawer
             onPlayerClick={handlePlayerClick}
           />
         )}
