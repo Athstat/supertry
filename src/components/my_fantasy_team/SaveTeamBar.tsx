@@ -101,6 +101,8 @@ export default function SaveTeamBar({ leagueRound }: Props) {
                     is_captain: boolean;
                 }[];
 
+            console.log("Athletes Payload ", athletesPayload);
+
             const updatedTeam = await fantasySeasonTeamService.updateRoundTeam(leagueRound.season, authUser?.kc_id || '', leagueRound.round_number,  {
                 athletes: athletesPayload, user_id: authUser?.kc_id || '' 
             });

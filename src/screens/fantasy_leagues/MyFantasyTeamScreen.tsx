@@ -12,7 +12,7 @@ import { useEffect } from 'react';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 import { useTeamHistory } from '../../hooks/fantasy/useTeamHistory';
 import TeamHistoryBar from '../../components/my_fantasy_team/TeamHistoryBar';
-import { getMyTeamViewMode } from '../../utils/fantasy/myteamUtils';
+import { getMyTeamViewMode, hashFantasyTeam } from '../../utils/fantasy/myteamUtils';
 import { isSeasonRoundTeamsLocked } from '../../utils/leaguesUtils';
 import MyTeamProvider from '../../contexts/fantasy/my_team/MyTeamContext';
 import MyTeamPitch from '../../components/my_fantasy_team/MyTeamPitch';
@@ -79,7 +79,7 @@ function Content() {
         team={roundTeam}
         manager={manager}
         isReadOnly={false}
-        key={round?.round_number}
+        key={hashFantasyTeam(roundTeam)}
       >
         <MyTeamHeader />
         <MyTeamPitch />

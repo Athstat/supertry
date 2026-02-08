@@ -100,3 +100,11 @@ export function getMyTeamViewMode(round?: ISeasonRound, roundTeam?: IFantasyLeag
 
     return 'error';
 }
+
+export function hashFantasyTeam(team: IFantasyLeagueTeam) {
+    const teamAthletesStr = team.athletes.reduce((str, curr) => {
+        return str + `-${curr.athlete?.tracking_id}`;
+    }, '');
+
+    return `${team.id}-club_id=${team.team_id}-${team.user_id}-${teamAthletesStr}`;
+}
