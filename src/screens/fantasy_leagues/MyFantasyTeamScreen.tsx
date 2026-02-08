@@ -33,7 +33,7 @@ export function MyFantasyTeamScreen() {
   const { authUser } = useAuth();
 
   const { getSeasonById, setSelectedSeason } = useFantasySeasons();
-  const seasonId = useQueryValue('season_id')
+  const seasonId = useQueryValue('season_id');
 
   useEffect(() => {
     if (seasonId) {
@@ -64,6 +64,7 @@ export function MyFantasyTeamScreen() {
 function Content() {
   const { round, roundTeam, manager, onUpdateRoundTeam } = useTeamHistory();
   const isLocked = round && isSeasonRoundTeamsLocked(round);
+
   const viewMode = getMyTeamViewMode(round, roundTeam, isLocked);
   const { isLoading, fixtures } = useSeasonRoundFixtures(round?.season, round?.round_number);
 
@@ -90,7 +91,7 @@ function Content() {
     )
   }
 
-  if (viewMode === "create-team" && round) {
+  if (viewMode === "create-team" && round && !isLocked) {
     return (
       <CreateTeamProvider
         roundGames={fixtures}

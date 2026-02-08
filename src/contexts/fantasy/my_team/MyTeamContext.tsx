@@ -49,8 +49,6 @@ export default function MyTeamProvider({ team, manager, round, children, isReadO
         showPointsModal: false
     });
 
-    console.log("Slots ", slots);
-
     return (
         <MyTeamContext.Provider
             value={{
