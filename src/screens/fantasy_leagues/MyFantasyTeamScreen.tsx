@@ -1,5 +1,4 @@
 import PageView from '../../components/ui/containers/PageView';
-import MyTeamModeSelector from '../../components/my_fantasy_team/MyTeamModeSelector';
 import { useHideBottomNavBar, useHideTopNavBar } from '../../hooks/navigation/useNavigationBars';
 import MyFantasyTeamScreenHeader from '../../components/fantasy_league/MyFantasyTeamScreenHeader';
 import { twMerge } from 'tailwind-merge';
@@ -12,10 +11,7 @@ import { useQueryValue } from '../../hooks/web/useQueryState';
 import { useEffect } from 'react';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 import { useTeamHistory } from '../../hooks/fantasy/useTeamHistory';
-import RoundFixturesProvider from '../../providers/fixtures/RoundFixturesProvider';
 import TeamHistoryBar from '../../components/my_fantasy_team/TeamHistoryBar';
-import { IFantasyLeagueTeam } from '../../types/fantasyLeague';
-import { ISeasonRound } from '../../types/fantasy/fantasySeason';
 import { getMyTeamViewMode } from '../../utils/fantasy/myteamUtils';
 import { isSeasonRoundTeamsLocked } from '../../utils/leaguesUtils';
 import MyTeamProvider from '../../contexts/fantasy/my_team/MyTeamContext';
@@ -26,6 +22,8 @@ import MyTeamModals from '../../components/my_fantasy_team/MyTeamModals';
 import { useSeasonRoundFixtures } from '../../hooks/fixtures/useProFixtures';
 import CreateTeamProvider from '../../providers/fantasy_teams/CreateTeamProvider';
 import CreateTeamHeader from '../../components/my_fantasy_team/CreateTeamHeader';
+import NoTeamCreatedFallback from '../../components/fantasy-leagues/NoTeamCreatedFallback';
+import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
 
 /** Renders my fantasy team screen */
 export function MyFantasyTeamScreen() {
@@ -71,6 +69,10 @@ function Content() {
   const viewMode = getMyTeamViewMode(round, roundTeam, isLocked);
   const { isLoading, fixtures } = useSeasonRoundFixtures(round?.season, round?.round_number);
 
+  if (isLoading) {
+    return <LoadingIndicator />
+  }
+
   if (viewMode === "pitch-view" && roundTeam && manager) {
     return (
       <MyTeamProvider
@@ -101,6 +103,10 @@ function Content() {
       </CreateTeamProvider>
     )
   }
+
+  return (
+    <NoTeamCreatedFallback />
+  )
 }
 
 function LeagueScreenLoadingSkeleton() {
