@@ -17,6 +17,7 @@ import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams";
 import WarningCard from "../ui/cards/WarningCard";
 import { useMyTeam } from "../../hooks/fantasy/my_team/useMyTeam";
 import { useMyTeamActions } from "../../hooks/fantasy/my_team/useMyTeamActions";
+import { useMyTeamModals } from "../../hooks/fantasy/my_team/useMyTeamModals";
 
 type PlayerActionModalProps = {
   player: IFantasyTeamAthlete;
@@ -33,8 +34,9 @@ export function PlayerActionModal({
 }: PlayerActionModalProps) {
 
   const { seasonTeam } = usePlayerSeasonTeam(player.athlete);
-  const {isPlayerLocked, isShowPlayerLock, round, teamCaptain, isReadOnly} = useMyTeam();
-  const {initiateSwap, removePlayer, setCaptain, slots } = useMyTeamActions();
+  const { isPlayerLocked, isShowPlayerLock, round, teamCaptain, isReadOnly } = useMyTeam();
+  const { initiateSwap, removePlayer, setCaptain, slots, substituteIn, subOutCandidate } = useMyTeamActions();
+  const { handleCloseActionModal } = useMyTeamModals();
 
   const isSub = !player.is_starting;
 
@@ -48,6 +50,8 @@ export function PlayerActionModal({
 
   const isLocked = isPlayerLocked(player.athlete);
   const showSlotLockedWarning = isShowPlayerLock(player.athlete);
+
+  const hideControls = isReadOnly || isLocked;
 
   const handleViewProfile = () => {
     if (onViewProfile) {
@@ -80,6 +84,11 @@ export function PlayerActionModal({
     if (playerSlot && !isLocked) {
       setCaptain(playerSlot.slotNumber);
     }
+  }
+
+  const handleSubIn = () => {
+    substituteIn();
+    handleCloseActionModal();
   }
 
   return (
@@ -180,7 +189,7 @@ export function PlayerActionModal({
         </WarningCard>
       )}
 
-      <Activity mode={isReadOnly ? "hidden" : "visible"} >
+      <Activity mode={(hideControls) ? "hidden" : "visible"} >
 
         <div className="mt-3" >
           <p>Quick Actions</p>
@@ -209,7 +218,7 @@ export function PlayerActionModal({
       </Activity>
 
 
-      <Activity mode={isReadOnly ? "hidden" : "visible"} >
+      <Activity mode={(hideControls) ? "hidden" : "visible"} >
         <div className={twMerge(
           isLocked && "opacity-60"
         )} >
@@ -221,6 +230,16 @@ export function PlayerActionModal({
             onClick={handleMakePlayerCaptain}
           >
             Make Captain
+            {isLocked && <Lock className="w-4 h-4" />}
+          </RoundedCard>}
+
+          {isSub && <RoundedCard
+            className={
+              "border-none hover:dark:text-slate-300 cursor-pointer  bg-slate-200 dark:bg-slate-800 dark:text-slate-400 p-2.5 items-center justify-center flex flex-row gap-1"
+            }
+            onClick={handleSubIn}
+          >
+            Subsitute In for {subOutCandidate?.athlete?.athstat_lastname}
             {isLocked && <Lock className="w-4 h-4" />}
           </RoundedCard>}
 

@@ -10,6 +10,11 @@ import { useMyTeam } from "./useMyTeam";
 export function useMyTeamActions() {
     const { setSelectedPlayer, setSlots, team, setSwapState, swapState, slots, budgetRemaining, selectedCount } = useMyTeam();
 
+    const subSlot = slots.find((s) => !s.is_starting || s.slotNumber === 6);
+    const subOutCandidate = slots.find((s) => {
+        return s.slotNumber !== 6 && s.position.position_class === subSlot?.position.position_class
+    });
+
     const viewPlayer = (player?: IFantasyTeamAthlete) => {
         setSelectedPlayer(player);
     }
@@ -83,26 +88,21 @@ export function useMyTeamActions() {
 
     const substituteIn = () => {
         setSlots((prev) => {
-            const subSlot = prev.find((s) => !s.is_starting || s.slotNumber === 6);
+            
             if (!subSlot || !subSlot.athlete?.athlete) return prev;
-
-            const samePositionPlayer = prev.find((s) => {
-                return s.slotNumber !== 6 && s.position.position_class === subSlot.position.position_class
-            });
-
-            if (!samePositionPlayer || !samePositionPlayer.athlete?.athlete) return prev;
+            if (!subOutCandidate || !subOutCandidate.athlete?.athlete) return prev;
 
             prev = setPlayerAtSlot(
                 team,
                 prev,
                 subSlot.slotNumber,
-                samePositionPlayer?.athlete.athlete
+                subOutCandidate?.athlete.athlete
             )
 
             prev = setPlayerAtSlot(
                 team,
                 prev,
-                samePositionPlayer.slotNumber,
+                subOutCandidate.slotNumber,
                 subSlot?.athlete.athlete
             )
 
@@ -111,11 +111,11 @@ export function useMyTeamActions() {
     }
 
     const initiateSwap = (slot: IFantasyLeagueTeamSlot) => {
-        setSwapState({slot});
+        setSwapState({ slot });
     }
 
     const cancelSwap = () => {
-        setSwapState({slot: undefined});
+        setSwapState({ slot: undefined });
     }
 
     const completeSwap = (player: IProAthlete) => {
@@ -135,7 +135,7 @@ export function useMyTeamActions() {
     }
 
     const isTeamFull = selectedCount === 6;
-    
+
     return {
         setSlot,
         removePlayer,
@@ -150,6 +150,8 @@ export function useMyTeamActions() {
         swapBudget,
         changesDetected,
         resetToOriginalTeam,
-        isTeamFull
+        isTeamFull,
+        subOutCandidate
+
     }
 }
