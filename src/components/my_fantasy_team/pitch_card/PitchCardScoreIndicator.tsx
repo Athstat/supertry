@@ -1,19 +1,22 @@
 import { TriangleAlert } from "lucide-react";
 import { Activity } from "react";
 import { twMerge } from "tailwind-merge";
-import { usePlayerRoundAvailability } from "../../../hooks/fantasy/usePlayerRoundAvailability";
-import { usePlayerSeasonTeam } from "../../../hooks/seasons/useSeasonTeams";
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete";
 import { isSeasonRoundStarted } from "../../../utils/leaguesUtils";
 import { sanitizeStat } from "../../../utils/stringUtils";
 import { useMyTeam } from "../../../hooks/fantasy/my_team/useMyTeam";
+import { IProTeam } from "../../../types/team";
 
 type PlayerPointsScoreProps = {
     player: IFantasyTeamAthlete,
+    showAvailabilityWarning?: boolean,
+    homeOrAway?: string,
+    opponent?: IProTeam,
+    reportTitle?: string
 }
 
 /** Player Pitch Card Score Indicator */
-export function PitchCardScoreIndicator({ player }: PlayerPointsScoreProps) {
+export function PitchCardScoreIndicator({ player, showAvailabilityWarning, homeOrAway, reportTitle, opponent }: PlayerPointsScoreProps) {
 
     const {round} = useMyTeam();
     const hasRoundStarted = round && isSeasonRoundStarted(round);
@@ -22,15 +25,6 @@ export function PitchCardScoreIndicator({ player }: PlayerPointsScoreProps) {
     const score = player.score || 0;
 
     const isLoading = false;
-    const {seasonTeam} = usePlayerSeasonTeam(player.athlete);
-
-    const { showAvailabilityWarning, homeOrAway, opponent, reportTitle } = usePlayerRoundAvailability(
-        player.tracking_id,
-        round?.season ?? "",
-        round?.round_number ?? 0,
-        seasonTeam?.athstat_id
-    );
-
 
     const showScore = Boolean(!isLoading && hasRoundStarted);
     const showNextMatchInfo = !isLoading && (!showAvailabilityWarning && Boolean(homeOrAway) && Boolean(opponent) && !showScore);

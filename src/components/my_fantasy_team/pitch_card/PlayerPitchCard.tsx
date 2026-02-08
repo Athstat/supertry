@@ -18,7 +18,7 @@ export function PlayerPitchCard({ player, onClick }: PlayerPitchCardProps) {
     const {isTeamCaptain} = useMyTeamSlot();
     const {seasonTeam} = usePlayerSeasonTeam(player.athlete);
 
-    const { showAvailabilityWarning } = usePlayerRoundAvailability(
+    const { showAvailabilityWarning, homeOrAway, opponent, reportTitle } = usePlayerRoundAvailability(
         player.tracking_id,
         round?.season ?? "",
         round?.round_number ?? 0,
@@ -90,6 +90,10 @@ export function PlayerPitchCard({ player, onClick }: PlayerPitchCardProps) {
                     )} >
                             <PitchCardScoreIndicator
                                 player={player}
+                                showAvailabilityWarning={showAvailabilityWarning}
+                                homeOrAway={homeOrAway}
+                                opponent={opponent}
+                                reportTitle={reportTitle}
                             />
                     </div>
                 </div>
