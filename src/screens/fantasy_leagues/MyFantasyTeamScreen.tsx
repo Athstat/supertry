@@ -81,6 +81,7 @@ function Content() {
         team={roundTeam}
         manager={manager}
         isReadOnly={false}
+        key={round?.round_number}
       >
         <MyTeamHeader />
         <MyTeamPitch />
@@ -95,6 +96,7 @@ function Content() {
       <CreateTeamProvider
         roundGames={fixtures}
         leagueRound={round}
+        key={round?.round_number}
       >
         <CreateTeamHeader />
         <MyTeamPitch />

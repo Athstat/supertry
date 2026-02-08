@@ -87,6 +87,7 @@ function Content() {
                         roundGames={[]}
                         round={round}
                         isReadOnly
+                        key={round?.round_number}
                     >
                         <MyTeamHeader />
                         <MyTeamPitch />
