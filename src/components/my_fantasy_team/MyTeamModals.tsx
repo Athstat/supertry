@@ -81,10 +81,10 @@ export default function MyTeamModals() {
                     athlete={selectedPlayer.athlete}
                     team={team}
                     onClose={handleClosePointsModal}
-                    multiplier={selectedPlayer.is_captain ? 1.5 :
+                    multiplier={
+                        selectedPlayer.is_captain ? 1.5 :
                         selectedPlayer.is_super_sub ? 0.5 : undefined
                     }
-
                     multiplierDescription={
                         selectedPlayer.is_captain ? "Captain Bonus" :
                             selectedPlayer.is_super_sub ? "Super Sub Reduction" : undefined

@@ -107,7 +107,7 @@ export function getMyTeamViewMode(round?: ISeasonRound, roundTeam?: IFantasyLeag
 
 export function hashFantasyTeam(team: IFantasyLeagueTeam) {
     const teamAthletesStr = team.athletes.reduce((str, curr) => {
-        return str + `slot-${curr.slot}-${curr.athlete?.tracking_id}-`;
+        return str + `slot-${curr.slot}-${curr.athlete?.tracking_id}-round-score-${curr.score}`;
     }, '');
 
     return `${team.id}-club_id=${team.team_id}-${team.user_id}-${teamAthletesStr}`;

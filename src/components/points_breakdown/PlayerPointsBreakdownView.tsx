@@ -42,7 +42,6 @@ export default function PlayerPointsBreakdownView({ athlete, round: leagueRound,
     })?.score ?? rawPoints;
 
     const multiplierScore = finalScore - rawPoints;
-
     const isLoading = loadingPointsBreakdown;
 
     return (
