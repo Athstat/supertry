@@ -63,7 +63,8 @@ export function setPlayerAtSlot(team: IFantasyLeagueTeam, slots: IFantasyLeagueT
 }
 
 /** Returns true if the hash of a team and its slots are the same */
-export const hashCompareFantasyTeams = (team: IFantasyLeagueTeam, slots: IFantasyLeagueTeamSlot[]) => {
+export const hashCompareFantasyTeams = (team: IFantasyLeagueTeam, slots: IFantasyLeagueTeamSlot[]) => {    
+
     let oldAthletes = (team?.athletes) ?? [];
     let newAthletes: IFantasyTeamAthlete[] = [];
 

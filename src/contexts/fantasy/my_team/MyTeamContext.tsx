@@ -1,4 +1,4 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useState } from "react"
+import { createContext, Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react"
 import { DjangoUserMinimal } from "../../../types/auth"
 import { ISeasonRound } from "../../../types/fantasy/fantasySeason"
 import { IFantasyLeagueTeam } from "../../../types/fantasyLeague"
@@ -38,7 +38,8 @@ type Props = {
 }
 
 export default function MyTeamProvider({ team, manager, round, children, isReadOnly = false, roundGames = [], onUpdateTeam }: Props) {
-    const [slots, setSlots] = useState<IFantasyLeagueTeamSlot[]>(getSlotsFromTeam(team));
+    
+    const [slots, setSlots] = useState<IFantasyLeagueTeamSlot[]>([]);
     const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete | undefined>(undefined);
     const [swapState, setSwapState] = useState<MyTeamSwapState>({ slot: undefined });
     const [modalsState, setModalsState] = useState<MyTeamModalsState>({
@@ -46,6 +47,14 @@ export default function MyTeamProvider({ team, manager, round, children, isReadO
         showProfileModal: false,
         showPointsModal: false
     });
+
+    useEffect(() => {
+
+        if (team) {
+            setSlots(getSlotsFromTeam(team));
+        }
+
+    }, [team])
 
     return (
         <MyTeamContext.Provider
