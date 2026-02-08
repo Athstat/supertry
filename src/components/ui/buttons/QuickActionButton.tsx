@@ -16,7 +16,7 @@ export default function QuickActionButton({ children, className, onClick, hideAr
   return (
     <RoundedCard
       className={twMerge(
-        "w-fit p-1.5 text-xs lg:text-sm px-3 flex flex-row bg-slate-100 hover:dark:bg-slate-700 items-center gap-2 cursor-pointer",
+        "w-fit p-1.5 text-sm lg:text-sm px-3 flex flex-row bg-slate-100 hover:dark:bg-slate-700 items-center gap-2 cursor-pointer",
         !showBorder && "border-none",
         className
       )}
