@@ -23,7 +23,6 @@ import { useSeasonRoundFixtures } from '../../hooks/fixtures/useProFixtures';
 import CreateTeamProvider from '../../providers/fantasy_teams/CreateTeamProvider';
 import CreateTeamHeader from '../../components/my_fantasy_team/CreateTeamHeader';
 import NoTeamCreatedFallback from '../../components/fantasy-leagues/NoTeamCreatedFallback';
-import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
 
 /** Renders my fantasy team screen */
 export function MyFantasyTeamScreen() {
@@ -53,7 +52,6 @@ export function MyFantasyTeamScreen() {
     )}>
       <TeamHistoryProvider
         user={authUser}
-        loadingFallback={<LeagueScreenLoadingSkeleton />}
       >
         <MyFantasyTeamScreenHeader />
         <TeamHistoryBar />
@@ -70,7 +68,7 @@ function Content() {
   const { isLoading, fixtures } = useSeasonRoundFixtures(round?.season, round?.round_number);
 
   if (isLoading) {
-    return <LoadingIndicator />
+    return <LoadingSkeleton hideHeader />
   }
 
   if (viewMode === "pitch-view" && roundTeam && manager) {
@@ -111,21 +109,25 @@ function Content() {
   )
 }
 
-function LeagueScreenLoadingSkeleton() {
+type LoadingSkeletonProps = {
+  hideHeader?: boolean
+}
+
+function LoadingSkeleton({hideHeader} : LoadingSkeletonProps) {
 
   return (
     <PageView className="animate-pulse overflow-hidden flex flex-col gap-4">
 
-      <div className='px-4' >
+      {!hideHeader && <div className='px-4' >
         <div className="flex flex-row pt-4 relative items-center justify-center">
 
           <RoundedCard className="border-none absolute left-0 rounded-full w-[30px] h-[30px] " />
           <RoundedCard className="border-none w-[100px] h-[30px] " />
           <RoundedCard className="border-none absolute w-[100px] right-0 h-[30px] " />
         </div>
-      </div>
+      </div>}
 
-      <PitchViewLoadingSkeleton />
+      <PitchViewLoadingSkeleton hideHistoryBar={hideHeader} />
     </PageView>
   );
 }

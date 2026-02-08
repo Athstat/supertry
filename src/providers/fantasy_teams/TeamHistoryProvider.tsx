@@ -7,7 +7,6 @@ import { DjangoUserMinimal } from "../../types/auth";
 import { IFantasyLeagueTeam } from "../../types/fantasyLeague";
 import { useUserRoundTeam } from "../../hooks/fantasy/useUserRoundTeam";
 import { KeyedMutator } from "swr";
-import { LoadingIndicator } from "../../components/ui/LoadingIndicator";
 
 type TeamHistoryContextProps = {
     round?: ISeasonRound,
@@ -33,7 +32,7 @@ type Props = {
  * Provder depends on the FantasyLeagueGroupProvider
  */
 export default function TeamHistoryProvider({ children, user, initRoundNumber, loadingFallback }: Props) {
-    const {seasonRounds, currentRound} = useFantasySeasons();
+    const { seasonRounds, currentRound } = useFantasySeasons();
 
     const [roundNumber, setRoundNumber] = useQueryState(queryParamKeys.ROUND_NUMBER_QUERY_KEY, {
         init: initRoundNumber?.toString() || currentRound?.round_number.toString()
@@ -56,22 +55,22 @@ export default function TeamHistoryProvider({ children, user, initRoundNumber, l
     }, [setRoundNumber]);
 
     const shouldFetchTeam = Boolean(round);
-    const {roundTeam, isLoading, mutate} = useUserRoundTeam( user?.kc_id, round?.round_number, shouldFetchTeam);
+    const { roundTeam, isLoading, mutate } = useUserRoundTeam(user?.kc_id, round?.round_number, shouldFetchTeam);
 
     const moveNextRound = useCallback(() => {
         const currentIndex = seasonRounds.findIndex((r) => r.round_number.toString() === roundNumber);
 
-        if (!maxIndex || currentIndex >= maxIndex ) {
+        if (!maxIndex || currentIndex >= maxIndex) {
             return;
         }
 
         const nextIndex = currentIndex + 1;
         setRoundNumber(seasonRounds[nextIndex].round_number.toString());
-        
+
     }, [maxIndex, roundNumber, seasonRounds, setRoundNumber]);
 
     const movePreviousRound = useCallback(() => {
-        
+
         const currentIndex = seasonRounds.findIndex((r) => r.round_number.toString() === roundNumber);
 
         if (currentIndex <= minIndex) {
@@ -83,12 +82,8 @@ export default function TeamHistoryProvider({ children, user, initRoundNumber, l
     }, [roundNumber, seasonRounds, setRoundNumber]);
 
 
-    if (isLoading) {
-        if (loadingFallback) {
-            return <>{loadingFallback}</>
-        }
-
-        return <LoadingIndicator />
+    if (isLoading && loadingFallback) {
+        return <>{loadingFallback}</>
     }
 
     return (
