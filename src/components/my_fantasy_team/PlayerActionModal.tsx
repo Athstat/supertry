@@ -19,6 +19,7 @@ import { useMyTeamActions } from "../../hooks/fantasy/my_team/useMyTeamActions";
 import { useMyTeamModals } from "../../hooks/fantasy/my_team/useMyTeamModals";
 import { formatPosition } from "../../utils/athletes/athleteUtils";
 import { isSeasonRoundStarted } from "../../utils/leaguesUtils";
+import { CaptainsArmBand } from "../player/CaptainsArmBand";
 
 type PlayerActionModalProps = {
   player: IFantasyTeamAthlete;
@@ -51,8 +52,9 @@ export function PlayerActionModal({
 
   const isSlotLocked = isPlayerLocked(player.athlete);
   const showSlotLockedWarning = isShowPlayerLock(player.athlete);
+  const isTeamCaptainSlotLocked = isPlayerLocked(teamCaptain?.athlete?.athlete);
 
-  const isTeamCaptainLocked = round && isSeasonRoundStarted(round) && teamCaptain !== undefined;
+  const isTeamCaptainLocked = round && isSeasonRoundStarted(round) && isTeamCaptainSlotLocked ;
 
   const hideControls = isReadOnly || isSlotLocked;
 
@@ -84,7 +86,7 @@ export function PlayerActionModal({
   }
 
   const handleMakePlayerCaptain = () => {
-    if (playerSlot && !isSlotLocked && !isTeamCaptainLocked) {
+    if (playerSlot && !isSlotLocked && !isTeamCaptainLocked && !isTeamCaptain) {
       setCaptain(playerSlot.slotNumber);
     }
   }
@@ -235,6 +237,7 @@ export function PlayerActionModal({
               onClick={handleMakePlayerCaptain}
             >
               {isTeamCaptain ? "Team Captain" : "Make Team Captain"}
+              {isTeamCaptain && <CaptainsArmBand className="h-4" />}
               {isTeamCaptainLocked && <Lock className="w-4 h-4" />}
             </RoundedCard>
           )}
