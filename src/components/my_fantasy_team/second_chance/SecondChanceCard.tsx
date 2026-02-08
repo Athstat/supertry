@@ -1,6 +1,5 @@
 import WarningCard from "../../ui/cards/WarningCard"
-import { Link } from "react-router-dom"
-import { useFantasyTeam } from "../../../hooks/fantasy/useFantasyTeam"
+import { useMyTeam } from "../../../hooks/fantasy/my_team/useMyTeam"
 
 type Props = {
     teamCreation?: boolean
@@ -8,7 +7,7 @@ type Props = {
 
 export default function SecondChanceCard({teamCreation = false} : Props) {
 
-    const { roundFixtures: fixtures } = useFantasyTeam();
+    const { roundGames: fixtures } = useMyTeam();
 
     const liveOrCompleted = fixtures.filter((f) => {
         return f.game_status !== "not_started"
@@ -24,24 +23,7 @@ export default function SecondChanceCard({teamCreation = false} : Props) {
 
                 <div>
                     <p>
-                        
-                        <span>You can't {teamCreation ? "pick" : "swap in or out"} players participating in the following (live or completed) games: </span>
-
-                        {liveOrCompleted.map((f) => {
-                            return (
-                                // <span>
-                                //     {f.team?.athstat_name} vs {f.opposition_team?.athstat_name}
-                                // </span>
-                                <Link
-                                    to={`/fixtures/${f.game_id}`}
-                                    className="text-blue-500 underline dark:text-blue-400"
-                                >
-                                    {f.team?.athstat_name} vs {f.opposition_team?.athstat_name}
-                                </Link>
-                            )
-
-                        })}
-
+                        <span>You can't {teamCreation ? "pick" : "swap in or out"} players participating in (live or completed) games</span>
                     </p>
 
                 </div>

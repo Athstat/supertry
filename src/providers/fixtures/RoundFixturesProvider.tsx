@@ -13,7 +13,7 @@ type Props = {
 
 /** Puts provider that provides round fixtures through an atom */
 export default function RoundFixturesProvider({children, loadingFallback} : Props) {
-    const {roundTeam} = useTeamHistory();
+    
     const atoms = [roundFixturesAtom];
 
     return (
@@ -21,16 +21,16 @@ export default function RoundFixturesProvider({children, loadingFallback} : Prop
             atoms={atoms}
         >
             <Inner 
-                round={round}
                 loadingFallback={loadingFallback}
             >{children}</Inner>
         </ScopeProvider>
     )
 }
 
-function Inner({round, children, loadingFallback} : Props) {
+function Inner({children, loadingFallback} : Props) {
     
     const setFixtures = useSetAtom(roundFixturesAtom);
+    const {round} = useTeamHistory();
     const {fixtures, isLoading} = useSeasonRoundFixtures(round?.season, round?.round_number);
     
     useEffect(() => {

@@ -3,7 +3,7 @@ import { Coins } from 'lucide-react';
 import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
 import { useRoundScoringSummaryV2 } from '../../hooks/fantasy/useRoundScoringSummary';
 import { smartRoundUp } from '../../utils/intUtils';
-import { isInSecondChanceMode, isSeasonRoundStarted } from '../../utils/leaguesUtils';
+import { isSeasonRoundStarted } from '../../utils/leaguesUtils';
 import SecondaryText from '../ui/typography/SecondaryText';
 import { Activity } from 'react';
 import { useLeagueConfig } from '../../hooks/useLeagueConfig';
@@ -23,8 +23,6 @@ export default function MyTeamHeader() {
       onUpdateTeam();
     }
   }
-
-  const isSecondChance = round && isInSecondChanceMode(round);
 
 
   return (
@@ -68,7 +66,7 @@ export default function MyTeamHeader() {
         onTeamUpdated={handleTeamUpdated}
       />}
 
-      {!isReadOnly && isSecondChance && (
+      {!isReadOnly && (
         <SecondChanceCard 
         />
       )}
