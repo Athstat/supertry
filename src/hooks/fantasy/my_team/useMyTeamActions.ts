@@ -135,7 +135,7 @@ export function useMyTeamActions() {
     }
 
     const isTeamFull = selectedCount === 6;
-
+    
     return {
         setSlot,
         removePlayer,
