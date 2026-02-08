@@ -2,7 +2,7 @@ import { createContext, Dispatch, ReactNode, SetStateAction, useState } from "re
 import { DjangoUserMinimal } from "../../../types/auth"
 import { ISeasonRound } from "../../../types/fantasy/fantasySeason"
 import { IFantasyLeagueTeam } from "../../../types/fantasyLeague"
-import { IFantasyLeagueTeamSlot, MyTeamSwapState } from "../../../types/fantasyLeagueTeam"
+import { IFantasyLeagueTeamSlot, MyTeamModalsState, MyTeamSwapState } from "../../../types/fantasyLeagueTeam"
 import { getSlotsFromTeam } from "../../../utils/fantasy/myteamUtils"
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete"
 import { IFixture } from "../../../types/games"
@@ -20,7 +20,9 @@ type MyTeamContextProps = {
     isReadOnly: boolean,
     onUpdateTeam?: KeyedMutator<IFantasyLeagueTeam | undefined>,
     swapState: MyTeamSwapState,
-    setSwapState: Dispatch<SetStateAction<MyTeamSwapState>>
+    setSwapState: Dispatch<SetStateAction<MyTeamSwapState>>,
+    modalsState: MyTeamModalsState,
+    setModalsState: Dispatch<SetStateAction<MyTeamModalsState>>
 }
 
 export const MyTeamContext = createContext<MyTeamContextProps | null>(null);
@@ -32,21 +34,26 @@ type Props = {
     children?: ReactNode,
     isReadOnly?: boolean,
     roundGames: IFixture[],
-    onUpdateTeam?: KeyedMutator<IFantasyLeagueTeam | undefined>
+    onUpdateTeam?: KeyedMutator<IFantasyLeagueTeam | undefined>,
 }
 
-export default function MyTeamProvider({team, manager, round, children, isReadOnly = false, roundGames = [], onUpdateTeam} : Props) {
+export default function MyTeamProvider({ team, manager, round, children, isReadOnly = false, roundGames = [], onUpdateTeam }: Props) {
     const [slots, setSlots] = useState<IFantasyLeagueTeamSlot[]>(getSlotsFromTeam(team));
     const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete | undefined>(undefined);
-    const [swapState, setSwapState] = useState<MyTeamSwapState>({slot: undefined});
-    
+    const [swapState, setSwapState] = useState<MyTeamSwapState>({ slot: undefined });
+    const [modalsState, setModalsState] = useState<MyTeamModalsState>({
+        showActionModal: false,
+        showProfileModal: false,
+        showPointsModal: false
+    });
+
     return (
         <MyTeamContext.Provider
             value={{
-                team, manager, round, slots, 
+                team, manager, round, slots,
                 setSlots, setSelectedPlayer, selectedPlayer,
                 isReadOnly, roundGames, onUpdateTeam, swapState,
-                setSwapState
+                setSwapState, modalsState, setModalsState
             }}
         >
             {children}

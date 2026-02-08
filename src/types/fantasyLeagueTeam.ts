@@ -57,3 +57,9 @@ export type MyTeamSlotType = "obscured" | "athlete" | "empty"
 export type MyTeamSwapState = {
     slot?: IFantasyLeagueTeamSlot
 }
+
+export type MyTeamModalsState = {
+    showActionModal: boolean,
+    showProfileModal: boolean,
+    showPointsModal: boolean
+}
