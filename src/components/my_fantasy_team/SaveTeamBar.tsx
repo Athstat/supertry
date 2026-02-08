@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { Check, Loader } from "lucide-react";
+import { Loader } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { useNavigateBack } from "../../hooks/web/useNavigateBack";
 import { useNavigationGuard } from "../../hooks/web/useNavigationGuard";
@@ -29,7 +29,6 @@ export default function SaveTeamBar({ leagueRound }: Props) {
     const [isSaving, setIsSaving] = useState(false);
     const [saveError, setSaveError] = useState<string | undefined>(undefined);
     const isLocked = isSeasonRoundTeamsLocked(leagueRound);
-    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     const toggleUnSavedChangesModal = () => {
         setShowUnsavedChangesModal(prev => !prev);
@@ -100,8 +99,6 @@ export default function SaveTeamBar({ leagueRound }: Props) {
                     is_captain: boolean;
                 }[];
 
-            console.log("Athletes Payload ", athletesPayload);
-
             const updatedTeam = await fantasySeasonTeamService.updateRoundTeam(leagueRound.season, authUser?.kc_id || '', leagueRound.round_number,  {
                 athletes: athletesPayload, user_id: authUser?.kc_id || '' 
             });
@@ -116,7 +113,6 @@ export default function SaveTeamBar({ leagueRound }: Props) {
             }
 
             setIsSaving(false);
-            setShowSuccessModal(true);
 
             fantasyAnalytics.trackSaveTeamEdits();
         } catch (e) {
@@ -165,7 +161,8 @@ export default function SaveTeamBar({ leagueRound }: Props) {
             )}
 
             {/* Success Modal */}
-            {
+            
+            {/* {
                 showSuccessModal && (
                     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
                         <div className={twMerge(
@@ -192,11 +189,11 @@ export default function SaveTeamBar({ leagueRound }: Props) {
                         </div>
                     </div>
                 )
-            }
+            } */}
 
             {/* Loading Modal */}
             {
-                isSaving && !showSuccessModal && (
+                isSaving && (
                     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
                         <div className={twMerge(
                             "bg-white rounded-xl w-full max-w-md p-6",
