@@ -1,13 +1,14 @@
 
 import { IProAthlete } from "../../../types/athletes";
+import { IFantasyLeagueTeamSlot } from "../../../types/fantasyLeagueTeam";
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete";
 import { setPlayerAtSlot } from "../../../utils/fantasy/myteamUtils";
 import { useMyTeam } from "./useMyTeam";
 
-/** Hook that provides functions to perform actions
- * on a fantasy team */
+/** Hook that provides functions to perform actions on a fantasy team */
+
 export function useMyTeamActions() {
-    const { setSelectedPlayer, setSlots, team } = useMyTeam();
+    const { setSelectedPlayer, setSlots, team, setSwapState, swapState } = useMyTeam();
 
     const viewPlayer = (player?: IFantasyTeamAthlete) => {
         setSelectedPlayer(player);
@@ -109,11 +110,31 @@ export function useMyTeamActions() {
         })
     }
 
+    const initiateSwap = (slot: IFantasyLeagueTeamSlot) => {
+        setSwapState({slot});
+    }
+
+    const cancelSwap = () => {
+        setSwapState({slot: undefined});
+    }
+
+    const completeSwap = (player: IProAthlete) => {
+        const slot = swapState.slot;
+        if (!slot || !player) return;
+
+        setSlot(slot.slotNumber, player);
+        cancelSwap();
+    }
+
     return {
         setSlot,
         removePlayer,
         setCaptain,
         substituteIn,
-        viewPlayer
+        viewPlayer,
+        swapState,
+        initiateSwap,
+        cancelSwap,
+        completeSwap
     }
 }

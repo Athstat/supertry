@@ -2,7 +2,7 @@ import { createContext, Dispatch, ReactNode, SetStateAction, useState } from "re
 import { DjangoUserMinimal } from "../../../types/auth"
 import { ISeasonRound } from "../../../types/fantasy/fantasySeason"
 import { IFantasyLeagueTeam } from "../../../types/fantasyLeague"
-import { IFantasyLeagueTeamSlot } from "../../../types/fantasyLeagueTeam"
+import { IFantasyLeagueTeamSlot, MyTeamSwapState } from "../../../types/fantasyLeagueTeam"
 import { getSlotsFromTeam } from "../../../utils/fantasy/myteamUtils"
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete"
 import { IFixture } from "../../../types/games"
@@ -16,8 +16,10 @@ type MyTeamContextProps = {
     selectedPlayer?: IFantasyTeamAthlete,
     setSelectedPlayer: (val?: IFantasyTeamAthlete) => void,
     roundGames: IFixture[],
-    isReadOnly: boolean
-
+    isReadOnly: boolean,
+    onUpdateTeam?: (team: IFantasyLeagueTeam) => void,
+    swapState: MyTeamSwapState,
+    setSwapState: Dispatch<SetStateAction<MyTeamSwapState>>
 }
 
 export const MyTeamContext = createContext<MyTeamContextProps | null>(null);
@@ -28,21 +30,22 @@ type Props = {
     round?: ISeasonRound,
     children?: ReactNode,
     isReadOnly?: boolean,
-    roundGames: IFixture[]
+    roundGames: IFixture[],
+    onUpdateTeam?: (team: IFantasyLeagueTeam) => void
 }
 
-export default function MyTeamProvider({team, manager, round, children, isReadOnly = false, roundGames = []} : Props) {
+export default function MyTeamProvider({team, manager, round, children, isReadOnly = false, roundGames = [], onUpdateTeam = () => {}} : Props) {
     const [slots, setSlots] = useState<IFantasyLeagueTeamSlot[]>(getSlotsFromTeam(team));
     const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete | undefined>(undefined);
-
-
-
+    const [swapState, setSwapState] = useState<MyTeamSwapState>({slot: undefined});
+    
     return (
         <MyTeamContext.Provider
             value={{
                 team, manager, round, slots, 
                 setSlots, setSelectedPlayer, selectedPlayer,
-                isReadOnly, roundGames
+                isReadOnly, roundGames, onUpdateTeam, swapState,
+                setSwapState
             }}
         >
             {children}

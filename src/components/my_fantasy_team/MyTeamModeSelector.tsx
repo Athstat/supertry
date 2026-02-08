@@ -3,7 +3,6 @@ import NoTeamCreatedFallback from '../fantasy-leagues/NoTeamCreatedFallback';
 import { useTeamHistory } from '../../hooks/fantasy/useTeamHistory';
 import { isSeasonRoundTeamsLocked } from '../../utils/leaguesUtils';
 import CreateFantasyTeamProvider from '../../providers/fantasy_teams/CreateFantasyTeamProvider';
-import FantasyTeamProvider from '../../providers/fantasy_teams/FantasyTeamProvider';
 import FantasyTeamView from './FantasyTeamView';
 import PitchViewLoadingSkeleton from './PitchViewLoadingSkeleton';
 import TeamHistoryBar from './TeamHistoryBar';
@@ -12,6 +11,7 @@ import { useLeagueConfig } from '../../hooks/useLeagueConfig';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 import { useUserRoundTeam } from '../../hooks/fantasy/useUserRoundTeam';
 import MyTeamScreenProvider from '../../contexts/ui/MyTeamScreenContext';
+import MyTeamProvider from '../../contexts/fantasy/my_team/MyTeamContext';
 
 
 /** Renders the right team view based on the view mode  */
@@ -26,7 +26,7 @@ export default function MyTeamModeSelector() {
   const { leagueConfig } = useLeagueConfig(selectedSeason?.id);
 
   const { roundTeam, isLoading, mutate } = useUserRoundTeam(manager?.kc_id, round?.round_number);
-
+  
   const isLocked = useMemo(() => {
     return round && isSeasonRoundTeamsLocked(round);
   }, [round]);
@@ -58,15 +58,21 @@ export default function MyTeamModeSelector() {
 
       <MyTeamScreenProvider onUpdateTeam={mutate} >
         {!isLoading && <Activity mode={viewMode === 'pitch-view' ? 'visible' : 'hidden'}>
-          {roundTeam && (
-            <FantasyTeamProvider team={roundTeam}>
+          {roundTeam && manager && (
+            <MyTeamProvider 
+              team={roundTeam}
+              round={round}
+              roundGames={[]}
+              manager={manager}
+              isReadOnly={false}
+              onUpdateTeam={mutate}
+            >
               <FantasyTeamView
                 leagueConfig={leagueConfig}
-                onTeamUpdated={async () => { await mutate() }}
                 onBack={() => { }}
                 pitchCN='mt-5'
               />
-            </FantasyTeamProvider>
+            </MyTeamProvider>
           )}
         </Activity>}
 

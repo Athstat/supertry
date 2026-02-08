@@ -8,21 +8,23 @@ import { requestPushPermissions } from '../../utils/bridgeUtils';
 import PlayerPicker from '../player_picker/PlayerPicker';
 import PushOptInModal from '../ui/PushOptInModal';
 import MyTeamPitchView from './MyTeamPitchView';
+import { useMyTeam } from '../../hooks/fantasy/my_team/useMyTeam';
 
 type Props = {
   leagueRound?: IFantasyLeagueRound;
   leagueConfig?: IGamesLeagueConfig;
   onBack?: () => void;
-  onTeamUpdated: () => Promise<void>;
   onEditChange?: (isEditing: boolean) => void;
   pitchCN?: string
 }
 
 /** Renders a fantasy team view, with editor capabilities */
-export default function FantasyTeamView({ onTeamUpdated, leagueRound, pitchCN }: Props) {
+export default function FantasyTeamView({ leagueRound, pitchCN }: Props) {
 
   const { cancelSwap, slots, swapState, completeSwap, swapPlayer, budgetRemaining } =
     useFantasyTeam();
+
+  const {onUpdateTeam} = useMyTeam();
 
   const exludePlayers = slots
     .filter(s => Boolean(s.athlete))
@@ -57,7 +59,7 @@ export default function FantasyTeamView({ onTeamUpdated, leagueRound, pitchCN }:
   return (
     <div className="w-full h-full">
       <MyTeamViewHeader
-        onTeamUpdated={onTeamUpdated}
+        onTeamUpdated={onUpdateTeam}
       />
 
       <MyTeamPitchView 
