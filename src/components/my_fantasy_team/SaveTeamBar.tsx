@@ -14,7 +14,6 @@ import { fantasySeasonTeamService } from "../../services/fantasy/fantasySeasonTe
 import { useAuth } from "../../contexts/auth/AuthContext";
 import { useMyTeam } from "../../hooks/fantasy/my_team/useMyTeam";
 import { useMyTeamActions } from "../../hooks/fantasy/my_team/useMyTeamActions";
-import { getSlotsFromTeam } from "../../utils/fantasy/myteamUtils";
 
 type Props = {
     onTeamUpdated: () => Promise<void>
@@ -24,7 +23,7 @@ type Props = {
 /** Renders Save Team Bar */
 export default function SaveTeamBar({ leagueRound }: Props) {
     const {authUser} = useAuth();
-    const {onUpdateTeam, setSlots} = useMyTeam();
+    const {onUpdateTeam } = useMyTeam();
 
     const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState<boolean>(false);
     const [isSaving, setIsSaving] = useState(false);
@@ -109,7 +108,7 @@ export default function SaveTeamBar({ leagueRound }: Props) {
 
             // Apply optimistic update
             if (updatedTeam && onUpdateTeam) {
-                setSlots(getSlotsFromTeam(updatedTeam));
+                // setSlots(getSlotsFromTeam(updatedTeam));
                 onUpdateTeam(updatedTeam);
             }
 
