@@ -4,7 +4,7 @@ import { IFantasyLeagueTeam, FantasyLeagueTeamWithAthletes, IFantasyLeagueRound 
 import PlayerPointsBreakdownView from "./PlayerPointsBreakdownView"
 import { athleteAnalytics } from "../../services/analytics/athleteAnalytics"
 import DialogModal from "../ui/modals/DialogModal"
-import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam"
+import { useMyTeam } from "../../hooks/fantasy/my_team/useMyTeam"
 
 type Props = {
   athlete: IProAthlete,
@@ -19,7 +19,7 @@ type Props = {
 /** Renders a points breakdown modal */
 export default function PointsBreakdownModal({ athlete, team, onClose, isOpen, multiplier, multiplierDescription }: Props) {
 
-  const { leagueRound: round } = useFantasyTeam();
+  const { round } = useMyTeam();
 
   useEffect(() => {
 

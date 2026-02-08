@@ -11,13 +11,15 @@ import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
 import { useUserRoundTeam } from "../../hooks/fantasy/useUserRoundTeam";
 import { useHideBottomNavBar, useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
 import TeamHistoryBar from "../../components/my_fantasy_team/TeamHistoryBar";
-import FantasyTeamView from "../../components/my_fantasy_team/FantasyTeamView";
-import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import TeamHistoryProvider from "../../providers/fantasy_teams/TeamHistoryProvider";
-import FantasyTeamProvider from "../../providers/fantasy_teams/FantasyTeamProvider";
 import NoTeamCreatedFallback from "../../components/fantasy-leagues/NoTeamCreatedFallback";
 import PitchViewLoadingSkeleton from "../../components/my_fantasy_team/PitchViewLoadingSkeleton";
 import MyTeamScreenProvider from "../../contexts/ui/MyTeamScreenContext";
+import MyTeamProvider from "../../contexts/fantasy/my_team/MyTeamContext";
+import MyTeamHeader from "../../components/my_fantasy_team/MyTeamHeader";
+import MyTeamPitch from "../../components/my_fantasy_team/MyTeamPitch";
+import MyTeamBenchDrawer from "../../components/my_fantasy_team/MyTeamBenchDrawer";
+import MyTeamModals from "../../components/my_fantasy_team/MyTeamModals";
 
 
 export default function LeagueMemberTeamScreen() {
@@ -51,7 +53,6 @@ function Content() {
 
     const { hardPop } = useNavigateBack();
     const { round, manager } = useTeamHistory();
-    const { leagueConfig } = useFantasyLeagueGroup();
 
     const { roundTeam, isLoading } = useUserRoundTeam(manager?.kc_id, round?.round_number);
 
@@ -81,16 +82,17 @@ function Content() {
             <MyTeamScreenProvider onUpdateTeam={() => {}} >
 
                 {roundTeam && (
-                    <FantasyTeamProvider
+                    <MyTeamProvider
                         team={roundTeam}
-                        readOnly
+                        roundGames={[]}
+                        round={round}
+                        isReadOnly
                     >
-                        <FantasyTeamView
-                            leagueConfig={leagueConfig}
-                            onTeamUpdated={async () => { }}
-                            onBack={() => { }}
-                        />
-                    </FantasyTeamProvider>
+                        <MyTeamHeader />
+                        <MyTeamPitch />
+                        <MyTeamBenchDrawer />
+                        <MyTeamModals />
+                    </MyTeamProvider>
                 )}
 
                 {!roundTeam && !isLoading && (

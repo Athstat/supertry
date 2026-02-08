@@ -82,9 +82,7 @@ export default function MyTeamModals() {
                     team={team}
                     onClose={handleClosePointsModal}
                     multiplier={selectedPlayer.is_captain ? 1.5 :
-
                         selectedPlayer.is_super_sub ? 0.5 : undefined
-
                     }
 
                     multiplierDescription={
