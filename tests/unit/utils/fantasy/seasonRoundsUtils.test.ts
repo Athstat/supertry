@@ -963,13 +963,10 @@ describe('test isSeasonRoundTeamsLocked() function', () => {
             coverage_end: new Date(),
             season: "test season",
             priority: 1,
-            created_at: new Date(),
-            // define a second chance window that includes `now`
-            second_chance_start: subMinutes(now, 5),
-            second_chance_end: addMinutes(now, 20)
+            created_at: new Date()
         } as any;
 
 
-        expect(isSeasonRoundTeamsLocked(seasonRound)).toBeFalsy();
+        expect(isSeasonRoundTeamsLocked(seasonRound)).toBeTruthy();
     });
 })

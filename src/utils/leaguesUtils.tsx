@@ -106,11 +106,6 @@ export function isPastSeasonRound(seasonRound: ISeasonRound) {
 }
 
 export function isSeasonRoundTeamsLocked(seasonRound: ISeasonRound) {
-
-  if (isInSecondChanceMode(seasonRound)) {
-    return false;
-  }
-
   return isSeasonRoundStarted(seasonRound);
 }
 
