@@ -15,17 +15,14 @@ import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 import { useMyTeam } from "../../hooks/fantasy/my_team/useMyTeam";
 import { useMyTeamActions } from "../../hooks/fantasy/my_team/useMyTeamActions";
-
-
-type Props = {
-  onPlayerClick?: (player: IFantasyTeamAthlete) => void
-}
+import { useMyTeamModals } from "../../hooks/fantasy/my_team/useMyTeamModals";
 
 /** Renders a bottom drawer for team subs */
-export default function MyTeamBenchDrawer({ onPlayerClick }: Props) {
+export default function MyTeamBenchDrawer() {
 
   const { round, slots} = useMyTeam();
   const {initiateSwap} = useMyTeamActions();
+  const {handlePlayerClick: onPlayerClick} = useMyTeamModals();
 
   const superSubSlot = useMemo(() => {
     return slots.find((s) => s.slotNumber === 6);
