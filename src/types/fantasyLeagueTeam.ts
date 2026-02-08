@@ -51,3 +51,17 @@ export type UpdateFantasyLeagueTeam = {
     athletes: UpdateFantasyTeamAthleteItem[],
     user_id: string
 }
+
+export type MyTeamSlotType = "obscured" | "athlete" | "empty"
+
+export type MyTeamSwapState = {
+    slot?: IFantasyLeagueTeamSlot
+}
+
+export type MyTeamModalsState = {
+    showActionModal: boolean,
+    showProfileModal: boolean,
+    showPointsModal: boolean
+}
+
+export type MyTeamViewMode = 'pitch-view' | 'no-team-locked' | 'create-team';

@@ -3,7 +3,6 @@ import { playerPickerAtoms } from "../../state/playerPicker/playerPicker"
 import { IProAthlete, PositionClass } from "../../types/athletes"
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete"
 import { IFantasyAthlete } from "../../types/rugbyPlayer"
-import { IFantasyLeagueRound } from "../../types/fantasyLeague"
 import { fantasyLeagueAtom } from "../../state/fantasy/fantasyLeague.atoms"
 import PlayerPickerHeader from "./PlayerPickerHeader"
 import PlayerPickerPlayerList from "./PlayerPickerPlayerList"
@@ -16,12 +15,13 @@ import PlayerPickerDataProvider from "../../providers/PlayerPickerDataProvider"
 import { twMerge } from "tailwind-merge"
 import { AppColours } from "../../types/constants"
 import DialogModal from "../ui/modals/DialogModal"
+import { ISeasonRound } from "../../types/fantasy/fantasySeason"
 
 type Props = {
   playerToBeReplaced?: IProAthlete | IFantasyAthlete | IFantasyTeamAthlete,
   positionPool?: PositionClass,
   onSelectPlayer?: (player: IProAthlete) => void,
-  targetLeagueRound?: IFantasyLeagueRound,
+  targetLeagueRound?: ISeasonRound,
   isOpen?: boolean,
   title?: string,
   remainingBudget?: number,

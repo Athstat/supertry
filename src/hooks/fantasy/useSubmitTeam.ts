@@ -6,15 +6,12 @@ import { useCreateFantasyTeam } from "./useCreateFantasyTeam";
 import { fantasySeasonTeamService } from '../../services/fantasy/fantasySeasonTeamService';
 import { useLeagueConfig } from '../useLeagueConfig';
 import { useAuth } from '../../contexts/auth/AuthContext';
-import { useMyTeamScreen } from '../../contexts/ui/MyTeamScreenContext';
 
 /** Hook for submitting a fantasy league team */
 export function useSubmitTeam(onSuccess?: (createdTeam:IFantasyLeagueTeam) => void) {
 
-    const {onUpdateTeam} = useMyTeamScreen();
-
     const { leagueConfig } = useLeagueConfig();
-    const { leagueRound, teamCaptain, slots } = useCreateFantasyTeam();
+    const { teamCaptain, slots, round: leagueRound, onUpdateTeam } = useCreateFantasyTeam();
     const { authUser } = useAuth();
 
     const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -56,7 +53,8 @@ export function useSubmitTeam(onSuccess?: (createdTeam:IFantasyLeagueTeam) => vo
                     is_starting: !isSuperSub,
                     slot: index + 1,
                     is_super_sub: isSuperSub,
-                    is_captain: teamCaptain.tracking_id === slotPlayer.tracking_id,
+                    is_captain: teamCaptain.athlete?.tracking_id === slotPlayer.athlete?.tracking_id,
+                    
                 } as ICreateFantasyTeamAthleteItem;
             })
                 .filter(Boolean) as ICreateFantasyTeamAthleteItem[];
@@ -73,7 +71,7 @@ export function useSubmitTeam(onSuccess?: (createdTeam:IFantasyLeagueTeam) => vo
                 {athletes, user_id: authUser.kc_id || ''}
             );
 
-            if (createdTeam) {
+            if (createdTeam && onUpdateTeam) {
                 onUpdateTeam(createdTeam);
             }
 

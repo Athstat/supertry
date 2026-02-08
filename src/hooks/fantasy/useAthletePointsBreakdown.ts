@@ -10,13 +10,19 @@ export function useAthletePointsBreakdown(athlete: IProAthlete | IFantasyTeamAth
     const shouldFetch = Boolean(roundNumber && seasonId);
     
     const key = shouldFetch ? `/fantasy-athletes/${athlete.tracking_id}/athlete-points-breakdown?season_id=${seasonId}&round=${roundNumber}` : null;
-    const { data: pointItems, isLoading } = useSWR(key, () => fantasyAthleteService.getRoundPointsBreakdown(
+    const { data, isLoading } = useSWR(key, () => fantasyAthleteService.getRoundPointsBreakdown(
         athlete.tracking_id,
         roundNumber,
         seasonId
     ), {
         refreshInterval: 1000 * 60 * 1 // Every minute
     });
+
+    const pointItems = [...(data || [])].filter((f) => {
+        return f.score !== 0
+    }).sort((a, b) => {
+        return (Math.abs(b.score ?? 0)) - Math.abs(a.score ?? 0);
+    })
 
     const totalPoints = useMemo(() => {
         return pointItems?.reduce((sum, curr) => {

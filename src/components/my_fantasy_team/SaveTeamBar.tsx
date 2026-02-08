@@ -1,19 +1,18 @@
 import { useCallback, useMemo, useState } from "react";
-import { Check, Loader } from "lucide-react";
+import { Loader } from "lucide-react";
 import { twMerge } from "tailwind-merge";
-import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
 import { useNavigateBack } from "../../hooks/web/useNavigateBack";
 import { useNavigationGuard } from "../../hooks/web/useNavigationGuard";
 import { fantasyAnalytics } from "../../services/analytics/fantasyAnalytics";
 import { AppColours } from "../../types/constants";
-import { isSeasonRoundTeamsLocked } from "../../utils/leaguesUtils";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import { Toast } from "../ui/Toast";
 import UnsavedChangesWarningModal from "../ui/modals/UnsavedChangesModal";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 import { fantasySeasonTeamService } from "../../services/fantasy/fantasySeasonTeamService";
 import { useAuth } from "../../contexts/auth/AuthContext";
-import { useMyTeamScreen } from "../../contexts/ui/MyTeamScreenContext";
+import { useMyTeam } from "../../hooks/fantasy/my_team/useMyTeam";
+import { useMyTeamActions } from "../../hooks/fantasy/my_team/useMyTeamActions";
 
 type Props = {
     onTeamUpdated: () => Promise<void>
@@ -23,23 +22,18 @@ type Props = {
 /** Renders Save Team Bar */
 export default function SaveTeamBar({ leagueRound }: Props) {
     const {authUser} = useAuth();
-    const {onUpdateTeam} = useMyTeamScreen();
+    const {onUpdateTeam } = useMyTeam();
 
     const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState<boolean>(false);
     const [isSaving, setIsSaving] = useState(false);
     const [saveError, setSaveError] = useState<string | undefined>(undefined);
-    const isLocked = isSeasonRoundTeamsLocked(leagueRound);
-    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     const toggleUnSavedChangesModal = () => {
         setShowUnsavedChangesModal(prev => !prev);
     }
 
-    const {
-        changesDetected,
-        resetToOriginalTeam,
-        isTeamFull, slots, team, teamCaptain
-    } = useFantasyTeam();
+    const { slots, team, teamCaptain } = useMyTeam();
+    const { changesDetected, resetToOriginalTeam, isTeamFull } = useMyTeamActions();
 
     const {hardPop} = useNavigateBack();
 
@@ -67,7 +61,6 @@ export default function SaveTeamBar({ leagueRound }: Props) {
     
 
     const buildPayloadAndSave = async () => {
-        if (isLocked) return;
 
         if (!team) return;
 
@@ -107,13 +100,16 @@ export default function SaveTeamBar({ leagueRound }: Props) {
                 athletes: athletesPayload, user_id: authUser?.kc_id || '' 
             });
 
-            // Apply optimistic update
-            if (updatedTeam) {
-                onUpdateTeam(updatedTeam);
+            if (updatedTeam && onUpdateTeam) {
+                await onUpdateTeam(updatedTeam);
+            }
+
+            if (!updatedTeam) {
+                setSaveError("Something Wen't wrong saving your team");
+                return;
             }
 
             setIsSaving(false);
-            setShowSuccessModal(true);
 
             fantasyAnalytics.trackSaveTeamEdits();
         } catch (e) {
@@ -144,7 +140,7 @@ export default function SaveTeamBar({ leagueRound }: Props) {
                     </button>
                     <PrimaryButton
                         className="w-[150px] text-xs"
-                        disabled={isSaving || isLocked || !isTeamFull}
+                        disabled={isSaving || !isTeamFull}
                         onClick={buildPayloadAndSave}
                     >
                         {isSaving ? 'Saving...' : 'Save Changes'}
@@ -161,39 +157,8 @@ export default function SaveTeamBar({ leagueRound }: Props) {
                 />
             )}
 
-            {/* Success Modal */}
             {
-                showSuccessModal && (
-                    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
-                        <div className={twMerge(
-                            "bg-white rounded-xl w-full max-w-md p-6",
-                            AppColours.BACKGROUND
-                        )}>
-                            <div className="text-center">
-                                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 text-green-500 dark:text-green-400 mb-4">
-                                    <Check size={32} />
-                                </div>
-                                <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Team Updated!</h2>
-                                <p className="text-gray-600 dark:text-gray-400 mb-6">
-                                    Your team changes have been saved for {leagueRound.round_title}
-                                </p>
-                                <PrimaryButton
-                                    className="w-full"
-                                    onClick={() => {
-                                        setShowSuccessModal(false);
-                                    }}
-                                >
-                                    Great!
-                                </PrimaryButton>
-                            </div>
-                        </div>
-                    </div>
-                )
-            }
-
-            {/* Loading Modal */}
-            {
-                isSaving && !showSuccessModal && (
+                isSaving && (
                     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60]">
                         <div className={twMerge(
                             "bg-white rounded-xl w-full max-w-md p-6",

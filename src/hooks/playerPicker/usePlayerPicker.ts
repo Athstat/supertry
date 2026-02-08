@@ -1,7 +1,7 @@
 import { useAtom, useAtomValue } from "jotai";
 import { playerPickerAtoms } from "../../state/playerPicker/playerPicker";
 import { fantasyLeagueAtom } from "../../state/fantasy/fantasyLeague.atoms";
-import { useFantasyTeam } from "../fantasy/useFantasyTeam";
+import { useMyTeamActions } from "../fantasy/my_team/useMyTeamActions";
 
 /** Provides a hook to interface with the player picker component */
 export function usePlayerPicker() {
@@ -13,7 +13,7 @@ export function usePlayerPicker() {
     const [relatedGames] = useAtomValue(playerPickerAtoms.relatedGamesAtom);
     const leagueRound = useAtomValue(fantasyLeagueAtom);
 
-    const {budgetRemaining: remainingBudget} = useFantasyTeam();
+    const {swapBudget: remainingBudget} = useMyTeamActions();
 
     const excludePlayers = useAtomValue(playerPickerAtoms.excludePlayersAtom);
 

@@ -15,12 +15,16 @@ import UnsavedChangesWarningModal from "../ui/modals/UnsavedChangesModal";
 import { useLeagueConfig } from "../../hooks/useLeagueConfig";
 import SecondChanceCard from "./second_chance/SecondChanceCard";
 import { isInSecondChanceMode } from "../../utils/leaguesUtils";
+import { useMyTeam } from "../../hooks/fantasy/my_team/useMyTeam";
+import { useMyTeamActions } from "../../hooks/fantasy/my_team/useMyTeamActions";
 
 
 /** Renders Create Team View Header */
-export default function CreateTeamViewHeader() {
+export default function CreateTeamHeader() {
     const { leagueConfig } = useLeagueConfig();
-    const { totalSpent, selectedCount, leagueRound, isTeamFull, resetToOriginalTeam, setTeam: setRoundTeam, isReadOnly } = useFantasyTeam();
+
+    const { totalSpent, selectedCount, round: leagueRound, isReadOnly, onUpdateTeam: onUpdateTeam } = useMyTeam();
+    const {isTeamFull, resetToOriginalTeam} = useMyTeamActions();
 
     const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
     const [showClaimAccountModal, setShowClaimAccountModal] = useState<boolean>(false);
@@ -51,8 +55,8 @@ export default function CreateTeamViewHeader() {
         }
 
         // Perform Optimistic Update
-        if (createdTeam) {
-            setRoundTeam(createdTeam)
+        if (createdTeam && onUpdateTeam) {
+            onUpdateTeam(createdTeam)
         }
     }
 
@@ -262,10 +266,8 @@ function UnsavedChangesGuard() {
 
     const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState<boolean>(false);
 
-    const {
-        changesDetected,
-        selectedCount
-    } = useCreateFantasyTeam();
+    const { selectedCount } = useCreateFantasyTeam();
+    const {changesDetected} = useMyTeamActions();
 
     const toggleUnSavedChangesModal = () => {
         setShowUnsavedChangesModal(prev => !prev);

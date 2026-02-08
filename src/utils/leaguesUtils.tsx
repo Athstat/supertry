@@ -73,18 +73,7 @@ export function getSeasonRoundDeadline(seasonRound: ISeasonRound) {
 }
 
 export function isInSecondChanceMode(seasonRound: ISeasonRound) {
-
-  const { second_chance_end, second_chance_start } = seasonRound;
-
-  if (!second_chance_end || !second_chance_start) {
-    return false;
-  }
-
-  const now = new Date();
-  const start = new Date(second_chance_start);
-  const end = new Date(second_chance_end);
-
-  return (now.valueOf() >= start.valueOf()) && (now.valueOf() <= end.valueOf());
+  return isSeasonRoundStarted(seasonRound);
 }
 
 export function isSeasonRoundStarted(seasonRound: ISeasonRound) {
@@ -117,11 +106,6 @@ export function isPastSeasonRound(seasonRound: ISeasonRound) {
 }
 
 export function isSeasonRoundTeamsLocked(seasonRound: ISeasonRound) {
-
-  if (isInSecondChanceMode(seasonRound)) {
-    return false;
-  }
-
   return isSeasonRoundStarted(seasonRound);
 }
 

@@ -74,9 +74,13 @@ export function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer }: 
                                 />
                             </div>
 
-                            {isAffordable && (<SecondaryText className="text-[10px]" >
-                                {seasonTeam?.athstat_name ?? player.position_class}
-                            </SecondaryText>)}
+                            {isAffordable && (
+                                <div className="flex flex-row items-center " >
+                                    <SecondaryText className="text-[10px]" >
+                                        {seasonTeam?.athstat_name ?? player.position_class}
+                                    </SecondaryText>
+                                </div>
+                            )}
 
                             {!isAffordable && (
                                 <p className="text-red-500 text-[10px] font-medium" >Can't Afford this Player</p>

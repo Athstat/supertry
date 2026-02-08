@@ -1,19 +1,19 @@
 import { ScopeProvider } from "jotai-scope";
 import { roundFixturesAtom } from "../../state/fantasy/fantasyLeagueTeam.atoms"
-import { ISeasonRound } from "../../types/fantasy/fantasySeason"
 import { ReactNode, useEffect } from "react";
 import { useSeasonRoundFixtures } from "../../hooks/fixtures/useProFixtures";
 import { useSetAtom } from "jotai";
 import { LoadingIndicator } from "../../components/ui/LoadingIndicator";
+import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
 
 type Props = {
-    round?: ISeasonRound,
     children?: ReactNode,
     loadingFallback?: ReactNode
 }
 
 /** Puts provider that provides round fixtures through an atom */
-export default function RoundFixturesProvider({round, children, loadingFallback} : Props) {
+export default function RoundFixturesProvider({children, loadingFallback} : Props) {
+    
     const atoms = [roundFixturesAtom];
 
     return (
@@ -21,16 +21,16 @@ export default function RoundFixturesProvider({round, children, loadingFallback}
             atoms={atoms}
         >
             <Inner 
-                round={round}
                 loadingFallback={loadingFallback}
             >{children}</Inner>
         </ScopeProvider>
     )
 }
 
-function Inner({round, children, loadingFallback} : Props) {
+function Inner({children, loadingFallback} : Props) {
     
     const setFixtures = useSetAtom(roundFixturesAtom);
+    const {round} = useTeamHistory();
     const {fixtures, isLoading} = useSeasonRoundFixtures(round?.season, round?.round_number);
     
     useEffect(() => {

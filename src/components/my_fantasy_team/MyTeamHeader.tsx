@@ -3,31 +3,26 @@ import { Coins } from 'lucide-react';
 import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
 import { useRoundScoringSummaryV2 } from '../../hooks/fantasy/useRoundScoringSummary';
 import { smartRoundUp } from '../../utils/intUtils';
-import { isInSecondChanceMode, isSeasonRoundStarted } from '../../utils/leaguesUtils';
+import { isSeasonRoundStarted } from '../../utils/leaguesUtils';
 import SecondaryText from '../ui/typography/SecondaryText';
 import { Activity } from 'react';
 import { useLeagueConfig } from '../../hooks/useLeagueConfig';
 import { ISeasonRound } from '../../types/fantasy/fantasySeason';
 import { LeagueRoundCountdown2 } from '../fantasy_league/LeagueCountdown';
 import SecondChanceCard from './second_chance/SecondChanceCard';
-
-type Props = {
-  onTeamUpdated?: () => Promise<void>;
-};
+import { useMyTeam } from '../../hooks/fantasy/my_team/useMyTeam';
 
 /** Renders My Team View Header */
-export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
+export default function MyTeamHeader() {
 
   const { leagueConfig } = useLeagueConfig();
-  const { totalSpent, selectedCount, leagueRound, isReadOnly } = useFantasyTeam();
+  const {onUpdateTeam, isReadOnly, selectedCount, round, totalSpent} = useMyTeam();
 
   const handleTeamUpdated = async () => {
-    if (onTeamUpdated) {
-      await onTeamUpdated();
+    if (onUpdateTeam) {
+      onUpdateTeam();
     }
   }
-
-  const isSecondChance = leagueRound && isInSecondChanceMode(leagueRound);
 
 
   return (
@@ -47,8 +42,8 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
 
         <div className="flex flex-row items-center justify-center text-center gap-1">
 
-          {leagueRound && <TeamPointsCard
-            leagueRound={leagueRound}
+          {round && <TeamPointsCard
+            leagueRound={round}
           />}
 
         </div>
@@ -66,12 +61,12 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
         </div>
       </div>
 
-      {leagueRound && <SaveTeamBar
-        leagueRound={leagueRound}
+      {round && <SaveTeamBar
+        leagueRound={round}
         onTeamUpdated={handleTeamUpdated}
       />}
 
-      {!isReadOnly && isSecondChance && (
+      {!isReadOnly && (
         <SecondChanceCard 
         />
       )}
