@@ -1,9 +1,9 @@
-import { IProAthlete, PositionClass } from "../../types/athletes";
+import { IProAthlete } from "../../types/athletes";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 import { IFantasyLeagueTeam } from "../../types/fantasyLeague";
-import { defaultFantasyPositions, FantasyPositionName, IFantasyLeagueTeamSlot, IFantasyPosition } from "../../types/fantasyLeagueTeam";
+import { defaultFantasyPositions, IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
-import { formatPosition, hashFantasyTeamAthletes, sortFantasyTeamAthletes } from "../athletes/athleteUtils";
+import { hashFantasyTeamAthletes, sortFantasyTeamAthletes } from "../athletes/athleteUtils";
 
 /** Gets storage key for saving team in local storage */
 export function getMyTeamStorageKey(leagueRoundId: string | number, authUserId: string) {
@@ -11,29 +11,30 @@ export function getMyTeamStorageKey(leagueRoundId: string | number, authUserId: 
 }
 
 export function getSlotsFromTeam(team: IFantasyLeagueTeam): IFantasyLeagueTeamSlot[] {
-    return team.athletes.map((a) => {
+    const teamAthletes: IFantasyTeamAthlete[] = team.athletes;
 
-        const defaultPosition = {
-            name: formatPosition(a.position_class) as FantasyPositionName,
-            position_class: (a.position_class || '') as PositionClass,
-            isSpecial: !a.is_starting
-        } as IFantasyPosition
+    const slots = defaultFantasyPositions.map((p, index) => {
 
-        return {
-            athlete: a,
-            slotNumber: a.slot,
-            purchasePrice: a.purchase_price,
-            is_starting: Boolean(a.is_starting),
-            isCaptain: Boolean(a.is_captain),
-            position: defaultFantasyPositions.at(a.slot) ?? defaultPosition
+        const slotAthlete = teamAthletes.find((a) => a.slot === index + 1);
+        const slotNumber = slotAthlete?.slot ?? (index + 1);
+
+        const slot: IFantasyLeagueTeamSlot = {
+            position: p,
+            slotNumber: slotNumber,
+            athlete: slotAthlete,
+            purchasePrice: slotAthlete?.purchase_price ?? 0,
+            is_starting: slotNumber !== 6,
+            isCaptain: slotAthlete?.is_captain
         }
-    }).sort((a, b) => {
-        return (a.slotNumber) - (b.slotNumber);
-    })
+
+        return slot;
+    });
+
+    return slots;
 }
 
 /** Takes a slot and sets a player at a slot in place */
-export function setPlayerAtSlot(team: IFantasyLeagueTeam, slots: IFantasyLeagueTeamSlot[], slotNumber: number, newPlayer: IProAthlete) : IFantasyLeagueTeamSlot[] {
+export function setPlayerAtSlot(team: IFantasyLeagueTeam, slots: IFantasyLeagueTeamSlot[], slotNumber: number, newPlayer: IProAthlete): IFantasyLeagueTeamSlot[] {
     return slots.map((s) => {
         if (s.slotNumber === slotNumber) {
             const newSlot = {
@@ -63,7 +64,7 @@ export function setPlayerAtSlot(team: IFantasyLeagueTeam, slots: IFantasyLeagueT
 }
 
 /** Returns true if the hash of a team and its slots are the same */
-export const hashCompareFantasyTeams = (team: IFantasyLeagueTeam, slots: IFantasyLeagueTeamSlot[]) => {    
+export const hashCompareFantasyTeams = (team: IFantasyLeagueTeam, slots: IFantasyLeagueTeamSlot[]) => {
 
     let oldAthletes = (team?.athletes) ?? [];
     let newAthletes: IFantasyTeamAthlete[] = [];
@@ -85,17 +86,17 @@ export const hashCompareFantasyTeams = (team: IFantasyLeagueTeam, slots: IFantas
 };
 
 export function getMyTeamViewMode(round?: ISeasonRound, roundTeam?: IFantasyLeagueTeam, isLocked?: boolean) {
-    
+
     if (round && roundTeam) {
-      return 'pitch-view';
+        return 'pitch-view';
     }
 
     if (isLocked && roundTeam === undefined) {
-      return 'no-team-locked';
+        return 'no-team-locked';
     }
 
     if (!isLocked && roundTeam === undefined) {
-      return 'create-team';
+        return 'create-team';
     }
 
     return 'error';

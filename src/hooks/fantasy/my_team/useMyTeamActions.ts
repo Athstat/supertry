@@ -11,7 +11,7 @@ export function useMyTeamActions() {
     const { setSelectedPlayer, setSlots, team, setSwapState, swapState, slots, budgetRemaining, selectedCount, teamCaptain } = useMyTeam();
 
     const subSlot = slots.find((s) => !s.is_starting || s.slotNumber === 6);
-    
+
     const subOutCandidate = slots.find((s) => {
         return s.slotNumber !== 6 && s.position.position_class === subSlot?.position.position_class
     });

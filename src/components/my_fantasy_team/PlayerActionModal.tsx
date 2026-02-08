@@ -18,6 +18,7 @@ import WarningCard from "../ui/cards/WarningCard";
 import { useMyTeam } from "../../hooks/fantasy/my_team/useMyTeam";
 import { useMyTeamActions } from "../../hooks/fantasy/my_team/useMyTeamActions";
 import { useMyTeamModals } from "../../hooks/fantasy/my_team/useMyTeamModals";
+import { formatPosition } from "../../utils/athletes/athleteUtils";
 
 type PlayerActionModalProps = {
   player: IFantasyTeamAthlete;
@@ -111,6 +112,7 @@ export function PlayerActionModal({
             />}
 
             <p className="text-lg font-bold text-nowrap truncate" >{player.player_name}</p>
+            <SecondaryText>{formatPosition(player.position_class)}</SecondaryText>
 
             {isSub && <SuperSubPill />}
           </div>
