@@ -8,7 +8,7 @@ import { useMyTeam } from "./useMyTeam";
 /** Hook that provides functions to perform actions on a fantasy team */
 
 export function useMyTeamActions() {
-    const { setSelectedPlayer, setSlots, team, setSwapState, swapState } = useMyTeam();
+    const { setSelectedPlayer, setSlots, team, setSwapState, swapState, slots, budgetRemaining } = useMyTeam();
 
     const viewPlayer = (player?: IFantasyTeamAthlete) => {
         setSelectedPlayer(player);
@@ -126,6 +126,8 @@ export function useMyTeamActions() {
         cancelSwap();
     }
 
+    const swapBudget = budgetRemaining + (swapState.slot?.athlete?.purchase_price ?? swapState.slot?.purchasePrice ?? 0);
+
     return {
         setSlot,
         removePlayer,
@@ -135,6 +137,8 @@ export function useMyTeamActions() {
         swapState,
         initiateSwap,
         cancelSwap,
-        completeSwap
+        completeSwap,
+        slots,
+        swapBudget
     }
 }

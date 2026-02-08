@@ -9,6 +9,7 @@ import PlayerPicker from '../player_picker/PlayerPicker';
 import PushOptInModal from '../ui/PushOptInModal';
 import MyTeamPitchView from './MyTeamPitchView';
 import { useMyTeam } from '../../hooks/fantasy/my_team/useMyTeam';
+import { useMyTeamActions } from '../../hooks/fantasy/my_team/useMyTeamActions';
 
 type Props = {
   leagueRound?: IFantasyLeagueRound;
@@ -21,10 +22,7 @@ type Props = {
 /** Renders a fantasy team view, with editor capabilities */
 export default function FantasyTeamView({ leagueRound, pitchCN }: Props) {
 
-  const { cancelSwap, slots, swapState, completeSwap, swapPlayer, budgetRemaining } =
-    useFantasyTeam();
-
-  const {onUpdateTeam} = useMyTeam();
+  const {cancelSwap, slots, swapState, completeSwap, swapBudget} = useMyTeamActions();
 
   const exludePlayers = slots
     .filter(s => Boolean(s.athlete))
@@ -32,7 +30,7 @@ export default function FantasyTeamView({ leagueRound, pitchCN }: Props) {
       return { tracking_id: s.athlete?.tracking_id ?? '' };
     })
 
-  const isPlayerPickerOpen = swapState.open && swapState.slot != null && Boolean(swapState.position);
+  const isPlayerPickerOpen = Boolean(swapState.slot);
 
   const handleOnEnable = async () => {
     try {
@@ -58,9 +56,7 @@ export default function FantasyTeamView({ leagueRound, pitchCN }: Props) {
 
   return (
     <div className="w-full h-full">
-      <MyTeamViewHeader
-        onTeamUpdated={onUpdateTeam}
-      />
+      <MyTeamViewHeader />
 
       <MyTeamPitchView 
         className={pitchCN}
@@ -68,13 +64,13 @@ export default function FantasyTeamView({ leagueRound, pitchCN }: Props) {
 
       <PlayerPicker
         isOpen={isPlayerPickerOpen}
-        positionPool={swapState?.position?.positionClass as PositionClass}
-        remainingBudget={budgetRemaining + (swapPlayer?.purchase_price || 0)}
+        positionPool={swapState.slot?.position.position_class}
+        remainingBudget={swapBudget}
         excludePlayers={exludePlayers}
         onSelectPlayer={completeSwap}
         onClose={cancelSwap}
         targetLeagueRound={leagueRound}
-        playerToBeReplaced={swapPlayer}
+        playerToBeReplaced={swapState.slot?.athlete?.athlete}
       />
 
       <PushOptInModal

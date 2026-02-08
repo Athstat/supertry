@@ -6,6 +6,7 @@ import { IFantasyLeagueTeamSlot, MyTeamSwapState } from "../../../types/fantasyL
 import { getSlotsFromTeam } from "../../../utils/fantasy/myteamUtils"
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete"
 import { IFixture } from "../../../types/games"
+import { KeyedMutator } from "swr"
 
 type MyTeamContextProps = {
     team: IFantasyLeagueTeam,
@@ -17,7 +18,7 @@ type MyTeamContextProps = {
     setSelectedPlayer: (val?: IFantasyTeamAthlete) => void,
     roundGames: IFixture[],
     isReadOnly: boolean,
-    onUpdateTeam?: (team: IFantasyLeagueTeam) => void,
+    onUpdateTeam?: KeyedMutator<IFantasyLeagueTeam | undefined>,
     swapState: MyTeamSwapState,
     setSwapState: Dispatch<SetStateAction<MyTeamSwapState>>
 }
@@ -31,10 +32,10 @@ type Props = {
     children?: ReactNode,
     isReadOnly?: boolean,
     roundGames: IFixture[],
-    onUpdateTeam?: (team: IFantasyLeagueTeam) => void
+    onUpdateTeam?: KeyedMutator<IFantasyLeagueTeam | undefined>
 }
 
-export default function MyTeamProvider({team, manager, round, children, isReadOnly = false, roundGames = [], onUpdateTeam = () => {}} : Props) {
+export default function MyTeamProvider({team, manager, round, children, isReadOnly = false, roundGames = [], onUpdateTeam} : Props) {
     const [slots, setSlots] = useState<IFantasyLeagueTeamSlot[]>(getSlotsFromTeam(team));
     const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete | undefined>(undefined);
     const [swapState, setSwapState] = useState<MyTeamSwapState>({slot: undefined});
