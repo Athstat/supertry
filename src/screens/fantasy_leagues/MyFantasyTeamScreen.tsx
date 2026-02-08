@@ -48,7 +48,7 @@ export function MyFantasyTeamScreen() {
 
   return (
     <PageView className={twMerge(
-      "dark:text-white flex flex-col gap-2",
+      "dark:text-white flex flex-col gap-3 pt-4",
       AppColours.BACKGROUND,
     )}>
       <TeamHistoryProvider
