@@ -15,7 +15,7 @@ export function useAthletePointsBreakdown(athlete: IProAthlete | IFantasyTeamAth
         roundNumber,
         seasonId
     ), {
-        refreshInterval: 1000 * 10 // Every minute
+        refreshInterval: 1000 * 60 * 1 // Every minute
     });
 
     const pointItems = [...(data || [])].filter((f) => {
