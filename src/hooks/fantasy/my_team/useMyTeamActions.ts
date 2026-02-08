@@ -11,6 +11,7 @@ export function useMyTeamActions() {
     const { setSelectedPlayer, setSlots, team, setSwapState, swapState, slots, budgetRemaining, selectedCount, teamCaptain } = useMyTeam();
 
     const subSlot = slots.find((s) => !s.is_starting || s.slotNumber === 6);
+    
     const subOutCandidate = slots.find((s) => {
         return s.slotNumber !== 6 && s.position.position_class === subSlot?.position.position_class
     });
@@ -120,7 +121,7 @@ export function useMyTeamActions() {
         if (subCandidateWasCaptain) {
             // if you are substituting the captain out
             // make the sub in player the captain at the same slot
-            
+
             setCaptain(subOutCandidate.slotNumber);
         }
     }
@@ -167,6 +168,5 @@ export function useMyTeamActions() {
         resetToOriginalTeam,
         isTeamFull,
         subOutCandidate
-
     }
 }
