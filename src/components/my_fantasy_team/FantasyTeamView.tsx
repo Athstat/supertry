@@ -51,6 +51,8 @@ export default function FantasyTeamView({ leagueRound, pitchCN }: Props) {
   // Push opt-in prompt state
   const [showPushModal, setShowPushModal] = useState(false);
 
+  console.log("Swap Budget ", swapBudget)
+
   return (
     <div className="w-full h-full">
       <MyTeamViewHeader />
