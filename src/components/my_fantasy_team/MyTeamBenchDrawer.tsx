@@ -1,7 +1,6 @@
 import { ArrowUpDown, CirclePlus, Lock, TriangleAlert } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { Activity, useMemo } from "react";
-import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
 import { usePlayerRoundAvailability } from "../../hooks/fantasy/usePlayerRoundAvailability";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
 import { AppColours } from "../../types/constants";
@@ -16,13 +15,15 @@ import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 import { useMyTeam } from "../../hooks/fantasy/my_team/useMyTeam";
 import { useMyTeamActions } from "../../hooks/fantasy/my_team/useMyTeamActions";
 import { useMyTeamModals } from "../../hooks/fantasy/my_team/useMyTeamModals";
+import MyTeamSlotProvider from "../../contexts/fantasy/my_team/MyTeamSlotContext";
+import { useMyTeamSlot } from "../../hooks/fantasy/my_team/useMyTeamSlot";
 
 /** Renders a bottom drawer for team subs */
 export default function MyTeamBenchDrawer() {
 
-  const { round, slots} = useMyTeam();
-  const {initiateSwap} = useMyTeamActions();
-  const {handlePlayerClick: onPlayerClick} = useMyTeamModals();
+  const { round, slots } = useMyTeam();
+  const { initiateSwap } = useMyTeamActions();
+  const { handlePlayerClick: onPlayerClick } = useMyTeamModals();
 
   const superSubSlot = useMemo(() => {
     return slots.find((s) => s.slotNumber === 6);
@@ -70,12 +71,17 @@ export default function MyTeamBenchDrawer() {
             </p>
           </div>
 
+
           {athlete && (
-            <SubPlayerCard
-              player={athlete}
-              round={round}
-              onClick={() => { }}
-            />
+            <MyTeamSlotProvider
+              slot={superSubSlot}
+            >
+              <SubPlayerCard
+                player={athlete}
+                round={round}
+                onClick={() => { }}
+              />
+            </MyTeamSlotProvider>
           )}
 
           {isSlotEmpty && (
@@ -99,10 +105,9 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
 
   const { position_class } = player;
   const { league } = useFantasyLeagueGroup();
-  const {isShowPlayerLock} = useFantasyTeam();
+  const { isShowPlayerLock } = useMyTeamSlot();
 
   const { seasonTeam } = usePlayerSeasonTeam(player.athlete);
-  const showSlotLock = isShowPlayerLock(player.athlete);
 
   const { isNotAvailable, isTeamNotPlaying } = usePlayerRoundAvailability(
     player.tracking_id,
@@ -172,7 +177,7 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
         </div>
       </div>
 
-      {showSlotLock && (
+      {isShowPlayerLock && (
         <div className='absolute bg-yellow-500 p-1 rounded-md z-[30] -top-6 right-2' >
           <Lock className='w-4 h-4 text-black' />
         </div>
@@ -204,16 +209,16 @@ type PlayerPointsScoreProps = {
 
 function SubPlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
-  const isLocked = isSeasonRoundStarted(round);
-  const { league } = useFantasyLeagueGroup();
+  const hasRoundStarted = isSeasonRoundStarted(round);
 
   const score = player.score;
   const isLoading = false;
 
   const { seasonTeam } = usePlayerSeasonTeam(player.athlete)
+  
   const { isNotAvailable, isTeamNotPlaying, nextMatch } = usePlayerRoundAvailability(
     player.tracking_id,
-    league?.season_id ?? "",
+    round?.season ?? "",
     round?.round_number ?? 0,
     seasonTeam?.athstat_id
   );
@@ -237,7 +242,7 @@ function SubPlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
   }, [nextMatch, player.athlete_team_id]);
 
-  const showScore = !isLoading && isLocked;
+  const showScore = !isLoading && hasRoundStarted;
 
   const showAvailabilityWarning = !isLoading && (isNotAvailable || isTeamNotPlaying) && !showScore;
   const showNextMatchInfo = !isLoading && !showAvailabilityWarning && homeOrAway && opponent && !showScore;
