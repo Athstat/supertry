@@ -95,7 +95,7 @@ export default function MyTeamModals() {
 
             <PlayerPicker
                 isOpen={isPlayerPickerOpen}
-                positionPool={swapState.slot?.position.position_class}
+                positionPool={swapState.slot?.slotNumber === 6 ? "super-sub" : swapState.slot?.position.position_class}
                 remainingBudget={swapBudget}
                 excludePlayers={exludePlayers}
                 onSelectPlayer={completeSwap}
