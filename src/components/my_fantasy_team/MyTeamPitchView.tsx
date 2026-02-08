@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import TeamBenchDrawer from './TeamBenchDrawer';
 import { AnimatePresence } from 'framer-motion';
-import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
 import { fantasyAnalytics } from '../../services/analytics/fantasyAnalytics';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import PlayerProfileModal from '../player/PlayerProfileModal';
@@ -9,6 +8,7 @@ import PointsBreakdownModal from '../points_breakdown/PointsBreakdownModal';
 import { FantasyTeamFormation3D } from './FantasyTeamFormation3D';
 import { PlayerActionModal } from './PlayerActionModal';
 import { twMerge } from 'tailwind-merge';
+import { useMyTeam } from '../../hooks/fantasy/my_team/useMyTeam';
 
 type Props = {
   className?: string,
@@ -20,14 +20,11 @@ type Props = {
 /** Renders my team pitch view */
 export default function MyTeamPitchView({ className, hideBenchPlayer = false, firstRowCN, pitchCN }: Props) {
 
-
-  const { slots, team, leagueRound } = useFantasyTeam();
-  const [selectedPlayer, setSelectedPlayer] = useState<IFantasyTeamAthlete>();
+  const { slots, team, round, selectedPlayer, setSelectedPlayer } = useMyTeam();
 
   const [showActionModal, setShowActionModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showPointsModal, setShowPointsModal] = useState(false);
-
 
   useEffect(() => {
     fantasyAnalytics.trackVisitedTeamPitchView();
@@ -82,23 +79,16 @@ export default function MyTeamPitchView({ className, hideBenchPlayer = false, fi
     )}>
       <div className='flex flex-col relative'>
 
-
-        {leagueRound && starters.length > 0 && (
+        {round && starters.length > 0 && (
           <FantasyTeamFormation3D
-            marginCN={twMerge(
-              'mt-0',
-              pitchCN
-            )}
-            firstRowMargin={twMerge(
-              '',
-              firstRowCN
-            )}
+            marginCN={twMerge('mt-0', pitchCN)}
+            firstRowMargin={firstRowCN}
             onPlayerClick={handlePlayerClick}
           />
         )}
 
         {/* Super Substitute */}
-        {leagueRound && superSubSlot && !hideBenchPlayer && (
+        {round && superSubSlot && !hideBenchPlayer && (
           <TeamBenchDrawer
             onPlayerClick={handlePlayerClick}
           />

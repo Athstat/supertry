@@ -14,7 +14,7 @@ export function useMyTeam() {
     }, 0);
 
     const budgetRemaining = MAX_TEAM_BUDGET - totalSpent;
-    
+
     const selectedCount = context.slots.reduce((total, curr) => {
         if (curr.athlete) {
             return total + 1;
@@ -23,10 +23,15 @@ export function useMyTeam() {
         return total;
     }, 0);
 
+    const teamCaptain = context.slots.find((s) => {
+        return s.isCaptain === true;
+    })
+
     return {
         ...context,
         totalSpent, 
         budgetRemaining,
-        selectedCount
+        selectedCount,
+        teamCaptain
     }
 }

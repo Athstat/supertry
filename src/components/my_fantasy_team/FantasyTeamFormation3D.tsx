@@ -7,6 +7,9 @@ import { IFantasyLeagueTeamSlot, SlotCardPosition } from '../../types/fantasyLea
 import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
 import { EmptySlotPitchCard } from './pitch_card/EmptySlotPitchCard';
 import { Lock } from 'lucide-react';
+import { useMyTeam } from '../../hooks/fantasy/my_team/useMyTeam';
+import { SlotCard } from './pitch_card/PitchSlotCard';
+import MyTeamSlotProvider from '../../contexts/fantasy/my_team/MyTeamSlotContext';
 
 interface TeamFormationProps {
   onPlayerClick: (player: IFantasyTeamAthlete) => void;
@@ -18,7 +21,7 @@ interface TeamFormationProps {
 /** Renders a 3 Dimensional-looking pitch view */
 export function FantasyTeamFormation3D({ onPlayerClick, marginCN, firstRowMargin, className }: TeamFormationProps) {
 
-  const { slots } = useFantasyTeam();
+  const { slots } = useMyTeam();
 
   const slotPositions = [
     { x: 20, y: 10, slot: 1 },
@@ -38,7 +41,6 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN, firstRowMargin
       <RugbyPitch3DRaster className={twMerge(
         'mt-12',
         marginCN,
-
       )} />
 
       <div className='top-0  left-0 absolute w-full p-3 flex flex-col items-center justify-center gap-0' >
@@ -56,12 +58,16 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN, firstRowMargin
             }
 
             return (
-              <SlotCard
-                key={slot.slotNumber}
+              <MyTeamSlotProvider
                 slot={slot}
-                position={pos}
-                onPlayerClick={onPlayerClick}
-              />
+                key={`${slot.slotNumber}/${slot.athlete?.athlete_id}`}
+              >
+                <SlotCard
+                  slot={slot}
+                  position={pos}
+                  onPlayerClick={onPlayerClick}
+                />
+              </MyTeamSlotProvider>
             )
 
           })}
@@ -72,62 +78,3 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN, firstRowMargin
   );
 }
 
-type SlotCardProps = {
-  slot: IFantasyLeagueTeamSlot,
-  onPlayerClick?: (player: IFantasyTeamAthlete) => void,
-  round?: IFantasyLeagueRound,
-  className?: string,
-  position: SlotCardPosition
-}
-
-function SlotCard({ slot, onPlayerClick, position }: SlotCardProps) {
-
-  const { isShowPlayerLock } = useFantasyTeam();
-  const { athlete } = slot;
-
-  const showSlotLocked = isShowPlayerLock(slot.athlete?.athlete);
-
-  if (!athlete) {
-    return (
-      <div
-        className="absolute"
-        style={{
-          left: `${position.x}%`,
-          top: `${position.y + 4}%`,
-          transform: 'translate(-50%, -50%)',
-        }}
-      >
-        <EmptySlotPitchCard
-          slot={slot}
-        />
-      </div>
-    )
-  };
-
-
-  return (
-    <div
-      className="absolute"
-      style={{
-        left: `${position.x}%`,
-        top: `${position.y}%`,
-        transform: 'translate(-50%, -50%)',
-      }}
-    >
-      <div className='relative' >
-        <PlayerPitchCard
-          player={athlete}
-          onClick={onPlayerClick}
-          key={slot.slotNumber}
-        />
-
-        {showSlotLocked && (
-          <div className='absolute bg-yellow-500 p-1 rounded-md z-[30] top-5 left-0' >
-            <Lock  className='w-4 h-4 text-black' />
-          </div>
-        )}
-      </div>
-
-    </div>
-  )
-}

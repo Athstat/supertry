@@ -1,13 +1,12 @@
 import { TriangleAlert } from "lucide-react";
 import { Activity } from "react";
 import { twMerge } from "tailwind-merge";
-import { useFantasyTeam } from "../../../hooks/fantasy/useFantasyTeam";
 import { usePlayerRoundAvailability } from "../../../hooks/fantasy/usePlayerRoundAvailability";
-import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
 import { usePlayerSeasonTeam } from "../../../hooks/seasons/useSeasonTeams";
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete";
 import { isSeasonRoundStarted } from "../../../utils/leaguesUtils";
 import { sanitizeStat } from "../../../utils/stringUtils";
+import { useMyTeam } from "../../../hooks/fantasy/my_team/useMyTeam";
 
 type PlayerPointsScoreProps = {
     player: IFantasyTeamAthlete,
@@ -16,27 +15,26 @@ type PlayerPointsScoreProps = {
 /** Player Pitch Card Score Indicator */
 export function PitchCardScoreIndicator({ player }: PlayerPointsScoreProps) {
 
-    const {leagueRound} = useFantasyTeam();
-    const hasRoundStarted = leagueRound && isSeasonRoundStarted(leagueRound);
+    const {round} = useMyTeam();
+    const hasRoundStarted = round && isSeasonRoundStarted(round);
 
     // const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, leagueRound?.season || '', leagueRound?.round_number ?? 0, shouldFetchScore);
     const score = player.score || 0;
-
-    const { league } = useFantasyLeagueGroup();
 
     const isLoading = false;
     const {seasonTeam} = usePlayerSeasonTeam(player.athlete);
 
     const { showAvailabilityWarning, homeOrAway, opponent, reportTitle } = usePlayerRoundAvailability(
         player.tracking_id,
-        league?.season_id ?? "",
-        leagueRound?.round_number ?? 0,
+        round?.season ?? "",
+        round?.round_number ?? 0,
         seasonTeam?.athstat_id
     );
 
 
     const showScore = Boolean(!isLoading && hasRoundStarted);
     const showNextMatchInfo = !isLoading && (!showAvailabilityWarning && Boolean(homeOrAway) && Boolean(opponent) && !showScore);
+
     return (
         <>
             <div className={twMerge(

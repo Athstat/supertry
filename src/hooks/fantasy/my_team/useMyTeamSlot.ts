@@ -8,7 +8,7 @@ import { isInSecondChanceMode, isSeasonRoundTeamsLocked, isPastSeasonRound } fro
 export function useMyTeamSlot() {
     const context = useContext(MyTeamSlotContext);
     const { setCaptain } = useMyTeamActions();
-    const { roundGames: roundFixtures, isReadOnly, round } = useMyTeam();
+    const { roundGames: roundFixtures, isReadOnly, round, teamCaptain } = useMyTeam();
 
     if (context === null) {
         throw new Error("useMyTeamSlot() was used outside the MyTeamSlotProvider")
@@ -64,13 +64,14 @@ export function useMyTeamSlot() {
     }
 
     const isSub = !context.slot.is_starting || context.slot.slotNumber === 6;
-    
+    const isTeamCaptain = context.slot.athlete?.athlete_id === teamCaptain?.athlete?.athlete_id;
 
     return {
         ...context,
         isSub,
         makeCaptain,
         isSlotLocked,
-        isShowPlayerLock: getShowPlayerLock(context.slot.athlete?.athlete)
+        isShowPlayerLock: getShowPlayerLock(context.slot.athlete?.athlete),
+        isTeamCaptain
     }
 }

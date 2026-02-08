@@ -2,11 +2,11 @@ import { twMerge } from "tailwind-merge";
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete";
 import TeamJersey from "../../player/TeamJersey";
 import { usePlayerRoundAvailability } from "../../../hooks/fantasy/usePlayerRoundAvailability";
-import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
 import { CaptainsArmBand } from "../../player/CaptainsArmBand";
-import { useFantasyTeam } from "../../../hooks/fantasy/useFantasyTeam";
 import { usePlayerSeasonTeam } from "../../../hooks/seasons/useSeasonTeams";
 import { PitchCardScoreIndicator } from "./PitchCardScoreIndicator";
+import { useMyTeam } from "../../../hooks/fantasy/my_team/useMyTeam";
+import { useMyTeamSlot } from "../../../hooks/fantasy/my_team/useMyTeamSlot";
 
 type PlayerPitchCardProps = {
     player: IFantasyTeamAthlete;
@@ -14,15 +14,14 @@ type PlayerPitchCardProps = {
 };
 
 export function PlayerPitchCard({ player, onClick }: PlayerPitchCardProps) {
-    const { league } = useFantasyLeagueGroup();
-    const { teamCaptain, leagueRound } = useFantasyTeam();
-
+    const { round } = useMyTeam();
+    const {isTeamCaptain} = useMyTeamSlot();
     const {seasonTeam} = usePlayerSeasonTeam(player.athlete);
 
     const { showAvailabilityWarning } = usePlayerRoundAvailability(
         player.tracking_id,
-        league?.season_id ?? "",
-        leagueRound?.round_number ?? 0,
+        round?.season ?? "",
+        round?.round_number ?? 0,
         seasonTeam?.athstat_id
     );
 
@@ -31,8 +30,6 @@ export function PlayerPitchCard({ player, onClick }: PlayerPitchCardProps) {
             onClick(player);
         }
     }
-
-    const isTeamCaptain = teamCaptain?.tracking_id === player.tracking_id;
 
     return (
         <div
@@ -51,9 +48,6 @@ export function PlayerPitchCard({ player, onClick }: PlayerPitchCardProps) {
                     'cursor-pointer',
                     "min-h-[140px] max-h-[140px] min-w-[115px] max-w-[115px]",
                     'md:min-h-[140px] md:max-h-[140px] md:min-w-[110px] md:max-w-[110px] flex flex-col',
-                    // player.image_url && "bg-gradient-to-br from-green-800 to-green-900/60 border border-green-600",
-                    // !player.image_url && "bg-gradient-to-br from-green-500 to-green-500",
-                    // showAvailabilityWarning && "bg-gradient-to-r dark:from-yellow-500/30 dark:to-yellow-500/30 from-yellow-500/40 to-yellow-600/40"
                 )}
                 onClick={handleClick}
             >
@@ -100,10 +94,6 @@ export function PlayerPitchCard({ player, onClick }: PlayerPitchCardProps) {
                     </div>
                 </div>
             </div>
-
-            {/* <div className="dark:bg-slate-700 bg-white h-[20px] px-2 flex flex-col items-center justify-center rounded-xl" >
-                <p className="text-[10px] font-medium" >{formatPosition(player.position_class)}</p>
-            </div> */}
 
         </div>
 
