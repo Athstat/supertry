@@ -17,8 +17,6 @@ export default function PlayerPickerHeader() {
         }
     }, [setSearchQuery]);
 
-    console.log("Remaining Budget", remainingBudget);
-
     return (
         <div className="flex flex-col gap-2" >
 
