@@ -8,25 +8,25 @@ import RoundedCard from "../../components/ui/cards/RoundedCard";
 import CircleButton from "../../components/ui/buttons/BackButton";
 import { useNavigateBack } from "../../hooks/web/useNavigateBack";
 import { useTeamHistory } from "../../hooks/fantasy/useTeamHistory";
-import { useUserRoundTeam } from "../../hooks/fantasy/useUserRoundTeam";
+
 import { useHideBottomNavBar, useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
 import TeamHistoryBar from "../../components/my_fantasy_team/TeamHistoryBar";
 import TeamHistoryProvider from "../../providers/fantasy_teams/TeamHistoryProvider";
 import NoTeamCreatedFallback from "../../components/fantasy-leagues/NoTeamCreatedFallback";
 import PitchViewLoadingSkeleton from "../../components/my_fantasy_team/PitchViewLoadingSkeleton";
-import MyTeamScreenProvider from "../../contexts/ui/MyTeamScreenContext";
 import MyTeamProvider from "../../contexts/fantasy/my_team/MyTeamContext";
 import MyTeamHeader from "../../components/my_fantasy_team/MyTeamHeader";
 import MyTeamPitch from "../../components/my_fantasy_team/MyTeamPitch";
 import MyTeamBenchDrawer from "../../components/my_fantasy_team/MyTeamBenchDrawer";
 import MyTeamModals from "../../components/my_fantasy_team/MyTeamModals";
+import { hashFantasyTeam } from "../../utils/fantasy/myteamUtils";
 
 
 export default function LeagueMemberTeamScreen() {
 
     useHideTopNavBar();
     useHideBottomNavBar();
-    
+
     const { userId } = useParams<{ leagueId?: string, userId?: string }>();
 
     const key = userId ? swrFetchKeys.getUserById(userId) : null;
@@ -40,7 +40,6 @@ export default function LeagueMemberTeamScreen() {
 
     return (
         <TeamHistoryProvider
-            loadingFallback={<LoadingFallback />}
             user={manager}
         >
             <Content />
@@ -52,9 +51,7 @@ export default function LeagueMemberTeamScreen() {
 function Content() {
 
     const { hardPop } = useNavigateBack();
-    const { round, manager } = useTeamHistory();
-
-    const { roundTeam, isLoading } = useUserRoundTeam(manager?.kc_id, round?.round_number);
+    const { round, manager, isLoading, roundTeam } = useTeamHistory();
 
     const handleBack = () => {
         hardPop('/leagues');
@@ -79,34 +76,39 @@ function Content() {
             <TeamHistoryBar
             />
 
-            <MyTeamScreenProvider onUpdateTeam={() => {}} >
+            {!isLoading && (
+                <>
 
-                {roundTeam && (
-                    <MyTeamProvider
-                        team={roundTeam}
-                        roundGames={[]}
-                        round={round}
-                        isReadOnly
-                        key={round?.round_number}
-                    >
-                        <MyTeamHeader />
-                        <MyTeamPitch />
-                        <MyTeamBenchDrawer />
-                        <MyTeamModals />
-                    </MyTeamProvider>
-                )}
+                    {roundTeam && (
+                        <MyTeamProvider
+                            team={roundTeam}
+                            roundGames={[]}
+                            round={round}
+                            isReadOnly
+                            manager={manager}
+                            key={hashFantasyTeam(roundTeam)}
+                        >
+                            <MyTeamHeader />
+                            <MyTeamPitch />
+                            <MyTeamBenchDrawer />
+                            <MyTeamModals />
+                        </MyTeamProvider>
+                    )}
 
-                {!roundTeam && !isLoading && (
-                    <NoTeamCreatedFallback
-                        hideViewStandingsOption
-                        perspective="third-person"
-                    />
-                )}
+                    {!roundTeam && !isLoading && (
+                        <NoTeamCreatedFallback
+                            hideViewStandingsOption
+                            perspective="third-person"
+                        />
+                    )}
 
-                {isLoading && (
-                    <PitchViewLoadingSkeleton />
-                )}
-            </MyTeamScreenProvider>
+
+                </>
+            )}
+
+            {isLoading && (
+                <PitchViewLoadingSkeleton hideHistoryBar />
+            )}
         </PageView>
     )
 }
