@@ -233,9 +233,9 @@ export function PlayerActionModal({
             {isLocked && <Lock className="w-4 h-4" />}
           </RoundedCard>}
 
-          {isSub && <RoundedCard
+          {isSub && subOutCandidate?.athlete && <RoundedCard
             className={
-              "border-none hover:dark:text-slate-300 cursor-pointer  bg-slate-200 dark:bg-slate-800 dark:text-slate-400 p-2.5 items-center justify-center flex flex-row gap-1"
+              "border-none hover:dark:text-slate-300 cursor-pointer  bg-slate-200 dark:bg-slate-700 dark:text-slate-200 p-2.5 items-center justify-center flex flex-row gap-1"
             }
             onClick={handleSubIn}
           >

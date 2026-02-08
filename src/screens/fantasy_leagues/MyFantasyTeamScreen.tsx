@@ -62,7 +62,7 @@ export function MyFantasyTeamScreen() {
 }
 
 function Content() {
-  const { round, roundTeam, manager } = useTeamHistory();
+  const { round, roundTeam, manager, onUpdateRoundTeam } = useTeamHistory();
   const isLocked = round && isSeasonRoundTeamsLocked(round);
   const viewMode = getMyTeamViewMode(round, roundTeam, isLocked);
   const { isLoading, fixtures } = useSeasonRoundFixtures(round?.season, round?.round_number);
@@ -80,6 +80,7 @@ function Content() {
         manager={manager}
         isReadOnly={false}
         key={hashFantasyTeam(roundTeam)}
+        onUpdateTeam={onUpdateRoundTeam}
       >
         <MyTeamHeader />
         <MyTeamPitch />

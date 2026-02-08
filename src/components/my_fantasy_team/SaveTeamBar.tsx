@@ -106,10 +106,8 @@ export default function SaveTeamBar({ leagueRound }: Props) {
                 athletes: athletesPayload, user_id: authUser?.kc_id || '' 
             });
 
-            // Apply optimistic update
             if (updatedTeam && onUpdateTeam) {
-                // setSlots(getSlotsFromTeam(updatedTeam));
-                onUpdateTeam(updatedTeam);
+                await onUpdateTeam(updatedTeam);
             }
 
             if (!updatedTeam) {
