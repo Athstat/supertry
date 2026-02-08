@@ -8,7 +8,7 @@ import { useMyTeam } from "./useMyTeam";
 /** Hook that provides functions to perform actions on a fantasy team */
 
 export function useMyTeamActions() {
-    const { setSelectedPlayer, setSlots, team, setSwapState, swapState, slots, budgetRemaining, selectedCount } = useMyTeam();
+    const { setSelectedPlayer, setSlots, team, setSwapState, swapState, slots, budgetRemaining, selectedCount, teamCaptain } = useMyTeam();
 
     const subSlot = slots.find((s) => !s.is_starting || s.slotNumber === 6);
     const subOutCandidate = slots.find((s) => {
@@ -87,27 +87,42 @@ export function useMyTeamActions() {
     }
 
     const substituteIn = () => {
+
+        if (!subSlot || !subSlot.athlete?.athlete) return;
+        if (!subOutCandidate || !subOutCandidate.athlete?.athlete) return;
+
+        const subInAthlete = subSlot?.athlete.athlete;
+        const subOutAthlete = subOutCandidate?.athlete.athlete;
+
+        if (!subInAthlete || !subOutAthlete) return;
+
+        const subCandidateWasCaptain = subOutCandidate.athlete.tracking_id === teamCaptain?.athlete?.tracking_id
+
         setSlots((prev) => {
-            
-            if (!subSlot || !subSlot.athlete?.athlete) return prev;
-            if (!subOutCandidate || !subOutCandidate.athlete?.athlete) return prev;
 
             prev = setPlayerAtSlot(
                 team,
                 prev,
                 subSlot.slotNumber,
-                subOutCandidate?.athlete.athlete
+                subOutAthlete
             )
 
             prev = setPlayerAtSlot(
                 team,
                 prev,
                 subOutCandidate.slotNumber,
-                subSlot?.athlete.athlete
+                subInAthlete
             )
 
             return prev;
-        })
+        });
+
+        if (subCandidateWasCaptain) {
+            // if you are substituting the captain out
+            // make the sub in player the captain at the same slot
+            
+            setCaptain(subOutCandidate.slotNumber);
+        }
     }
 
     const initiateSwap = (slot: IFantasyLeagueTeamSlot) => {
