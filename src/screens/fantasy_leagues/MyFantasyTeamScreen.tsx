@@ -13,6 +13,19 @@ import { useEffect } from 'react';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 import { useTeamHistory } from '../../hooks/fantasy/useTeamHistory';
 import RoundFixturesProvider from '../../providers/fixtures/RoundFixturesProvider';
+import TeamHistoryBar from '../../components/my_fantasy_team/TeamHistoryBar';
+import { IFantasyLeagueTeam } from '../../types/fantasyLeague';
+import { ISeasonRound } from '../../types/fantasy/fantasySeason';
+import { getMyTeamViewMode } from '../../utils/fantasy/myteamUtils';
+import { isSeasonRoundTeamsLocked } from '../../utils/leaguesUtils';
+import MyTeamProvider from '../../contexts/fantasy/my_team/MyTeamContext';
+import MyTeamPitch from '../../components/my_fantasy_team/MyTeamPitch';
+import MyTeamHeader from '../../components/my_fantasy_team/MyTeamHeader';
+import MyTeamBenchDrawer from '../../components/my_fantasy_team/MyTeamBenchDrawer';
+import MyTeamModals from '../../components/my_fantasy_team/MyTeamModals';
+import { useSeasonRoundFixtures } from '../../hooks/fixtures/useProFixtures';
+import CreateTeamProvider from '../../providers/fantasy_teams/CreateTeamProvider';
+import CreateTeamHeader from '../../components/my_fantasy_team/CreateTeamHeader';
 
 /** Renders my fantasy team screen */
 export function MyFantasyTeamScreen() {
@@ -36,34 +49,58 @@ export function MyFantasyTeamScreen() {
   }, [getSeasonById, seasonId, setSelectedSeason]);
 
   return (
-    <TeamHistoryProvider
-      user={authUser}
-      loadingFallback={<LeagueScreenLoadingSkeleton />}
-    >
-      <Content />
-    </TeamHistoryProvider>
+    <PageView className={twMerge(
+      "dark:text-white flex flex-col gap-2",
+      AppColours.BACKGROUND,
+    )}>
+      <TeamHistoryProvider
+        user={authUser}
+        loadingFallback={<LeagueScreenLoadingSkeleton />}
+      >
+        <MyFantasyTeamScreenHeader />
+        <TeamHistoryBar />
+        <Content />
+      </TeamHistoryProvider>
+    </PageView >
   );
 }
 
 function Content() {
+  const { round, roundTeam, manager } = useTeamHistory();
+  const isLocked = round && isSeasonRoundTeamsLocked(round);
+  const viewMode = getMyTeamViewMode(round, roundTeam, isLocked);
+  const { isLoading, fixtures } = useSeasonRoundFixtures(round?.season, round?.round_number);
 
-  const { round } = useTeamHistory();
+  if (viewMode === "pitch-view" && roundTeam && manager) {
+    return (
+      <MyTeamProvider
+        roundGames={fixtures}
+        round={round}
+        team={roundTeam}
+        manager={manager}
+        isReadOnly={false}
+      >
+        <MyTeamHeader />
+        <MyTeamPitch />
+        <MyTeamBenchDrawer />
+        <MyTeamModals />
+      </MyTeamProvider>
+    )
+  }
 
-  return (
-
-    <RoundFixturesProvider
-      round={round}
-      loadingFallback={<LeagueScreenLoadingSkeleton />}
-    >
-      <PageView className={twMerge(
-        "dark:text-white flex flex-col gap-2",
-        AppColours.BACKGROUND,
-      )}>
-        <MyFantasyTeamScreenHeader />
-        <MyTeamModeSelector />
-      </PageView>
-    </RoundFixturesProvider>
-  );
+  if (viewMode === "create-team" && round) {
+    return (
+      <CreateTeamProvider
+        roundGames={fixtures}
+        leagueRound={round}
+      >
+        <CreateTeamHeader />
+        <MyTeamPitch />
+        <MyTeamBenchDrawer />
+        <MyTeamModals />
+      </CreateTeamProvider>
+    )
+  }
 }
 
 function LeagueScreenLoadingSkeleton() {
@@ -84,3 +121,4 @@ function LeagueScreenLoadingSkeleton() {
     </PageView>
   );
 }
+

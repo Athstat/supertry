@@ -1,6 +1,8 @@
+import { useMemo } from "react";
 import { IProAthlete, PositionClass } from "../../types/athletes";
+import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 import { IFantasyLeagueTeam } from "../../types/fantasyLeague";
-import { defaultFantasyPositions, FantasyPositionName, IFantasyLeagueTeamSlot, IFantasyPosition } from "../../types/fantasyLeagueTeam";
+import { defaultFantasyPositions, FantasyPositionName, IFantasyLeagueTeamSlot, IFantasyPosition, MyTeamViewMode } from "../../types/fantasyLeagueTeam";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { formatPosition, hashFantasyTeamAthletes, sortFantasyTeamAthletes } from "../athletes/athleteUtils";
 
@@ -81,3 +83,20 @@ export const hashCompareFantasyTeams = (team: IFantasyLeagueTeam, slots: IFantas
     return oldAthletesHash === newAthletesHash;
 
 };
+
+export function getMyTeamViewMode(round?: ISeasonRound, roundTeam?: IFantasyLeagueTeam, isLocked?: boolean) {
+    
+    if (round && roundTeam) {
+      return 'pitch-view';
+    }
+
+    if (isLocked && roundTeam === undefined) {
+      return 'no-team-locked';
+    }
+
+    if (!isLocked && roundTeam === undefined) {
+      return 'create-team';
+    }
+
+    return 'error';
+}

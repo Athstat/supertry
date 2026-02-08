@@ -12,7 +12,7 @@ import { useCreateFantasyTeam } from '../../hooks/fantasy/useCreateFantasyTeam';
 import { FantasyTeamFormation3D } from './FantasyTeamFormation3D';
 import { IProAthlete } from '../../types/athletes';
 import { PlayerActionModal } from './PlayerActionModal';
-import CreateTeamViewHeader from './CreateTeamViewHeader';
+import CreateTeamHeader from './CreateTeamHeader';
 import MyTeamBenchDrawer from './MyTeamBenchDrawer';
 
 /** Renders a create team view */
@@ -92,7 +92,7 @@ export default function CreateFantasyTeamView() {
   return (
     <div className="w-full flex flex-col">
 
-      <CreateTeamViewHeader />
+      <CreateTeamHeader />
 
       <div className='relative' >
         <FantasyTeamFormation3D

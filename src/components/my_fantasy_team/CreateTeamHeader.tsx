@@ -18,7 +18,7 @@ import { isInSecondChanceMode } from "../../utils/leaguesUtils";
 
 
 /** Renders Create Team View Header */
-export default function CreateTeamViewHeader() {
+export default function CreateTeamHeader() {
     const { leagueConfig } = useLeagueConfig();
     const { totalSpent, selectedCount, leagueRound, isTeamFull, resetToOriginalTeam, setTeam: setRoundTeam, isReadOnly } = useFantasyTeam();
 

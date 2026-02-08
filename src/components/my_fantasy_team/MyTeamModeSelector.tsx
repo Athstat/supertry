@@ -2,7 +2,7 @@ import { Activity, Fragment, useMemo } from 'react';
 import NoTeamCreatedFallback from '../fantasy-leagues/NoTeamCreatedFallback';
 import { useTeamHistory } from '../../hooks/fantasy/useTeamHistory';
 import { isSeasonRoundTeamsLocked } from '../../utils/leaguesUtils';
-import CreateFantasyTeamProvider from '../../providers/fantasy_teams/CreateFantasyTeamProvider';
+import CreateTeamProvider from '../../providers/fantasy_teams/CreateTeamProvider';
 import FantasyTeamView from './FantasyTeamView';
 import PitchViewLoadingSkeleton from './PitchViewLoadingSkeleton';
 import TeamHistoryBar from './TeamHistoryBar';
@@ -78,9 +78,9 @@ export default function MyTeamModeSelector() {
 
         {!isLoading && <Activity mode={viewMode === 'create-team' ? 'visible' : 'hidden'}>
           {round && (
-            <CreateFantasyTeamProvider leagueRound={round}>
+            <CreateTeamProvider leagueRound={round}>
               <CreateFantasyTeamView />
-            </CreateFantasyTeamProvider>
+            </CreateTeamProvider>
           )}
         </Activity>}
 

@@ -10,7 +10,7 @@ import { KeyedMutator } from "swr"
 
 type MyTeamContextProps = {
     team: IFantasyLeagueTeam,
-    manager: DjangoUserMinimal,
+    manager?: DjangoUserMinimal,
     round?: ISeasonRound,
     slots: IFantasyLeagueTeamSlot[],
     setSlots: Dispatch<SetStateAction<IFantasyLeagueTeamSlot[]>>,
@@ -29,7 +29,7 @@ export const MyTeamContext = createContext<MyTeamContextProps | null>(null);
 
 type Props = {
     team: IFantasyLeagueTeam,
-    manager: DjangoUserMinimal,
+    manager?: DjangoUserMinimal,
     round?: ISeasonRound,
     children?: ReactNode,
     isReadOnly?: boolean,

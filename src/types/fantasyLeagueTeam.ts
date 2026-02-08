@@ -63,3 +63,5 @@ export type MyTeamModalsState = {
     showProfileModal: boolean,
     showPointsModal: boolean
 }
+
+export type MyTeamViewMode = 'pitch-view' | 'no-team-locked' | 'create-team';

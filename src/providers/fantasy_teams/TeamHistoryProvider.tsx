@@ -4,13 +4,20 @@ import { queryParamKeys } from "../../types/constants";
 import { useFantasySeasons } from "../../hooks/dashboard/useFantasySeasons";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 import { DjangoUserMinimal } from "../../types/auth";
+import { IFantasyLeagueTeam } from "../../types/fantasyLeague";
+import { useUserRoundTeam } from "../../hooks/fantasy/useUserRoundTeam";
+import { KeyedMutator } from "swr";
+import { LoadingIndicator } from "../../components/ui/LoadingIndicator";
 
 type TeamHistoryContextProps = {
     round?: ISeasonRound,
     setRound: (r: ISeasonRound) => void,
     moveNextRound: () => void,
     movePreviousRound: () => void,
-    manager?: DjangoUserMinimal
+    manager?: DjangoUserMinimal,
+    roundTeam?: IFantasyLeagueTeam,
+    isLoading?: boolean,
+    onUpdateRoundTeam: KeyedMutator<IFantasyLeagueTeam | undefined>
 }
 
 export const TeamHistoryContext = createContext<TeamHistoryContextProps | null>(null);
@@ -25,7 +32,7 @@ type Props = {
 /** Component that provides team history to its child components. 
  * Provder depends on the FantasyLeagueGroupProvider
  */
-export default function TeamHistoryProvider({ children, user, initRoundNumber }: Props) {
+export default function TeamHistoryProvider({ children, user, initRoundNumber, loadingFallback }: Props) {
     const {seasonRounds, currentRound} = useFantasySeasons();
 
     const [roundNumber, setRoundNumber] = useQueryState(queryParamKeys.ROUND_NUMBER_QUERY_KEY, {
@@ -47,6 +54,9 @@ export default function TeamHistoryProvider({ children, user, initRoundNumber }:
     const setRound = useCallback((r: ISeasonRound) => {
         setRoundNumber(r.round_number.toString());
     }, [setRoundNumber]);
+
+    const shouldFetchTeam = Boolean(round);
+    const {roundTeam, isLoading, mutate} = useUserRoundTeam( user?.kc_id, round?.round_number, shouldFetchTeam);
 
     const moveNextRound = useCallback(() => {
         const currentIndex = seasonRounds.findIndex((r) => r.round_number.toString() === roundNumber);
@@ -73,10 +83,19 @@ export default function TeamHistoryProvider({ children, user, initRoundNumber }:
     }, [roundNumber, seasonRounds, setRoundNumber]);
 
 
+    if (isLoading) {
+        if (loadingFallback) {
+            return <>{loadingFallback}</>
+        }
+
+        return <LoadingIndicator />
+    }
+
     return (
         <TeamHistoryContext.Provider
             value={{
-                round, setRound, moveNextRound, movePreviousRound, manager: user
+                round, setRound, moveNextRound, movePreviousRound, manager: user,
+                roundTeam, isLoading, onUpdateRoundTeam: mutate
             }}
         >
             {children}

@@ -1,4 +1,4 @@
-import MyTeamViewHeader from './MyTeamViewHeader';
+import MyTeamHeader from './MyTeamHeader';
 import { IFantasyLeagueRound } from '../../types/fantasyLeague';
 import { IGamesLeagueConfig } from '../../types/leagueConfig';
 import MyTeamPitch from './MyTeamPitch';
@@ -16,7 +16,7 @@ export default function FantasyTeamView({ pitchCN }: Props) {
 
   return (
     <div className="w-full h-full">
-      <MyTeamViewHeader />
+      <MyTeamHeader />
 
       <MyTeamPitch 
         className={pitchCN}

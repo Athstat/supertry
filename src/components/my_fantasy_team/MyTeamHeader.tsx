@@ -13,7 +13,7 @@ import SecondChanceCard from './second_chance/SecondChanceCard';
 import { useMyTeam } from '../../hooks/fantasy/my_team/useMyTeam';
 
 /** Renders My Team View Header */
-export default function MyTeamViewHeader() {
+export default function MyTeamHeader() {
 
   const { leagueConfig } = useLeagueConfig();
   const {onUpdateTeam, isReadOnly, selectedCount, round, totalSpent} = useMyTeam();
