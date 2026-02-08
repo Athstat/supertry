@@ -10,12 +10,13 @@ import { Activity, useMemo } from "react";
 import { twMerge } from "tailwind-merge";
 import { CaptainsArmBand } from "../player/CaptainsArmBand";
 import MatchPrCard from "../rankings/MatchPrCard";
-import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
 import QuickActionButton from "../ui/buttons/QuickActionButton";
 import RoundedCard from "../ui/cards/RoundedCard";
 import BottomSheetView from "../ui/modals/BottomSheetView";
 import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams";
 import WarningCard from "../ui/cards/WarningCard";
+import { useMyTeam } from "../../hooks/fantasy/my_team/useMyTeam";
+import { useMyTeamActions } from "../../hooks/fantasy/my_team/useMyTeamActions";
 
 type PlayerActionModalProps = {
   player: IFantasyTeamAthlete;
@@ -32,7 +33,8 @@ export function PlayerActionModal({
 }: PlayerActionModalProps) {
 
   const { seasonTeam } = usePlayerSeasonTeam(player.athlete);
-  const { leagueRound, initiateSwap, removePlayerAtSlot, setTeamCaptainAtSlot, slots, teamCaptain, isReadOnly, isPlayerLocked, isShowPlayerLock } = useFantasyTeam();
+  const {isPlayerLocked, isShowPlayerLock, round, teamCaptain, isReadOnly} = useMyTeam();
+  const {initiateSwap, removePlayer, setCaptain, slots } = useMyTeamActions();
 
   const isSub = !player.is_starting;
 
@@ -42,7 +44,7 @@ export function PlayerActionModal({
     })
   }, [slots, player]);
 
-  const isTeamCaptain = teamCaptain?.tracking_id === player.tracking_id;
+  const isTeamCaptain = teamCaptain?.athlete?.athlete?.tracking_id === player.tracking_id;
 
   const isLocked = isPlayerLocked(player.athlete);
   const showSlotLockedWarning = isShowPlayerLock(player.athlete);
@@ -70,13 +72,13 @@ export function PlayerActionModal({
   const handleRemovePlayer = () => {
     if (playerSlot && !isLocked) {
       onClose();
-      removePlayerAtSlot(playerSlot.slotNumber);
+      removePlayer(playerSlot.slotNumber);
     }
   }
 
   const handleMakePlayerCaptain = () => {
     if (playerSlot && !isLocked) {
-      setTeamCaptainAtSlot(playerSlot.slotNumber);
+      setCaptain(playerSlot.slotNumber);
     }
   }
 
@@ -157,9 +159,9 @@ export function PlayerActionModal({
 
       </div>
 
-      {leagueRound && player.athlete && (
+      {round && player.athlete && (
         <RoundAvailabilityText
-          round={leagueRound}
+          round={round}
           athlete={player.athlete}
         />
       )}

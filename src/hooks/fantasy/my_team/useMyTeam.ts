@@ -1,6 +1,9 @@
 import { useContext } from "react";
 import { MyTeamContext } from "../../../contexts/fantasy/my_team/MyTeamContext";
 import { MAX_TEAM_BUDGET } from "../../../types/constants";
+import { IProAthlete } from "../../../types/athletes";
+import { IFantasyLeagueTeamSlot } from "../../../types/fantasyLeagueTeam";
+import { isInSecondChanceMode, isSeasonRoundTeamsLocked, isPastSeasonRound } from "../../../utils/leaguesUtils";
 
 export function useMyTeam() {
     const context = useContext(MyTeamContext);
@@ -27,11 +30,60 @@ export function useMyTeam() {
         return s.isCaptain === true;
     })
 
+    const isPlayerLocked = (athlete?: IProAthlete) => {
+
+        /** If second chance mode is off */
+        if (context.round && !isInSecondChanceMode(context.round)) {
+            return isSeasonRoundTeamsLocked(context.round)
+        }
+
+        const seasonTeamIds = athlete?.athlete_teams?.filter((t) => {
+            return t.season_id === context.round?.season;
+        }).map((t) => t.team_id);
+
+        const eligibleTeamIds: string[] = [];
+
+        context.roundGames
+            .filter((f) => {
+                return f.game_status === "not_started";
+            })
+            .forEach((f) => {
+
+                if (f.team?.athstat_id && !eligibleTeamIds.includes(f.team?.athstat_id)) {
+                    eligibleTeamIds.push(f.team.athstat_id);
+                }
+
+                if (f.opposition_team?.athstat_id && !eligibleTeamIds.includes(f.opposition_team?.athstat_id)) {
+                    eligibleTeamIds.push(f.opposition_team.athstat_id);
+                }
+            });
+
+        const playerIsEditable = seasonTeamIds?.reduce((flag, curr) => {
+            return eligibleTeamIds.includes(curr) || flag;
+        }, false);
+
+        return !playerIsEditable;
+
+    }
+
+    const isSlotLocked = (slot: IFantasyLeagueTeamSlot) => {
+        return isPlayerLocked(slot.athlete?.athlete);
+    }
+
+    const isShowPlayerLock = (player?: IProAthlete) => {
+        const isLocked = isPlayerLocked(player);
+        const isSecondChanceMode = context.round && isInSecondChanceMode(context.round);
+        return isLocked && !context.isReadOnly && context.round && !isPastSeasonRound(context.round) && isSecondChanceMode;
+    }
+
     return {
         ...context,
-        totalSpent, 
+        totalSpent,
         budgetRemaining,
         selectedCount,
-        teamCaptain
+        teamCaptain,
+        isSlotLocked,
+        isShowPlayerLock,
+        isPlayerLocked
     }
 }
