@@ -13,7 +13,6 @@ import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 import { useTeamHistory } from '../../hooks/fantasy/useTeamHistory';
 import TeamHistoryBar from '../../components/my_fantasy_team/TeamHistoryBar';
 import { getMyTeamViewMode, hashFantasyTeam } from '../../utils/fantasy/myteamUtils';
-import { isSeasonRoundTeamsLocked } from '../../utils/leaguesUtils';
 import MyTeamProvider from '../../contexts/fantasy/my_team/MyTeamContext';
 import MyTeamPitch from '../../components/my_fantasy_team/MyTeamPitch';
 import MyTeamHeader from '../../components/my_fantasy_team/MyTeamHeader';
@@ -63,9 +62,8 @@ export function MyFantasyTeamScreen() {
 
 function Content() {
   const { round, roundTeam, manager, onUpdateRoundTeam } = useTeamHistory();
-  const isLocked = round && isSeasonRoundTeamsLocked(round);
 
-  const viewMode = getMyTeamViewMode(round, roundTeam, isLocked);
+  const viewMode = getMyTeamViewMode(round, roundTeam );
   const { isLoading, fixtures } = useSeasonRoundFixtures(round?.season, round?.round_number);
 
   if (isLoading) {
@@ -91,7 +89,7 @@ function Content() {
     )
   }
 
-  if (viewMode === "create-team" && round && !isLocked) {
+  if (viewMode === "create-team" && round ) {
     return (
       <CreateTeamProvider
         roundGames={fixtures}

@@ -4,6 +4,7 @@ import { IFantasyLeagueTeam } from "../../types/fantasyLeague";
 import { defaultFantasyPositions, IFantasyLeagueTeamSlot } from "../../types/fantasyLeagueTeam";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { hashFantasyTeamAthletes, sortFantasyTeamAthletes } from "../athletes/athleteUtils";
+import { isPastSeasonRound } from "../leaguesUtils";
 
 /** Gets storage key for saving team in local storage */
 export function getMyTeamStorageKey(leagueRoundId: string | number, authUserId: string) {
@@ -85,17 +86,19 @@ export const hashCompareFantasyTeams = (team: IFantasyLeagueTeam, slots: IFantas
 
 };
 
-export function getMyTeamViewMode(round?: ISeasonRound, roundTeam?: IFantasyLeagueTeam, isLocked?: boolean) {
+export function getMyTeamViewMode(round?: ISeasonRound, roundTeam?: IFantasyLeagueTeam ) {
+
+    const cannotCreateTeam = round && isPastSeasonRound(round) 
 
     if (round && roundTeam) {
         return 'pitch-view';
     }
 
-    if (isLocked && roundTeam === undefined) {
+    if (cannotCreateTeam && roundTeam === undefined) {
         return 'no-team-locked';
     }
 
-    if (!isLocked && roundTeam === undefined) {
+    if (!cannotCreateTeam && roundTeam === undefined) {
         return 'create-team';
     }
 
