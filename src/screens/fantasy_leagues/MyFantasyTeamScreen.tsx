@@ -97,6 +97,7 @@ function Content() {
         roundGames={fixtures}
         leagueRound={round}
         key={round?.round_number}
+        onUpdateTeam={onUpdateRoundTeam}
       >
         <CreateTeamHeader />
         <MyTeamPitch />
