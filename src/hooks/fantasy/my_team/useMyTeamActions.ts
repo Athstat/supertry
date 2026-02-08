@@ -10,10 +10,10 @@ import { useMyTeam } from "./useMyTeam";
 export function useMyTeamActions() {
     const { setSelectedPlayer, setSlots, team, setSwapState, swapState, slots, budgetRemaining, selectedCount, teamCaptain } = useMyTeam();
 
-    const subSlot = slots.find((s) => !s.is_starting || s.slotNumber === 6);
+    const subSlot = slots.find((s) => s.position.position_class === "super-sub" || !s.is_starting || s.slotNumber === 6);
 
     const subOutCandidate = slots.find((s) => {
-        return s.slotNumber !== 6 && s.position.position_class === subSlot?.position.position_class
+        return s.slotNumber !== 6 && s.athlete?.position_class === subSlot?.athlete?.position_class
     });
 
     const viewPlayer = (player?: IFantasyTeamAthlete) => {
