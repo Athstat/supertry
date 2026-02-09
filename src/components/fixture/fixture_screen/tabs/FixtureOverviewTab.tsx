@@ -1,14 +1,14 @@
 import { Calendar, Info, Trophy } from "lucide-react"
-import { IFixture } from "../../../types/games"
+import { IFixture } from "../../../../types/games"
 import { MapPin } from "lucide-react"
 import { format } from "date-fns"
 import { useNavigate } from "react-router-dom"
-import GameHighlightsCard from "../../ui/video/GameHighlightsCard"
-import { FixtureVotingCard } from "../../pickem/voting/FixtureVotingCard"
-import PastMatchupsCard from "./PastMatchupsCard"
-import PreFixtureForm from "./PreFixtureForm"
-import FixturePotmCard from "./FixturePotmCard"
-import RoundedCard from "../../ui/cards/RoundedCard"
+import GameHighlightsCard from "../../../ui/video/GameHighlightsCard"
+import { FixtureVotingCard } from "../../../pickem/voting/FixtureVotingCard"
+import PreFixtureForm from "../cards/PreFixtureForm"
+import RoundedCard from "../../../ui/cards/RoundedCard"
+import PastMatchupsCard from "../cards/PastMatchupsCard"
+import FixturePotmCard from "../cards/FixturePotmCard"
 
 type Props = {
     fixture: IFixture

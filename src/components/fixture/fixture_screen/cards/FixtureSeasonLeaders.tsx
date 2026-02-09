@@ -1,15 +1,15 @@
 import { useMemo } from "react";
-import { useTeamSeasonLeaders } from "../../../hooks/teams/useTeamSeasonLeaders"
-import { IFixture } from "../../../types/games"
-import { TeamSeasonLeader } from "../../../types/team";
-import SmartPlayerMugshot from "../../player/SmartPlayerMugshot";
-import SecondaryText from "../../ui/typography/SecondaryText";
-import TeamLogo from "../../team/TeamLogo";
-import { fixtureSummary } from "../../../utils/fixtureUtils";
-import { sanitizeStat } from "../../../utils/stringUtils";
-import { IProAthlete } from "../../../types/athletes";
-import RoundedCard from "../../ui/cards/RoundedCard";
-import { useSportActions } from "../../../hooks/useSportActions";
+import { useTeamSeasonLeaders } from "../../../../hooks/teams/useTeamSeasonLeaders";
+import { useSportActions } from "../../../../hooks/useSportActions";
+import { IProAthlete } from "../../../../types/athletes";
+import { IFixture } from "../../../../types/games";
+import { TeamSeasonLeader } from "../../../../types/team";
+import { fixtureSummary } from "../../../../utils/fixtureUtils";
+import { sanitizeStat } from "../../../../utils/stringUtils";
+import SmartPlayerMugshot from "../../../player/SmartPlayerMugshot";
+import TeamLogo from "../../../team/TeamLogo";
+import RoundedCard from "../../../ui/cards/RoundedCard";
+import SecondaryText from "../../../ui/typography/SecondaryText";
 
 type Props = {
     fixture: IFixture,

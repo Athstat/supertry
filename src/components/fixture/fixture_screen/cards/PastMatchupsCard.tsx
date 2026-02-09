@@ -1,16 +1,17 @@
-import useSWR from "swr"
-import { IFixture } from "../../../types/games"
-import { swrFetchKeys } from "../../../utils/swrKeys"
-import { gamesService } from "../../../services/gamesService"
-import TeamLogo from "../../team/TeamLogo"
-import { useCallback, useMemo } from "react"
-import { IProTeam } from "../../../types/team"
-import { fixtureSummary, formatGameStatus, isGameLive } from "../../../utils/fixtureUtils"
-import { format } from "date-fns"
-import { twMerge } from "tailwind-merge"
-import SecondaryText from "../../ui/typography/SecondaryText"
-import { Link } from "react-router-dom"
-import RoundedCard from "../../ui/cards/RoundedCard"
+import { useMemo, useCallback } from "react";
+import { Link } from "react-router-dom";
+import useSWR from "swr";
+import { twMerge } from "tailwind-merge";
+import { gamesService } from "../../../../services/gamesService";
+import { IFixture } from "../../../../types/games";
+import { IProTeam } from "../../../../types/team";
+import { fixtureSummary, isGameLive, formatGameStatus } from "../../../../utils/fixtureUtils";
+import { swrFetchKeys } from "../../../../utils/swrKeys";
+import TeamLogo from "../../../team/TeamLogo";
+import RoundedCard from "../../../ui/cards/RoundedCard";
+import SecondaryText from "../../../ui/typography/SecondaryText";
+import { format } from "date-fns";
+
 
 type Props = {
   fixture: IFixture
