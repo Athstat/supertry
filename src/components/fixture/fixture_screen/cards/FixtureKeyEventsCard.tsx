@@ -15,22 +15,26 @@ type Props = {
 
 /** Renders a fixture key events card */
 export default function FixtureKeyEventsCard({ fixture }: Props) {
-    const key = `/fixtures/${fixture.game_id}/key-events`;
+
+    // Don't fetch match time line if game has not yet kicked off
+    const key = fixture.game_status !== "not_started" ? `/fixtures/${fixture.game_id}/key-events` : null;
     const { data, isLoading } = useSWR(key, () => gamesService.getKeyEvents(fixture.game_id));
 
     const events = [...(data || [])].sort((a, b) => {
         return ((b.time * 60) + b.secs) - ((a.time * 60) + a.secs);
     });
 
+    if (isLoading) {
+        return (
+            <RoundedCard className="w-full h-[100px] border-none dark:border-none animate-pulse" />
+        )
+    }
+
     if (events.length === 0) {
         return null;
     }
 
-    if (isLoading) {
-        return (
-            <RoundedCard className="w-full h-[100px] rounded-md" />
-        )
-    }
+
 
     return (
         <RoundedCard className="p-4 flex flex-col gap-2 " >
