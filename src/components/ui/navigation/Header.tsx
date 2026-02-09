@@ -32,7 +32,7 @@ export function Header() {
   return (
     <Activity mode={topNavViewMode}>
       <header className={twMerge(
-        "sticky top-0 z-50 bg-white/80 backdrop-blur-sm shadow-none mb-0 pb-4",
+        "sticky top-0 z-50 bg-white/80 backdrop-blur-sm shadow-none mb-0 py-3",
         AppColours.BACKGROUND
       )}>
         <div className="container mx-auto px-1 h-10 overflow-hidden flex items-center justify-between">
