@@ -1,4 +1,4 @@
-import { IFixture, IFullFixture, IGameVote, IRosterItem, ITeamAction } from '../types/games';
+import { GameKeyEvent, IFixture, IFullFixture, IGameVote, IRosterItem, ITeamAction } from '../types/games';
 import { getAuthHeader, getUri } from '../utils/backendUtils';
 import { logger } from './logger';
 import { authService } from './authService';
@@ -265,6 +265,23 @@ export const gamesService = {
       }
     } catch (err) {
       logger.error("Error fetching athlete sports actions ", err);
+    }
+
+    return [];
+  },
+
+  getKeyEvents: async (fixtureId: string) : Promise<GameKeyEvent[]> => {
+    try {
+      const uri = getUri(`/api/v1/games/${fixtureId}/key-events`);
+      const res = await fetch(uri, {
+        headers: getAuthHeader()
+      });
+
+      if (res.ok) {
+        return (await res.json()) as GameKeyEvent[]
+      }
+    } catch (err) {
+      logger.error("Error fetching game key events ", err);
     }
 
     return [];

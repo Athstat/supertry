@@ -1,16 +1,17 @@
+import { Star, Crown } from "lucide-react";
 import useSWR from "swr";
-import { IFixture } from "../../../types/games"
-import { fixtureSummary } from "../../../utils/fixtureUtils"
-import { swrFetchKeys } from "../../../utils/swrKeys";
-import { gamesService } from "../../../services/gamesService";
-import { useAthlete } from "../../../hooks/athletes/useAthlete";
-import { Crown, Star } from "lucide-react";
-import SmartPlayerMugshot from "../../player/SmartPlayerMugshot";
-import SecondaryText from "../../ui/typography/SecondaryText";
-import MatchPrCard from "../../rankings/MatchPrCard";
-import { useFixtureScreen } from "../../../hooks/fixtures/useFixture";
-import RoundedCard from "../../ui/cards/RoundedCard";
-import { usePlayerSeasonTeam } from "../../../hooks/seasons/useSeasonTeams";
+import { useAthlete } from "../../../../hooks/athletes/useAthlete";
+import { useFixtureScreen } from "../../../../hooks/fixtures/useFixture";
+import { usePlayerSeasonTeam } from "../../../../hooks/seasons/useSeasonTeams";
+import { gamesService } from "../../../../services/gamesService";
+import { IFixture } from "../../../../types/games";
+import { fixtureSummary } from "../../../../utils/fixtureUtils";
+import { swrFetchKeys } from "../../../../utils/swrKeys";
+import SmartPlayerMugshot from "../../../player/SmartPlayerMugshot";
+import MatchPrCard from "../../../rankings/MatchPrCard";
+import RoundedCard from "../../../ui/cards/RoundedCard";
+import SecondaryText from "../../../ui/typography/SecondaryText";
+
 
 type Props = {
     fixture: IFixture

@@ -1,10 +1,8 @@
 import { useParams } from 'react-router-dom';
 import useSWR from 'swr';
 import FixtureBoxscoreTab from '../../components/fixture/fixture_screen/FixtureBoxscoreTab';
-import FixtureH2HTab from '../../components/fixture/fixture_screen/FixtureH2HTab';
 import FixtureHero from '../../components/fixture/fixture_screen/FixtureHero';
-import FixtureOverviewTab from '../../components/fixture/fixture_screen/FixtureOverviewTab';
-import FixtureStandingsTab from '../../components/fixture/fixture_screen/FixtureStandingsTab';
+import FixtureOverviewTab from '../../components/fixture/fixture_screen/tabs/FixtureOverviewTab';
 import FixtureRostersTab from '../../components/fixture/fixture_screen/rosters/FixtureRostersTab';
 import { ProMotmVotingBox } from '../../components/pickem/motm';
 import PlayerProfileModal from '../../components/player/PlayerProfileModal';
@@ -19,6 +17,8 @@ import PageView from '../../components/ui/containers/PageView';
 import ErrorCard from '../../components/ui/cards/ErrorCard';
 import { Activity } from 'react';
 import PlayerFixtureModal from '../../components/fixture/player_fixture_modal/PlayerFixtureModal';
+import FixtureStandingsTab from '../../components/fixture/fixture_screen/cards/FixtureStandingsTab';
+import FixtureH2HTab from '../../components/fixture/fixture_screen/tabs/FixtureH2HTab';
 
 export default function FixtureDetailScreen() {
 

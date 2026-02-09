@@ -1,12 +1,12 @@
 import { useCallback, useState } from "react"
-import { IFixture } from "../../../types/games"
-import PlayerProfileModal from "../../player/PlayerProfileModal"
-import SeasonStandingsTable from "../../seasons/SeasonStandingsTable"
-import { FixtureVotingCard } from "../../pickem/voting/FixtureVotingCard"
-import FixtureSeasonLeaders from "./FixtureSeasonLeaders"
-import FixtureTeamStats from "./FixtureTeamStats"
-import { IProAthlete } from "../../../types/athletes"
-import PastMatchupsCard from "./PastMatchupsCard"
+import { IProAthlete } from "../../../../types/athletes";
+import { IFixture } from "../../../../types/games";
+import { FixtureVotingCard } from "../../../pickem/voting/FixtureVotingCard";
+import PlayerProfileModal from "../../../player/PlayerProfileModal";
+import SeasonStandingsTable from "../../../seasons/SeasonStandingsTable";
+import FixtureSeasonLeaders from "../cards/FixtureSeasonLeaders";
+import FixtureTeamStats from "../cards/FixtureTeamStats";
+import PastMatchupsCard from "../cards/PastMatchupsCard";
 
 type Props = {
     fixture: IFixture

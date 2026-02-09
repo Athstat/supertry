@@ -1,8 +1,9 @@
-import { IProAthlete } from "../../../types/athletes";
-import { IRosterItem } from "../../../types/games";
-import { formatPosition } from "../../../utils/athletes/athleteUtils";
-import PlayerMugshot from "../../player/PlayerMugshot";
-import { CaptainsArmBand } from "../../player/CaptainsArmBand";
+import { IProAthlete } from "../../../../types/athletes";
+import { IRosterItem } from "../../../../types/games";
+import { formatPosition } from "../../../../utils/athletes/athleteUtils";
+import { CaptainsArmBand } from "../../../player/CaptainsArmBand";
+import PlayerMugshot from "../../../player/PlayerMugshot";
+
 
 type RosterListProps = {
     roster: IRosterItem[],
