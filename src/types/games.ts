@@ -257,4 +257,19 @@ export type SeasonFilterBarItem = {
 
 export type FixtureListViewMode = 'fixtures' | 'pickem';
 
-export type VoteForOption = "home_team" | "away_team" | "draw"
+export type VoteForOption = "home_team" | "away_team" | "draw";
+
+export type GameKeyEventAction = "TRY" | "PENK" | "YELC" | "START" | "END" | "CONV";
+export type GamePeriod = "First Half" | "Second Half"
+
+export type GameKeyEvent = {
+  event_id: string,
+  game_id: string,
+  athlete?: IProAthlete,
+  team_id: string,
+  action: GameKeyEventAction,
+  time: number,
+  secs: number,
+  period: GamePeriod,
+  updated_at: Date
+}
