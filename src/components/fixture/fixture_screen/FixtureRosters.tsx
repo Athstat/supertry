@@ -8,8 +8,8 @@ import PlayerProfileModal from "../../player/PlayerProfileModal";
 import NoContentCard from "../../ui/typography/NoContentMessage";
 import TabView, { TabViewHeaderItem, TabViewPage } from "../../ui/tabs/TabView";
 import { LoadingIndicator } from "../../ui/LoadingIndicator";
-import { FixtureRosterList } from "./FixtureRosterList";
 import { useInView } from "react-intersection-observer";
+import { FixtureRosterList } from "./rosters/FixtureRosterList";
 
 
 type Props = {
