@@ -213,7 +213,7 @@ export default function SbrFixtureTeamStats() {
   ]
 
   return (
-    <TitledCard title="Head to Head" icon={Shield} >
+    <TitledCard title="Team Stats" icon={Shield} >
 
       <div className="flex flex-col gap-2" >
 

@@ -71,7 +71,7 @@ function Content() {
       className: ""
     },
     {
-      label: 'Head to Head',
+      label: 'Team Stats',
       tabKey: 'h2h',
       disabled: false,
       className: ""
