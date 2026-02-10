@@ -27,13 +27,7 @@ export default function EmojiReactionPoll() {
 
     const allReactionOptions = [
         ...currentReactions,
-        ...(EMOJI_REACTION_OPTIONS.filter((e) => {
-            return !currentReactions.find((r) => r.emoji === e);
-        }).map((e) => {
-            return {emoji: e, reaction_count:0}
-        }).slice(0, 5))
-
-    ].sort((a, b) => b.emoji.localeCompare(a.emoji));
+    ].sort((a, b) => b.emoji.localeCompare(a.emoji)).slice(0, 5);
 
     const handleClick = (newEmoji: string) => {
 
@@ -68,7 +62,7 @@ export default function EmojiReactionPoll() {
     }, [debouncedEmoji]);
 
     const handleTooltip = () => {
-        openTooltipModal("Emoji Reactions", "Whether its a dissapointing defeat, encouraging win or dominant performance, express your reaction and let the emoji do all the talking.")
+        openTooltipModal("Emoji Reactions", "Whether its a dissapointing defeat, encouraging win or dominant performance, express your reaction with an emoji!")
     }
 
 
