@@ -23,14 +23,10 @@ export function useStoreLinks(league?: FantasyLeagueGroup, inviter?: DjangoUserM
             const url = new URL(oneLinkBase);
 
             if (league) {
-                url.searchParams.set('utm_source', `league_with_id_${league?.id}`);
-                url.searchParams.set('media_source', `league_with_id_${league?.id}`);
-
-                url.searchParams.set('utm_medium', `league_invite`);
+                url.searchParams.set('pid', `SCRUMMY_WEB_APP`);
+                url.searchParams.set('af_ad', `league_with_id_${league?.id}`);
                 url.searchParams.set('af_channel', `league_invite`);
-
-                url.searchParams.set('utm_campaign', `download_app`);
-                url.searchParams.set('campaign', `download_app`);
+                url.searchParams.set('c', `download_app`);
             }
 
             return url.toString();

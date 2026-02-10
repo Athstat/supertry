@@ -3,7 +3,7 @@ import { AppColours, leagueInviteQueryParams } from "../../types/constants";
 import PrimaryButton from "../../components/ui/buttons/PrimaryButton";
 import { Trophy } from "lucide-react";
 import { LoadingIndicator } from "../../components/ui/LoadingIndicator";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import SecondaryText from "../../components/ui/typography/SecondaryText";
 import ErrorCard from "../../components/ui/cards/ErrorCard";
 import { PillCard } from "../../components/ui/buttons/PillTag";
@@ -11,7 +11,6 @@ import { GooglePlayButton, AppStoreButton } from 'react-mobile-app-button';
 import { APP_GOOGLE_PLAYSTORE_LINK, APP_IOS_APPSTORE_LINK } from '../../types/constants';
 import { useStoreLinks } from "../../hooks/marketing/useStoreLinks";
 import { Activity, useCallback, useMemo } from "react";
-import { Download } from "lucide-react";
 import { isMobile } from "react-device-detect";
 import { deleteTempGuestAccount } from "../../utils/authUtils";
 import useSWR from "swr";
@@ -23,6 +22,7 @@ import { twMerge } from "tailwind-merge";
 import TempGuestUserProvider from "../../components/auth/guest/TempGuestUserProvider";
 import ScrummyLoadingState from "../../components/ui/ScrummyLoadingState";
 import { useTheme } from "../../contexts/app_state/ThemeContext";
+import DownloadAppButton from "../../components/ui/buttons/DownloadAppButton";
 
 
 export default function TinyInviteStepsScreen() {
@@ -44,7 +44,6 @@ function Content() {
     return (
 
         <PageView className="py-0 p-0" >
-            <DownloadAppHeader />
             {!isLoading && <InviteView
                 invite={data}
             />}
@@ -98,78 +97,69 @@ function InviteView({ invite }: Props) {
     }
 
     return (
-        <section className="flex flex-col mt-10 gap-4 items-center justify-center p-4" >
+        <div>
+            <DownloadAppHeader league={league} />
+            <section className="flex flex-col mt-10 gap-4 items-center justify-center p-4" >
 
-            <div className="flex w-fit flex-col cursor-pointer transition-all ease-in items-center gap-2 " >
-                <Trophy className="w-20 h-20" />
-                <p className="font-semibold" >{league?.title}</p>
+                <div className="flex w-fit flex-col cursor-pointer transition-all ease-in items-center gap-2 " >
+                    <Trophy className="w-20 h-20" />
+                    <p className="font-semibold" >{league?.title}</p>
 
-                <div className="flex flex-row items-center gap-2" >
-                    {/* <PillCard className="flex flex-row items-center justify-center gap-2" >
-                        <Users className="w-4 h-4" />
-                        <p>{members.length} Member{pluralMembers ? 's' : ''}</p>
-                    </PillCard> */}
+                    <div className="flex flex-row items-center gap-2" >
+                        <PillCard className="flex flex-row items-center justify-center gap-2" >
+                            <Trophy className="w-4 h-4" />
+                            <p>{league?.season.name}</p>
+                        </PillCard>
+                    </div>
 
-                    <PillCard className="flex flex-row items-center justify-center gap-2" >
-                        <Trophy className="w-4 h-4" />
-                        <p>{league?.season.name}</p>
-                    </PillCard>
                 </div>
 
-            </div>
+                <div className="flex flex-col gap-4 items-center justify-center " >
+                    <SecondaryText className="max-w-[60%] text-center" >You have been invited by {inviter?.username} to join {league?.title} on SCRUMMY</SecondaryText>
 
-            <div className="flex flex-col gap-4 items-center justify-center " >
-                <SecondaryText className="max-w-[60%] text-center" >You have been invited by {inviter?.username} to join {league?.title} on SCRUMMY</SecondaryText>
+                    <PrimaryButton onClick={handleOpenInApp} className="w-fit py-3 px-8" >Join League In SCRUMMY App</PrimaryButton>
 
-                <PrimaryButton onClick={handleOpenInApp} className="w-fit py-3 px-8" >Join League In SCRUMMY App</PrimaryButton>
-
-            </div>
-
-            <div className="flex flex-col gap-2 mt-6 items-center justify-center" >
-                <SecondaryText className="text-center max-w-[80%]" >Don't have the SCRUMMY App installed? First install the app then follow this link again to join the league</SecondaryText>
-
-                <div className="flex flex-col w-full gap-4 items-center justify-center">
-
-                    <Activity mode={oneLinkUrl ? 'hidden' : 'visible'} >
-                        <AppStoreButton
-                            url={APP_IOS_APPSTORE_LINK}
-                            theme={theme === 'dark' ? 'dark' : 'dark'}
-                            width={300}
-                            height={60}
-                        />
-
-                        <GooglePlayButton
-                            url={APP_GOOGLE_PLAYSTORE_LINK}
-                            theme={theme === 'dark' ? 'dark' : 'dark'}
-                            className="w-[300px] text-nowrap p-4"
-                            width={300}
-                            height={60}
-                        />
-                    </Activity>
-
-                    <Activity mode={oneLinkUrl ? 'visible' : 'hidden'} >
-                        <Link to={oneLinkUrl || ''} target="blank" >
-                            <div className="flex flex-col items-center justify-center w-full" >
-                                <PrimaryButton className="flex w-fit flex-row items-center gap-4" >
-                                    <p> Download App</p>
-                                    <Download />
-                                </PrimaryButton>
-                            </div>
-                        </Link>
-                    </Activity>
                 </div>
-            </div>
 
-            {expiresAt && (
-                <footer className={twMerge(
-                    "fixed bottom-0  left-0 p-6 flex flex-col gap-2 items-center justify-center w-full",
-                    AppColours.CARD_BACKGROUND
-                )} >
-                    <SecondaryText>This invite will expire on {format(expiresAt, 'EEEE dd MMMM yyyy, HH:mm')}</SecondaryText>
-                    <SecondaryText className="text-xs" >SCRUMMY © {new Date().getFullYear()}</SecondaryText>
-                </footer>
-            )}
-        </section >
+                <div className="flex flex-col gap-2 mt-6 items-center justify-center" >
+                    <SecondaryText className="text-center max-w-[80%]" >Don't have the SCRUMMY App installed? First install the app then follow this link again to join the league</SecondaryText>
+
+                    <div className="flex flex-col w-full gap-4 items-center justify-center">
+
+                        <Activity mode={oneLinkUrl ? 'hidden' : 'visible'} >
+                            <AppStoreButton
+                                url={APP_IOS_APPSTORE_LINK}
+                                theme={theme === 'dark' ? 'dark' : 'dark'}
+                                width={300}
+                                height={60}
+                            />
+
+                            <GooglePlayButton
+                                url={APP_GOOGLE_PLAYSTORE_LINK}
+                                theme={theme === 'dark' ? 'dark' : 'dark'}
+                                className="w-[300px] text-nowrap p-4"
+                                width={300}
+                                height={60}
+                            />
+                        </Activity>
+
+                        <Activity mode={oneLinkUrl ? 'visible' : 'hidden'} >
+                            <DownloadAppButton showIcon league={league} />
+                        </Activity>
+                    </div>
+                </div>
+
+                {expiresAt && (
+                    <footer className={twMerge(
+                        "fixed bottom-0  left-0 p-6 flex flex-col gap-2 items-center justify-center w-full",
+                        AppColours.CARD_BACKGROUND
+                    )} >
+                        <SecondaryText>This invite will expire on {format(expiresAt, 'EEEE dd MMMM yyyy, HH:mm')}</SecondaryText>
+                        <SecondaryText className="text-xs" >SCRUMMY © {new Date().getFullYear()}</SecondaryText>
+                    </footer>
+                )}
+            </section >
+        </div>
     )
 }
 
