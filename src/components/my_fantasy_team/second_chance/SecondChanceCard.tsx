@@ -1,5 +1,6 @@
 import WarningCard from "../../ui/cards/WarningCard"
 import { useMyTeam } from "../../../hooks/fantasy/my_team/useMyTeam"
+import { isPastSeasonRound } from "../../../utils/leaguesUtils";
 
 type Props = {
     teamCreation?: boolean
@@ -7,13 +8,13 @@ type Props = {
 
 export default function SecondChanceCard({teamCreation = false} : Props) {
 
-    const { roundGames: fixtures } = useMyTeam();
+    const { roundGames: fixtures, round } = useMyTeam();
 
     const liveOrCompleted = fixtures.filter((f) => {
         return f.game_status !== "not_started"
     });
 
-    if (liveOrCompleted.length === 0) {
+    if (liveOrCompleted.length === 0 || !round || (isPastSeasonRound(round))) {
         return null;
     }
 
