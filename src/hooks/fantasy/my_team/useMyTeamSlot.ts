@@ -24,6 +24,7 @@ export function useMyTeamSlot() {
     const isTeamCaptain = context.slot.athlete?.athlete_id === teamCaptain?.athlete?.athlete_id;
 
     const hasPlayerGameStarted = isPlayerGameStarted(context.slot?.athlete?.athlete);
+    
 
     return {
         ...context,

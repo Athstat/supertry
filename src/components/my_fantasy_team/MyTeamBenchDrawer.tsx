@@ -210,6 +210,7 @@ type PlayerPointsScoreProps = {
 function SubPlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
   const hasRoundStarted = isSeasonRoundStarted(round);
+  const {roundGames} = useMyTeam();
 
   const score = player.score;
   const isLoading = false;
@@ -243,7 +244,8 @@ function SubPlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
   }, [nextMatch, player.athlete_team_id]);
 
-  const showScore = !isLoading && hasRoundStarted && hasPlayerGameStarted;
+  const showScore = Boolean(!isLoading && hasRoundStarted && (roundGames.length > 0 ? hasPlayerGameStarted : true));
+
 
   const showAvailabilityWarning = !isLoading && (isNotAvailable || isTeamNotPlaying) && !showScore;
   const showNextMatchInfo = !isLoading && !showAvailabilityWarning && homeOrAway && opponent && !showScore;
