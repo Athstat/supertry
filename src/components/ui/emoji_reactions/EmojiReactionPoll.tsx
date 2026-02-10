@@ -6,11 +6,15 @@ import { useTopicReactions } from "../../../hooks/ui/useTopicReactions";
 import { useDebounced } from "../../../hooks/web/useDebounced";
 import { EMOJI_REACTION_OPTIONS } from "../../../types/constants";
 import EmojiReactionButton from "./EmojiReactionButton";
+import { HelpCircle } from "lucide-react";
+import { useTooltip } from "../../../hooks/ui/useTooltip";
 
 
 export default function EmojiReactionPoll() {
 
     const { reactions, userReaction, deleteReaction, updateReaction } = useTopicReactions();
+
+    const {openTooltipModal} = useTooltip();
 
     const [emoji, setEmoji] = useState(userReaction?.emoji);
     const debouncedEmoji = useDebounced(emoji, 1000);
@@ -51,6 +55,10 @@ export default function EmojiReactionPoll() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [debouncedEmoji]);
 
+    const handleTooltip = () => {
+        openTooltipModal("Emoji Reactions", "Whether its a dissapointing defeat, encouraging win or dominant performance, express your reaction and let the emoji do all the talking.")
+    }
+
 
     if (!reactions?.all_reactions) {
         return null;
@@ -74,6 +82,9 @@ export default function EmojiReactionPoll() {
                 />
             })}
 
+            <button onClick={handleTooltip} >
+                <HelpCircle className="text-slate-400 w-4 h-4" />
+            </button>
         </div>
     )
 }
