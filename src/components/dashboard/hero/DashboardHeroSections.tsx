@@ -36,7 +36,7 @@ type DashboardFrameProps = {
 }
 
 /** Renders the dashboard frame */
-export function DashboardHeroFrame({ children, imageUrl, cornerImageUrl = '/images/dashboard/beast_screeming.png', cornerImageClassName }: DashboardFrameProps) {
+export function DashboardHeroFrame({ children, imageUrl, cornerImageUrl, cornerImageClassName }: DashboardFrameProps) {
 
   const finalImageUrl = imageUrl || '/images/dashboard/hero-background.jpg';
 
@@ -65,7 +65,7 @@ export function DashboardHeroFrame({ children, imageUrl, cornerImageUrl = '/imag
         {children}
       </div>
 
-      {<div className='z-[20] max-h-32 overflow-clip sm:max-h-32  absolute bottom-0 left-0 px-0.5' >
+      {cornerImageUrl && <div className='z-[20] max-h-32 overflow-clip sm:max-h-32  absolute bottom-0 left-0 px-0.5' >
         <img
           src={cornerImageUrl}
           className={twMerge(
