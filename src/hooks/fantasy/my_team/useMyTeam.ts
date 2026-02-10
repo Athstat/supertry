@@ -75,6 +75,29 @@ export function useMyTeam() {
         return isLocked && !context.isReadOnly && context.round && !isPastSeasonRound(context.round) && isSecondChanceMode;
     }
 
+    const isPlayerGameStarted = (athlete?: IProAthlete) => {
+
+        const seasonTeamIds = athlete?.athlete_teams?.filter((t) => {
+            return t.season_id === context.round?.season;
+        }).map((t) => t.team_id);
+
+        const eligableGamesStarted = context.roundGames
+            .filter((f) => {
+                return f.game_status !== "not_started";
+            })
+            .filter((f) => {
+
+                if (!f.team || !f.opposition_team) {
+                    return false;
+                }
+
+                return seasonTeamIds?.includes(f.team?.athstat_id) || seasonTeamIds?.includes(f.opposition_team?.athstat_id);
+            })
+
+        return eligableGamesStarted.length > 0;
+
+    }
+
     return {
         ...context,
         totalSpent,
@@ -83,6 +106,7 @@ export function useMyTeam() {
         teamCaptain,
         isSlotLocked,
         isShowPlayerLock,
-        isPlayerLocked
+        isPlayerLocked,
+        isPlayerGameStarted
     }
 }

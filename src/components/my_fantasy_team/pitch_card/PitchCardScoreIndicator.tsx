@@ -20,7 +20,7 @@ type PlayerPointsScoreProps = {
 export function PitchCardScoreIndicator({ player, showAvailabilityWarning, homeOrAway, reportTitle, opponent }: PlayerPointsScoreProps) {
 
     const {round} = useMyTeam();
-    const {isShowPlayerLock} = useMyTeamSlot();
+    const {hasPlayerGameStarted} = useMyTeamSlot();
 
     const hasRoundStarted = round && isSeasonRoundStarted(round);
 
@@ -28,8 +28,8 @@ export function PitchCardScoreIndicator({ player, showAvailabilityWarning, homeO
     const score = player.score || 0;
 
     const isLoading = false;
+    const showScore = Boolean(!isLoading && hasRoundStarted && hasPlayerGameStarted);
 
-    const showScore = Boolean(!isLoading && hasRoundStarted && isShowPlayerLock);
     const showNextMatchInfo = !isLoading && (!showAvailabilityWarning && Boolean(homeOrAway) && Boolean(opponent) && !showScore);
 
     return (
