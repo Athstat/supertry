@@ -18,22 +18,27 @@ export default function EmojiReactionPicker() {
         updateReaction(emoji);
     }
 
-    const first4Reactions = [...EMOJI_REACTION_OPTIONS].slice(0, 6);
+    const first4Reactions = [...EMOJI_REACTION_OPTIONS].slice(0, 10);
 
     return (
         <div className="max-w-full overflow-x-clip flex flex-col gap-2" >
-            <p className="font-semibold">Game Reaction</p>
-            <RoundedCard className="flex flex-row min-h-[55px] max-w-full overflow-x-hidden overflow-y-hidden no-scrollbar max-h-[55px] items-center gap-6 bg-slate-50 dark:bg-slate-700 dark:hover:bg-slate-700 rounded-full px-4 py-2 w-fit border border-slate-100" >
-                {first4Reactions.map((emoji) => {
-                    return (
-                        <EmojiReactionButton
-                            emoji={emoji}
-                            onClick={handleClick}
-                        />
-                    )
-                })}
+            <p className="font-semibold">Game Reactions</p>
 
-                <CircleButton onClick={toggle} className="min-w-10 min-h-10 bg-slate-300" >
+            <RoundedCard className="flex flex-row max-w-full overflow-x-hidden no-scrollbar items-center gap-3 bg-slate-50 dark:hover:bg-slate-800 rounded-full no-scrollbar px-2 py-2 w-fit border border-slate-100 flex-nowrap" >
+
+                <div className="flex flex-row relative max-w-full overflow-x-scroll no-scrollbar items-center gap-3 rounded-full no-scrollbar px-2 py-2 w-fit flex-nowrap" >
+                    {first4Reactions.map((emoji) => {
+                        return (
+                            <EmojiReactionButton
+                                emoji={emoji}
+                                onClick={handleClick}
+                            />
+                        )
+                    })}
+
+                </div>
+
+                <CircleButton onClick={toggle} className=" min-w-10 min-h-10 bg-slate-300 dark:bg-slate-700" >
                     <Plus />
                 </CircleButton>
             </RoundedCard>
@@ -57,7 +62,7 @@ type EmojiBottomSheetPickerProps = {
 
 export function EmojiBottomSheetPicker({ onClick, onClose, emojies, isOpen }: EmojiBottomSheetPickerProps) {
 
-    if (isOpen) {
+    if (!isOpen) {
         return null;
     }
 
@@ -83,7 +88,7 @@ export function EmojiBottomSheetPicker({ onClick, onClose, emojies, isOpen }: Em
                         <EmojiReactionButton
                             emoji={emoji}
                             onClick={onClick}
-                            className="bg-slate-100 dark:bg-slate-800"
+                            className="bg-slate-100 dark:bg-slate-700"
                         />
                     )
                 })}
