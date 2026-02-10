@@ -9,7 +9,9 @@ type TopicReactionsContextType = {
     reactions?: TopicReactions,
     deleteReaction: () => void,
     updateReaction: (emoji: string) => void,
-    refresh: KeyedMutator<TopicReactions | undefined>
+    refresh: KeyedMutator<TopicReactions | undefined>,
+    isUpdating?: boolean,
+    isLoading?: boolean
 }
 
 export const TopicReactionsContext = createContext<TopicReactionsContextType | null>(null);
@@ -25,9 +27,8 @@ export default function TopicReactionsProvider({ topic, loadingFallback, childre
 
     const key = `/emoji-reactions/${topic}`;
 
-    const { data: reactions, isLoading: isFetching, isValidating, mutate } = useSWR(key, () => emojiReactionService.getSummary(topic), {
+    const { data: reactions, isLoading: isFetching, mutate } = useSWR(key, () => emojiReactionService.getSummary(topic), {
         revalidateIfStale: true,
-        revalidateOnMount: true,
         // refreshInterval: 1000 * 10 // 10 seconds
     });
 
@@ -84,7 +85,7 @@ export default function TopicReactionsProvider({ topic, loadingFallback, childre
         setUpdating(false);
     }
 
-    const isLoading = isUpdating || isFetching || isValidating;
+    const isLoading = isFetching;
 
     if (isLoading && loadingFallback) {
         return <>{loadingFallback}</>
@@ -97,7 +98,9 @@ export default function TopicReactionsProvider({ topic, loadingFallback, childre
                 reactions,
                 updateReaction,
                 deleteReaction,
-                topic
+                topic,
+                isUpdating,
+                isLoading
             }}
         >
             {children}

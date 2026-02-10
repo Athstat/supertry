@@ -3,6 +3,8 @@ import TopicReactionsProvider from "../../../contexts/ui/TopicReactionsContext"
 import { useTopicReactions } from "../../../hooks/ui/useTopicReactions"
 import { EMOJI_REACTION_OPTIONS } from "../../../types/constants"
 import RoundedCard from "../cards/RoundedCard"
+import SecondaryText from "../typography/SecondaryText"
+import { compactNumber } from "../../../utils/intUtils"
 
 type Props = {
     topic: string,
@@ -11,7 +13,10 @@ type Props = {
 /** Renders an emoji reaction bar */
 export default function EmojiReactionBar({ topic }: Props) {
     return (
-        <TopicReactionsProvider topic={topic} >
+        <TopicReactionsProvider 
+            topic={topic} 
+            loadingFallback={<RoundedCard className="h-[50px] animate-pulse border-none" />}
+        >
             <Content />
         </TopicReactionsProvider>
     )
@@ -63,28 +68,51 @@ function EmojiReactionPicker() {
 
 function EmojiReactionPoll() {
 
-    const {reactions} = useTopicReactions();
+    const {reactions, userReaction, deleteReaction, updateReaction} = useTopicReactions();
 
     if (!reactions?.all_reactions) {
         return null;
     }
 
-    const otherOptions = EMOJI_REACTION_OPTIONS.filter((e) => {
+    const top3Reactions = [...reactions.all_reactions];
+
+    const otherOptions = [...EMOJI_REACTION_OPTIONS].filter((e) => {
         return !reactions.all_reactions.find((r) => r.emoji === e);
-    });
+    })
+    const handleClick = (emoji: string) => {
+        if (userReaction?.emoji.toLowerCase() === emoji.toLowerCase()) {
+            deleteReaction();
+            return;
+        }
+
+        updateReaction(emoji);
+    }
 
     return (
-        <div>
-            {reactions.all_reactions.map((r) => {
+        <div className="flex flex-row items-center gap-2" >
+
+            {top3Reactions.map((r) => {
+                const isUserReaction = Boolean(userReaction?.emoji.toLowerCase() === r.emoji.toLowerCase());
+
                 return <EmojiReactionButton 
+                    key={r.emoji}
                     emoji={r.emoji}
+                    count={r.reaction_count}
+                    showBorder
+                    className={twMerge(
+                        isUserReaction && "border-blue-500 dark:border-blue-600"
+                    )}
+                    onClick={handleClick}
                 />
             })}
 
             {otherOptions.map((e) => {
                 return (
                     <EmojiReactionButton
+                        key={e}
                         emoji={e}
+                        showBorder
+                        onClick={handleClick}
                     />
                 )
             })}
@@ -96,10 +124,11 @@ type EmojiReactionButtonProps = {
     emoji: string,
     onClick?: (emoji: string) => void,
     count?: number,
-    className?: string
+    className?: string,
+    showBorder?: boolean
 }
 
-function EmojiReactionButton({ emoji, onClick, className }: EmojiReactionButtonProps) {
+function EmojiReactionButton({ emoji, onClick, className, count, showBorder }: EmojiReactionButtonProps) {
     
 
     const handleClick = () => {
@@ -111,12 +140,14 @@ function EmojiReactionButton({ emoji, onClick, className }: EmojiReactionButtonP
     return (
         <button
             className={twMerge(
-                "text-[24px] w-[40px] h-[40px] rounded-xl active:bg-slate-800 transition-all delay-0 hover:-rotate-12",
+                "text-[24px] w-[40px] flex flex-row items-center justify-center gap-1 h-[40px] rounded-xl active:bg-slate-800 transition-all delay-0 hover:-rotate-12",
+                showBorder && "border-2 hover:rotate-0 dark:border-slate-600 hover:bg-slate-500 hover:dark:bg-slate-700/60 px-3 py-0.5 w-fit h-fit text-[16px] rounded-2xl",
                 className
             )}
             onClick={handleClick}
         >
-            {emoji}
+            <p>{emoji}</p>
+            {count && <SecondaryText className="text-sm" >{compactNumber(count)}</SecondaryText>}
         </button>
     )
 }
