@@ -57,7 +57,7 @@ export default function EmojiReactionPoll() {
     }
 
     return (
-        <div className="flex flex-row items-center gap-2" >
+        <div className="flex flex-row items-center gap-2 flex-wrap" >
 
             {allReactionOptions.map((r) => {
                 const isUserReaction = Boolean(emoji === r.emoji.toLowerCase());

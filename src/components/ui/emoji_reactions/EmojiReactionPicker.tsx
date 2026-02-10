@@ -12,7 +12,7 @@ export default function EmojiReactionPicker() {
     }
 
     return (
-        <RoundedCard className="flex flex-row min-h-[55px] max-h-[55px] items-center gap-2 bg-slate-50 dark:bg-slate-700 dark:hover:bg-slate-700 rounded-full px-4 py-2 w-fit border border-slate-200" >
+        <RoundedCard className="flex flex-row min-h-[55px] max-h-[55px] items-center gap-1 bg-slate-50 dark:bg-slate-700 dark:hover:bg-slate-700 rounded-full px-4 py-2 w-fit border border-slate-200" >
             {EMOJI_REACTION_OPTIONS.map((emoji) => {
                 return (
                     <EmojiReactionButton

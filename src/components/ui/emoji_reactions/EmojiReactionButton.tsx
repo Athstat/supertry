@@ -23,14 +23,14 @@ export default function EmojiReactionButton({ emoji, onClick, className, count, 
     return (
         <button
             className={twMerge(
-                "text-[24px] w-[40px] flex flex-row items-center justify-center gap-1 h-[40px] rounded-xl active:bg-slate-800 transition-all delay-0 hover:-rotate-12",
-                showBorder && "border-[1px] hover:rotate-0 dark:border-slate-600 hover:bg-blue-500/20 hover:dark:bg-slate-700/60 px-3 py-1 w-fit h-fit text-[16px] rounded-2xl",
+                "text-[24px] w-[40px] flex flex-row items-center justify-center gap-1 h-[40px] rounded-lg active:bg-slate-800 transition-all delay-0 hover:-rotate-12",
+                showBorder && "border-[1px] hover:rotate-0 dark:border-slate-600 hover:bg-blue-500/20 hover:dark:bg-slate-700/60 px-[9px] py-1 w-fit h-fit text-[16px] rounded-2xl",
                 className
             )}
             onClick={handleClick}
         >
             <p>{emoji}</p>
-            {showCount && <SecondaryText className="text-sm" >{compactNumber(count)}</SecondaryText>}
+            {showCount && <SecondaryText className="text-xs" >{compactNumber(count)}</SecondaryText>}
         </button>
     )
 }
