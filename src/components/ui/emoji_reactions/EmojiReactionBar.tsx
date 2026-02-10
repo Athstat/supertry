@@ -5,6 +5,8 @@ import { EMOJI_REACTION_OPTIONS } from "../../../types/constants"
 import RoundedCard from "../cards/RoundedCard"
 import SecondaryText from "../typography/SecondaryText"
 import { compactNumber } from "../../../utils/intUtils"
+import { useEffect, useState } from "react"
+import { useDebounced } from "../../../hooks/web/useDebounced"
 
 type Props = {
     topic: string,
@@ -13,8 +15,8 @@ type Props = {
 /** Renders an emoji reaction bar */
 export default function EmojiReactionBar({ topic }: Props) {
     return (
-        <TopicReactionsProvider 
-            topic={topic} 
+        <TopicReactionsProvider
+            topic={topic}
             loadingFallback={<RoundedCard className="h-[50px] animate-pulse border-none" />}
         >
             <Content />
@@ -68,37 +70,58 @@ function EmojiReactionPicker() {
 
 function EmojiReactionPoll() {
 
-    const {reactions, userReaction, deleteReaction, updateReaction} = useTopicReactions();
+    const { reactions, userReaction, deleteReaction, updateReaction } = useTopicReactions();
+
+    const [emoji, setEmoji] = useState(userReaction?.emoji);
+    const debouncedEmoji = useDebounced(emoji, 1000);
+
+    const allReactions = [...(reactions?.all_reactions ?? [])]
+
+    const otherOptions = [...EMOJI_REACTION_OPTIONS].filter((e) => {
+        return !allReactions.find((r) => r.emoji === e);
+    });
+
+    const allReactionOptions = [...allReactions, ...(otherOptions.map((e) => {
+        return { emoji: e, reaction_count: 0 }
+    }))].sort((a, b) => b.emoji.localeCompare(a.emoji));
+
+    const handleClick = (newEmoji: string) => {
+        if (newEmoji === emoji) {
+            setEmoji(undefined);
+        }
+        setEmoji(newEmoji);
+    }
+
+    useEffect(() => {
+
+        console.log("Code  in use effect Ran");
+
+        const fetcher = () => {
+
+            if (debouncedEmoji === undefined) {
+                deleteReaction();
+                return;
+            }
+
+            updateReaction(debouncedEmoji);
+        }
+
+        fetcher();
+
+    }, [debouncedEmoji]);
+
 
     if (!reactions?.all_reactions) {
         return null;
-    }
-
-    
-    const otherOptions = [...EMOJI_REACTION_OPTIONS].filter((e) => {
-        return !reactions.all_reactions.find((r) => r.emoji === e);
-    });
-
-    const allReactionOptions = [...reactions.all_reactions, ...(otherOptions.map((e) => {
-        return {emoji: e, reaction_count: 0}
-    }))].sort((a, b) => b.emoji.localeCompare(a.emoji));
-    
-    const handleClick = (emoji: string) => {
-        if (userReaction?.emoji.toLowerCase() === emoji.toLowerCase()) {
-            deleteReaction();
-            return;
-        }
-
-        updateReaction(emoji);
     }
 
     return (
         <div className="flex flex-row items-center gap-2" >
 
             {allReactionOptions.map((r) => {
-                const isUserReaction = Boolean(userReaction?.emoji.toLowerCase() === r.emoji.toLowerCase());
+                const isUserReaction = Boolean(emoji === r.emoji.toLowerCase());
 
-                return <EmojiReactionButton 
+                return <EmojiReactionButton
                     key={r.emoji}
                     emoji={r.emoji}
                     count={r.reaction_count}
@@ -123,7 +146,7 @@ type EmojiReactionButtonProps = {
 }
 
 function EmojiReactionButton({ emoji, onClick, className, count, showBorder }: EmojiReactionButtonProps) {
-    
+
     const handleClick = () => {
         if (onClick) {
             onClick(emoji);
@@ -131,7 +154,7 @@ function EmojiReactionButton({ emoji, onClick, className, count, showBorder }: E
     }
 
     const showCount = count !== undefined && count > 0;
-    
+
     return (
         <button
             className={twMerge(

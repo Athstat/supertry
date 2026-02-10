@@ -59,6 +59,7 @@ export default function TopicReactionsProvider({ topic, loadingFallback, childre
             setError("Something wen't wrong deleting your reaction");
         }
 
+        await mutate();
         setUpdating(false);
     }
 
@@ -82,6 +83,7 @@ export default function TopicReactionsProvider({ topic, loadingFallback, childre
             setError("Something wen't wrong making reaction");
         }
 
+        await mutate();
         setUpdating(false);
     }
 
