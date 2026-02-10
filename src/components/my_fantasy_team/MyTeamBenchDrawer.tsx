@@ -215,7 +215,7 @@ function SubPlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
   const isLoading = false;
 
   const { seasonTeam } = usePlayerSeasonTeam(player.athlete)
-  const {isShowPlayerLock, hasPlayerGameStarted} = useMyTeamSlot();
+  const {hasPlayerGameStarted} = useMyTeamSlot();
   
   const { isNotAvailable, isTeamNotPlaying, nextMatch } = usePlayerRoundAvailability(
     player.tracking_id,
