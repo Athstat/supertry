@@ -63,6 +63,31 @@ export const emojiReactionService = {
 
         // apply optimistic update
         if (reactions) {
+
+            // Remove old user reaction
+            const prevUserReaction = reactions.user_reaction;
+
+            if (prevUserReaction) {
+                const prevUserReactionCountRecord = reactions.all_reactions.find((f) => {
+                    return f.emoji === prevUserReaction.emoji;
+                });
+
+
+                if (prevUserReactionCountRecord && prevUserReactionCountRecord?.reaction_count == 1 ) {
+                    reactions.all_reactions = reactions.all_reactions.filter((f) => {
+                        return f.emoji !== prevUserReaction.emoji
+                    });
+                } else {
+                    reactions.all_reactions = reactions.all_reactions.map((r) => {
+                        if (r.emoji === prevUserReaction.emoji) {
+                            return {...r, reaction_count: r.reaction_count - 1}
+                        }
+
+                        return r;
+                    })
+                }
+            }
+
             const selected_reaction_count = reactions.all_reactions.find((r) => {
                 return r.emoji.toLowerCase() === emoji.toLowerCase();
             })?.reaction_count ?? 0;

@@ -74,11 +74,15 @@ function EmojiReactionPoll() {
         return null;
     }
 
-    const top3Reactions = [...reactions.all_reactions];
-
+    
     const otherOptions = [...EMOJI_REACTION_OPTIONS].filter((e) => {
         return !reactions.all_reactions.find((r) => r.emoji === e);
-    })
+    });
+
+    const allReactionOptions = [...reactions.all_reactions, ...(otherOptions.map((e) => {
+        return {emoji: e, reaction_count: 0}
+    }))].sort((a, b) => b.emoji.localeCompare(a.emoji));
+    
     const handleClick = (emoji: string) => {
         if (userReaction?.emoji.toLowerCase() === emoji.toLowerCase()) {
             deleteReaction();
@@ -91,7 +95,7 @@ function EmojiReactionPoll() {
     return (
         <div className="flex flex-row items-center gap-2" >
 
-            {top3Reactions.map((r) => {
+            {allReactionOptions.map((r) => {
                 const isUserReaction = Boolean(userReaction?.emoji.toLowerCase() === r.emoji.toLowerCase());
 
                 return <EmojiReactionButton 
@@ -100,22 +104,12 @@ function EmojiReactionPoll() {
                     count={r.reaction_count}
                     showBorder
                     className={twMerge(
-                        isUserReaction && "border-blue-500 dark:border-blue-600"
+                        isUserReaction && "border-blue-500 dark:border-blue-600 dark:bg-blue-600/20"
                     )}
                     onClick={handleClick}
                 />
             })}
 
-            {otherOptions.map((e) => {
-                return (
-                    <EmojiReactionButton
-                        key={e}
-                        emoji={e}
-                        showBorder
-                        onClick={handleClick}
-                    />
-                )
-            })}
         </div>
     )
 }
@@ -130,24 +124,25 @@ type EmojiReactionButtonProps = {
 
 function EmojiReactionButton({ emoji, onClick, className, count, showBorder }: EmojiReactionButtonProps) {
     
-
     const handleClick = () => {
         if (onClick) {
             onClick(emoji);
         }
     }
+
+    const showCount = count !== undefined && count > 0;
     
     return (
         <button
             className={twMerge(
                 "text-[24px] w-[40px] flex flex-row items-center justify-center gap-1 h-[40px] rounded-xl active:bg-slate-800 transition-all delay-0 hover:-rotate-12",
-                showBorder && "border-2 hover:rotate-0 dark:border-slate-600 hover:bg-slate-500 hover:dark:bg-slate-700/60 px-3 py-0.5 w-fit h-fit text-[16px] rounded-2xl",
+                showBorder && "border-[1px] hover:rotate-0 dark:border-slate-600 hover:bg-slate-500 hover:dark:bg-slate-700/60 px-3 py-0.5 w-fit h-fit text-[16px] rounded-2xl",
                 className
             )}
             onClick={handleClick}
         >
             <p>{emoji}</p>
-            {count && <SecondaryText className="text-sm" >{compactNumber(count)}</SecondaryText>}
+            {showCount && <SecondaryText className="text-sm" >{compactNumber(count)}</SecondaryText>}
         </button>
     )
 }
