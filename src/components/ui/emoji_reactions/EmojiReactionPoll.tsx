@@ -4,36 +4,40 @@ import { useState, useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 import { useTopicReactions } from "../../../hooks/ui/useTopicReactions";
 import { useDebounced } from "../../../hooks/web/useDebounced";
-import { EMOJI_REACTION_OPTIONS } from "../../../types/constants";
 import EmojiReactionButton from "./EmojiReactionButton";
-import { HelpCircle } from "lucide-react";
+import { HelpCircle, Plus } from "lucide-react";
 import { useTooltip } from "../../../hooks/ui/useTooltip";
+import CircleButton from "../buttons/BackButton";
+import { EmojiBottomSheetPicker } from "./EmojiReactionPicker";
+import { EMOJI_REACTION_OPTIONS } from "../../../types/constants";
 
 
 export default function EmojiReactionPoll() {
 
     const { reactions, userReaction, deleteReaction, updateReaction } = useTopicReactions();
+    const [showPicker, setShowPicker] = useState(false);
+    const togglePicker = () => setShowPicker(prev => !prev);
 
-    const {openTooltipModal} = useTooltip();
+    const { openTooltipModal } = useTooltip();
 
     const [emoji, setEmoji] = useState(userReaction?.emoji);
     const debouncedEmoji = useDebounced(emoji, 1000);
 
     const allReactions = [...(reactions?.all_reactions ?? [])]
 
-    const otherOptions = [...EMOJI_REACTION_OPTIONS].filter((e) => {
-        return !allReactions.find((r) => r.emoji === e);
-    });
-
-    const allReactionOptions = [...allReactions, ...(otherOptions.map((e) => {
-        return { emoji: e, reaction_count: 0 }
-    }))].sort((a, b) => b.emoji.localeCompare(a.emoji));
+    const allReactionOptions = [...allReactions].sort((a, b) => b.emoji.localeCompare(a.emoji));
 
     const handleClick = (newEmoji: string) => {
+
         if (newEmoji === emoji) {
             setEmoji(undefined);
         }
+
         setEmoji(newEmoji);
+
+        if (showPicker) {
+            togglePicker();
+        }
     }
 
     useEffect(() => {
@@ -52,7 +56,7 @@ export default function EmojiReactionPoll() {
 
         fetcher();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [debouncedEmoji]);
 
     const handleTooltip = () => {
@@ -82,9 +86,20 @@ export default function EmojiReactionPoll() {
                 />
             })}
 
+            <CircleButton onClick={togglePicker} className=" min-w-10 min-h-10 bg-slate-300 dark:bg-slate-700" >
+                <Plus />
+            </CircleButton>
+
             <button onClick={handleTooltip} >
                 <HelpCircle className="text-slate-400 w-4 h-4" />
             </button>
+
+            <EmojiBottomSheetPicker 
+                isOpen={showPicker}
+                onClick={handleClick}
+                onClose={togglePicker}
+                emojies={EMOJI_REACTION_OPTIONS}
+            />
         </div>
     )
 }
