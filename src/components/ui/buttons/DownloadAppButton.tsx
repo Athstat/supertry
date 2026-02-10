@@ -4,6 +4,7 @@ import { useStoreLinks } from "../../../hooks/marketing/useStoreLinks"
 import { leagueInviteService } from "../../../services/fantasy/leagueInviteService"
 import { LeagueGroupInvite } from "../../../types/fantasyLeague"
 import SecondaryText from "../typography/SecondaryText"
+import { useState } from "react"
 
 type Props = {
     showIcon?: boolean,
@@ -14,11 +15,14 @@ type Props = {
 export default function DownloadAppButton({ showIcon = false, invite }: Props) {
 
     const { oneLinkUrl } = useStoreLinks(invite?.league);
+    const [isLoading, setLoading] = useState(false);
 
-    const handleOnClick = () => {
+    const handleOnClick = async () => {
 
         if (invite) {
-            leagueInviteService.registerIntent(invite?.id);
+            setLoading(true);
+            await leagueInviteService.registerIntent(invite?.id);
+            setLoading(false)
         }
 
         if (oneLinkUrl) {
@@ -34,6 +38,8 @@ export default function DownloadAppButton({ showIcon = false, invite }: Props) {
         <PrimaryButton 
             className="flex w-fit flex-row items-center gap-4" 
             onClick={handleOnClick}
+            isLoading={isLoading}
+            disabled={isLoading}
         >
             <p className="text-nowrap" >Download App</p>
             {showIcon && <Download />}
