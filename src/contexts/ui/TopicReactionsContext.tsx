@@ -27,7 +27,9 @@ export default function TopicReactionsProvider({ topic, loadingFallback, childre
 
     const key = `/emoji-reactions/${topic}`;
 
-    const { data: reactions, isLoading: isFetching, mutate } = useSWR(key, () => emojiReactionService.getSummary(topic));
+    const { data: reactions, isLoading: isFetching, mutate } = useSWR(key, () => emojiReactionService.getSummary(topic), {
+        revalidateOnFocus: true
+    });
 
     const [isUpdating, setUpdating] = useState(false);
     const [error, setError] = useState<string>();
