@@ -38,5 +38,21 @@ export const leagueInviteService = {
         }
 
         return undefined;
+    },
+
+    registerIntent: async (inviteId?: string) : Promise<void> => {
+
+        try {
+            const uri = getUri(`/api/v1/fantasy-league-groups/invite/${inviteId}/intent`);
+            
+            await fetch(uri, {
+                headers: getAuthHeader(),
+                method: 'POST'
+            });
+
+        } catch (err) {
+            logger.error("error registering intent to join a league ", err);
+        }
+        
     }
 }

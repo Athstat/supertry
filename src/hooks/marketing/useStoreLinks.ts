@@ -6,7 +6,7 @@ import { FantasyLeagueGroup } from "../../types/fantasyLeagueGroups";
 
 /** Hook that creates a one link to track app download */
 export function useStoreLinks(league?: FantasyLeagueGroup, inviter?: DjangoUserMinimal) {
-    
+
     const joinCode = league?.entry_code;
     const userName = inviter?.email;
     const leagueName = league?.title;
@@ -20,27 +20,14 @@ export function useStoreLinks(league?: FantasyLeagueGroup, inviter?: DjangoUserM
     const oneLinkUrl = (() => {
         if (!oneLinkBase) return null;
         try {
-            const params = new URLSearchParams(window.location.search);
             const url = new URL(oneLinkBase);
 
-            // Standard UTM mappings to AppsFlyer params
-            url.searchParams.set('pid', params.get('utm_source') || 'invite_steps_screen'); // media source
-            const campaign = params.get('utm_campaign');
-            if (campaign) url.searchParams.set('c', campaign);
-
-            const channel = params.get('utm_medium');
-            if (channel) url.searchParams.set('af_channel', channel);
-
-            const term = params.get('utm_term');
-            if (term) url.searchParams.set('af_sub1', term);
-
-            const content = params.get('utm_content');
-            if (content) url.searchParams.set('af_sub2', content);
-
-            // Extra context for analytics/debug
-            if (joinCode) url.searchParams.set('af_sub3', (joinCode ?? '').toUpperCase());
-            if (leagueName) url.searchParams.set('af_sub4', leagueName as string);
-            if (userName) url.searchParams.set('af_sub5', userName as string);
+            if (league) {
+                url.searchParams.set('pid', `SCRUMMY_WEB_APP`);
+                url.searchParams.set('af_ad', `league_with_id_${league?.id}`);
+                url.searchParams.set('af_channel', `league_invite`);
+                url.searchParams.set('c', `download_app`);
+            }
 
             return url.toString();
         } catch {

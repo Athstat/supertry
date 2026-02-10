@@ -1,13 +1,15 @@
-import { Link } from 'react-router-dom'
 import { twMerge } from 'tailwind-merge'
 import { AppColours } from '../../../types/constants'
+import DownloadAppButton from '../buttons/DownloadAppButton'
 import ScrummyLogoHorizontal from '../../branding/scrummy_logo_horizontal'
-import PrimaryButton from '../buttons/PrimaryButton'
-import { useStoreLinks } from '../../../hooks/marketing/useStoreLinks'
+import { LeagueGroupInvite } from '../../../types/fantasyLeague'
+
+type Props = {
+    invite?: LeagueGroupInvite
+}
 
 /** Renders a download app header */
-export default function DownloadAppHeader() {
-    const { oneLinkUrl } = useStoreLinks();
+export default function DownloadAppHeader({invite} : Props) {
 
     return (
         <header className={twMerge(
@@ -27,9 +29,9 @@ export default function DownloadAppHeader() {
             </div>
 
             <div className="pr-2" >
-                <Link to={oneLinkUrl || ''} target={'blank'} >
-                    <PrimaryButton className="text-nowrap" >Download App</PrimaryButton>
-                </Link>
+                <DownloadAppButton
+                    invite={invite}
+                />
             </div>
         </header>
     )
