@@ -232,7 +232,7 @@ export function PlayerActionModal({
           {!isSub && !isTeamCaptainLocked && (
             <RoundedCard
               className={
-                "border-none hover:dark:text-slate-300 py-4 cursor-pointer  bg-slate-200 dark:bg-slate-700 dark:text-slate-200 p-2.5 items-center justify-center flex flex-row gap-1"
+                "border-none hover:dark:text-slate-300 cursor-pointer  bg-slate-200 dark:bg-slate-700 dark:text-slate-200 p-2.5 py-4 items-center justify-center flex flex-row gap-1"
               }
               onClick={handleMakePlayerCaptain}
             >
