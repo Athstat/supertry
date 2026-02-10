@@ -21,7 +21,7 @@ export default function EmojiReactionPoll() {
     const { openTooltipModal } = useTooltip();
 
     const [emoji, setEmoji] = useState(userReaction?.emoji);
-    const debouncedEmoji = useDebounced(emoji, 1000);
+    const debouncedEmoji = useDebounced(emoji, 200);
 
     const currentReactions = [...(reactions?.all_reactions ?? []),]
 

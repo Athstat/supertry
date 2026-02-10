@@ -10,7 +10,6 @@ type TopicReactionsContextType = {
     deleteReaction: () => void,
     updateReaction: (emoji: string) => void,
     refresh: KeyedMutator<TopicReactions | undefined>,
-    isUpdating?: boolean,
     isLoading?: boolean
 }
 
@@ -31,7 +30,6 @@ export default function TopicReactionsProvider({ topic, loadingFallback, childre
         revalidateOnFocus: true
     });
 
-    const [isUpdating, setUpdating] = useState(false);
     const [error, setError] = useState<string>();
 
     const deleteReaction = async () => {
@@ -42,54 +40,37 @@ export default function TopicReactionsProvider({ topic, loadingFallback, childre
             return;
         }
 
-        setUpdating(true);
-
-        const oldReactionsObj = reactions ? { ...reactions } : undefined;
-
-        mutate(emojiReactionService.optimisticDelete(
-            reactions, userReaction.emoji
-        ))
-
         const success = await emojiReactionService.deleteReaction(topic);
 
-        if (!success) {
-            // roll back reactions when there is an error
-            mutate(oldReactionsObj);
-            setError("Something wen't wrong deleting your reaction");
-        }
-
-        // Continue Update in background
         if (success) {
-            await mutate();
+            mutate(emojiReactionService.optimisticDelete(
+                reactions, userReaction.emoji
+            ))
         }
 
-        setUpdating(false);
+        if (!success) {
+            setError("Something wen't wrong deleting your reaction");
+            return;
+        }
+
     }
 
     const updateReaction = async (emoji: string) => {
 
         setError(undefined);
-        setUpdating(true);
-
-        const originalReactionsObj: TopicReactions | undefined = reactions ? { ...reactions } : undefined;
-
-        mutate(emojiReactionService.optmisticUpdateReaction(
-            topic, reactions, emoji
-        ));
-
         const success = await emojiReactionService.updateReaction(topic, emoji);
 
-        if (!success) {
-            mutate(originalReactionsObj);
-            setError("Something wen't wrong making reaction");
-        }
-
-        // Continue Update in background
         if (success) {
-            await mutate();
+            mutate(emojiReactionService.optmisticUpdateReaction(
+                topic, reactions, emoji
+            ));
         }
 
-        setUpdating(false);
+        if (!success) {
+            setError("Something wen't wrong making reaction");
+            return;
+        }
+
     }
 
     const isLoading = isFetching;
@@ -106,7 +87,6 @@ export default function TopicReactionsProvider({ topic, loadingFallback, childre
                 updateReaction,
                 deleteReaction,
                 topic,
-                isUpdating,
                 isLoading
             }}
         >
