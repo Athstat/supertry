@@ -29,7 +29,7 @@ export default function TopicReactionsProvider({ topic, loadingFallback, childre
 
     const { data: reactions, isLoading: isFetching, mutate } = useSWR(key, () => emojiReactionService.getSummary(topic), {
         revalidateIfStale: true,
-        // refreshInterval: 1000 * 10 // 10 seconds
+        revalidateOnFocus: true
     });
 
     const [isUpdating, setUpdating] = useState(false);
@@ -59,7 +59,6 @@ export default function TopicReactionsProvider({ topic, loadingFallback, childre
             setError("Something wen't wrong deleting your reaction");
         }
 
-        await mutate();
         setUpdating(false);
     }
 
@@ -70,7 +69,6 @@ export default function TopicReactionsProvider({ topic, loadingFallback, childre
 
         const originalReactionsObj: TopicReactions | undefined = reactions ? { ...reactions } : undefined;
 
-        // apply optimistic update
         mutate(emojiReactionService.optmisticUpdateReaction(
             topic, reactions, emoji
         ));
@@ -78,12 +76,10 @@ export default function TopicReactionsProvider({ topic, loadingFallback, childre
         const success = await emojiReactionService.updateReaction(topic, emoji);
 
         if (!success) {
-            // roll back optimistic update if there is an error
             mutate(originalReactionsObj);
             setError("Something wen't wrong making reaction");
         }
 
-        await mutate();
         setUpdating(false);
     }
 
