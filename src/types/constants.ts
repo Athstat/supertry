@@ -302,4 +302,4 @@ export const SIZE_5_MEGABYTES = 5242880;
 export const SCOUTING_LIST_MAX_SIZE = 10;
 
 
-export const EMOJI_REACTION_OPTIONS = ['🔥', '💪', '✅', '💩', '😭', '🤣', '❤️', '👏', '🫶', '😬', '😜', '🎉']
+export const EMOJI_REACTION_OPTIONS = ['🔥', '❤️', '💪', '✅', '💩', '😭', '🤣', '👏', '🫶', '😬', '😜', '🎉', '🚨', '⬆️', '💀', '🤦‍♂️']
