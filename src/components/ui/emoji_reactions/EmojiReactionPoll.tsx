@@ -68,7 +68,7 @@ export default function EmojiReactionPoll() {
                     count={r.reaction_count}
                     showBorder
                     className={twMerge(
-                        isUserReaction && "border-blue-500 dark:border-blue-600 bg-blue-400/20 dark:bg-blue-600/20"
+                        isUserReaction && "border-blue-400 dark:border-blue-600 bg-blue-400/20 hover:bg-blue-400/20 dark:bg-blue-600/20"
                     )}
                     onClick={handleClick}
                 />
