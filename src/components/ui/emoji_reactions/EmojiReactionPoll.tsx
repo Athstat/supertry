@@ -33,6 +33,7 @@ export default function EmojiReactionPoll() {
 
         if (newEmoji === emoji) {
             setEmoji(undefined);
+            return;
         }
 
         setEmoji(newEmoji);
@@ -44,22 +45,31 @@ export default function EmojiReactionPoll() {
 
     useEffect(() => {
 
-        console.log("Code  in use effect Ran");
-
+        
         const fetcher = () => {
-
+            
+            // prevents uneccessary PUT request on on mount
+            if (debouncedEmoji === userReaction?.emoji) {
+                return;
+            }
+            
             if (debouncedEmoji === undefined) {
                 deleteReaction();
                 return;
             }
-
+            
             updateReaction(debouncedEmoji);
+            console.log("Code  in use effect to make PUT request");
         }
 
         fetcher();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [debouncedEmoji]);
+
+    const otherEmojiOptions = EMOJI_REACTION_OPTIONS.filter((f) => {
+        return !currentReactions.find((r) => r.emoji === f);
+    })
 
     const handleTooltip = () => {
         openTooltipModal("Emoji Reactions", "Whether its a dissapointing defeat, encouraging win or dominant performance, express your reaction with an emoji!")
@@ -100,7 +110,7 @@ export default function EmojiReactionPoll() {
                 isOpen={showPicker}
                 onClick={handleClick}
                 onClose={togglePicker}
-                emojies={EMOJI_REACTION_OPTIONS}
+                emojies={otherEmojiOptions}
             />
         </div>
     )
