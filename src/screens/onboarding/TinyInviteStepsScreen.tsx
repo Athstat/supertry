@@ -98,7 +98,7 @@ function InviteView({ invite }: Props) {
 
     return (
         <div>
-            <DownloadAppHeader league={league} />
+            <DownloadAppHeader invite={invite} />
             <section className="flex flex-col mt-10 gap-4 items-center justify-center p-4" >
 
                 <div className="flex w-fit flex-col cursor-pointer transition-all ease-in items-center gap-2 " >
@@ -144,7 +144,10 @@ function InviteView({ invite }: Props) {
                         </Activity>
 
                         <Activity mode={oneLinkUrl ? 'visible' : 'hidden'} >
-                            <DownloadAppButton showIcon league={league} />
+                            <DownloadAppButton 
+                                invite={invite}
+                                showIcon 
+                            />
                         </Activity>
                     </div>
                 </div>

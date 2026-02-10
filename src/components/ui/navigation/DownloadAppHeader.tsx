@@ -1,15 +1,15 @@
 import { twMerge } from 'tailwind-merge'
 import { AppColours } from '../../../types/constants'
-import { FantasyLeagueGroup } from '../../../types/fantasyLeagueGroups'
 import DownloadAppButton from '../buttons/DownloadAppButton'
 import ScrummyLogoHorizontal from '../../branding/scrummy_logo_horizontal'
+import { LeagueGroupInvite } from '../../../types/fantasyLeague'
 
 type Props = {
-    league: FantasyLeagueGroup
+    invite?: LeagueGroupInvite
 }
 
 /** Renders a download app header */
-export default function DownloadAppHeader({league} : Props) {
+export default function DownloadAppHeader({invite} : Props) {
 
     return (
         <header className={twMerge(
@@ -30,7 +30,7 @@ export default function DownloadAppHeader({league} : Props) {
 
             <div className="pr-2" >
                 <DownloadAppButton
-                    league={league}
+                    invite={invite}
                 />
             </div>
         </header>
