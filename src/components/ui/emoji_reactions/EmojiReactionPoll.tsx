@@ -23,9 +23,17 @@ export default function EmojiReactionPoll() {
     const [emoji, setEmoji] = useState(userReaction?.emoji);
     const debouncedEmoji = useDebounced(emoji, 1000);
 
-    const allReactions = [...(reactions?.all_reactions ?? [])]
+    const currentReactions = [...(reactions?.all_reactions ?? []),]
 
-    const allReactionOptions = [...allReactions].sort((a, b) => b.emoji.localeCompare(a.emoji));
+    const allReactionOptions = [
+        ...currentReactions,
+        ...(EMOJI_REACTION_OPTIONS.filter((e) => {
+            return !currentReactions.find((r) => r.emoji === e);
+        }).map((e) => {
+            return {emoji: e, reaction_count:0}
+        }).slice(0, 5))
+
+    ].sort((a, b) => b.emoji.localeCompare(a.emoji));
 
     const handleClick = (newEmoji: string) => {
 
@@ -86,15 +94,15 @@ export default function EmojiReactionPoll() {
                 />
             })}
 
-            <CircleButton onClick={togglePicker} className=" min-w-10 min-h-10 bg-slate-300 dark:bg-slate-700" >
-                <Plus />
+            <CircleButton onClick={togglePicker} className="h-8 w-8 bg-slate-300 dark:bg-slate-700" >
+                <Plus className="h-6 w-6" />
             </CircleButton>
 
             <button onClick={handleTooltip} >
-                <HelpCircle className="text-slate-400 w-4 h-4" />
+                <HelpCircle className="text-slate-400 w-5 h-5" />
             </button>
 
-            <EmojiBottomSheetPicker 
+            <EmojiBottomSheetPicker
                 isOpen={showPicker}
                 onClick={handleClick}
                 onClose={togglePicker}
