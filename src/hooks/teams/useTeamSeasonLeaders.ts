@@ -6,7 +6,9 @@ export function useTeamSeasonLeaders(teamId: string | undefined, seasonId: strin
     
     const cancleFetch = !teamId || !seasonId;
     const key = cancleFetch ? null : `/teams/${teamId}/seasons/${seasonId}/stats/leaders`;
-    const {data, isLoading} = useSWR(key, () => teamService.getTeamSeasonLeaders(teamId ?? "", seasonId ?? ""));
+    const {data, isLoading} = useSWR(key, () => teamService.getTeamSeasonLeaders(teamId ?? "", seasonId ?? ""), {
+        revalidateOnFocus: false
+    });
 
     return {
         leaders: data,

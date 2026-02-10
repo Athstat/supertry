@@ -160,7 +160,7 @@ function EmojiReactionButton({ emoji, onClick, className, count, showBorder }: E
         <button
             className={twMerge(
                 "text-[24px] w-[40px] flex flex-row items-center justify-center gap-1 h-[40px] rounded-xl active:bg-slate-800 transition-all delay-0 hover:-rotate-12",
-                showBorder && "border-[1px] hover:rotate-0 dark:border-slate-600 hover:bg-slate-500 hover:dark:bg-slate-700/60 px-3 py-0.5 w-fit h-fit text-[16px] rounded-2xl",
+                showBorder && "border-[1px] hover:rotate-0 dark:border-slate-600 hover:bg-slate-500 hover:dark:bg-slate-700/60 px-3 py-1 w-fit h-fit text-[16px] rounded-2xl",
                 className
             )}
             onClick={handleClick}
