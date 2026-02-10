@@ -5,6 +5,7 @@ import PreFixtureForm from "../cards/PreFixtureForm"
 import PastMatchupsCard from "../cards/PastMatchupsCard"
 import FixturePotmCard from "../cards/FixturePotmCard"
 import FixtureKeyEventsCard from "../cards/FixtureKeyEventsCard"
+import EmojiReactionBar from "../../../ui/emoji_reactions/EmojiReactionBar"
 
 type Props = {
     fixture: IFixture
@@ -18,6 +19,8 @@ export default function FixtureOverviewTab({ fixture }: Props) {
         <div className="flex flex-col gap-6" >
 
             <GameHighlightsCard link={fixture.highlights_link} />
+
+            <EmojiReactionBar topic="scrummy-1" />
 
             <FixtureVotingCard fixture={fixture} />
 
