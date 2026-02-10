@@ -86,12 +86,7 @@ export function useMyTeam() {
                 return f.game_status !== "not_started";
             })
             .filter((f) => {
-
-                if (!f.team || !f.opposition_team) {
-                    return false;
-                }
-
-                return seasonTeamIds?.includes(f.team?.athstat_id) || seasonTeamIds?.includes(f.opposition_team?.athstat_id);
+                return seasonTeamIds?.includes(f.team?.athstat_id || '') || seasonTeamIds?.includes(f.opposition_team?.athstat_id || '');
             })
 
         return eligableGamesStarted.length > 0;

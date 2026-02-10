@@ -96,7 +96,7 @@ export function isPastSeasonRound(seasonRound: ISeasonRound) {
   const { games_end } = seasonRound;
 
   if (!games_end) {
-    return true;
+    return false;
   } 
 
   const now = new Date();
