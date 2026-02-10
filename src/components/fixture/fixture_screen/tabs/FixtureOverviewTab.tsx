@@ -20,7 +20,7 @@ export default function FixtureOverviewTab({ fixture }: Props) {
 
             <GameHighlightsCard link={fixture.highlights_link} />
 
-            <EmojiReactionBar topic="scrummy-1" />
+            <EmojiReactionBar topic={`fixtures-${fixture.game_id}`} />
 
             <FixtureVotingCard fixture={fixture} />
 

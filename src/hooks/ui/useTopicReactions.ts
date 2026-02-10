@@ -10,7 +10,7 @@ export function useTopicReactions() {
     }
 
     const userReaction = context.reactions?.user_reaction;
-    const isNoReactions = context.reactions?.all_reactions.length === 0;
+    const isNoReactions = (context.reactions?.all_reactions ?? []).length === 0;
 
     return {
         ...context,

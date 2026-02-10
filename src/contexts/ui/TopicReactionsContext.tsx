@@ -27,10 +27,7 @@ export default function TopicReactionsProvider({ topic, loadingFallback, childre
 
     const key = `/emoji-reactions/${topic}`;
 
-    const { data: reactions, isLoading: isFetching, mutate } = useSWR(key, () => emojiReactionService.getSummary(topic), {
-        revalidateIfStale: true,
-        revalidateOnFocus: true
-    });
+    const { data: reactions, isLoading: isFetching, mutate } = useSWR(key, () => emojiReactionService.getSummary(topic));
 
     const [isUpdating, setUpdating] = useState(false);
     const [error, setError] = useState<string>();
@@ -45,7 +42,7 @@ export default function TopicReactionsProvider({ topic, loadingFallback, childre
 
         setUpdating(true);
 
-        const oldReactionsObj = reactions ? {...reactions} : undefined;
+        const oldReactionsObj = reactions ? { ...reactions } : undefined;
 
         mutate(emojiReactionService.optimisticDelete(
             reactions, userReaction.emoji
@@ -57,6 +54,11 @@ export default function TopicReactionsProvider({ topic, loadingFallback, childre
             // roll back reactions when there is an error
             mutate(oldReactionsObj);
             setError("Something wen't wrong deleting your reaction");
+        }
+
+        // Continue Update in background
+        if (success) {
+            await mutate();
         }
 
         setUpdating(false);
@@ -78,6 +80,11 @@ export default function TopicReactionsProvider({ topic, loadingFallback, childre
         if (!success) {
             mutate(originalReactionsObj);
             setError("Something wen't wrong making reaction");
+        }
+
+        // Continue Update in background
+        if (success) {
+            await mutate();
         }
 
         setUpdating(false);
@@ -104,7 +111,7 @@ export default function TopicReactionsProvider({ topic, loadingFallback, childre
             {children}
 
             {error && (
-                <Toast 
+                <Toast
                     message={error}
                     type="error"
                     isVisible={Boolean(error)}
