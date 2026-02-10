@@ -26,7 +26,7 @@ export default function EmojiReactionPicker() {
 
             <RoundedCard className="flex flex-row max-w-full overflow-x-hidden no-scrollbar items-center gap-3 bg-slate-50 dark:hover:bg-slate-800 rounded-full no-scrollbar px-2 py-2 w-fit border border-slate-100 flex-nowrap" >
 
-                <div className="flex flex-row relative max-w-full overflow-x-scroll no-scrollbar items-center gap-3 rounded-full no-scrollbar px-2 py-2 w-fit flex-nowrap" >
+                <div className="flex flex-row relative max-w-full overflow-x-scroll no-scrollbar items-center gap-3 rounded-full no-scrollbar px-2 w-fit flex-nowrap" >
                     {first4Reactions.map((emoji) => {
                         return (
                             <EmojiReactionButton
