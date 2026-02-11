@@ -193,6 +193,7 @@ export type DjangoUserMinimal = {
   last_name?: string,
   username?: string,
   game_updates_preference?: string
+  avatar_url?: string
 }
 
 export type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated';
