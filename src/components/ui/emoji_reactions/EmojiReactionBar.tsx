@@ -1,5 +1,6 @@
 import TopicReactionsProvider from "../../../contexts/ui/TopicReactionsContext"
 import { useTopicReactions } from "../../../hooks/ui/useTopicReactions"
+import Experimental from "../ab_testing/Experimental"
 import RoundedCard from "../cards/RoundedCard"
 import EmojiReactionPicker from "./EmojiReactionPicker"
 import EmojiReactionPoll from "./EmojiReactionPoll"
@@ -34,10 +35,12 @@ function Content() {
     const { isNoReactions } = useTopicReactions();
 
     return (
-        <div>
-            {isNoReactions && <EmojiReactionPicker />}
-            {!isNoReactions && <EmojiReactionPoll />}
-        </div>
+        <Experimental>
+            <div>
+                {isNoReactions && <EmojiReactionPicker />}
+                {!isNoReactions && <EmojiReactionPoll />}
+            </div>
+        </Experimental>
     )
 }
 
