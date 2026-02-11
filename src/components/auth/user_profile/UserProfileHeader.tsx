@@ -6,6 +6,8 @@ import { DefaultImage } from "../../../types/ui"
 import UserAvatarCard from "./avatar/UserAvatarCard"
 import { useEditAccountInfo } from "../../../hooks/auth/useEditAccountInfo"
 import { Toast } from "../../ui/Toast"
+import { Pencil } from "lucide-react"
+import CircleButton from "../../ui/buttons/BackButton"
 
 type Props = {
     user: DjangoAuthUser,
@@ -14,14 +16,14 @@ type Props = {
 
 export default function UserProfileHeader({ user, isGuestAccount }: Props) {
 
-    const {handleSaveChanges, setForm, form, isLoading, error, setError} = useEditAccountInfo();
+    const { handleSaveChanges, setForm, form, isLoading, error, setError } = useEditAccountInfo();
 
     const [showAvatarPicker, setShowAvatarPicker] = useState<boolean>(false);
     const toggleAvatarPickerModal = () => setShowAvatarPicker(prev => !prev);
 
     const handleChangeAvatar = (defaultImage: DefaultImage) => {
         setForm((prev) => {
-            return {...prev, avatarUrl: defaultImage.image}
+            return { ...prev, avatarUrl: defaultImage.image }
         });
     }
 
@@ -37,13 +39,20 @@ export default function UserProfileHeader({ user, isGuestAccount }: Props) {
             className="bg-white dark:bg-dark-800/60 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm"
         >
             <div className="flex items-center space-x-4">
-               
-                <UserAvatarCard 
-                    className="w-[65px] h-[65px]"
-                    iconCN="w-10 h-10"
-                    imageUrl={user.avatar_url}
-                    onClick={toggleAvatarPickerModal}
-                />
+
+                <div className="relative" >
+                    <UserAvatarCard
+                        className="w-[65px] h-[65px]"
+                        iconCN="w-10 h-10"
+                        imageUrl={user.avatar_url}
+                        onClick={toggleAvatarPickerModal}
+                    />
+
+                    <CircleButton className="absolute top-0 w-6 h-6 right-0 dark:bg-slate-800" >
+                        <Pencil className="w-3 h-3" />
+                    </CircleButton>
+                </div>
+
 
                 <div>
                     <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -55,7 +64,7 @@ export default function UserProfileHeader({ user, isGuestAccount }: Props) {
                 </div>
             </div>
 
-            <AvatarPicker 
+            <AvatarPicker
                 isOpen={showAvatarPicker}
                 onClose={toggleAvatarPickerModal}
                 value={form.avatarUrl}
@@ -65,7 +74,7 @@ export default function UserProfileHeader({ user, isGuestAccount }: Props) {
             />
 
             {error && (
-                <Toast 
+                <Toast
                     isVisible={Boolean(error)}
                     type="error"
                     message={error}
