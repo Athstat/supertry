@@ -1,6 +1,9 @@
 import { User } from "lucide-react"
-import { DjangoAuthUser } from "../../types/auth"
 import { motion } from "framer-motion"
+import { DjangoAuthUser } from "../../../types/auth"
+import { useState } from "react"
+import AvatarPicker from "./avatar/AvatarPicker"
+import { DefaultImage } from "../../../types/ui"
 
 type Props = {
     user: DjangoAuthUser,
@@ -8,6 +11,15 @@ type Props = {
 }
 
 export default function UserProfileHeader({ user, isGuestAccount }: Props) {
+
+    const [showAvatarPicker, setShowAvatarPicker] = useState<boolean>(true);
+    const toggleAvatarPickerModal = () => setShowAvatarPicker(prev => !prev);
+
+    const [userAvatarUrl, setUserAvatarUrl] = useState<string | undefined>(user.avatar_url);
+    const handleChangeAvatar = (defaultImage: DefaultImage) => {
+        setUserAvatarUrl(defaultImage.image);
+    }
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -27,6 +39,13 @@ export default function UserProfileHeader({ user, isGuestAccount }: Props) {
                     </p>
                 </div>
             </div>
+
+            <AvatarPicker 
+                isOpen={showAvatarPicker}
+                onClose={toggleAvatarPickerModal}
+                value={userAvatarUrl}
+                onChange={handleChangeAvatar}
+            />
         </motion.div>
     )
 }

@@ -93,6 +93,7 @@ export type DjangoAuthUser = {
   device_id?: string | DeviceIdPair;
   verification_state: VerificationState;
   is_claimed_account: boolean;
+  avatar_url?: string
 };
 
 export type DjangoLoginRes = {
