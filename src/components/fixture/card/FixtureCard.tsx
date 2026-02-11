@@ -14,6 +14,7 @@ import { abbreviateSeasonName } from '../../../utils/stringUtils';
 import FixtureCardHeader from './FixtureCardHeader';
 import FixtureCardTeam from './FixtureCardTeam';
 import FixtureCardGameStatus from './FixtureCardGameStatus';
+import { analytics } from '../../../services/analytics/anayticsService';
 
 type Props = {
   fixture: IFixture;
@@ -34,6 +35,7 @@ export default function FixtureCard({
   const navigate = useNavigate();
 
   const handleClick = () => {
+    analytics.trackFixtureCardClicked(fixture);
     navigate(`/fixtures/${fixture.game_id}`);
   };
 

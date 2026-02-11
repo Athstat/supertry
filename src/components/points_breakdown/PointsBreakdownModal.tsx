@@ -1,25 +1,24 @@
 import { useEffect } from "react"
 import { IProAthlete } from "../../types/athletes"
-import { IFantasyLeagueTeam, FantasyLeagueTeamWithAthletes, IFantasyLeagueRound } from "../../types/fantasyLeague"
+import { IFantasyLeagueTeam, FantasyLeagueTeamWithAthletes } from "../../types/fantasyLeague"
 import PlayerPointsBreakdownView from "./PlayerPointsBreakdownView"
 import { athleteAnalytics } from "../../services/analytics/athleteAnalytics"
 import DialogModal from "../ui/modals/DialogModal"
-import { useMyTeam } from "../../hooks/fantasy/my_team/useMyTeam"
+import { ISeasonRound } from "../../types/fantasy/fantasySeason"
 
 type Props = {
   athlete: IProAthlete,
   team: IFantasyLeagueTeam | FantasyLeagueTeamWithAthletes,
-  round?: IFantasyLeagueRound,
+  round?: ISeasonRound,
   onClose?: () => void,
   isOpen?: boolean,
   multiplier?: number,
-  multiplierDescription?: string
+  multiplierDescription?: string,
 }
 
 /** Renders a points breakdown modal */
-export default function PointsBreakdownModal({ athlete, team, onClose, isOpen, multiplier, multiplierDescription }: Props) {
+export default function PointsBreakdownModal({ athlete, team, onClose, isOpen, multiplier, multiplierDescription, round }: Props) {
 
-  const { round } = useMyTeam();
 
   useEffect(() => {
 

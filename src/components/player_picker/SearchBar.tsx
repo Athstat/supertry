@@ -11,7 +11,7 @@ interface SearchBarProps {
   placeholder?: string
 }
 
-export const SearchBar: React.FC<SearchBarProps> = ({ searchQuery, onSearchChange, className, placeholder }) => {
+export const PlayerPickerSearchBar: React.FC<SearchBarProps> = ({ searchQuery, onSearchChange, className, placeholder }) => {
   
   const {positionPool} = usePlayerPicker();
   const positionName = positionPool ? formatPosition(positionPool) : undefined
@@ -39,4 +39,4 @@ export const SearchBar: React.FC<SearchBarProps> = ({ searchQuery, onSearchChang
   );
 };
 
-export default SearchBar;
+export default PlayerPickerSearchBar;
