@@ -4,7 +4,7 @@ import PlayerPickerTeamFilterRow from "./PlayerPickerTeamFilterRow";
 import BlueGradientCard from "../ui/cards/BlueGradientCard";
 import { twMerge } from "tailwind-merge";
 import { Coins } from "lucide-react";
-import SearchBar from "./SearchBar";
+import PlayerPickerSearchBar from "./SearchBar";
 import { TabSwitchOption } from "../ui/buttons/TabSwitchOption";
 
 export default function PlayerPickerHeader() {
@@ -37,7 +37,7 @@ export default function PlayerPickerHeader() {
                     inputCn="focus:ring-transparent"
                 /> */}
 
-                <SearchBar
+                <PlayerPickerSearchBar
                     className="w-full"
                     searchQuery={searchQuery}
                     onSearchChange={setSearchQuery}
