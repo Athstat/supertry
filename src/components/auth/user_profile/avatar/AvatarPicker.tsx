@@ -31,6 +31,9 @@ export default function AvatarPicker({ isOpen, value, onClose, onChange }: Props
     const selectedImage = images.find((i) => i.image === value);
 
     const handleChange = (defaultImage: DefaultImage) => {
+
+        console.log("User Avatar Default Img selected ", defaultImage);
+
         if (onChange) {
             onChange(defaultImage);
         }
@@ -57,7 +60,7 @@ export default function AvatarPicker({ isOpen, value, onClose, onChange }: Props
 
             <div className="flex flex-row items-center justify-between w-full" >
                 <div className="flex flex-row items-center gap-2" >
-                    <p className="dark:text-white text-xl font-bold" >Select an Avatar</p>
+                    <p className="dark:text-white text-xl font-bold" >Choose Avatar</p>
                 </div>
 
                 <div>
@@ -75,8 +78,8 @@ export default function AvatarPicker({ isOpen, value, onClose, onChange }: Props
                             imageUrl={i.image}
                             
                             className={twMerge(
-                                "hover:-rotate-12 transition-all ease-in delay-100",
-                                selectedImage?.image === i.image && 'border border-blue-600 animate-glow'
+                                "transition-all ease-in delay-100",
+                                selectedImage?.image === i.image && 'border-4 border-blue-600 '
                             )}
 
                             onClick={() => handleChange(i)}

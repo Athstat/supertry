@@ -16,9 +16,12 @@ export default function UserProfileHeader({ user, isGuestAccount }: Props) {
     const toggleAvatarPickerModal = () => setShowAvatarPicker(prev => !prev);
 
     const [userAvatarUrl, setUserAvatarUrl] = useState<string | undefined>(user.avatar_url);
+
     const handleChangeAvatar = (defaultImage: DefaultImage) => {
         setUserAvatarUrl(defaultImage.image);
     }
+
+    console.log("User Avatar ", userAvatarUrl);
 
     return (
         <motion.div
