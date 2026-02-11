@@ -18,11 +18,12 @@ type Props = {
     value?: string,
 
     onChange?: (avatar: DefaultImage) => void,
-    onConfirm?: () => void
+    onConfirm?: () => void,
+    isSaving?: boolean
 }
 
 /** Renders a user avatar picker */
-export default function AvatarPicker({ isOpen, value, onClose, onChange }: Props) {
+export default function AvatarPicker({ isOpen, value, onClose, onChange, isSaving, onConfirm }: Props) {
 
     const key = isOpen ? `/images/default/avatars` : null;
     const { data, isLoading } = useSWR(key, () => defaultImageService.getLibraryImages('avatars'));
@@ -70,16 +71,29 @@ export default function AvatarPicker({ isOpen, value, onClose, onChange }: Props
                 </div>
             </div>
 
+            {/* <RoundedCard className="flex flex-row items-center gap-2 p-4 px-6 dark:border dark:border-slate-700" >
+                <UserAvatarCard
+                    className="w-[60px] h-[60px]"
+                    imageUrl={selectedImage?.image}
+                    iconCN="w-10 h-10"
+                />
+
+                <div>
+                    <p className="font-semibold" >{authUser?.username}</p>
+                    <SecondaryText>{authUser?.first_name} {authUser?.last_name}</SecondaryText>
+                </div>
+            </RoundedCard> */}
+
             <div className="flex flex-row items-center gap-4 flex-wrap pb-20 overflow-y-scroll justify-start w-fit" >
 
                 {images.map((i) => {
                     return (
                         <UserAvatarCard
                             imageUrl={i.image}
-                            
+
                             className={twMerge(
                                 "transition-all ease-in delay-100",
-                                selectedImage?.image === i.image && 'border-4 border-blue-600 '
+                                selectedImage?.image === i.image && 'border-4 border-blue-600 dark:border-blue-500'
                             )}
 
                             onClick={() => handleChange(i)}
@@ -90,7 +104,12 @@ export default function AvatarPicker({ isOpen, value, onClose, onChange }: Props
 
             <div className="absolute bottom-0 left-0 w-full" >
                 <div className="w-full flex flex-col relative items-center justify-center h-[150px]" >
-                    <PrimaryButton className="w-1/3 z-[10] text-base font-semibold" >
+                    <PrimaryButton 
+                        className="w-1/3 z-[10] text-base font-semibold" 
+                        isLoading={isSaving}
+                        disabled={isSaving}
+                        onClick={onConfirm}
+                    >
                         Save
                     </PrimaryButton>
 

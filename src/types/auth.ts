@@ -182,7 +182,8 @@ export type VerifyEmailRes = {
 export type UpdateUserProfileReq = {
   username?: string,
   first_name?: string,
-  last_name?: string
+  last_name?: string,
+  avatar_url?: string
 }
 
 export type DjangoUserMinimal = {
@@ -225,5 +226,6 @@ export type UpdatedUserInternalProfileReq = {
 export type EditAccountInfoForm = {
   username: string,
   firstName?: string,
-  lastName?: string
+  lastName?: string,
+  avatarUrl?: string
 }

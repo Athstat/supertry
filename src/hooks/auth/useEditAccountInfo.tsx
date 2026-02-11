@@ -10,7 +10,8 @@ export function useEditAccountInfo() {
     const [form, setForm] = useState<EditAccountInfoForm>({
         username: authUser?.username ?? "",
         firstName: authUser?.first_name,
-        lastName: authUser?.last_name
+        lastName: authUser?.last_name,
+        avatarUrl: authUser?.avatar_url
     });
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -53,7 +54,8 @@ export function useEditAccountInfo() {
             const res = await userService.updateUserProfile({
                 username: form.username ?? "",
                 first_name: form.firstName ?? "",
-                last_name: form.lastName ?? ""
+                last_name: form.lastName ?? "",
+                avatar_url: form.avatarUrl
             });
 
             if (res) {
@@ -73,7 +75,7 @@ export function useEditAccountInfo() {
         }
 
         setIsLoading(false);
-    }, [userNameError, form.username, form.firstName, form.lastName, refreshAuthUser]);
+    }, [userNameError, form, refreshAuthUser]);
 
 
     return {
