@@ -16,7 +16,7 @@ export default function UserProfileHeader({ user, isGuestAccount }: Props) {
 
     const {handleSaveChanges, setForm, form, isLoading, error, setError} = useEditAccountInfo();
 
-    const [showAvatarPicker, setShowAvatarPicker] = useState<boolean>(true);
+    const [showAvatarPicker, setShowAvatarPicker] = useState<boolean>(false);
     const toggleAvatarPickerModal = () => setShowAvatarPicker(prev => !prev);
 
     const handleChangeAvatar = (defaultImage: DefaultImage) => {
