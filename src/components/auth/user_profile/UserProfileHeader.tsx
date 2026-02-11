@@ -40,15 +40,15 @@ export default function UserProfileHeader({ user, isGuestAccount }: Props) {
         >
             <div className="flex items-center space-x-4">
 
-                <div className="relative" >
+                <div className="relative" onClick={toggleAvatarPickerModal} >
                     <UserAvatarCard
-                        className="w-[65px] h-[65px]"
-                        iconCN="w-10 h-10"
+                        className="w-[80px] h-[80px]"
+                        iconCN="w-12 h-12"
                         imageUrl={user.avatar_url}
-                        onClick={toggleAvatarPickerModal}
+                        
                     />
 
-                    <CircleButton className="absolute top-0 w-6 h-6 right-0 dark:bg-slate-800" >
+                    <CircleButton  className="absolute top-0 w-6 h-6 right-0 dark:bg-slate-800" >
                         <Pencil className="w-3 h-3" />
                     </CircleButton>
                 </div>
