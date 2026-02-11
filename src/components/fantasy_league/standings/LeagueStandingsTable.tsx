@@ -14,6 +14,7 @@ import StickyUserRankingCard from './StickyUserRankingCard';
 import { isSeasonRoundTeamsLocked } from '../../../utils/leaguesUtils';
 import { ISeasonRound } from '../../../types/fantasy/fantasySeason';
 import { useAuth } from '../../../contexts/auth/AuthContext';
+import ScrollToTopButton from '../../ui/buttons/ScrollToTopButton';
 
 type Props = {
   round?: ISeasonRound
@@ -149,6 +150,8 @@ export default function LeagueStandingsTable({
         userRanking={userRanking}
         onClick={handleScrollToUser}
       />
+
+      <ScrollToTopButton  className='bottom-24' />
 
       {!isLoading && <div className="divide-y dark:divide-slate-700/20 divide-slate-300/40">
         {completeStandings.map((ranking, index) => {

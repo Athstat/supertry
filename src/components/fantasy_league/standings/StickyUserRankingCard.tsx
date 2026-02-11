@@ -1,7 +1,7 @@
 import { twMerge } from "tailwind-merge"
 import { FantasySeasonRankingItem } from "../../../types/fantasyLeagueGroups"
 import { smartRoundUp } from "../../../utils/intUtils"
-import { User } from "lucide-react"
+import UserAvatarCard from "../../auth/user_profile/avatar/UserAvatarCard"
 
 type Props = {
     userRanking?: FantasySeasonRankingItem,
@@ -27,7 +27,11 @@ export default function StickyUserRankingCard({ userRanking, onClick }: Props) {
                         </div>
 
                         <div className="flex flex-row items-center gap-2" >
-                            <User className="w-4 h-4" />
+                            <UserAvatarCard 
+                                imageUrl={userRanking?.avatar_url}
+                                className="w-[35px] h-[35px] border-none"
+                                iconCN="w-4 h-4"
+                            />
                             <p>{userRanking?.username}</p>
                         </div>
                     </div>

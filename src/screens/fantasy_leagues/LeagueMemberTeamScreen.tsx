@@ -20,6 +20,7 @@ import MyTeamPitch from "../../components/my_fantasy_team/MyTeamPitch";
 import MyTeamBenchDrawer from "../../components/my_fantasy_team/MyTeamBenchDrawer";
 import MyTeamModals from "../../components/my_fantasy_team/MyTeamModals";
 import { hashFantasyTeam } from "../../utils/fantasy/myteamUtils";
+import UserAvatarCard from "../../components/auth/user_profile/avatar/UserAvatarCard";
 
 
 export default function LeagueMemberTeamScreen() {
@@ -69,7 +70,15 @@ function Content() {
                             <ArrowLeft className="w-5 h-5" />
                         </CircleButton>
                     </div>
-                    <p>{manager?.username || manager?.first_name || manager?.last_name}</p>
+
+                    <div className="flex flex-row items-center gap-2" >
+                        <UserAvatarCard 
+                            imageUrl={manager?.avatar_url}
+                            className="w-[38px] h-[38px]"
+                            iconCN="w-6 h-6"
+                        />
+                        <p>{manager?.username || manager?.first_name || manager?.last_name}</p>
+                    </div>
                 </div>
             </div>
 

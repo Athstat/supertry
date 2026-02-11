@@ -34,3 +34,14 @@ export type TopicReactions = {
     user_reaction?: UserTopicReaction,
     all_reactions: EmojiReactionCount[]
 }
+
+export type DefaultImage = {
+    id: string,
+    library: string,
+    title: string,
+    description?: string,
+    group?: string,
+    image: string,
+    is_hidden: boolean,
+    created_at: Date
+}

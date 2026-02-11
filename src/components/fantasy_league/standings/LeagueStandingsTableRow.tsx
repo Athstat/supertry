@@ -1,8 +1,9 @@
-import { ChevronDown, ChevronUp, Medal, User } from "lucide-react";
+import { ChevronDown, ChevronUp, Medal } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { FantasySeasonRankingItem } from "../../../types/fantasyLeagueGroups";
 import { smartRoundUp } from "../../../utils/intUtils";
 import SecondaryText from "../../ui/typography/SecondaryText";
+import UserAvatarCard from "../../auth/user_profile/avatar/UserAvatarCard";
 
 type StandingsProps = {
     ranking: FantasySeasonRankingItem;
@@ -62,13 +63,14 @@ export function LeagueStandingsTableRow({ ranking, isUser, hideUserScore, index,
 
                     {/* <PositionChangeCard positionChange={positionChange} /> */}
 
-                    {isUser && (
-                        <div className=" w-6 h-6 bg-blue-500 rounded-xl flex flex-col items-center justify-center">
-                            <User className="w-4 h-4 text-white" />
-                        </div>
-                    )}
 
-                    <div className="flex flex-col">
+                    <div className="flex flex-row items-center gap-2">
+
+                        <UserAvatarCard 
+                            imageUrl={ranking.avatar_url}
+                            className="w-[36px] h-[36px]"
+                            iconCN="w-5 h-5"
+                        />
 
                         <p className="text-sm" >{ranking.username ?? ranking.first_name}</p>
 
@@ -77,6 +79,7 @@ export function LeagueStandingsTableRow({ ranking, isUser, hideUserScore, index,
                                 Claim account to see your points
                             </p>
                         )}
+
                     </div>
 
                     {showBadges && <RankingCrown isUser={isUser} ranking={ranking} />}
