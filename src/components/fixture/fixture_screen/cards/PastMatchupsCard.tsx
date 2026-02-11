@@ -21,7 +21,9 @@ type Props = {
 export default function PastMatchupsCard({ fixture }: Props) {
 
   const key = swrFetchKeys.getPastMatchups(fixture.game_id);
-  const { data, isLoading } = useSWR(key, () => gamesService.getFixturePastMatchUps(fixture.game_id));
+  const { data, isLoading } = useSWR(key, () => gamesService.getFixturePastMatchUps(fixture.game_id), {
+    revalidateOnFocus: false,
+  });
 
   const { team, opposition_team } = fixture;
 

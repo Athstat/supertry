@@ -16,8 +16,6 @@ export function TeamRosterPitchView({ team, fixture }: TeamRosterProps) {
 
     const { rosters, isLoading } = useGameRosters(fixture);
 
-
-
     const teamRoster = useMemo(() => {
         return rosters.filter((r) => {
             return r.team_id === team.athstat_id

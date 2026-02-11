@@ -24,7 +24,10 @@ export default function SeasonStandingsTable({ seasonId, highlightTeamIds = [], 
     const { openTooltipModal } = useTooltip();
 
     const key = seasonId ? swrFetchKeys.getSeasonStandings(seasonId) : null;
-    const { data, isLoading: loadingStandings } = useSWR(key, () => seasonService.getSeasonStandings(seasonId ?? ""));
+    
+    const { data, isLoading: loadingStandings } = useSWR(key, () => seasonService.getSeasonStandings(seasonId ?? ""), {
+        revalidateOnFocus: false
+    });
 
     const isLoading = loadingSeason || loadingStandings;
 

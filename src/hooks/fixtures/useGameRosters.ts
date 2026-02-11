@@ -6,7 +6,10 @@ import { useMemo } from "react";
 export function useGameRosters(fixture: IFixture) {
     const fixtureId = fixture.game_id;
     const rostersKey = fixtureId ? `fixtures/${fixtureId}/game-rosters` : null;
-    const { data: fetchedRosters, isLoading } = useSWR(rostersKey, () => gamesService.getGameRostersById(fixtureId ?? ""));
+    
+    const { data: fetchedRosters, isLoading } = useSWR(rostersKey, () => gamesService.getGameRostersById(fixtureId ?? ""), {
+        revalidateOnFocus: false
+    });
 
     const rosters = useMemo(() => {
         return (fetchedRosters ?? []);

@@ -1,6 +1,5 @@
 import SaveTeamBar from './SaveTeamBar';
 import { Coins } from 'lucide-react';
-import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
 import { useRoundScoringSummaryV2 } from '../../hooks/fantasy/useRoundScoringSummary';
 import { smartRoundUp } from '../../utils/intUtils';
 import { isSeasonRoundStarted } from '../../utils/leaguesUtils';
@@ -80,15 +79,12 @@ type TeamPointsProps = {
 
 function TeamPointsCard({ leagueRound }: TeamPointsProps) {
 
-  const { isReadOnly, team } = useFantasyTeam();
-  const isLocked = isSeasonRoundStarted(leagueRound);
-  const { highestPointsScored, averagePointsScored, isLoading } =
-    useRoundScoringSummaryV2(leagueRound);
+  const { isReadOnly, team } = useMyTeam();
+  const hasRoundStarted = isSeasonRoundStarted(leagueRound);
 
-  const showScore = !isLoading && isLocked
+  const { highestPointsScored, averagePointsScored, isLoading } = useRoundScoringSummaryV2(leagueRound);
 
-  // Uses team?.overall_score here instead of userscore from the useRoundScoringSummary
-  // because that hook returns the auth user's score not the score of the teams manager
+  const showScore = !isLoading && hasRoundStarted
 
   return (
     <div className="flex flex-col min-h-[30px] max-h-[30px]" >
@@ -113,7 +109,7 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
         </div>
       </Activity>
 
-      <Activity mode={!isLocked && !isReadOnly ? "visible" : "hidden"} >
+      <Activity mode={!hasRoundStarted && !isReadOnly ? "visible" : "hidden"} >
         <div className='flex flex-row w-full items-center justify-center' >
           <LeagueRoundCountdown2
               leagueRound={leagueRound}

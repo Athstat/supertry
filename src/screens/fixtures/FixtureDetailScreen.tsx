@@ -19,6 +19,7 @@ import { Activity } from 'react';
 import PlayerFixtureModal from '../../components/fixture/player_fixture_modal/PlayerFixtureModal';
 import FixtureStandingsTab from '../../components/fixture/fixture_screen/cards/FixtureStandingsTab';
 import FixtureH2HTab from '../../components/fixture/fixture_screen/tabs/FixtureH2HTab';
+import { fixtureSummary } from '../../utils/fixtureUtils';
 
 export default function FixtureDetailScreen() {
 
@@ -40,10 +41,12 @@ function Content() {
 
   const sportsActionsKey = fixtureId ? `/fixtures/${fixtureId}/boxscore/sports-actions` : null;
 
+  const gameKickedOff = fixture ? fixtureSummary(fixture).gameKickedOff : false;
+
   const { data: sportActions, isLoading: loadingSportsActions } = useSWR(sportsActionsKey, () =>
     boxScoreService.getSportActionsByGameId(fixtureId ?? '')
   , {
-    refreshInterval: 1000 * 2 // 2 minutes
+    refreshInterval: gameKickedOff ?  1000 * 2 : undefined // every 2 minutes when games starts
   });
 
   useHideBottomNavBar();
