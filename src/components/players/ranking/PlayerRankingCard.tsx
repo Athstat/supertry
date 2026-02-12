@@ -24,7 +24,7 @@ export function PlayerRankingCard({ rank, onClick, player, value, borderColor = 
   };
 
   return (
-    <div className="flex flex-col w-full overflow-hidden bg-[#F0F3F7] shadow-[1.5px_1.5px_1.58px_0px_rgba(196,201,212,0.9)]">
+    <div className="flex flex-col w-full overflow-hidden bg-[#F0F3F7] dark:bg-slate-800 shadow-[1.5px_1.5px_1.58px_0px_rgba(196,201,212,0.9)] dark:shadow-none">
       <div
         onClick={handleOnClick}
         className="flex cursor-pointer flex-row items-center gap-4 overflow-hidden border-l-[2px] pl-2 py-2"
