@@ -91,7 +91,7 @@ export default function PlayersCountryGridList() {
                 <p className='font-bold text-md' >By Nationality</p>
             </div>
             
-            <div className="grid grid-cols-3 gap-4 px-6" >
+            <div className="grid grid-cols-3 gap-4" >
                 {countries.map((c) => {
                     return (
                         <CountryCard

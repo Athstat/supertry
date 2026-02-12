@@ -82,7 +82,7 @@ function Content() {
 
   return (
     <Fragment>
-      <div className='flex flex-col gap-4' >
+      <div className='flex flex-col gap-8' >
 
         <div className='flex flex-row items-center gap-2' >
           <RoundedCard
@@ -114,7 +114,7 @@ function Content() {
           <p className='font-bold text-md' >By Position</p>
         </div>
 
-        <div className='grid grid-cols-2 gap-4' >
+        <div className='grid grid-cols-2 gap-4 ' >
           <PositionCard
             positionClass='front-row'
             title='Front Row'
