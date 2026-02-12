@@ -40,7 +40,12 @@ function Content() {
 
     const navigate = useNavigate();
     const { viewMode, setViewMode } = useFantasyLeagueScreen();
+
+    const {currentRound, scoringRound} = useFantasyLeagueGroup();
+
     const { league } = useFantasyLeagueGroup();
+
+    const defaultRoundNumber = scoringRound?.start_round?.toString() || currentRound?.start_round?.toString() || 'overall';
 
     const isChatEnabled = league?.is_private === true && league?.type === 'user_created';
 
@@ -95,7 +100,10 @@ function Content() {
             </div>
 
             <Activity mode={viewMode === 'standings' ? 'visible' : 'hidden'} >
-                <FantasyLeagueStandingsTab />
+                <FantasyLeagueStandingsTab 
+                    defaultRoundNumber={defaultRoundNumber}
+                    key={defaultRoundNumber}
+                />
             </Activity>
 
             {isChatEnabled && (

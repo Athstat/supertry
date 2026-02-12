@@ -80,7 +80,8 @@ export default function LeagueStandingsTable({
         rank: undefined,
         league_rank: lastRanking + index + 1,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        avatar_url: m.user.avatar_url
       }
     });
 

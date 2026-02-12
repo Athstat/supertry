@@ -21,7 +21,7 @@ export function LeagueStandingsTableRow({ ranking, isUser, hideUserScore, index,
 
     const rank = ranking.league_rank ?? index + 1;
     const shouldHideScore = (isUser && hideUserScore) || !ranking.total_score
-    const pointsDisplay = shouldHideScore ? '-' : smartRoundUp(ranking.total_score);
+    const pointsDisplay = shouldHideScore ? '-' : smartRoundUp(ranking.league_points === undefined ? ranking.total_score : ranking.league_points);
 
     // const prevRound = ranking.round_number ? ranking.round_number - 1 : undefined;
     // const { userRanking: prevWeekRank } = useUserWeekRoundStanding(ranking.user_id, league?.id, prevRound);

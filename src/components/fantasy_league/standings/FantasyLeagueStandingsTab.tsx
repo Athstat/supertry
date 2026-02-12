@@ -12,9 +12,12 @@ import RoundedCard from '../../ui/cards/RoundedCard';
 import { useFantasySeasons } from '../../../hooks/dashboard/useFantasySeasons';
 import { useAuth } from '../../../contexts/auth/AuthContext';
 
+type Props = {
+  defaultRoundNumber?: string
+}
 
 /** Renders fantasy league group standings */
-export function FantasyLeagueStandingsTab() {
+export function FantasyLeagueStandingsTab({defaultRoundNumber} : Props) {
 
   const { currentRound } = useFantasySeasons();
   const { userMemberRecord } = useFantasyLeagueGroup();
@@ -23,7 +26,7 @@ export function FantasyLeagueStandingsTab() {
   const { authUser } = useAuth();
   const isGuest = isGuestUser(authUser);
 
-  const { selectedRound, currentOption, setRoundFilterId } = useLeagueRoundStandingsFilter();
+  const { selectedRound, currentOption, setRoundFilterId } = useLeagueRoundStandingsFilter(defaultRoundNumber);
 
   return (
     <div className="flex flex-col gap-6 pb-32">

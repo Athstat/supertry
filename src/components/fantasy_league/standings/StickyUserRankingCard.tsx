@@ -11,7 +11,7 @@ type Props = {
 /** Sticky User Ranking thats always at the bottom of the screen */
 export default function StickyUserRankingCard({ userRanking, onClick }: Props) {
 
-    const pointsDisplay = smartRoundUp(userRanking?.total_score) || '-';
+    const pointsDisplay = smartRoundUp(userRanking?.league_points ?? userRanking?.total_score) || '-';
 
     return (
         <div className="fixed p-4 bottom-1 left-0 w-full" >
