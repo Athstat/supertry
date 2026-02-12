@@ -150,6 +150,7 @@ export default function PlayersList({ players, stickyHeaderClassName }: Props) {
                 isComparePicking={isPickingPlayers}
                 stickyHeaderClassName={stickyHeaderClassName}
             />
+            
             <PlayersScreenCompareStatus />
 
             <ScrollToTopButton />

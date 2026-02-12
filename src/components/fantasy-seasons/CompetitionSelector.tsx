@@ -27,7 +27,7 @@ export default function CompetitionSelector() {
     <div className='w-full flex-1'>
 
       <RoundedCard
-        className='rounded-md flex-1 cursor-pointer px-2 py-1 flex flex-row items-center gap-1 justify-between'
+        className='rounded-md flex-1 cursor-pointer dark:bg-slate-700/70 px-2 py-1 flex flex-row items-center gap-1 justify-between'
         onClick={toggleShowOptions}
       >
         <p style={{ fontFamily: 'Oswald, sans-serif' }} className='font-semibold text-[#011E5C] dark:text-white text-xl' >{trimSeasonYear(abbreviateSeasonName(selectedSeason?.name || ''))}</p>

@@ -61,7 +61,7 @@ export default function ProFixturesScreen() {
     <Fragment>
       <PageView className="dark:text-white flex flex-col gap-6 py-2 pb-28 md:pb-32">
 
-        <div className='px-4 flex flex-col gap-3' >
+        <div className='px-4 flex flex-col gap-3 rounded-b-[20px] pb-4 py-2' >
 
           <ProMatchCenterHeader
             viewMode={viewMode}

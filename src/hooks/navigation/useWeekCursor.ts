@@ -1,4 +1,4 @@
-import { addDays, endOfWeek, isSameDay, startOfWeek, subDays } from "date-fns";
+import { addDays, isSameDay, nextWednesday, previousWednesday, startOfWeek, subDays } from "date-fns";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 /** Hook that allows you to move inbetween different weeks */
@@ -12,7 +12,8 @@ export function useWeekCursor(today: Date = new Date()) {
 
     const weekStart = useMemo(() => {
         if (pivotDate) {
-            return startOfWeek(new Date(pivotDate));
+            const start = previousWednesday(new Date(pivotDate));
+            return start;
         }
 
         return today;
@@ -21,7 +22,8 @@ export function useWeekCursor(today: Date = new Date()) {
     const weekEnd = useMemo(() => {
 
         if (pivotDate) {
-            return endOfWeek(new Date(pivotDate));
+            const end = nextWednesday(new Date(pivotDate));
+            return end;
         }
 
         return today;

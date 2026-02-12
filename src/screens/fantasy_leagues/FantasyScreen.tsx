@@ -18,9 +18,9 @@ export function FantasyScreen() {
   const isLoading = loadingFeatureGroup;
 
   return (
-    <PageView className="pt-1 flex flex-col gap-3" key={selectedSeason?.id} >
+    <PageView className="pt-1 flex flex-col gap-1" key={selectedSeason?.id} >
 
-      <div className="flex flex-row items-center gap-2 px-4">
+      <div className="flex flex-row items-center gap-2 px-4 py-2">
         <IconCircle>
           <FantasyTrophyIcon />
         </IconCircle>

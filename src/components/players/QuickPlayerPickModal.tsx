@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { IProAthlete } from "../../types/athletes"
 import { PlayerSearch } from "./PlayerSearch";
-import PlayerMugshot from "../player/PlayerMugshot";
 import SecondaryText from "../ui/typography/SecondaryText";
 import { twMerge } from "tailwind-merge";
 import { useDebounced } from "../../hooks/web/useDebounced";
@@ -12,6 +11,9 @@ import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes"
 import RoundedCard from "../ui/cards/RoundedCard";
 import DialogModal from "../ui/modals/DialogModal";
 import useAthleteFilter from "../../hooks/athletes/useAthleteFilter";
+import MatchPrCard from "../rankings/MatchPrCard";
+import SmartPlayerMugshot from "../player/SmartPlayerMugshot";
+import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams";
 
 type Props = {
     onSelectPlayers?: (players: IProAthlete[]) => void,
@@ -77,9 +79,10 @@ export default function QuickPlayerSelectModal({ onSelectPlayers, open, onClose,
         <DialogModal
             open={open}
             onClose={handleCloseModal}
-            title="Add Players"
-            className="flex flex-col gap-3 overflow-hidden h-max"
-            hw="max-h-[90vh] min-h-[90vh]"
+            title="Add Players To Compare"
+            className="flex flex-col rounded-none gap-3 overflow-hidden h-max"
+            hw="min-h-[100vh] min-w-full rounded-none"
+            outerCon="rounded-none"
         >
             <div className="overflow-y-auto flex h-max flex-col gap-3" >
 
@@ -143,6 +146,7 @@ type PlayerItemProps = {
 function PlayerItem({ player, onClick, isSelected, disabled }: PlayerItemProps) {
 
     const {ref, inView} = useInView({triggerOnce: true});
+    const {seasonTeam} = usePlayerSeasonTeam(player);
 
     const handleClick = () => {
 
@@ -161,7 +165,7 @@ function PlayerItem({ player, onClick, isSelected, disabled }: PlayerItemProps) 
            {inView && <div
                 className={twMerge(
                     "flex py-2 px-4 rounded-xl cursor-pointer flex-col items-start gap-2",
-                    "bg-slate-200 dark:bg-slate-700/40 hover:dark:bg-slate-600 hover:bg-slate-100",
+                    "bg-slate-200 dark:bg-slate-700/30",
                     isSelected && "bg-blue-600 dark:bg-blue-600 hover:bg-blue-700 hover:dark:bg-blue-600",
                     disabled && "opacity-35"
                 )}
@@ -169,33 +173,23 @@ function PlayerItem({ player, onClick, isSelected, disabled }: PlayerItemProps) 
                 onClick={handleClick}
             >
                 <div className="flex flex-row items-center w-full gap-2 justify-between" >
-                    <PlayerMugshot
-                        url={player.image_url}
-                        playerPr={player.power_rank_rating}
-                        showPrBackground
+                    <SmartPlayerMugshot
+                        teamId={seasonTeam?.athstat_id}
                     />
 
-                    <div className="flex-1 flex items-start flex-col" >
+                    <div className="flex-1 flex items-start flex-col text-sm" >
                         <p className={twMerge(
                             isSelected && "text-white font-bold"
                         )} >{player.player_name}</p>
+
                         <SecondaryText className={twMerge(
-                            "text-sm",
+                            "text-xs",
                             isSelected && "text-slate-100 dark:text-slate-100"
                         )} >{player?.team?.athstat_name}</SecondaryText>
                     </div>
 
                     <div className="flex flex-row items-center gap-2" >
-                        <p className={twMerge(
-                            "font-bold text-primary-500 dark:text-primary-4 00",
-                            isSelected && "text-white"
-                        )} >
-                            {player.power_rank_rating ?
-                                Math.floor(player.power_rank_rating)
-                                : "-"
-                            }
-                        </p>
-
+                        <MatchPrCard pr={player.power_rank_rating} />
                     </div>
                 </div>
 

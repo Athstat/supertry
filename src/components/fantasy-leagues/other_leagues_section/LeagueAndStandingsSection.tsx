@@ -40,7 +40,7 @@ export default function LeagueAndStandingsSection({ fantasySeason }: Props) {
     if (isLoading) {
         return (
             <div>
-                <div className='flex flex-col gap-4 px-4' >
+                <div className='flex flex-col gap-4 px-4 pt-4' >
                     <RoundedCard className='w-[200px] h-[35px] border-none rounded-xl animate-pulse' />
                     <RoundedCard className='w-full h-[45px] border-none rounded-xl animate-pulse' />
                 </div>

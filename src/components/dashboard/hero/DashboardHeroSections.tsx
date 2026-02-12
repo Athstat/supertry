@@ -16,6 +16,7 @@ import { trimSeasonYear } from "../../../utils/stringUtils";
 import { twMerge } from "tailwind-merge";
 import { useAuth } from "../../../contexts/auth/AuthContext";
 import { ISeasonRound } from "../../../types/fantasy/fantasySeason";
+import UserAvatarCard from "../../auth/user_profile/avatar/UserAvatarCard";
 
 
 export function DashboardHeroLoadingSkeleton() {
@@ -98,7 +99,13 @@ export function DashboardHeroHeader({ title }: HeroProps) {
   return (
     <Fragment>
       <div onClick={handleClick} className="flex cursor-pointer items-center gap-2">
-        <img src="/images/profile-icon.svg" alt="Profile" className="w-6 h-6" />
+        
+        <UserAvatarCard
+          imageUrl={authUser?.avatar_url}
+          className="w-[25px] h-[25px]"
+          iconCN="w-4 h-4"
+        />
+
         <p className="text-white font-normal text-xs">{authUser?.username || 'User'}</p>
       </div>
 

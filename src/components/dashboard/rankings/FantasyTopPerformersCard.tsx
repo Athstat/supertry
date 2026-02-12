@@ -54,25 +54,25 @@ export default function FantasyTopPerformersCard({className} : Props) {
   return (
     <Fragment>
       <RoundedCard className={twMerge(
-        "rounded-xl overflow-hidden",
+        "rounded-xl overflow-hidden bg-[#F0F3F7]",
         className
       )}>
         
         {/* Title */}
         <div className="p-4">
-          <p className="font-semibold text-lg text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald', }}>
+          <p className="font-[600] text-[20px] text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald', }}>
             Fantasy Top Performers {scoringRound?.round_number ? `(Round ${scoringRound?.round_number})` : ''}
           </p>
         </div>
 
         {/* Table Header */}
-        <div className="bg-[#011E5C] text-white pl-4 py-2 flex items-center gap-4 w-[97%] mx-auto">
-          <div className="w-8 text-xs font-semibold">Position</div>
-          <div className="flex-1 text-xs font-semibold ml-14">Player</div>
-          <div className="text-xs font-semibold mr-4">Points</div>
+        <div className="bg-[#011E5C] text-white pl-4 py-4 flex items-center gap-4 w-[97%] mx-auto">
+          <div className="w-8 text-sm font-medium">Position</div>
+          <div className="flex-1 text-sm font-medium ml-14">Player</div>
+          <div className="text-sm font-medium mr-4">Points</div>
         </div>
 
-        <div className="flex flex-col items-center overflow-y-auto gap-1 pt-4 pl-2 pr-2">
+        <div className="flex flex-col items-center gap-2 pt-1 pl-2 pr-2">
           {rankings.map((r, index) => {
             const val = r.total_points;
             const rank = index + 1;
@@ -99,7 +99,7 @@ export default function FantasyTopPerformersCard({className} : Props) {
         {/* View All Players Link */}
         <p
           onClick={handleViewMore}
-          className="font-semibold text-sm text-[#011E5C] dark:text-white underline pb-4 text-center cursor-pointer"
+          className="font-semibold pt-6 text-sm text-[#011E5C] dark:text-white underline pb-4 text-center cursor-pointer"
         >
           View All Players
         </p>

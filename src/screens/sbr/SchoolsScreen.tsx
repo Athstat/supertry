@@ -58,26 +58,28 @@ export default function SchoolsScreen() {
     <Fragment>
       <PageView className="dark:text-white overflow-x-hidden flex flex-col gap-4 pb-28 md:pb-32">
 
+        <div className='rounded-b-[20px] pt-2 pb-5 px-4 flex flex-col gap-4' >
 
-        <div className="flex flex-row justify-between px-4">
+          <div className="flex flex-row justify-between ">
 
-          <div className="flex flex-row items-center gap-2">
+            <div className="flex flex-row items-center gap-2">
 
-            <IconCircle>
-              <SbrIcon />
-            </IconCircle>
+              <IconCircle>
+                <SbrIcon />
+              </IconCircle>
 
-            <p className="font-bold text-xl">Schoolboy Rugby</p>
+              <p className="font-bold text-xl">Schoolboy Rugby</p>
+            </div>
+
           </div>
 
-        </div>
-
-        <div className='px-4' >
-          <SearchInput
-            placeholder='Search school fixtures'
-            value={searchQuery}
-            onChange={setSearchQuery}
-          />
+          <div className='' >
+            <SearchInput
+              placeholder='Search school fixtures'
+              value={searchQuery}
+              onChange={setSearchQuery}
+            />
+          </div>
         </div>
 
         <SbrSeasonFilter
