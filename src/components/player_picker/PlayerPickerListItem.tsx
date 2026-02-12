@@ -45,9 +45,8 @@ export function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer }: 
 
     return (
         <tr ref={ref} className={twMerge(
-            "hover:bg-slate-50 items-center w-[100%]",
+            "items-center w-[100%]",
             !isAffordable && 'opacity-50',
-            "dark:hover:bg-slate-800/50 hover:bg-slate-200"
         )} >
             <Activity mode={inView ? "visible" : "hidden"} >
                 <td onClick={handleViewPlayerProfile} className="overflow-clip"  >
