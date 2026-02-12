@@ -35,7 +35,7 @@ export default function PlayerRowCard({ player, onClick }: Props) {
         <tr
             ref={ref}
             onClick={handelClick}
-            className="cursor-pointer dark:hover:bg-slate-800 hover:bg-slate-100"
+            className="cursor-pointer"
         >
             {inView && <>
                 <td className="py-3" >
