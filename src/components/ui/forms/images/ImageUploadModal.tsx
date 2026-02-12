@@ -17,7 +17,6 @@ type Props = {
   minWidth?: number,
   initFileUrl?: string,
   children?: ReactNode
-
   onClose?: () => void,
   onUpload?: (file: File) => void,
 }

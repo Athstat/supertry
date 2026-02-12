@@ -1,6 +1,7 @@
 import 'react-image-crop/dist/ReactCrop.css'
 import { SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
 import ReactCrop, { centerCrop, makeAspectCrop, PixelCrop } from 'react-image-crop'
+import { useDebounced } from '../../../../hooks/web/useDebounced';
 
 type Props = {
     imageUrl: string,
@@ -16,6 +17,7 @@ export default function ImageCropper({ imageUrl, onConfirmCrop, aspect = 1, minW
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     const [crop, setCrop] = useState<PixelCrop>();
+    const defferedCrop = useDebounced(crop, 1000);
 
     const handleConfirmCrop = useCallback(async (crop: PixelCrop) => {
         const image = imageRef.current;
@@ -54,19 +56,13 @@ export default function ImageCropper({ imageUrl, onConfirmCrop, aspect = 1, minW
 
     useEffect(() => {
 
-        if (!crop) {
+        if (!defferedCrop) {
             return;
         }
 
-        const timeout = setTimeout(() => {
-            handleConfirmCrop(crop);
-        }, 50);
+        handleConfirmCrop(defferedCrop);
 
-        return () => {
-            clearTimeout(timeout);
-        }
-
-    }, [crop, handleConfirmCrop]);
+    }, [defferedCrop, handleConfirmCrop]);
 
     return (
         <div className='flex flex-col gap-3 items-center justify-center' >
@@ -129,7 +125,7 @@ async function createCroppedImage(image: HTMLImageElement, canvas: HTMLCanvasEle
     );
 
     ctx.restore();
-    
+
     const blob = await new Promise((resolve) => {
         canvas.toBlob(resolve, "image/webp", 0.95);
     });
@@ -137,7 +133,7 @@ async function createCroppedImage(image: HTMLImageElement, canvas: HTMLCanvasEle
     if (!blob) {
         return undefined;
     }
-    
+
     const fileType = (blob as Blob).type;
     const fileName = `image_${new Date().valueOf()}.${fileType.split('/').at(1)}`;
 
