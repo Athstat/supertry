@@ -8,6 +8,7 @@ import FormIndicator from "./FormIndicator"
 import { stripCountryName } from "../../utils/stringUtils"
 import { useInView } from "react-intersection-observer"
 import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams"
+import AvailabilityIcon from "../players/availability/AvailabilityIcon"
 
 
 type Props = {
@@ -47,9 +48,13 @@ export default function PlayerRowCard({ player, onClick }: Props) {
                         </div>
 
                         <div>
+
                             <div>
                                 <p className="text-sm" >{player.player_name}</p>
+
                             </div>
+
+
                             <div className="flex flex-row items-center gap-1" >
 
                                 <SecondaryText className="text-[11px]  truncate" >{formatPosition(player.position)} </SecondaryText>
@@ -64,6 +69,13 @@ export default function PlayerRowCard({ player, onClick }: Props) {
                                     </>
                                 )}
                             </div>
+                        </div>
+
+                        <div>
+                            <AvailabilityIcon 
+                                athlete={player}
+                                shouldFetch={inView}
+                            />
                         </div>
                     </div>
                 </td>

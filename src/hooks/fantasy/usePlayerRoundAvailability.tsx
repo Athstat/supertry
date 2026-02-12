@@ -5,13 +5,13 @@ import { IFixture } from "../../types/games";
 import { useFantasySeasons } from "../dashboard/useFantasySeasons";
 
 /** Gets Player Specific Round Availability outside rosters */
-export function usePlayerRoundAvailability(athleteId: string, seasonId: string, roundNumber: number, team_id?: string) {
+export function usePlayerRoundAvailability(athleteId: string, seasonId: string, roundNumber: number, team_id?: string, shouldFetch: boolean = true) {
 
   const { selectedSeason } = useFantasySeasons();
   const finalSeasonId = selectedSeason?.id || seasonId;
 
-  const shouldFetch = (Boolean(athleteId) && Boolean(finalSeasonId)) && (roundNumber > 0);
-  const key = shouldFetch ? `/athlete/${athleteId}/general-availability/by-season/${finalSeasonId}/${roundNumber}${team_id ? `?team_id=${team_id}` : ''}` : null;
+  const shouldFetchFinal = (Boolean(athleteId) && Boolean(finalSeasonId)) && (roundNumber > 0) && shouldFetch;
+  const key = shouldFetchFinal ? `/athlete/${athleteId}/general-availability/by-season/${finalSeasonId}/${roundNumber}${team_id ? `?team_id=${team_id}` : ''}` : null;
 
   const { data, isLoading } = useSWR(key, () => athleteService.getRoundAvailabilityReport(
     athleteId,

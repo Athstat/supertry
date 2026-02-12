@@ -11,11 +11,12 @@ import { useFantasySeasons } from "../../../hooks/dashboard/useFantasySeasons"
 type Props = {
     athlete: IProAthlete,
     iconClassName?: string,
-    className?: string
+    className?: string,
+    shouldFetch?: boolean
 }
 
 /** Renders an Availability Indicator Icon, usually to be placed on top of a card */
-export default function AvailabilityIcon({ athlete, className, iconClassName }: Props) {
+export default function AvailabilityIcon({ athlete, className, iconClassName, shouldFetch }: Props) {
 
     const { currentRound } = useFantasySeasons();
     const { seasonTeam } = usePlayerSeasonTeam(athlete);
@@ -25,7 +26,7 @@ export default function AvailabilityIcon({ athlete, className, iconClassName }: 
     const roundNumber = currentRound?.round_number;
     const teamId = seasonTeam?.athstat_id
 
-    const { isLoading, showAvailabilityWarning } = usePlayerRoundAvailability(athleteId, seasonId || '', roundNumber || 0, teamId);
+    const { isLoading, showAvailabilityWarning } = usePlayerRoundAvailability(athleteId, seasonId || '', roundNumber || 0, teamId, shouldFetch);
 
     if (isLoading) {
         return;
