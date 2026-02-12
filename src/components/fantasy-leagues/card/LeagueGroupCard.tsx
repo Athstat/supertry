@@ -6,7 +6,7 @@ import RoundedCard from "../../ui/cards/RoundedCard";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { Users } from "lucide-react";
-import LeagueBadge, { LeagueGoldCheckMark } from "./LeagueBadge";
+import LeagueBadge from "./LeagueBadge";
 import { useAuth } from "../../../contexts/auth/AuthContext";
 
 type CardProps = {
@@ -63,7 +63,7 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
                                 {leagueGroup.title}
                             </h3>
                             
-                            <LeagueGoldCheckMark leagueGroup={leagueGroup} />
+                            {/* <LeagueGoldCheckMark leagueGroup={leagueGroup} /> */}
                         </div>
 
 

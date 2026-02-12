@@ -12,7 +12,7 @@ export function useJoinedLeagues(fantasySeasonId?: string) {
 
     const { data: fetchedLeagues, isLoading: loadingUserLeagues, error } = useSWR(
         key, () => fantasyLeagueGroupsFetcher(fantasySeasonId || ""), {
-        revalidateOnFocus: false,
+        revalidateOnFocus: true,
         revalidateIfStale: true
     });
 
