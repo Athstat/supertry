@@ -2,13 +2,14 @@ import { twMerge } from "tailwind-merge"
 
 type Props = {
     value?: number | string,
-    className?: string
+    className?: string,
+    fontSize?: string
 }
 
-export default function RankNumberCard({ value, className }: Props) {
+export default function RankNumberCard({ value, className, fontSize }: Props) {
 
     const charLen = `${value ?? ""}`.length;
-    const textSize = charLen <= 3 ? "12px" : charLen <= 5 ? "11px" : "10px";
+    const textSize = fontSize ? fontSize : charLen <= 3 ? "12px" : charLen <= 5 ? "11px" : "10px";
 
     return (
         <div className={twMerge(
@@ -16,7 +17,7 @@ export default function RankNumberCard({ value, className }: Props) {
             className
         )}>
             <p
-                className="font-semibold text-wrap truncate"
+                className="text-wrap truncate"
                 style={{
                     fontSize: textSize
                 }}

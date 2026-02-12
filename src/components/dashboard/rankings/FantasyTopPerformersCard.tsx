@@ -54,7 +54,7 @@ export default function FantasyTopPerformersCard({className} : Props) {
   return (
     <Fragment>
       <RoundedCard className={twMerge(
-        "rounded-xl overflow-hidden",
+        "rounded-xl overflow-hidden bg-[#F0F3F7]",
         className
       )}>
         
@@ -66,13 +66,13 @@ export default function FantasyTopPerformersCard({className} : Props) {
         </div>
 
         {/* Table Header */}
-        <div className="bg-[#011E5C] text-white pl-4 py-2 flex items-center gap-4 w-[97%] mx-auto">
-          <div className="w-8 text-xs font-semibold">Position</div>
-          <div className="flex-1 text-xs font-semibold ml-14">Player</div>
-          <div className="text-xs font-semibold mr-4">Points</div>
+        <div className="bg-[#011E5C] text-white pl-4 py-4 flex items-center gap-4 w-[97%] mx-auto">
+          <div className="w-8 text-sm font-medium">Position</div>
+          <div className="flex-1 text-sm font-medium ml-14">Player</div>
+          <div className="text-sm font-medium mr-4">Points</div>
         </div>
 
-        <div className="flex flex-col items-center overflow-y-auto gap-1 pt-4 pl-2 pr-2">
+        <div className="flex flex-col items-center overflow-y-auto gap-4 pt-1 pl-2 pr-2">
           {rankings.map((r, index) => {
             const val = r.total_points;
             const rank = index + 1;
