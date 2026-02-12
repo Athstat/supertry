@@ -1,4 +1,4 @@
-import {scan} from "react-scan";
+// import {scan} from "react-scan";
 
 import ReactDOM from 'react-dom/client';
 import './index.css';
@@ -11,9 +11,9 @@ import App from './App';
 //   sendDefaultPii: true
 // });
 
-scan({
-  enabled: true
-})
+// scan({
+//   enabled: true
+// })
 
 // React Scan is used for checking how many times components rerender
 
