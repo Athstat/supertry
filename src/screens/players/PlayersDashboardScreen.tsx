@@ -18,7 +18,7 @@ import IconCircle from '../../components/ui/icons/IconCircle'
 import TextHeading from '../../components/ui/typography/TextHeading'
 import ScoutingIcon from '../../components/ui/icons/ScoutingIcon'
 
-export default function PlayersOverviewScreen() {
+export default function PlayersDashboardScreen() {
 
   const [searchQuery, setSearchQuery] = useQueryState<string | undefined>('query');
   const debouncedQuery = useDebounced(searchQuery, 500);

@@ -73,7 +73,7 @@ function SeasonTeamGridList({ onSuccess }: SeasonTeamListProps) {
   }
 
   return (
-    <div className="flex flex-col gap-2" >
+    <div className="flex flex-col gap-2 px-6" >
 
       {/* <div>
         <p className="font-semibold" >{season.name}</p>
@@ -85,7 +85,7 @@ function SeasonTeamGridList({ onSuccess }: SeasonTeamListProps) {
         />
       )}
 
-      <div className="grid grid-cols-3 gap-2" >
+      <div className="grid grid-cols-3 gap-4" >
         {teams.map((t) => {
           return (
             <TeamItem
