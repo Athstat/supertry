@@ -22,7 +22,7 @@ export default function RoundedCard({children, className, onClick} : Props) {
         <div
             onClick={handleClick}
             className={twMerge(
-                "bg-white dark:text-white dark:hover:text-slate-50 border border-slate-300 dark:border-slate-800 rounded-2xl transition-all",
+                "bg-white dark:text-white dark:hover:text-slate-50 border border-slate-300 dark:border-slate-800 rounded-[5px] transition-all",
                 AppColours.CARD_BACKGROUND,
                 className
             )}
