@@ -72,7 +72,7 @@ export default function FantasyTopPerformersCard({className} : Props) {
           <div className="text-sm font-medium mr-4">Points</div>
         </div>
 
-        <div className="flex flex-col items-center overflow-y-auto gap-4 pt-1 pl-2 pr-2">
+        <div className="flex flex-col items-center overflow-y-auto gap-2 pt-1 pl-2 pr-2">
           {rankings.map((r, index) => {
             const val = r.total_points;
             const rank = index + 1;
