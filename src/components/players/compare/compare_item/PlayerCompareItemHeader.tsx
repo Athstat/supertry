@@ -4,7 +4,6 @@ import { formatPosition } from '../../../../utils/athletes/athleteUtils';
 import SecondaryText from '../../../ui/typography/SecondaryText';
 import { twMerge } from 'tailwind-merge';
 import { usePlayerCompareActions } from '../../../../hooks/usePlayerCompare';
-import SmartPlayerMugshot from '../../../player/SmartPlayerMugshot';
 import { useMemo } from 'react';
 import { useTooltip } from '../../../../hooks/ui/useTooltip';
 import { positionsTooltipMap } from '../../../../types/constants';
@@ -14,6 +13,8 @@ import TeamLogo from '../../../team/TeamLogo';
 import RoundedCard from '../../../ui/cards/RoundedCard';
 import PlayerCompareSeasonPicker from '../season_stats/PlayerCompareSeasonPicker';
 import { usePlayerCompareItem } from '../../../../hooks/athletes/usePlayerCompareItem';
+import PlayerMugshot from '../../../player/PlayerMugshot';
+import { usePlayerSeasonTeam } from '../../../../hooks/seasons/useSeasonTeams';
 
 type Props = {
   player: IProAthlete;
@@ -21,11 +22,13 @@ type Props = {
 
 export default function PlayerCompareItemHeader({ player }: Props) {
 
-  const {selectedSeason, seasons, switchSeason, hasNoData} = usePlayerCompareItem();
+  const { selectedSeason, seasons, switchSeason, hasNoData } = usePlayerCompareItem();
 
   const { movePlayerLeft, movePlayerRight, removePlayer } = usePlayerCompareActions();
 
   const { openTooltipModal } = useTooltip();
+
+  const {seasonTeam} = usePlayerSeasonTeam(player);
 
   const positionKey = useMemo(() => {
     const lowCase = player.position?.toLowerCase();
@@ -82,12 +85,9 @@ export default function PlayerCompareItemHeader({ player }: Props) {
         </div>
 
         <div className='flex flex-col items-center justify-center gap-2' >
-          <SmartPlayerMugshot
-            url={player.image_url}
-            teamId={player.team_id}
-            className='w-16 h-16'
-            playerImageClassName='w-16 h-16'
-            jerseyClassName='w-16 h-16'
+          <PlayerMugshot
+            teamId={seasonTeam?.athstat_id}
+            className="flex flex-col items-center justify-center bg-gradient-to-br from-blue-500 to-blue-800"
           />
 
           <div className='flex flex-col gap-1 items-center justify-center' >
