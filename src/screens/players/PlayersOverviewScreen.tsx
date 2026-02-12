@@ -25,10 +25,10 @@ export default function PlayersOverviewScreen() {
 
 
   return (
-    <PageView className='px-4 flex flex-col gap-8 py-2' >
+    <PageView className='flex flex-col px-0 gap-8 pb-2' >
 
-      <div className='flex flex-col gap-4' >
-        <div className='flex flex-row items-center gap-2' >
+      <div className='flex flex-col gap-4 rounded-b-[20px] pt-2 pb-5 px-4' >
+        <div className='flex flex-row items-center gap-2 ' >
 
           <IconCircle>
             <PlayersIcon />
@@ -47,15 +47,17 @@ export default function PlayersOverviewScreen() {
         </div>
       </div>
 
-      <Activity mode={debouncedQuery ? "hidden" : "visible"} >
-        <Content />
-      </Activity>
+      <div className='flex flex-col gap-4 px-4' >
+        <Activity mode={debouncedQuery ? "hidden" : "visible"} >
+          <Content />
+        </Activity>
 
-      <Activity mode={debouncedQuery ? "visible" : "hidden"} >
-        <PlayerSearchResults
-          searchQuery={debouncedQuery}
-        />
-      </Activity>
+        <Activity mode={debouncedQuery ? "visible" : "hidden"} >
+          <PlayerSearchResults
+            searchQuery={debouncedQuery}
+          />
+        </Activity>
+      </div>
 
     </PageView>
   )
