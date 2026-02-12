@@ -60,7 +60,7 @@ export default function FantasyTopPerformersCard({className} : Props) {
         
         {/* Title */}
         <div className="p-4">
-          <p className="font-semibold text-lg text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald', }}>
+          <p className="font-[600] text-[20px] text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald', }}>
             Fantasy Top Performers {scoringRound?.round_number ? `(Round ${scoringRound?.round_number})` : ''}
           </p>
         </div>
@@ -72,7 +72,7 @@ export default function FantasyTopPerformersCard({className} : Props) {
           <div className="text-sm font-medium mr-4">Points</div>
         </div>
 
-        <div className="flex flex-col items-center overflow-y-auto gap-2 pt-1 pl-2 pr-2">
+        <div className="flex flex-col items-center gap-2 pt-1 pl-2 pr-2">
           {rankings.map((r, index) => {
             const val = r.total_points;
             const rank = index + 1;
@@ -99,7 +99,7 @@ export default function FantasyTopPerformersCard({className} : Props) {
         {/* View All Players Link */}
         <p
           onClick={handleViewMore}
-          className="font-semibold text-sm text-[#011E5C] dark:text-white underline pb-4 text-center cursor-pointer"
+          className="font-semibold pt-6 text-sm text-[#011E5C] dark:text-white underline pb-4 text-center cursor-pointer"
         >
           View All Players
         </p>
