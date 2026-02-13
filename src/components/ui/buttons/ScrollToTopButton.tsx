@@ -24,11 +24,13 @@ export default function ScrollToTopButton({className, showText} : Props) {
 
             {!isTopPageRefVisible && (
                 <PrimaryButton
+                
                     className={twMerge(
                         "fixed bottom-20 right-0 rounded-full w-11 h-11 shadow-md mx-4",
                         showText && 'rounded-md w-fit',
                         className
                     )}
+
                     onClick={scrollToTop}
                 >
                     {showText && (
