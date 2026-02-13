@@ -1,5 +1,5 @@
 import { ISeasonRound } from '../../types/fantasy/fantasySeason';
-import { isSeasonRoundLocked } from '../leaguesUtils';
+import { isSeasonRoundTeamsLocked } from '../leaguesUtils';
 
 type LocalStorageFlags = {
   done?: boolean;
@@ -35,7 +35,7 @@ export function isCreateTeamTutorialEligible({
     return false;
   }
 
-  const isLocked = isSeasonRoundLocked(currentRound);
+  const isLocked = isSeasonRoundTeamsLocked(currentRound);
 
   if (!isLocked) {
     return !hasTeamForEligibleRound;
