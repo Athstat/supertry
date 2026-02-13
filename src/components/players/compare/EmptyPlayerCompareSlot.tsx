@@ -38,7 +38,7 @@ export default function EmptyPlayerCompareSlot() {
         <div
             className={twMerge(
                 "flex flex-col gap-2 m-4 flex-1 min-w-[300px] max-w-[300px]",
-                "bg-slate-200 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-600 rounded-xl min-h-screen max-h-screen",
+                "bg-slate-200 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-600 rounded-xl h-[50vh]",
                 "flex flex-col items-center justify-center",
                 isCompareLimitReached && "hidden"
             )}
