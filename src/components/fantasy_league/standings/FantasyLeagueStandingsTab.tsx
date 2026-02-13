@@ -11,6 +11,8 @@ import { LeagueRoundCountdown2 } from '../LeagueCountdown';
 import RoundedCard from '../../ui/cards/RoundedCard';
 import { useFantasySeasons } from '../../../hooks/dashboard/useFantasySeasons';
 import { useAuth } from '../../../contexts/auth/AuthContext';
+import { twMerge } from 'tailwind-merge';
+import { AppColours } from '../../../types/constants';
 
 type Props = {
   defaultRoundNumber?: string
@@ -60,6 +62,11 @@ export function FantasyLeagueStandingsTab({defaultRoundNumber} : Props) {
           <ClaimAccontCard />
         )}
       </div>
+
+      <div className={twMerge(
+        'w-full h-[100px] bottom-0 left-0 fixed bg-gradient-to-t to-transparent',
+        AppColours.BACKGROUND_GRADIENT
+      )} ></div>
 
     </div>
   );

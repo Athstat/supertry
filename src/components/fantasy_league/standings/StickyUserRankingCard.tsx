@@ -14,9 +14,9 @@ export default function StickyUserRankingCard({ userRanking, onClick }: Props) {
     const pointsDisplay = smartRoundUp(userRanking?.league_points ?? userRanking?.total_score) || '-';
 
     return (
-        <div className="fixed p-4 bottom-1 left-0 w-full" >
+        <div className="fixed p-4 bottom-1 left-0 z-[10] w-full" >
             <div onClick={onClick} className={twMerge(
-                "w-full rounded-xl bg-blue-500 dark:shadow-lg text-white shadow-black dark:bg-blue-600 cursor-pointer p-4 flex flex-col gap-2",
+                "w-full rounded-md bg-blue-500 dark:shadow-lg text-white shadow-black dark:bg-blue-600 cursor-pointer p-4 flex flex-col gap-2",
             )} >
 
 
