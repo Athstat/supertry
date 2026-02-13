@@ -8,6 +8,7 @@ import { getGameKeyEventName, getPeriodMarkerName } from "../../../../utils/fixt
 import WhistleIcon from "../../../ui/icons/WhistleIcon";
 import { MdSportsRugby } from "react-icons/md";
 import RugbyGoalPostIcon from "../../../ui/icons/RugbyGoalPostIcon";
+import { useFixtureScreen } from "../../../../hooks/fixtures/useFixture";
 
 type Props = {
     fixture: IFixture
@@ -63,17 +64,29 @@ function EventCard({ event, fixture }: EventCardProps) {
     const isHome = event.team_id === fixture.team?.athstat_id;
     const actionName = getGameKeyEventName(event.action);
 
+    const { openPlayerMatchModal } = useFixtureScreen();
+
     if (['END', 'START'].includes(event.action)) {
         return (
             <GamePeriodMarker event={event} fixture={fixture} />
         )
     }
 
+    const handleClick = () => {
+        if (event.athlete) {
+            openPlayerMatchModal(event.athlete);
+        }
+    }
+
     return (
-        <div className={twMerge(
-            "w-full flex flex-row items-center justify-start",
-            !isHome && "justify-end"
-        )} >
+        <div
+            className={twMerge(
+                "w-full flex flex-row items-center justify-start cursor-pointer",
+                !isHome && "justify-end"
+            )}
+
+            onClick={handleClick}
+        >
             <div className="flex flex-row items-center gap-2" >
                 {isHome && <p className="text-sm font-extrabold" >{event.time}'</p>}
                 {isHome && <EventIcon event={event} />}
