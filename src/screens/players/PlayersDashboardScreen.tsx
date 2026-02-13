@@ -17,8 +17,6 @@ import PlayersIcon from '../../components/ui/icons/PlayersIcon'
 import IconCircle from '../../components/ui/icons/IconCircle'
 import TextHeading from '../../components/ui/typography/TextHeading'
 import ScoutingIcon from '../../components/ui/icons/ScoutingIcon'
-import { ScopeProvider } from 'jotai-scope'
-import { comparePlayersAtomGroup } from '../../state/comparePlayers.atoms'
 import { usePlayerCompareActions } from '../../hooks/usePlayerCompare'
 
 export default function PlayersDashboardScreen() {
@@ -26,54 +24,50 @@ export default function PlayersDashboardScreen() {
   const [searchQuery, setSearchQuery] = useQueryState<string | undefined>('query');
   const debouncedQuery = useDebounced(searchQuery, 500);
 
-  const atoms = [comparePlayersAtomGroup.isCompareModeModal]
-
 
   return (
-    <ScopeProvider atoms={atoms} >
-      <PageView className='flex flex-col px-0 gap-8 pb-2' >
+    <PageView className='flex flex-col px-0 gap-8 pb-2' >
 
-        <div className='flex flex-col gap-4 rounded-b-[20px] pt-2 pb-5 px-4' >
-          <div className='flex flex-row items-center gap-2 ' >
+      <div className='flex flex-col gap-4 rounded-b-[20px] pt-2 pb-5 px-4' >
+        <div className='flex flex-row items-center gap-2 ' >
 
-            <IconCircle>
-              <PlayersIcon />
-            </IconCircle>
+          <IconCircle>
+            <PlayersIcon />
+          </IconCircle>
 
-            <TextHeading className='text-2xl font-bold' >Players</TextHeading>
+          <TextHeading className='text-2xl font-bold' >Players</TextHeading>
 
-          </div>
-
-          <div className='flex flex-row items-center gap-2 w-full h-[40px]' >
-            <SearchInput
-              value={searchQuery}
-              onChange={setSearchQuery}
-              placeholder='Search players by name'
-            />
-          </div>
         </div>
 
-        <div className='flex flex-col gap-4 px-4' >
-          <Activity mode={debouncedQuery ? "hidden" : "visible"} >
-            <Content />
-          </Activity>
-
-          <Activity mode={debouncedQuery ? "visible" : "hidden"} >
-            <PlayerSearchResults
-              searchQuery={debouncedQuery}
-            />
-          </Activity>
+        <div className='flex flex-row items-center gap-2 w-full h-[40px]' >
+          <SearchInput
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder='Search players by name'
+          />
         </div>
+      </div>
 
-      </PageView>
-    </ScopeProvider>
+      <div className='flex flex-col gap-4 px-4' >
+        <Activity mode={debouncedQuery ? "hidden" : "visible"} >
+          <Content />
+        </Activity>
+
+        <Activity mode={debouncedQuery ? "visible" : "hidden"} >
+          <PlayerSearchResults
+            searchQuery={debouncedQuery}
+          />
+        </Activity>
+      </div>
+
+    </PageView>
   )
 }
 
 
 function Content() {
 
-  const {showCompareModal} = usePlayerCompareActions();
+  const { showCompareModal } = usePlayerCompareActions();
 
   const navigate = useNavigate();
 
