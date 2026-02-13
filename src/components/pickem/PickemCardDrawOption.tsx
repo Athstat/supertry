@@ -44,7 +44,7 @@ export default function PickemCardDrawOption({ fixture, fetchGameVotes, onVote, 
             onClick={handleVote}
             disabled={disabled}
             className={twMerge(
-                'flex flex-col relative items-center justify-between w-full gap-2 px-4 py-3 rounded-md h-full transition-all duration-200 justify-self-center',
+                'flex flex-col relative items-center justify-center w-full gap-2 px-4 py-3 rounded-md h-full transition-all duration-200 justify-self-center',
                 'bg-[#F9FBFD] dark:bg-slate-800 shadow-[0px_0px_3px_rgba(0,0,0,0.25)]',
                 !isLocked && 'hover:bg-slate-100 dark:hover:bg-slate-700/50 active:scale-95 cursor-pointer',
                 votedDraw && !isLocked && 'bg-slate-200 dark:bg-slate-600 ring-2 ring-slate-500 shadow-lg',
@@ -54,9 +54,11 @@ export default function PickemCardDrawOption({ fixture, fetchGameVotes, onVote, 
             ref={ref}
         >
 
-            <VoteIndicator isHighlighted={votedDraw} />
+            <div className="top-0 left-0 flex flex-row w-full items-center justify-center absolute h-8" >
+                <VoteIndicator isHighlighted={votedDraw} />
+            </div>
 
-            <div className="relative">
+            <div className="relative pt-2">
                 {clickedButton === 'draw' && isVoting ? (
                     <Loader className="w-5 h-5 animate-spin text-slate-600 dark:text-slate-300" />
                 ) : (
