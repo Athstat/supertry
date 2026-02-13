@@ -13,6 +13,7 @@ import { twMerge } from "tailwind-merge"
 import { IFixture } from "../../../../types/games"
 import { usePlayerData } from "../../../../providers/PlayerDataProvider"
 import RoundedCard from "../../../ui/cards/RoundedCard"
+import { usePlayerSeasonTeam } from "../../../../hooks/seasons/useSeasonTeams"
 
 type Props = {
     player: IProAthlete,
@@ -100,9 +101,11 @@ type HistoryItemProps = {
 function PointsHistoryItem({ item, player, onClick }: HistoryItemProps) {
 
     const { game } = item;
+    const {seasonTeam} = usePlayerSeasonTeam(player);
+
     const kickoff = game.kickoff_time ? new Date(game.kickoff_time) : undefined;
 
-    const opp = getOpponent(game, player);
+    const opp = getOpponent(game, player, seasonTeam);
 
     const { team, opposition_team } = game;
     const { homeTeamWon, awayTeamWon, isDraw } = fixtureSummary(game);
@@ -115,6 +118,8 @@ function PointsHistoryItem({ item, player, onClick }: HistoryItemProps) {
             onClick(game);
         }
     }
+
+    console.log(" ", opp);
 
     return (
         <div onClick={handleOnClick} className="flex rounded-xl cursor-pointer flex-col gap-2 items-center justify-center flex-1" >
