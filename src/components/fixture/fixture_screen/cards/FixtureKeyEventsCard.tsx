@@ -21,7 +21,7 @@ export default function FixtureKeyEventsCard({ fixture }: Props) {
     const { data, isLoading } = useSWR(key, () => gamesService.getKeyEvents(fixture.game_id));
 
     const events = [...(data || [])].sort((a, b) => {
-        return ((b.time * 60) + b.secs) - ((a.time * 60) + a.secs);
+        return ((a.time * 60) + a.secs) - ((b.time * 60) + b.secs);
     });
 
     if (isLoading) {
@@ -39,7 +39,7 @@ export default function FixtureKeyEventsCard({ fixture }: Props) {
     return (
         <RoundedCard className="p-4 flex flex-col gap-2 " >
 
-            <div className="flex flex-col gap-1" >
+            <div className="flex flex-col gap-2" >
                 {events.map((e) => {
                     return (
                         <EventCard
