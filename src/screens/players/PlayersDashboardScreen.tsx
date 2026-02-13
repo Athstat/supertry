@@ -17,7 +17,6 @@ import PlayersIcon from '../../components/ui/icons/PlayersIcon'
 import IconCircle from '../../components/ui/icons/IconCircle'
 import TextHeading from '../../components/ui/typography/TextHeading'
 import ScoutingIcon from '../../components/ui/icons/ScoutingIcon'
-import PlayerCompareModal from '../../components/players/compare/PlayerCompareModal'
 import { ScopeProvider } from 'jotai-scope'
 import { comparePlayersAtomGroup } from '../../state/comparePlayers.atoms'
 import { usePlayerCompareActions } from '../../hooks/usePlayerCompare'
@@ -193,8 +192,6 @@ function Content() {
 
       <PlayersTeamsGridList />
       <PlayersCountryGridList />
-
-      <PlayerCompareModal />
     </Fragment>
   )
 }

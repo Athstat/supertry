@@ -13,7 +13,6 @@ import { getAthletesSummary } from "../../utils/athletes/athleteUtils";
 import PlayerProfileModal from "../player/PlayerProfileModal";
 import SecondaryText from "../ui/typography/SecondaryText";
 import TeamLogo from "../team/TeamLogo";
-import PlayerCompareModal from "./compare/PlayerCompareModal";
 import PlayersScreenCompareStatus from "./compare/PlayersScreenCompareStatus";
 import { twMerge } from "tailwind-merge";
 import { AppColours } from "../../types/constants";
@@ -215,8 +214,6 @@ export default function PlayersList({ players, stickyHeaderClassName }: Props) {
                         onClearSearchQuery={() => setSearchQuery("")}
                     />
                 )}
-
-                <PlayerCompareModal />
 
                 {playerModalPlayer && (
                     <PlayerProfileModal
