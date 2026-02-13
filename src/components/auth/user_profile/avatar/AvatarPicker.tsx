@@ -84,7 +84,7 @@ export default function AvatarPicker({ isOpen, value, onClose, onChange, isSavin
                 </div>
             </RoundedCard> */}
 
-            <div className="flex flex-row items-center gap-4 flex-wrap pb-20 overflow-y-scroll justify-start w-fit" >
+            <div className="grid grid-cols-3 items-center gap-4 pb-40 overflow-y-scroll no-scrollbar justify-start w-fit" >
 
                 {images.map((i) => {
                     return (
@@ -102,10 +102,11 @@ export default function AvatarPicker({ isOpen, value, onClose, onChange, isSavin
                 })}
             </div>
 
+
             <div className="absolute bottom-0 left-0 w-full" >
                 <div className="w-full flex flex-col relative items-center justify-center h-[150px]" >
-                    <PrimaryButton 
-                        className="w-1/3 z-[10] text-base font-semibold" 
+                    <PrimaryButton
+                        className="w-1/3 z-[10] text-base font-semibold"
                         isLoading={isSaving}
                         disabled={isSaving}
                         onClick={onConfirm}
