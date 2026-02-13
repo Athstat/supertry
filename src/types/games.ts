@@ -39,6 +39,7 @@ export type IFixture = BaseFixture & {
   league: string;
   league_id: string;
   highlights_link?: string;
+  updated_power_ranking?: number;
 };
 
 export type GameStatus = string | 'completed' | 'in_progress' | 'not_started';
