@@ -3,6 +3,7 @@ import { useLiveFixture } from "../../../hooks/fixtures/useLiveFixture";
 import { IFixture } from "../../../types/games";
 import { fixtureSummary } from "../../../utils/fixtureUtils";
 import TeamLogo from "../../team/TeamLogo";
+import { trimTeamName } from "../../../utils/stringUtils";
 
 type Props = {
     fixture: IFixture,
@@ -36,50 +37,55 @@ export default function FixtureCardTeam({ fixture, showLogo, isHome = true }: Pr
     const teamWon = isHome ? homeTeamWon : awayTeamWon;
 
     const showScore = gameKickedOff && fixture.team_score !== null && fixture.opposition_score !== null;
-    
+
     const showScoreOnRight = isHome && showScore;
     const showScoreOnLeft = !isHome && showScore;
 
     return (
-        <div className="flex-1 flex text-slate-700 dark:text-white flex-col items-end justify-center">
-            <div className="flex flex-row gap-2 items-center w-full justify-start">
+        <div className={twMerge(
+            "flex-1 flex text-slate-700 dark:text-white flex-row items-center justify-start gap-2",
+            !isHome && "justify-end"
+        )}>
 
-                {showScoreOnLeft ? (
-                    <div
-                        className={twMerge(
-                            'flex items-center justify-start px-2 py-1 rounded-full text-slate-700 dark:text-slate-200 text-md',
-                            teamWon && 'font-bold'
-                        )}
-                    >
-                        {teamScore}
-                    </div>
-                ) : null}
-
-                <div className="flex flex-col gap-4 items-center w-full justify-start">
-                    {showLogo && (
-                        <TeamLogo
-                            url={team?.image_url}
-                            teamName={team?.athstat_name}
-                            className="w-10 h-10"
-                        />
+            {showScoreOnLeft ? (
+                <div
+                    className={twMerge(
+                        'flex items-center justify-start px-2 py-1 rounded-full text-slate-700 dark:text-slate-200 text-md',
+                        teamWon && 'font-bold'
                     )}
-
-                    <p className={twMerge('text-xs md:text-sm w-fit text-center')}>
-                        {team?.athstat_name}
-                    </p>
+                >
+                    {teamScore}
                 </div>
+            ) : null}
 
-                {showScoreOnRight ? (
-                    <div
-                        className={twMerge(
-                            'flex items-center justify-start px-2 py-1 rounded-full text-slate-700 dark:text-slate-200 text-md',
-                            teamWon && 'font-bold'
-                        )}
-                    >
-                        {teamScore}
-                    </div>
-                ) : null}
+            <div className={twMerge(
+                "flex flex-col gap-1 items-center w-fit justify-center",
+                !isHome && "items-center"
+            )}>
+                {showLogo && (
+                    <TeamLogo
+                        url={team?.image_url}
+                        teamName={team?.athstat_name}
+                        className="w-10 h-10"
+                    />
+                )}
+
+                <p className={twMerge('text-[10px] md:text-sm w-fit text-center')}>
+                     {trimTeamName(team?.athstat_name)}
+                </p>
             </div>
+
+            {showScoreOnRight ? (
+                <div
+                    className={twMerge(
+                        'flex items-center justify-start px-2 py-1 rounded-full text-slate-700 dark:text-slate-200 text-md',
+                        teamWon && 'font-bold'
+                    )}
+                >
+                    {teamScore}
+                </div>
+            ) : null}
         </div>
+
     )
 }

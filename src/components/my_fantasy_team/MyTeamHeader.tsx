@@ -1,34 +1,31 @@
 import SaveTeamBar from './SaveTeamBar';
 import { Coins } from 'lucide-react';
-import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
 import { useRoundScoringSummaryV2 } from '../../hooks/fantasy/useRoundScoringSummary';
 import { smartRoundUp } from '../../utils/intUtils';
-import { isSeasonRoundLocked } from '../../utils/leaguesUtils';
+import { isSeasonRoundStarted } from '../../utils/leaguesUtils';
 import SecondaryText from '../ui/typography/SecondaryText';
 import { Activity } from 'react';
 import { useLeagueConfig } from '../../hooks/useLeagueConfig';
 import { ISeasonRound } from '../../types/fantasy/fantasySeason';
 import { LeagueRoundCountdown2 } from '../fantasy_league/LeagueCountdown';
-
-type Props = {
-  onTeamUpdated?: () => Promise<void>;
-};
+import SecondChanceCard from './second_chance/SecondChanceCard';
+import { useMyTeam } from '../../hooks/fantasy/my_team/useMyTeam';
 
 /** Renders My Team View Header */
-export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
+export default function MyTeamHeader() {
 
   const { leagueConfig } = useLeagueConfig();
-  const { totalSpent, selectedCount, leagueRound } = useFantasyTeam();
+  const {onUpdateTeam, isReadOnly, selectedCount, round, totalSpent} = useMyTeam();
 
   const handleTeamUpdated = async () => {
-    if (onTeamUpdated) {
-      await onTeamUpdated();
+    if (onUpdateTeam) {
+      onUpdateTeam();
     }
   }
 
 
   return (
-    <div className="px-4 flex flex-col gap-3.5" >
+    <div className="px-4 flex flex-col gap-3" >
 
       <div className="flex flex-row  items-center justify-between" >
 
@@ -44,8 +41,8 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
 
         <div className="flex flex-row items-center justify-center text-center gap-1">
 
-          {leagueRound && <TeamPointsCard
-            leagueRound={leagueRound}
+          {round && <TeamPointsCard
+            leagueRound={round}
           />}
 
         </div>
@@ -63,11 +60,15 @@ export default function MyTeamViewHeader({ onTeamUpdated }: Props) {
         </div>
       </div>
 
-      {leagueRound && <SaveTeamBar
-        leagueRound={leagueRound}
+      {round && <SaveTeamBar
+        leagueRound={round}
         onTeamUpdated={handleTeamUpdated}
       />}
 
+      {!isReadOnly && (
+        <SecondChanceCard 
+        />
+      )}
     </div>
   );
 }
@@ -78,15 +79,12 @@ type TeamPointsProps = {
 
 function TeamPointsCard({ leagueRound }: TeamPointsProps) {
 
-  const { isReadOnly, team } = useFantasyTeam();
-  const isLocked = isSeasonRoundLocked(leagueRound);
-  const { highestPointsScored, averagePointsScored, isLoading } =
-    useRoundScoringSummaryV2(leagueRound);
+  const { isReadOnly, team } = useMyTeam();
+  const hasRoundStarted = isSeasonRoundStarted(leagueRound);
 
-  const showScore = !isLoading && isLocked
+  const { highestPointsScored, averagePointsScored, isLoading } = useRoundScoringSummaryV2(leagueRound);
 
-  // Uses team?.overall_score here instead of userscore from the useRoundScoringSummary
-  // because that hook returns the auth user's score not the score of the teams manager
+  const showScore = !isLoading && hasRoundStarted
 
   return (
     <div className="flex flex-col min-h-[30px] max-h-[30px]" >
@@ -100,7 +98,7 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
           </div>
 
           <div className="flex flex-col items-center justify-center" >
-            <p className="font-black text-md" >{smartRoundUp(team?.overall_score ?? 0)}</p>
+            <p className="font-black text-md" >{smartRoundUp(team?.overall_score)}</p>
             <SecondaryText className="text-[10px]" >Score</SecondaryText>
           </div>
 
@@ -111,7 +109,7 @@ function TeamPointsCard({ leagueRound }: TeamPointsProps) {
         </div>
       </Activity>
 
-      <Activity mode={!isLocked && !isReadOnly ? "visible" : "hidden"} >
+      <Activity mode={!hasRoundStarted && !isReadOnly ? "visible" : "hidden"} >
         <div className='flex flex-row w-full items-center justify-center' >
           <LeagueRoundCountdown2
               leagueRound={leagueRound}

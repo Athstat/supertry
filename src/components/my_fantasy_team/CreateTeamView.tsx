@@ -3,7 +3,7 @@ import PrimaryButton from '../ui/buttons/PrimaryButton';
 
 import PlayerProfileModal from '../player/PlayerProfileModal';
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
-import { isSeasonRoundLocked } from '../../utils/leaguesUtils';
+import { isSeasonRoundTeamsLocked } from '../../utils/leaguesUtils';
 import NoContentCard from '../ui/typography/NoContentMessage';
 import { useTabView } from '../ui/tabs/TabView';
 
@@ -12,8 +12,8 @@ import { useCreateFantasyTeam } from '../../hooks/fantasy/useCreateFantasyTeam';
 import { FantasyTeamFormation3D } from './FantasyTeamFormation3D';
 import { IProAthlete } from '../../types/athletes';
 import { PlayerActionModal } from './PlayerActionModal';
-import CreateTeamViewHeader from './CreateTeamViewHeader';
-import TeamBenchDrawer from './TeamBenchDrawer';
+import CreateTeamHeader from './CreateTeamHeader';
+import MyTeamBenchDrawer from './MyTeamBenchDrawer';
 import { useTutorial } from '../../hooks/tutorials/useTutorial';
 import { TUTORIAL_IDS } from '../../tutorials/tutorialIds';
 import { CREATE_TEAM_TUTORIAL_STEP_INDEX } from '../../tutorials/createTeamTutorial';
@@ -65,7 +65,7 @@ export default function CreateFantasyTeamView() {
     cancelSwap();
   }
 
-  const isLocked = leagueRound && isSeasonRoundLocked(leagueRound);
+  const isLocked = leagueRound && isSeasonRoundTeamsLocked(leagueRound);
 
   const handleGoToStandings = () => {
     tabNavigate('standings');
@@ -293,7 +293,7 @@ export default function CreateFantasyTeamView() {
   return (
     <div className="w-full flex flex-col" data-tutorial="my-team-intro">
 
-      <CreateTeamViewHeader />
+      <CreateTeamHeader />
 
       {isCreateTeamTutorialActive && isFreeRoam && (
         <div className="px-4 mt-3">
@@ -311,7 +311,7 @@ export default function CreateFantasyTeamView() {
           firstRowMargin='mt-8'
         />
 
-        <TeamBenchDrawer
+        <MyTeamBenchDrawer
           onPlayerClick={handleOpenActionModal}
         />
       </div>

@@ -21,6 +21,8 @@ import { AuthProvider } from "./contexts/auth/AuthContext";
 import InternalUserProfileProvider from "./contexts/auth/InternalUserProfileContext";
 import { AthleteProvider } from "./contexts/data/AthleteContext";
 import SeasonTeamsProvider from "./contexts/data/SeasonTeamsContext";
+import PlayerCompareProvider from "./providers/PlayerCompareProvider";
+import PlayerCompareModal from "./components/players/compare/PlayerCompareModal";
 
 type Props = {
     children?: ReactNode
@@ -100,6 +102,17 @@ function DataLayer({ children }: Props) {
     )
 }
 
+function UILayer({ children }: Props) {
+    return (
+        <TooltipProvider>
+            <PlayerCompareProvider>
+                <FantasySeasonsPickerModal />
+                {children}
+                <PlayerCompareModal />
+            </PlayerCompareProvider>
+        </TooltipProvider>
+    )
+}
 
 /** Groups app state layer providers */
 function AppStateLayer({ children }: Props) {
@@ -124,10 +137,9 @@ function AppStateLayer({ children }: Props) {
                         fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
                     >
                         <TutorialProvider>
-                            <TooltipProvider>
-                                <FantasySeasonsPickerModal />
+                            <UILayer>
                                 {children}
-                            </TooltipProvider>
+                            </UILayer>
                         </TutorialProvider>
                     </ErrorBoundary>
                 </GeoLocationProvider>

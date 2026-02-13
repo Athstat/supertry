@@ -1,6 +1,6 @@
  
 import { createContext, ReactNode } from "react";
-import { IProAthlete } from "../types/athletes";
+import { IProAthlete } from "../../types/athletes";
 
 type ContextProps = {
     isComparing?: boolean,

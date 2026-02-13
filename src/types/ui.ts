@@ -17,3 +17,31 @@ export type FilterListOption = {
     label: string,
     value: string
 }
+
+export type UserTopicReaction = {
+    emoji: string,
+    created_at: Date,
+    updated_at: Date,
+    topic: string
+}
+
+export type EmojiReactionCount = {
+    emoji: string,
+    reaction_count: number
+}
+
+export type TopicReactions = {
+    user_reaction?: UserTopicReaction,
+    all_reactions: EmojiReactionCount[]
+}
+
+export type DefaultImage = {
+    id: string,
+    library: string,
+    title: string,
+    description?: string,
+    group?: string,
+    image: string,
+    is_hidden: boolean,
+    created_at: Date
+}

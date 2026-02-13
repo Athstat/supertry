@@ -31,7 +31,7 @@ export default function PlayersTeamsGridList({ onSuccess }: Props) {
 
 
   return (
-    <div className="flex flex-col gap-4" >
+    <div className="flex flex-col gap-4 rounded-2xl" >
       <div>
         <p className='font-bold text-md' >By Team</p>
       </div>
@@ -85,7 +85,7 @@ function SeasonTeamGridList({ onSuccess }: SeasonTeamListProps) {
         />
       )}
 
-      <div className="grid grid-cols-3 gap-2" >
+      <div className="grid grid-cols-3 gap-4" >
         {teams.map((t) => {
           return (
             <TeamItem

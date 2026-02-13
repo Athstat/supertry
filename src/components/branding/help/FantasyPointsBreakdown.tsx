@@ -1,9 +1,17 @@
 import { Star, Target, BarChart, TriangleAlert, Trophy } from "lucide-react";
 
 export default function FantasyPointsBreakdown() {
-
   return (
     <div className="space-y-4 pb-10">
+      {/* Eligibility Note */}
+      <div className="rounded-lg border-2 border-amber-300/60 bg-amber-50/60 dark:border-amber-400/40 dark:bg-amber-900/20 p-3 text-sm text-amber-900 dark:text-amber-100">
+        <strong>Eligibility note:</strong> Some actions only score for specific positions.
+        <div className="mt-1">
+          Props only: Scrums Won Outright, Scrums Won Penalty. <br />
+          Hooker/Lock only: Lineouts Won, Lineout Won Own Throw, Lineout Won Steal, Lineouts Lost, Lineout Non Straight.
+        </div>
+      </div>
+
       {/* High Impact Actions */}
       <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-green-500/20 to-primary-500/20 dark:from-green-600/30 dark:to-primary-600/30 border-2 border-green-500/50 dark:border-green-400/50 p-4 shadow-lg">
         <div className="flex items-center gap-2 mb-3">
@@ -15,9 +23,20 @@ export default function FantasyPointsBreakdown() {
           </h3>
         </div>
         <div className="space-y-2">
-          <ActionRow action="Try Assist" points="+2" />
-          <ActionRow action="Scrums Won Outright" points="+1.2" />
-          <ActionRow action="Scrums Won Free Kick" points="+1.1" />
+          <ActionRow action="Tries" points="+4" />
+          <ActionRow action="Try Assist" points="+2.5" />
+          <ActionRow action="Kick Try Scored" points="+2" />
+          <ActionRow action="Turnover Won" points="+1.5" />
+          <ActionRow action="Scrums Won Penalty" points="+1.5" />
+          <ActionRow action="Clean Breaks" points="+1" />
+          <ActionRow action="Defenders Beaten" points="+1" />
+          <ActionRow action="Dominant Tackles" points="+1" />
+          <ActionRow action="Line Break Assists" points="+1" />
+          <ActionRow action="Lineout Won Steal" points="+1" />
+          <ActionRow action="Kick Possession Retained" points="+1" />
+          <ActionRow action="True Retained Kicks" points="+1" />
+          <ActionRow action="Scrums Won Free Kick" points="+1" />
+          <ActionRow action="Scrums Won Outright" points="+0.8" />
         </div>
       </div>
 
@@ -32,13 +51,15 @@ export default function FantasyPointsBreakdown() {
           </h3>
         </div>
         <div className="space-y-2">
-          <ActionRow action="Clean Break" points="+1" />
-          <ActionRow action="Defender Beaten" points="+1" />
-          <ActionRow action="Dominant Tackle" points="+1" />
-          <ActionRow action="Lineout Won Steal" points="+1" />
-          <ActionRow action="Offload" points="+1" />
-          <ActionRow action="Tackle Turnover" points="+1" />
-          <ActionRow action="Turnover Won" points="+1" />
+          <ActionRow action="Offload" points="+0.5" />
+          <ActionRow action="Carries Crossed Gain Line" points="+0.5" />
+          <ActionRow action="Carry Dominant" points="+0.5" />
+          <ActionRow action="Tackles" points="+0.4" />
+          <ActionRow action="Lineout Won Own Throw" points="+0.4" />
+          <ActionRow action="Playmaker Kick" points="+0.4" />
+          <ActionRow action="Conversion Goals" points="+0.5" />
+          <ActionRow action="Penalty Goals" points="+0.5" />
+          <ActionRow action="Drop Goals Converted" points="+0.5" />
         </div>
       </div>
 
@@ -53,12 +74,11 @@ export default function FantasyPointsBreakdown() {
           </h3>
         </div>
         <div className="space-y-2">
-          <ActionRow action="Match Points Scored" points="+0.8" />
-          <ActionRow action="Carry Dominant" points="+0.5" />
-          <ActionRow action="Tackle" points="+0.5" />
-          <ActionRow action="Scrums Won Penalty" points="+0.5" />
-          <ActionRow action="Lineout Won Own Throw" points="+0.5" />
-          <ActionRow action="Kick Penalty Good" points="+0.5" />
+          <ActionRow action="Lineouts Won" points="+0.2" />
+          <ActionRow action="Collection Loose Ball" points="+0.2" />
+          <ActionRow action="Post Contact Metres" points="+0.1" />
+          <ActionRow action="Playmaker Pass" points="+0.05" />
+          <ActionRow action="Ruck Arrival Attack" points="+0.05" />
         </div>
       </div>
 
@@ -73,11 +93,7 @@ export default function FantasyPointsBreakdown() {
           </h3>
         </div>
         <div className="space-y-2">
-          <ActionRow action="Carry Crossed Gain Line" points="+0.3" />
-          <ActionRow action="Post Contact Metres" points="+0.1" />
-          <ActionRow action="Ruck Arrival Attack" points="+0.05" />
-          <ActionRow action="Minutes Played Total" points="+0.025" />
-          <ActionRow action="Carry Metres Total" points="+0.005" />
+          <ActionRow action="Carry Metres Total" points="+0.02" />
         </div>
       </div>
 
@@ -92,10 +108,16 @@ export default function FantasyPointsBreakdown() {
           </h3>
         </div>
         <div className="space-y-2">
-          <ActionRow action="Missed Tackle" points="−0.5" negative />
-          <ActionRow action="Kick Penalty Bad" points="−0.5" negative />
-          <ActionRow action="Scrums Lost Penalty" points="−0.5" negative />
-          <ActionRow action="Scrums Lost Outright" points="−1" negative />
+          <ActionRow action="Penalties Conceded" points="-1" negative />
+          <ActionRow action="Scrums Lost Outright" points="-0.8" negative />
+          <ActionRow action="Turnovers Conceded" points="-0.6" negative />
+          <ActionRow action="Missed Tackles" points="-0.5" negative />
+          <ActionRow action="Lineout Non Straight" points="-0.5" negative />
+          <ActionRow action="Lineouts Lost" points="-0.4" negative />
+          <ActionRow action="Bad Passes" points="-0.3" negative />
+          <ActionRow action="Handling Error" points="-0.3" negative />
+          <ActionRow action="Missed Goals" points="-0.3" negative />
+          <ActionRow action="Kick Possession Lost" points="-0.2" negative />
         </div>
       </div>
     </div>

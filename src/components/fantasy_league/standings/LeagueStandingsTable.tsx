@@ -11,9 +11,10 @@ import { useNavigate } from 'react-router-dom';
 import { ErrorState } from '../../ui/ErrorState';
 import { LeagueStandingsTableRow } from './LeagueStandingsTableRow';
 import StickyUserRankingCard from './StickyUserRankingCard';
-import { isSeasonRoundLocked } from '../../../utils/leaguesUtils';
+import { isSeasonRoundTeamsLocked } from '../../../utils/leaguesUtils';
 import { ISeasonRound } from '../../../types/fantasy/fantasySeason';
 import { useAuth } from '../../../contexts/auth/AuthContext';
+import ScrollToTopButton from '../../ui/buttons/ScrollToTopButton';
 
 type Props = {
   round?: ISeasonRound
@@ -79,7 +80,8 @@ export default function LeagueStandingsTable({
         rank: undefined,
         league_rank: lastRanking + index + 1,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        avatar_url: m.user.avatar_url
       }
     });
 
@@ -98,7 +100,7 @@ export default function LeagueStandingsTable({
     }
   }
 
-  const isRoundLocked = selectedRound && isSeasonRoundLocked(selectedRound);
+  const isRoundLocked = selectedRound && isSeasonRoundTeamsLocked(selectedRound);
 
   if (error) {
     return (
@@ -148,6 +150,11 @@ export default function LeagueStandingsTable({
       <StickyUserRankingCard
         userRanking={userRanking}
         onClick={handleScrollToUser}
+      />
+
+      <ScrollToTopButton  
+        className='top-4' 
+        showText
       />
 
       {!isLoading && <div className="divide-y dark:divide-slate-700/20 divide-slate-300/40">

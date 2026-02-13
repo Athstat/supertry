@@ -8,6 +8,7 @@ import FormIndicator from "./FormIndicator"
 import { stripCountryName } from "../../utils/stringUtils"
 import { useInView } from "react-intersection-observer"
 import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams"
+import AvailabilityIcon from "../players/availability/AvailabilityIcon"
 
 
 type Props = {
@@ -34,7 +35,7 @@ export default function PlayerRowCard({ player, onClick }: Props) {
         <tr
             ref={ref}
             onClick={handelClick}
-            className="cursor-pointer dark:hover:bg-slate-800 hover:bg-slate-100"
+            className="cursor-pointer"
         >
             {inView && <>
                 <td className="py-3" >
@@ -47,9 +48,13 @@ export default function PlayerRowCard({ player, onClick }: Props) {
                         </div>
 
                         <div>
+
                             <div>
                                 <p className="text-sm" >{player.player_name}</p>
+
                             </div>
+
+
                             <div className="flex flex-row items-center gap-1" >
 
                                 <SecondaryText className="text-[11px]  truncate" >{formatPosition(player.position)} </SecondaryText>
@@ -64,6 +69,13 @@ export default function PlayerRowCard({ player, onClick }: Props) {
                                     </>
                                 )}
                             </div>
+                        </div>
+
+                        <div>
+                            <AvailabilityIcon 
+                                athlete={player}
+                                shouldFetch={inView}
+                            />
                         </div>
                     </div>
                 </td>

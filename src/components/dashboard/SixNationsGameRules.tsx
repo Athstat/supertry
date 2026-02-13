@@ -23,7 +23,7 @@ export default function SixNationsGameRules({ className }: Props) {
         )}>
             <h1 className="font-[510] text-[20px] text-[#011E5C] dark:text-white" style={{ fontFamily: 'Oswald, sans-serif' }}>Rules and Prizes</h1>
             
-            <SecondaryText>Compete for glory and exclusive rewards in this year’s Six Nations Fantasy challenge. Build your roster, track the leaderboard, triumph over all.</SecondaryText>
+            <SecondaryText className='text-xs' >Compete for glory and exclusive rewards in this year’s Six Nations Fantasy challenge. Build your roster, track the leaderboard, triumph over all.</SecondaryText>
             
             {showGameRules && <div className='flex flex-col gap-4' >
                 <div>

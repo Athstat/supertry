@@ -1,35 +1,35 @@
-import { ArrowUpDown, CirclePlus, TriangleAlert } from "lucide-react";
+import { ArrowUpDown, CirclePlus, Lock, TriangleAlert } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { Activity, useMemo } from "react";
-import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
 import { usePlayerRoundAvailability } from "../../hooks/fantasy/usePlayerRoundAvailability";
 import { useFantasyLeagueGroup } from "../../hooks/leagues/useFantasyLeagueGroup";
-import { useAthleteRoundScore } from "../../hooks/fantasy/useAthleteRoundScore";
 import { AppColours } from "../../types/constants";
 import { IFantasyTeamAthlete } from "../../types/fantasyTeamAthlete";
 import { formatPosition } from "../../utils/athletes/athleteUtils";
-import { isSeasonRoundLocked } from "../../utils/leaguesUtils";
+import { isSeasonRoundStarted } from "../../utils/leaguesUtils";
 import { sanitizeStat } from "../../utils/stringUtils";
 import PlayerMugshot from "../player/PlayerMugshot";
 import SecondaryText from "../ui/typography/SecondaryText";
 import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
-
-
-type Props = {
-  onPlayerClick?: (player: IFantasyTeamAthlete) => void
-}
+import { useMyTeam } from "../../hooks/fantasy/my_team/useMyTeam";
+import { useMyTeamActions } from "../../hooks/fantasy/my_team/useMyTeamActions";
+import { useMyTeamModals } from "../../hooks/fantasy/my_team/useMyTeamModals";
+import MyTeamSlotProvider from "../../contexts/fantasy/my_team/MyTeamSlotContext";
+import { useMyTeamSlot } from "../../hooks/fantasy/my_team/useMyTeamSlot";
 
 /** Renders a bottom drawer for team subs */
-export default function TeamBenchDrawer({ onPlayerClick }: Props) {
+export default function MyTeamBenchDrawer() {
 
-  const { leagueRound, slots, initateSwapOnEmptySlot } = useFantasyTeam();
+  const { round, slots } = useMyTeam();
+  const { initiateSwap } = useMyTeamActions();
+  const { handlePlayerClick: onPlayerClick } = useMyTeamModals();
 
   const superSubSlot = useMemo(() => {
     return slots.find((s) => s.slotNumber === 6);
   }, [slots]);
 
-  if (!superSubSlot || !leagueRound) {
+  if (!superSubSlot || !round) {
     return;
   }
 
@@ -43,7 +43,7 @@ export default function TeamBenchDrawer({ onPlayerClick }: Props) {
       return;
     }
 
-    initateSwapOnEmptySlot(superSubSlot);
+    initiateSwap(superSubSlot);
   }
 
   return (
@@ -71,12 +71,17 @@ export default function TeamBenchDrawer({ onPlayerClick }: Props) {
             </p>
           </div>
 
+
           {athlete && (
-            <SubPlayerCard
-              player={athlete}
-              round={leagueRound}
-              onClick={() => { }}
-            />
+            <MyTeamSlotProvider
+              slot={superSubSlot}
+            >
+              <SubPlayerCard
+                player={athlete}
+                round={round}
+                onClick={() => { }}
+              />
+            </MyTeamSlotProvider>
           )}
 
           {isSlotEmpty && (
@@ -90,7 +95,6 @@ export default function TeamBenchDrawer({ onPlayerClick }: Props) {
   )
 }
 
-
 type SubPlayerProps = {
   player: IFantasyTeamAthlete,
   round: ISeasonRound
@@ -101,8 +105,9 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
 
   const { position_class } = player;
   const { league } = useFantasyLeagueGroup();
+  const { isShowPlayerLock } = useMyTeamSlot();
 
-  const {seasonTeam} = usePlayerSeasonTeam(player.athlete);
+  const { seasonTeam } = usePlayerSeasonTeam(player.athlete);
 
   const { isNotAvailable, isTeamNotPlaying } = usePlayerRoundAvailability(
     player.tracking_id,
@@ -117,7 +122,7 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
   return (
     <div
       className={twMerge(
-        "w-full cursor-pointer h-full min-h-[80px] rounded-2xl p-2 flex flex-row items-center justify-between",
+        "w-full relative cursor-pointer h-full min-h-[80px] rounded-2xl p-2 flex flex-row items-center justify-between",
         showAvailabilityWarning && "bg-yellow-200/10 dark:bg-yellow-700/10 border border-yellow-500/30 dark:border-yellow-700/30"
       )}
       onClick={onClick}
@@ -165,12 +170,18 @@ function SubPlayerCard({ player, onClick, round }: SubPlayerProps) {
         </div> */}
 
         <div className="flex flex-row items-center gap-1" >
-          <SubPlayerScoreIndicator 
+          <SubPlayerScoreIndicator
             player={player}
             round={round}
           />
         </div>
       </div>
+
+      {isShowPlayerLock && (
+        <div className='absolute bg-yellow-500 p-1 rounded-md z-[30] -top-6 right-2' >
+          <Lock className='w-4 h-4 text-black' />
+        </div>
+      )}
 
     </div>
   )
@@ -192,91 +203,94 @@ function EmptySuperSubSlot() {
 }
 
 type PlayerPointsScoreProps = {
-    round: ISeasonRound,
-    player: IFantasyTeamAthlete,
+  round: ISeasonRound,
+  player: IFantasyTeamAthlete,
 }
 
 function SubPlayerScoreIndicator({ round, player }: PlayerPointsScoreProps) {
 
-    const isLocked = isSeasonRoundLocked(round);
-    const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, round.season, round?.round_number ?? 0);
-    const { league } = useFantasyLeagueGroup();
+  const hasRoundStarted = isSeasonRoundStarted(round);
+  const {roundGames} = useMyTeam();
 
-    const isLoading = loadingScore;
+  const score = player.score;
+  const isLoading = false;
 
-    const {seasonTeam} = usePlayerSeasonTeam(player.athlete)
-    const { isNotAvailable, isTeamNotPlaying, nextMatch } = usePlayerRoundAvailability(
-        player.tracking_id,
-        league?.season_id ?? "",
-        round?.round_number ?? 0,
-        seasonTeam?.athstat_id
-    );
+  const { seasonTeam } = usePlayerSeasonTeam(player.athlete)
+  const {hasPlayerGameStarted} = useMyTeamSlot();
+  
+  const { isNotAvailable, isTeamNotPlaying, nextMatch } = usePlayerRoundAvailability(
+    player.tracking_id,
+    round?.season ?? "",
+    round?.round_number ?? 0,
+    seasonTeam?.athstat_id
+  );
 
-    const [homeOrAway, opponent] = useMemo(() => {
-        if (!nextMatch) {
-            return [undefined, undefined];
-        }
+  const [homeOrAway, opponent] = useMemo(() => {
+    if (!nextMatch) {
+      return [undefined, undefined];
+    }
 
-        const playerTeamId = player.athlete_team_id;
+    const playerTeamId = player.athlete_team_id;
 
-        if (playerTeamId === nextMatch.team?.athstat_id) {
-            return ["(H)", nextMatch.opposition_team];
-        }
+    if (playerTeamId === nextMatch.team?.athstat_id) {
+      return ["(H)", nextMatch.opposition_team];
+    }
 
-        if (playerTeamId === nextMatch.opposition_team?.athstat_id) {
-            return ["(A)", nextMatch.team];
-        }
+    if (playerTeamId === nextMatch.opposition_team?.athstat_id) {
+      return ["(A)", nextMatch.team];
+    }
 
-        return [undefined, undefined];
+    return [undefined, undefined];
 
-    }, [nextMatch, player.athlete_team_id]);
+  }, [nextMatch, player.athlete_team_id]);
 
-    const showScore = !isLoading && isLocked;
+  const showScore = Boolean(!isLoading && hasRoundStarted && (roundGames.length > 0 ? hasPlayerGameStarted : true));
 
-    const showAvailabilityWarning = !isLoading && (isNotAvailable || isTeamNotPlaying) && !showScore;
-    const showNextMatchInfo = !isLoading && !showAvailabilityWarning && homeOrAway && opponent && !showScore;
 
-    
+  const showAvailabilityWarning = !isLoading && (isNotAvailable || isTeamNotPlaying) && !showScore;
+  const showNextMatchInfo = !isLoading && !showAvailabilityWarning && homeOrAway && opponent && !showScore;
 
-    return (
-        <>
-            <div className={twMerge(
-                "w-full overflow-clip items-center justify-center flex flex-row",
-                isLoading && "animate-pulse"
-            )} >
 
-                
-                <Activity mode={isLoading ? "visible" : "hidden"} >
-                    <div className="w-[60%] h-[10px] bg-white/40 animate-pulse" >
 
-                    </div>
-                </Activity>
+  return (
+    <>
+      <div className={twMerge(
+        "w-full overflow-clip items-center justify-center text-xs flex flex-row",
+        isLoading && "animate-pulse"
+      )} >
 
-                <Activity mode={showNextMatchInfo ? "visible" : "hidden"} >
-                    <p className=" text-sm md:text-[10px] max-w-[100px] font-medium truncate" >{opponent?.athstat_name} {homeOrAway}</p>
-                </Activity>
 
-                {/* <Activity mode={showPrice ? "visible" : "hidden"} >
+        <Activity mode={isLoading ? "visible" : "hidden"} >
+          <div className="w-[60%] h-[10px] bg-white/40 animate-pulse" >
+
+          </div>
+        </Activity>
+
+        <Activity mode={showNextMatchInfo ? "visible" : "hidden"} >
+          <p className=" text-[12px] md:text-[10px] max-w-[100px] font-medium truncate" >{opponent?.athstat_name} {homeOrAway}</p>
+        </Activity>
+
+        {/* <Activity mode={showPrice ? "visible" : "hidden"} >
                     <div className=" max-w-[100px] font-medium truncate flex flex-row items-center gap-1" >
                         <p className="text-[10px] md:text-[10px]" >{player.price}</p>
                         <Coins className="text-yellow-500 w-2.5 h-2.5" />
                     </div>
                 </Activity> */}
 
-                <Activity mode={showAvailabilityWarning ? "visible" : "hidden"} >
-                    <div className="w-full flex flex-row gap-1 text-center items-center justify-center" >
-                        <p className="text-sm md:text-[10px] font-medium" >Not Playing</p>
-                        <TriangleAlert className="w-3 h-3" />
-                    </div>
-                </Activity>
+        <Activity mode={showAvailabilityWarning ? "visible" : "hidden"} >
+          <div className="w-full flex flex-row gap-1 text-center items-center justify-center" >
+            <p className="text-sm md:text-[10px] font-medium" >Not Playing</p>
+            <TriangleAlert className="w-3 h-3" />
+          </div>
+        </Activity>
 
-                <Activity mode={showScore ? 'visible' : 'hidden'}  >
-                    <div>
-                        <p className='text-base md:text-[10px] font-bold' >{sanitizeStat(score)}</p>
-                    </div>
-                </Activity>
+        <Activity mode={showScore ? 'visible' : 'hidden'}  >
+          <div>
+            <p className='text-base md:text-[10px] font-bold' >{sanitizeStat(score)}</p>
+          </div>
+        </Activity>
 
-            </div>
-        </>
-    )
+      </div>
+    </>
+  )
 }

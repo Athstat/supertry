@@ -8,7 +8,7 @@ export function useAthleteRoundScore(athleteId: string, seasonId: string, round:
 
     const key = shouldFetchFinal ? `/fantasy-athletes/${athleteId}/season/${seasonId}/round/${round}` : null;
     const {data, isLoading, error} = useSWR(key, () => fantasyAthleteService.getRoundScore(athleteId, seasonId, round), {
-        refreshInterval: 1000 * 30 // 30 seconds
+        refreshInterval: 1000 * 10 // 30 seconds
     });
 
     const score = useMemo(() => data?.score || 0, [data]);

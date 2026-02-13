@@ -1,6 +1,4 @@
 import PageView from '../../components/ui/containers/PageView';
-import MyTeamModeSelector from '../../components/my_fantasy_team/MyTeamModeSelector';
-import LearnScrummyNoticeCard from '../../components/branding/help/LearnScrummyNoticeCard';
 import { useHideBottomNavBar, useHideTopNavBar } from '../../hooks/navigation/useNavigationBars';
 import MyFantasyTeamScreenHeader from '../../components/fantasy_league/MyFantasyTeamScreenHeader';
 import { twMerge } from 'tailwind-merge';
@@ -12,6 +10,18 @@ import { useAuth } from '../../contexts/auth/AuthContext';
 import { useQueryValue } from '../../hooks/web/useQueryState';
 import { useEffect } from 'react';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
+import { useTeamHistory } from '../../hooks/fantasy/useTeamHistory';
+import TeamHistoryBar from '../../components/my_fantasy_team/TeamHistoryBar';
+import { getMyTeamViewMode, hashFantasyTeam } from '../../utils/fantasy/myteamUtils';
+import MyTeamProvider from '../../contexts/fantasy/my_team/MyTeamContext';
+import MyTeamPitch from '../../components/my_fantasy_team/MyTeamPitch';
+import MyTeamHeader from '../../components/my_fantasy_team/MyTeamHeader';
+import MyTeamBenchDrawer from '../../components/my_fantasy_team/MyTeamBenchDrawer';
+import MyTeamModals from '../../components/my_fantasy_team/MyTeamModals';
+import { useSeasonRoundFixtures } from '../../hooks/fixtures/useProFixtures';
+import CreateTeamProvider from '../../providers/fantasy_teams/CreateTeamProvider';
+import CreateTeamHeader from '../../components/my_fantasy_team/CreateTeamHeader';
+import NoTeamCreatedFallback from '../../components/fantasy-leagues/NoTeamCreatedFallback';
 
 /** Renders my fantasy team screen */
 export function MyFantasyTeamScreen() {
@@ -22,7 +32,7 @@ export function MyFantasyTeamScreen() {
   const { authUser } = useAuth();
 
   const { getSeasonById, setSelectedSeason } = useFantasySeasons();
-  const seasonId = useQueryValue('season_id')
+  const seasonId = useQueryValue('season_id');
 
   useEffect(() => {
     if (seasonId) {
@@ -35,44 +45,91 @@ export function MyFantasyTeamScreen() {
   }, [getSeasonById, seasonId, setSelectedSeason]);
 
   return (
-    <TeamHistoryProvider
-      user={authUser}
-      loadingFallback={<LeagueScreenLoadingSkeleton />}
-    >
-      <Content />
-    </TeamHistoryProvider>
+    <PageView className={twMerge(
+      "dark:text-white flex flex-col gap-3 pt-4",
+      AppColours.BACKGROUND,
+    )}>
+      <TeamHistoryProvider
+        user={authUser}
+      >
+        <MyFantasyTeamScreenHeader />
+        <TeamHistoryBar />
+        <Content />
+      </TeamHistoryProvider>
+    </PageView >
   );
 }
 
 function Content() {
+  const { round, roundTeam, manager, onUpdateRoundTeam } = useTeamHistory();
+
+  const viewMode = getMyTeamViewMode(round, roundTeam );
+  const { isLoading, fixtures } = useSeasonRoundFixtures(round?.season, round?.round_number);
+
+  if (isLoading) {
+    return <LoadingSkeleton hideHeader />
+  }
+
+  if (viewMode === "pitch-view" && roundTeam && manager) {
+    return (
+      <MyTeamProvider
+        roundGames={fixtures}
+        round={round}
+        team={roundTeam}
+        manager={manager}
+        isReadOnly={false}
+        key={hashFantasyTeam(roundTeam)}
+        onUpdateTeam={onUpdateRoundTeam}
+      >
+        <MyTeamHeader />
+        <MyTeamPitch />
+        <MyTeamBenchDrawer />
+        <MyTeamModals />
+      </MyTeamProvider>
+    )
+  }
+
+  if (viewMode === "create-team" && round ) {
+    return (
+      <CreateTeamProvider
+        roundGames={fixtures}
+        leagueRound={round}
+        key={round?.round_number}
+        onUpdateTeam={onUpdateRoundTeam}
+      >
+        <CreateTeamHeader />
+        <MyTeamPitch />
+        <MyTeamBenchDrawer />
+        <MyTeamModals />
+      </CreateTeamProvider>
+    )
+  }
 
   return (
-    <PageView className={twMerge(
-      "dark:text-white flex flex-col gap-4",
-      AppColours.BACKGROUND
-    )}>
-      <MyFantasyTeamScreenHeader />
-      <LearnScrummyNoticeCard />
-      <MyTeamModeSelector />
-    </PageView>
-  );
+    <NoTeamCreatedFallback />
+  )
 }
 
-function LeagueScreenLoadingSkeleton() {
+type LoadingSkeletonProps = {
+  hideHeader?: boolean
+}
+
+function LoadingSkeleton({hideHeader} : LoadingSkeletonProps) {
 
   return (
     <PageView className="animate-pulse overflow-hidden flex flex-col gap-4">
 
-      <div className='px-4' >
+      {!hideHeader && <div className='px-4' >
         <div className="flex flex-row pt-4 relative items-center justify-center">
 
           <RoundedCard className="border-none absolute left-0 rounded-full w-[30px] h-[30px] " />
           <RoundedCard className="border-none w-[100px] h-[30px] " />
           <RoundedCard className="border-none absolute w-[100px] right-0 h-[30px] " />
         </div>
-      </div>
+      </div>}
 
-      <PitchViewLoadingSkeleton />
+      <PitchViewLoadingSkeleton hideHistoryBar={hideHeader} />
     </PageView>
   );
 }
+

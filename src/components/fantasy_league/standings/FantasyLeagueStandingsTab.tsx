@@ -11,10 +11,15 @@ import { LeagueRoundCountdown2 } from '../LeagueCountdown';
 import RoundedCard from '../../ui/cards/RoundedCard';
 import { useFantasySeasons } from '../../../hooks/dashboard/useFantasySeasons';
 import { useAuth } from '../../../contexts/auth/AuthContext';
+import { twMerge } from 'tailwind-merge';
+import { AppColours } from '../../../types/constants';
 
+type Props = {
+  defaultRoundNumber?: string
+}
 
 /** Renders fantasy league group standings */
-export function FantasyLeagueStandingsTab() {
+export function FantasyLeagueStandingsTab({defaultRoundNumber} : Props) {
 
   const { currentRound } = useFantasySeasons();
   const { userMemberRecord } = useFantasyLeagueGroup();
@@ -23,7 +28,7 @@ export function FantasyLeagueStandingsTab() {
   const { authUser } = useAuth();
   const isGuest = isGuestUser(authUser);
 
-  const { selectedRound, currentOption, setRoundFilterId } = useLeagueRoundStandingsFilter();
+  const { selectedRound, currentOption, setRoundFilterId } = useLeagueRoundStandingsFilter(defaultRoundNumber);
 
   return (
     <div className="flex flex-col gap-6 pb-32">
@@ -33,7 +38,7 @@ export function FantasyLeagueStandingsTab() {
       </div>}
 
       {currentSeasonRound && (
-        <RoundedCard className='p-2 mx-4 mt-4' >
+        <RoundedCard className='p-2 mx-4 ' >
           <LeagueRoundCountdown2 
             leagueRound={currentSeasonRound} 
             key={currentSeasonRound.id}
@@ -57,6 +62,11 @@ export function FantasyLeagueStandingsTab() {
           <ClaimAccontCard />
         )}
       </div>
+
+      <div className={twMerge(
+        'w-full h-[100px] bottom-0 left-0 fixed bg-gradient-to-t to-transparent',
+        AppColours.BACKGROUND_GRADIENT
+      )} ></div>
 
     </div>
   );

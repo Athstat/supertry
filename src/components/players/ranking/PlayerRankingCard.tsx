@@ -24,24 +24,26 @@ export function PlayerRankingCard({ rank, onClick, player, value, borderColor = 
   };
 
   return (
-    <div className="flex flex-col w-full overflow-hidden">
+    <div className="flex flex-col w-full overflow-hidden bg-[#F0F3F7] dark:bg-slate-800 shadow-[1.5px_1.5px_1.58px_0px_rgba(196,201,212,0.9)] dark:shadow-none">
       <div
         onClick={handleOnClick}
-        className="flex cursor-pointer flex-row items-center gap-4 overflow-hidden border-l-4 pl-2 py-2"
+        className="flex cursor-pointer flex-row items-center gap-4 overflow-hidden border-l-[2px] pl-2 py-2"
         style={{ borderLeftColor: borderColor }}
       >
         {/* Rank number with grey background */}
         <RankNumberCard 
           value={rank}
+          fontSize='14px'
         />
 
         <div className="flex flex-row items-center gap-2 flex-shrink-0">
           {seasonTeam && (
-            <div className="w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-full flex flex-col items-center justify-center">
+            <div className="w-10 h-10 bg-white overflow-clip dark:bg-gray-700 rounded-full flex flex-col items-center justify-center">
               <TeamJersey
                 useBaseClasses={false}
                 teamId={seasonTeam.athstat_id}
-                className="h-8"
+                className="h-9 mt-3"
+                hideFade
               />
             </div>
           )}
@@ -55,7 +57,7 @@ export function PlayerRankingCard({ rank, onClick, player, value, borderColor = 
         </div>
 
         <div className="flex-shrink-0 mr-4 flex flex-row items-center justify-end">
-          <p className="font-bold text-sm">{value}</p>
+          <p className="text-base">{value}</p>
         </div>
       </div>
     </div>

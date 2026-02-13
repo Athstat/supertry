@@ -3,9 +3,8 @@ import { usePlayerPicker } from "../../hooks/playerPicker/usePlayerPicker"
 import PlayerPickerTeamFilterRow from "./PlayerPickerTeamFilterRow";
 import BlueGradientCard from "../ui/cards/BlueGradientCard";
 import { twMerge } from "tailwind-merge";
-import Experimental from "../ui/ab_testing/Experimental";
 import { Coins } from "lucide-react";
-import SearchBar from "./SearchBar";
+import PlayerPickerSearchBar from "./SearchBar";
 import { TabSwitchOption } from "../ui/buttons/TabSwitchOption";
 
 export default function PlayerPickerHeader() {
@@ -18,22 +17,19 @@ export default function PlayerPickerHeader() {
         }
     }, [setSearchQuery]);
 
-
     return (
         <div className="flex flex-col gap-2" >
 
-            <Experimental>
-                <BlueGradientCard
-                    className={twMerge(
-                        "flex flex-row items-center justify-center gap-1  py-2",
-                        "from-blue-600 to-purple-700"
-                    )}
-                >
-                    <p className="text-sm font-medium" >Remaining SCRUM Coins: </p>
-                    <Coins className="w-4 h-4 text-yellow-500" />
-                    <p>{remainingBudget}</p>
-                </BlueGradientCard>
-            </Experimental>
+            <BlueGradientCard
+                className={twMerge(
+                    "flex flex-row items-center justify-center gap-1  py-2",
+                    "from-blue-600 to-purple-700"
+                )}
+            >
+                <p className="text-sm font-medium" >Remaining SCRUM Coins: </p>
+                <Coins className="w-4 h-4 text-yellow-500" />
+                <p>{remainingBudget}</p>
+            </BlueGradientCard>
 
             <div className="flex rounded-xl flex-row items-center gap-2 w-full" >
                 {/* <InputField 
@@ -41,7 +37,7 @@ export default function PlayerPickerHeader() {
                     inputCn="focus:ring-transparent"
                 /> */}
 
-                <SearchBar
+                <PlayerPickerSearchBar
                     className="w-full"
                     searchQuery={searchQuery}
                     onSearchChange={setSearchQuery}
@@ -104,7 +100,7 @@ function ScoutingListSwitcher() {
                 current={viewType}
                 value="all"
                 onSelect={handleChange}
-                // icon={<Users className="w-4 h-4" />}
+            // icon={<Users className="w-4 h-4" />}
             />
             <TabSwitchOption
                 label="Scouting List"
@@ -112,7 +108,7 @@ function ScoutingListSwitcher() {
                 value="scouting-list"
                 onSelect={handleChange}
                 dataTutorial="player-picker-scouting-tab"
-                // icon={<Binoculars className="w-4 h-4" />}
+            // icon={<Binoculars className="w-4 h-4" />}
             />
         </div>
     )

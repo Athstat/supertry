@@ -7,7 +7,7 @@ import { Fragment } from "react/jsx-runtime";
 import { useRoundScoringSummaryV2 } from "../../../hooks/fantasy/useRoundScoringSummary";
 import { IFantasyLeagueTeam } from "../../../types/fantasyLeague";
 import { formatCountdown } from "../../../utils/countdown";
-import { getSeasonRoundDeadline, isSeasonRoundLocked } from "../../../utils/leaguesUtils";
+import { getSeasonRoundDeadline, isSeasonRoundTeamsLocked } from "../../../utils/leaguesUtils";
 import ScrummyGamePlayModal from "../../branding/help/ScrummyGamePlayModal";
 import { useFantasySeasons } from "../../../hooks/dashboard/useFantasySeasons";
 import { smartRoundUp } from "../../../utils/intUtils";
@@ -16,6 +16,7 @@ import { trimSeasonYear } from "../../../utils/stringUtils";
 import { twMerge } from "tailwind-merge";
 import { useAuth } from "../../../contexts/auth/AuthContext";
 import { ISeasonRound } from "../../../types/fantasy/fantasySeason";
+import UserAvatarCard from "../../auth/user_profile/avatar/UserAvatarCard";
 
 
 export function DashboardHeroLoadingSkeleton() {
@@ -36,7 +37,7 @@ type DashboardFrameProps = {
 }
 
 /** Renders the dashboard frame */
-export function DashboardHeroFrame({ children, imageUrl, cornerImageUrl = '/images/dashboard/beast_screeming.png', cornerImageClassName }: DashboardFrameProps) {
+export function DashboardHeroFrame({ children, imageUrl, cornerImageUrl, cornerImageClassName }: DashboardFrameProps) {
 
   const finalImageUrl = imageUrl || '/images/dashboard/hero-background.jpg';
 
@@ -65,7 +66,7 @@ export function DashboardHeroFrame({ children, imageUrl, cornerImageUrl = '/imag
         {children}
       </div>
 
-      {<div className='z-[20] max-h-32 overflow-clip sm:max-h-32  absolute bottom-0 left-0 px-0.5' >
+      {cornerImageUrl && <div className='z-[20] max-h-32 overflow-clip sm:max-h-32  absolute bottom-0 left-0 px-0.5' >
         <img
           src={cornerImageUrl}
           className={twMerge(
@@ -98,7 +99,13 @@ export function DashboardHeroHeader({ title }: HeroProps) {
   return (
     <Fragment>
       <div onClick={handleClick} className="flex cursor-pointer items-center gap-2">
-        <img src="/images/profile-icon.svg" alt="Profile" className="w-6 h-6" />
+        
+        <UserAvatarCard
+          imageUrl={authUser?.avatar_url}
+          className="w-[25px] h-[25px]"
+          iconCN="w-4 h-4"
+        />
+
         <p className="text-white font-normal text-xs">{authUser?.username || 'User'}</p>
       </div>
 
@@ -214,7 +221,7 @@ export function DashboardHeroCTASection({ roundTeam, deadlineText, hideVerboseIn
     return deadline ? new Date(deadline) : undefined;
   }, [nextDeadlineRound]);
 
-  const isGameweekOpen = currentRound && !isSeasonRoundLocked(currentRound);
+  const isGameweekOpen = currentRound && !isSeasonRoundTeamsLocked(currentRound);
 
   const handleOpenHelpModal = () => {
     setShowHelpModal(true);
@@ -287,7 +294,7 @@ function PlayNowCTAButton({ currentRound, nextRound, roundTeam, hideVerboseInstr
 
   const isFirstTime = roundTeam === undefined;
 
-  const isGameweekOpen = currentRound && !isSeasonRoundLocked(currentRound);
+  const isGameweekOpen = currentRound && !isSeasonRoundTeamsLocked(currentRound);
 
   const teamUrl = `/my-team`;
   const isPickTeamForNextRound = !isGameweekOpen && isFirstTime && nextRound;

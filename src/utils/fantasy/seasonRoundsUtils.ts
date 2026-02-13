@@ -1,5 +1,5 @@
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
-import { isSeasonRoundLocked } from "../leaguesUtils";
+import { isSeasonRoundStarted } from "../leaguesUtils";
 
 function sortSeasonRounds(seasonRounds: ISeasonRound[]) {
     return [...seasonRounds].sort((a, b) => {
@@ -77,7 +77,7 @@ export function getScoringRound(seasonRounds: ISeasonRound[]) {
         return undefined;
     }
 
-    if (isSeasonRoundLocked(currentRound)) {
+    if (isSeasonRoundStarted(currentRound)) {
         return currentRound;
     }
 

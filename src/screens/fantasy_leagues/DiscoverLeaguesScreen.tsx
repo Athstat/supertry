@@ -12,6 +12,7 @@ import { useDebounced } from "../../hooks/web/useDebounced";
 import { useHideTopNavBar } from "../../hooks/navigation/useNavigationBars";
 import FantasyLeaguesFilter from "../../components/fantasy-leagues/FantasyLeaguesFilter";
 import { FantasyLeagueFilterField, FantasyLeaguesSortField } from "../../types/fantasyLeague";
+import { isLeagueOfficial } from "../../utils/leaguesUtils";
 
 /** Renders screen to discover public leagues */
 export default function DiscoverLeaguesScreen() {
@@ -40,7 +41,7 @@ export default function DiscoverLeaguesScreen() {
     }).filter((l) => {
 
         if (filterField === "official") {
-            return l.type === "official_league" || l.type === "system_created";
+            return isLeagueOfficial(l);
         }
 
         if (filterField === "user_created") {

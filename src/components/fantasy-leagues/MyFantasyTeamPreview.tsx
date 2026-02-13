@@ -8,10 +8,9 @@ import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 import { useUserRoundTeam } from '../../hooks/fantasy/useUserRoundTeam';
 import { useAuth } from '../../contexts/auth/AuthContext';
 import Dot from '../ui/icons/Dot';
-import FantasyTeamProvider from '../../providers/fantasy_teams/FantasyTeamProvider';
-import TeamHistoryProvider from '../../providers/fantasy_teams/TeamHistoryProvider';
-import { FantasyTeamFormation3D } from '../my_fantasy_team/FantasyTeamFormation3D';
 import { ManageTeamButton } from './ManageTeamButton';
+import MyTeamProvider from '../../contexts/fantasy/my_team/MyTeamContext';
+import MyTeamPitch from '../my_fantasy_team/MyTeamPitch';
 
 type Props = {
   leagueGroup: FantasyLeagueGroup;
@@ -27,7 +26,7 @@ export default function MyFantasyTeamPreview({ leagueGroup }: Props) {
   const { userScore, isLoading: loadingScore } = useRoundScoringSummaryV2(scoringRound);
 
   const isLoading = loadingScore || loadingUserTeam;
-  const showUserScore = (Boolean(userScore) && Boolean(scoringRound));
+  const showUserScore = userScore !== undefined && Boolean(scoringRound);
 
   if (!leagueGroup) return;
 
@@ -74,17 +73,14 @@ export default function MyFantasyTeamPreview({ leagueGroup }: Props) {
         <div className='max-h-[160px] min-h-[120px] overflow-clip relative' key={currentRound?.id} >
           {userTeam && currentRound && (
 
-            <TeamHistoryProvider
-              initRoundNumber={currentRound?.round_number}
-              user={authUser}
+            <MyTeamProvider
+              team={userTeam}
+              round={currentRound}
+              isReadOnly
+              roundGames={[]}
             >
-              <FantasyTeamProvider
-                team={userTeam}
-                readOnly
-              >
-                <FantasyTeamFormation3D className='mt-0 -top-8 flex flex-col items-center justify-center' onPlayerClick={() => { }} />
-              </FantasyTeamProvider>
-            </TeamHistoryProvider>
+              <MyTeamPitch />
+            </MyTeamProvider>
           )}
         </div>
 

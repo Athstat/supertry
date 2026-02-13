@@ -12,7 +12,7 @@ export const gameplayModalData: GameplayModalData = {
       "subTopics": [
         {
           "title": "Positions",
-          "description": "There are 6 slots. The first two slots are for the front row players, second 2 are for your half backs and the last row are is for back. The 6th and final slot is for a substitute playing at any position"
+          "description": "There are 6 slots. The first 5 slots are for your starters, which are front row, second row, back row, half back and back player slot. The 6th slot is the super sub player."
         },
         {
           "title": "Available Data",

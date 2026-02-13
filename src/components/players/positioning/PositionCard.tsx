@@ -26,12 +26,12 @@ export default function PositionCard({ title, onClick, positionClass, className,
     return (
         <RoundedCard
             className={twMerge(
-                "flex cursor-pointer overflow-clip p-4 dark:border-none  relative w-full h-[60px] rounded-xl flex-col gap-2",
+                "flex cursor-pointer overflow-clip p-4 dark:border-none  relative w-full h-[60px] flex-col gap-2",
                 className
             )}
             onClick={handleClick}
         >
-            <p className="font-semibold text-sm" >{title}</p>
+            <p className="text-sm" >{title}</p>
 
             {<div className="absolute top-0 right-0 opacity-0" >
                 {icon}

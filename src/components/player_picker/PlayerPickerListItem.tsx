@@ -48,7 +48,6 @@ export function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer, da
         <tr ref={ref} data-tutorial={dataTutorial} className={twMerge(
             "hover:bg-slate-50 items-center w-[100%]",
             !isAffordable && 'opacity-50',
-            "dark:hover:bg-slate-800/50 hover:bg-slate-200"
         )} >
             <Activity mode={inView ? "visible" : "hidden"} >
                 <td onClick={handleViewPlayerProfile} className="overflow-clip"  >
@@ -75,9 +74,13 @@ export function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer, da
                                 />
                             </div>
 
-                            {isAffordable && (<SecondaryText className="text-[10px]" >
-                                {seasonTeam?.athstat_name ?? player.position_class}
-                            </SecondaryText>)}
+                            {isAffordable && (
+                                <div className="flex flex-row items-center " >
+                                    <SecondaryText className="text-[10px]" >
+                                        {seasonTeam?.athstat_name ?? player.position_class}
+                                    </SecondaryText>
+                                </div>
+                            )}
 
                             {!isAffordable && (
                                 <p className="text-red-500 text-[10px] font-medium" >Can't Afford this Player</p>

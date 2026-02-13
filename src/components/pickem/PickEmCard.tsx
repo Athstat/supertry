@@ -61,8 +61,7 @@ export default function PickEmCard({ fixture, className }: Props) {
     <div
       ref={ref}
       className={twMerge(
-        'p-4 flex flex-col bg-white  border border-slate-300 dark:border-slate-700 gap-3 dark:bg-slate-800/50 transition-all duration-200',
-        ' dark:bg-slate-800',
+        'p-4 flex flex-col bg-white  border border-slate-300 dark:border-slate-700 gap-3 dark:bg-slate-800/20 transition-all duration-200',
         !isLocked && 'hover:shadow-lg',
         isLocked && 'opacity-70',
         className

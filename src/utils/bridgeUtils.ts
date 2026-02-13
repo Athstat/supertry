@@ -90,6 +90,7 @@ declare global {
     DARK_CARD_BACKGROUND_CLASSNAME?: string,
     MOBILE_THEME_NUMBER?: string,
     INIT_WEBVIEW_CACHE?: string,
+    ALLOW_YOUTUBE_VIDEO?: string,
     CAN_USE_MOBILE_SHARE_API?: boolean
   }
 }

@@ -5,11 +5,11 @@ import { StandingsFilterItem } from "../../types/standings";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 
 /** Hook that provides data and logic for league standings filtering */
-export function useLeagueRoundStandingsFilter() {
+export function useLeagueRoundStandingsFilter(defaultVal?: string) {
 
-    const { scoringRound, seasonRounds } = useFantasySeasons();
+    const { seasonRounds, scoringRound } = useFantasySeasons();
 
-    const [roundFilterId, setRoundFilterId] = useState<string | undefined>(scoringRound?.round_number.toString() || "overall");
+    const [roundFilterId, setRoundFilterId] = useState<string | undefined>(defaultVal || "overall");
 
     const options: StandingsFilterItem[] = useMemo(() => {
         return seasonRounds.map((s) => {
@@ -44,8 +44,8 @@ export function useLeagueRoundStandingsFilter() {
     }, [roundFilterId, seasonRounds]);
 
     useEffect(() => {
-        if (roundFilterId === undefined && scoringRound) {
-            setRoundFilterId(scoringRound.id);
+        if (roundFilterId === undefined && scoringRound?.round_number) {
+            setRoundFilterId(scoringRound.round_number.toString());
         }
     }, [roundFilterId, scoringRound, setRoundFilterId]);
 

@@ -1,11 +1,9 @@
 import { IFantasyTeamAthlete } from '../../types/fantasyTeamAthlete';
 import { RugbyPitch3DRaster } from '../ui/containers/RugbyPitch';
-import { PlayerPitchCard } from './pitch_card/PlayerPitchCard';
 import { twMerge } from 'tailwind-merge';
-import { IFantasyLeagueRound } from '../../types/fantasyLeague';
-import { IFantasyLeagueTeamSlot, SlotCardPosition } from '../../types/fantasyLeagueTeam';
-import { useFantasyTeam } from '../../hooks/fantasy/useFantasyTeam';
-import { EmptySlotPitchCard } from './pitch_card/EmptySlotPitchCard';
+import { useMyTeam } from '../../hooks/fantasy/my_team/useMyTeam';
+import { MyTeamSlotCard } from './pitch_card/MyTeamSlotCard';
+import MyTeamSlotProvider from '../../contexts/fantasy/my_team/MyTeamSlotContext';
 
 interface TeamFormationProps {
   onPlayerClick: (player: IFantasyTeamAthlete) => void;
@@ -17,7 +15,7 @@ interface TeamFormationProps {
 /** Renders a 3 Dimensional-looking pitch view */
 export function FantasyTeamFormation3D({ onPlayerClick, marginCN, firstRowMargin, className }: TeamFormationProps) {
 
-  const { slots } = useFantasyTeam();
+  const { slots } = useMyTeam();
 
   const slotPositions = [
     { x: 20, y: 10, slot: 1 },
@@ -37,7 +35,6 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN, firstRowMargin
       <RugbyPitch3DRaster className={twMerge(
         'mt-12',
         marginCN,
-        
       )} />
 
       <div className='top-0  left-0 absolute w-full p-3 flex flex-col items-center justify-center gap-0' >
@@ -55,12 +52,16 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN, firstRowMargin
             }
 
             return (
-              <SlotCard
-                key={slot.slotNumber}
+              <MyTeamSlotProvider
                 slot={slot}
-                position={pos}
-                onPlayerClick={onPlayerClick}
-              />
+                key={`${slot.slotNumber}/${slot.athlete?.athlete_id}`}
+              >
+                <MyTeamSlotCard
+                  slot={slot}
+                  position={pos}
+                  onPlayerClick={onPlayerClick}
+                />
+              </MyTeamSlotProvider>
             )
 
           })}
@@ -69,55 +70,4 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN, firstRowMargin
 
     </div>
   );
-}
-
-type SlotCardProps = {
-  slot: IFantasyLeagueTeamSlot,
-  onPlayerClick?: (player: IFantasyTeamAthlete) => void,
-  round?: IFantasyLeagueRound,
-  className?: string,
-  position: SlotCardPosition
-}
-
-function SlotCard({ slot, onPlayerClick, position }: SlotCardProps) {
-
-  const { athlete } = slot;
-
-  if (!athlete) {
-    return (
-      <div
-        className="absolute"
-        style={{
-          left: `${position.x}%`,
-          top: `${position.y + 4}%`,
-          transform: 'translate(-50%, -50%)',
-        }}
-      >
-        <EmptySlotPitchCard
-          slot={slot}
-        />
-      </div>
-    )
-  };
-
-
-  const dataTutorial = slot.slotNumber === 1 ? 'team-slot-1-player' : undefined;
-
-  return (
-    <div
-      className="absolute"
-      style={{
-        left: `${position.x}%`,
-        top: `${position.y}%`,
-        transform: 'translate(-50%, -50%)',
-      }}
-      data-tutorial={dataTutorial}
-    >
-      <PlayerPitchCard
-        player={athlete}
-        onClick={onPlayerClick}
-        key={slot.slotNumber}
-      />
-    </div>
-  )
 }

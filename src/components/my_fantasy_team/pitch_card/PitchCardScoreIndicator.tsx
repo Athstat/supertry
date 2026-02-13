@@ -1,43 +1,37 @@
 import { TriangleAlert } from "lucide-react";
 import { Activity } from "react";
 import { twMerge } from "tailwind-merge";
-import { useAthleteRoundScore } from "../../../hooks/fantasy/useAthleteRoundScore";
-import { useFantasyTeam } from "../../../hooks/fantasy/useFantasyTeam";
-import { usePlayerRoundAvailability } from "../../../hooks/fantasy/usePlayerRoundAvailability";
-import { useFantasyLeagueGroup } from "../../../hooks/leagues/useFantasyLeagueGroup";
-import { usePlayerSeasonTeam } from "../../../hooks/seasons/useSeasonTeams";
 import { IFantasyTeamAthlete } from "../../../types/fantasyTeamAthlete";
-import { isSeasonRoundLocked } from "../../../utils/leaguesUtils";
+import { isSeasonRoundStarted } from "../../../utils/leaguesUtils";
 import { sanitizeStat } from "../../../utils/stringUtils";
+import { useMyTeam } from "../../../hooks/fantasy/my_team/useMyTeam";
+import { IProTeam } from "../../../types/team";
+import { useMyTeamSlot } from "../../../hooks/fantasy/my_team/useMyTeamSlot";
 
 type PlayerPointsScoreProps = {
     player: IFantasyTeamAthlete,
+    showAvailabilityWarning?: boolean,
+    homeOrAway?: string,
+    opponent?: IProTeam,
+    reportTitle?: string
 }
 
 /** Player Pitch Card Score Indicator */
-export function PitchCardScoreIndicator({ player }: PlayerPointsScoreProps) {
+export function PitchCardScoreIndicator({ player, showAvailabilityWarning, homeOrAway, reportTitle, opponent }: PlayerPointsScoreProps) {
 
-    const {leagueRound} = useFantasyTeam();
+    const {round, roundGames} = useMyTeam();
+    const {hasPlayerGameStarted} = useMyTeamSlot();
 
-    const isLocked = leagueRound && isSeasonRoundLocked(leagueRound);
-    const shouldFetchScore = isLocked;
+    const hasRoundStarted = round && isSeasonRoundStarted(round);
 
-    const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, leagueRound?.season || '', leagueRound?.round_number ?? 0, shouldFetchScore);
-    const { league } = useFantasyLeagueGroup();
+    // const { isLoading: loadingScore, score } = useAthleteRoundScore(player.tracking_id, leagueRound?.season || '', leagueRound?.round_number ?? 0, shouldFetchScore);
+    const score = player.score || 0;
 
-    const isLoading = loadingScore;
-    const {seasonTeam} = usePlayerSeasonTeam(player.athlete);
+    const isLoading = false;
+    const showScore = Boolean(!isLoading && hasRoundStarted && (roundGames.length > 0 ? hasPlayerGameStarted : true));
 
-    const { showAvailabilityWarning, homeOrAway, opponent, reportTitle } = usePlayerRoundAvailability(
-        player.tracking_id,
-        league?.season_id ?? "",
-        leagueRound?.round_number ?? 0,
-        seasonTeam?.athstat_id
-    );
-
-
-    const showScore = Boolean(!isLoading && isLocked);
     const showNextMatchInfo = !isLoading && (!showAvailabilityWarning && Boolean(homeOrAway) && Boolean(opponent) && !showScore);
+
     return (
         <>
             <div className={twMerge(

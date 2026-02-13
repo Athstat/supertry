@@ -1,18 +1,14 @@
 import { useParams } from 'react-router-dom';
 import useSWR from 'swr';
 import FixtureBoxscoreTab from '../../components/fixture/fixture_screen/FixtureBoxscoreTab';
-import FixtureH2HTab from '../../components/fixture/fixture_screen/FixtureH2HTab';
 import FixtureHero from '../../components/fixture/fixture_screen/FixtureHero';
-import FixtureOverviewTab from '../../components/fixture/fixture_screen/FixtureOverviewTab';
-import FixtureStandingsTab from '../../components/fixture/fixture_screen/FixtureStandingsTab';
+import FixtureOverviewTab from '../../components/fixture/fixture_screen/tabs/FixtureOverviewTab';
 import FixtureRostersTab from '../../components/fixture/fixture_screen/rosters/FixtureRostersTab';
 import { ProMotmVotingBox } from '../../components/pickem/motm';
 import PlayerProfileModal from '../../components/player/PlayerProfileModal';
-import SportActionsDefinitionsProvider from '../../providers/SportActionsDefinitionsProvider';
 import { LoadingIndicator } from '../../components/ui/LoadingIndicator';
 import PilledTabView from '../../components/ui/tabs/PilledTabView';
 import { TabViewHeaderItem, TabViewPage } from '../../components/ui/tabs/TabView';
-import GameHighlightsCard from '../../components/ui/video/GameHighlightsCard';
 import { useFixtureScreen } from '../../hooks/fixtures/useFixture';
 import { useHideBottomNavBar } from '../../hooks/navigation/useNavigationBars';
 import { FixtureScreenProvider } from '../../providers/fixtures/FixtureScreenProvider';
@@ -21,6 +17,9 @@ import PageView from '../../components/ui/containers/PageView';
 import ErrorCard from '../../components/ui/cards/ErrorCard';
 import { Activity } from 'react';
 import PlayerFixtureModal from '../../components/fixture/player_fixture_modal/PlayerFixtureModal';
+import FixtureStandingsTab from '../../components/fixture/fixture_screen/cards/FixtureStandingsTab';
+import FixtureH2HTab from '../../components/fixture/fixture_screen/tabs/FixtureH2HTab';
+import { fixtureSummary } from '../../utils/fixtureUtils';
 
 export default function FixtureDetailScreen() {
 
@@ -30,9 +29,7 @@ export default function FixtureDetailScreen() {
     <FixtureScreenProvider
       fixtureId={fixtureId}
     >
-      <SportActionsDefinitionsProvider>
         <Content />
-      </SportActionsDefinitionsProvider>
     </FixtureScreenProvider>
   )
 }
@@ -44,9 +41,13 @@ function Content() {
 
   const sportsActionsKey = fixtureId ? `/fixtures/${fixtureId}/boxscore/sports-actions` : null;
 
+  const gameKickedOff = fixture ? fixtureSummary(fixture).gameKickedOff : false;
+
   const { data: sportActions, isLoading: loadingSportsActions } = useSWR(sportsActionsKey, () =>
     boxScoreService.getSportActionsByGameId(fixtureId ?? '')
-  );
+  , {
+    refreshInterval: gameKickedOff ?  1000 * 2 : undefined // every 2 minutes when games starts
+  });
 
   useHideBottomNavBar();
 
@@ -73,7 +74,7 @@ function Content() {
       className: ""
     },
     {
-      label: 'Head to Head',
+      label: 'Team Stats',
       tabKey: 'h2h',
       disabled: false,
       className: ""
@@ -116,12 +117,9 @@ function Content() {
           <PilledTabView pillTabRowClassName={"px-4"} className='' tabHeaderItems={tabItems}>
 
             <TabViewPage className="flex w-full flex-col gap-5" tabKey="athletes-stats">
-              <GameHighlightsCard link={fixture.highlights_link} />
-
               <Activity mode={sportActions && (sportActions?.length ?? 0) > 0 ? "visible" : "hidden"} >
                 <FixtureBoxscoreTab sportActions={sportActions || []} fixture={fixture} />
               </Activity>
-
             </TabViewPage>
 
             <TabViewPage className="flex flex-col gap-4 px-4" tabKey="kick-off">

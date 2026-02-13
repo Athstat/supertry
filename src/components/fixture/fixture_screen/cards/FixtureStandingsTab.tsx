@@ -1,5 +1,6 @@
-import { IFixture } from "../../../types/games"
-import SeasonStandingsTable from "../../seasons/SeasonStandingsTable"
+import { IFixture } from "../../../../types/games"
+import SeasonStandingsTable from "../../../seasons/SeasonStandingsTable"
+
 
 type Props = {
     fixture: IFixture

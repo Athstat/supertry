@@ -93,6 +93,7 @@ export type DjangoAuthUser = {
   device_id?: string | DeviceIdPair;
   verification_state: VerificationState;
   is_claimed_account: boolean;
+  avatar_url?: string
 };
 
 export type DjangoLoginRes = {
@@ -181,7 +182,8 @@ export type VerifyEmailRes = {
 export type UpdateUserProfileReq = {
   username?: string,
   first_name?: string,
-  last_name?: string
+  last_name?: string,
+  avatar_url?: string
 }
 
 export type DjangoUserMinimal = {
@@ -191,6 +193,7 @@ export type DjangoUserMinimal = {
   last_name?: string,
   username?: string,
   game_updates_preference?: string
+  avatar_url?: string
 }
 
 export type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated';
@@ -224,5 +227,6 @@ export type UpdatedUserInternalProfileReq = {
 export type EditAccountInfoForm = {
   username: string,
   firstName?: string,
-  lastName?: string
+  lastName?: string,
+  avatarUrl?: string
 }

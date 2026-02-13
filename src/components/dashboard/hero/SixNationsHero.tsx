@@ -27,7 +27,7 @@ function Content() {
     const { authUser } = useAuth();
 
     const { league, isLoading: loadingGroup } = useFantasyLeagueGroup();
-    const {currentRound} = useFantasySeasons();
+    const { currentRound } = useFantasySeasons();
 
     const { roundTeam, isLoading: loadingRoundTeam } = useUserRoundTeam(authUser?.kc_id, currentRound?.round_number);
     const isLoading = loadingGroup || loadingRoundTeam;
@@ -62,11 +62,16 @@ function Content() {
                             <strong className='text-[#D94204] font-normal ' >Win Tickets</strong> to the EPCR Champions Cup Final (2026) in Bilbao, Spain
                         </p>
                     </div>
+
+                    <div className='w-full items-center justify-center flex flex-row' >
+                        <p className='text-lg text-white max-w-[80%] font-light text-center' style={{ fontFamily: 'Oswald, sans-serif' }} >
+                            <strong className='text-white font-normal text-sm' >Terms & Conditions Apply</strong>
+                        </p>
+                    </div>
                 </div>
             </DashboardHeroScoreSection>
             <DashboardHeroCTASection
                 roundTeam={roundTeam}
-                deadlineText='Week #1 Starts:'
                 hideVerboseInstructions
             />
         </DashboardHeroFrame>

@@ -1,14 +1,12 @@
 import { twMerge } from 'tailwind-merge';
 import { IFixture } from '../../../types/games';
 import { format } from 'date-fns';
-import { useState } from 'react';
 import TeamLogo from '../../team/TeamLogo';
 import { useNavigate } from 'react-router-dom';
 import { fixtureSummary, isGameLive, formatGameStatus } from '../../../utils/fixtureUtils';
 import { Info } from 'lucide-react';
 import WarningCard from '../../ui/cards/WarningCard';
 import GameHighlightsCard from '../../ui/video/GameHighlightsCard';
-import { analytics } from '../../../services/analytics/anayticsService';
 import { useLiveFixture } from '../../../hooks/fixtures/useLiveFixture';
 import { useLiveGameClock } from '../../../hooks/fixtures/useLiveGameClock';
 import DialogModal from '../../ui/modals/DialogModal';
@@ -16,6 +14,7 @@ import { abbreviateSeasonName } from '../../../utils/stringUtils';
 import FixtureCardHeader from './FixtureCardHeader';
 import FixtureCardTeam from './FixtureCardTeam';
 import FixtureCardGameStatus from './FixtureCardGameStatus';
+import { analytics } from '../../../services/analytics/anayticsService';
 
 type Props = {
   fixture: IFixture;
@@ -33,12 +32,11 @@ export default function FixtureCard({
   showLogos, showVenue, message, hideDate,
 }: Props) {
 
-  const [showModal, setShowModal] = useState(false);
-  const toogle = () => setShowModal(!showModal);
+  const navigate = useNavigate();
 
   const handleClick = () => {
-    toogle();
     analytics.trackFixtureCardClicked(fixture);
+    navigate(`/fixtures/${fixture.game_id}`);
   };
 
   return (
@@ -46,7 +44,7 @@ export default function FixtureCard({
       <div
         onClick={handleClick}
         className={twMerge(
-          'p-4 flex cursor-pointer justify-center flex-col gap-6 bg-white shadow-sm border border-slate-300 dark:border-slate-700 text-white hover:bg-slate-50/50  dark:hover:bg-dark-800/50 dark:bg-slate-800/40 transition-colors',
+          'p-4 flex cursor-pointer justify-center flex-col gap-4 bg-white shadow-sm border border-slate-300 dark:border-slate-700 text-white hover:bg-slate-50/50  dark:hover:bg-dark-800/50 dark:bg-slate-800/40 transition-colors',
           className
         )}
       >
@@ -57,7 +55,7 @@ export default function FixtureCard({
           showVenue={showVenue}
         />
 
-        <div className="flex flex-row">
+        <div className="flex flex-row px-4">
           <FixtureCardTeam
             fixture={fixture}
             showLogo={showLogos}
@@ -86,7 +84,6 @@ export default function FixtureCard({
           </WarningCard>
         )}
       </div>
-      <FixtureCardModal fixture={fixture} showModal={showModal} onClose={toogle} />
     </>
   );
 }

@@ -3,7 +3,7 @@ import { DjangoAuthUser } from './auth';
 import { IFixture } from './games';
 import { IProSeason } from './season';
 
-export type FantasyLeagueGroupType = 'user_created' | 'system_created' | 'official_league';
+export type FantasyLeagueGroupType = 'user_created' | 'system_created' | 'official_league' | "celebrity_created" | 'subscriber_created';
 
 export type FantasyLeagueGroup = {
   id: string;
@@ -122,6 +122,8 @@ export type FantasySeasonRankingItem = {
   created_at: Date,
   updated_at?: Date,
   round_number?: number
+  avatar_url?: string,
+  league_points?: number
 }
 
 export type FantasySeasonOverallRanking = FantasyPointsScoredRankingItem;

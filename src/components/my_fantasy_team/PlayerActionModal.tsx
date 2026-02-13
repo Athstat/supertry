@@ -7,15 +7,19 @@ import SecondaryText from "../ui/typography/SecondaryText";
 import PrimaryButton from "../ui/buttons/PrimaryButton";
 import SuperSubPill from "./SuperSubPill";
 import { Activity, useMemo } from "react";
-import { isSeasonRoundLocked } from "../../utils/leaguesUtils";
 import { twMerge } from "tailwind-merge";
-import { CaptainsArmBand } from "../player/CaptainsArmBand";
 import MatchPrCard from "../rankings/MatchPrCard";
-import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
 import QuickActionButton from "../ui/buttons/QuickActionButton";
 import RoundedCard from "../ui/cards/RoundedCard";
 import BottomSheetView from "../ui/modals/BottomSheetView";
 import { usePlayerSeasonTeam } from "../../hooks/seasons/useSeasonTeams";
+import WarningCard from "../ui/cards/WarningCard";
+import { useMyTeam } from "../../hooks/fantasy/my_team/useMyTeam";
+import { useMyTeamActions } from "../../hooks/fantasy/my_team/useMyTeamActions";
+import { useMyTeamModals } from "../../hooks/fantasy/my_team/useMyTeamModals";
+import { formatPosition } from "../../utils/athletes/athleteUtils";
+import { isSeasonRoundStarted } from "../../utils/leaguesUtils";
+import { CaptainsArmBand } from "../player/CaptainsArmBand";
 
 type PlayerActionModalProps = {
   player: IFantasyTeamAthlete;
@@ -32,8 +36,10 @@ export function PlayerActionModal({
 }: PlayerActionModalProps) {
 
   const { seasonTeam } = usePlayerSeasonTeam(player.athlete);
-  const {leagueRound,  initiateSwap, removePlayerAtSlot, setTeamCaptainAtSlot, slots, teamCaptain, isReadOnly } = useFantasyTeam();
-  
+  const { isPlayerLocked, isShowPlayerLock, round, teamCaptain, isReadOnly } = useMyTeam();
+  const { initiateSwap, removePlayer, setCaptain, slots, substituteIn, subOutCandidate } = useMyTeamActions();
+  const { handleCloseActionModal } = useMyTeamModals();
+
   const isSub = !player.is_starting;
 
   const playerSlot = useMemo(() => {
@@ -42,8 +48,15 @@ export function PlayerActionModal({
     })
   }, [slots, player]);
 
-  const isTeamCaptain = teamCaptain?.tracking_id === player.tracking_id;
-  const isLocked = leagueRound && isSeasonRoundLocked(leagueRound);
+  const isTeamCaptain = teamCaptain?.athlete?.athlete?.tracking_id === player.tracking_id;
+
+  const isSlotLocked = isPlayerLocked(player.athlete);
+  const showSlotLockedWarning = isShowPlayerLock(player.athlete);
+  const isTeamCaptainSlotLocked = isPlayerLocked(teamCaptain?.athlete?.athlete);
+
+  const isTeamCaptainLocked = round && isSeasonRoundStarted(round) && isTeamCaptainSlotLocked && (teamCaptain !== undefined);
+
+  const hideControls = isReadOnly || isSlotLocked;
 
   const handleViewProfile = () => {
     if (onViewProfile) {
@@ -59,29 +72,34 @@ export function PlayerActionModal({
 
   const handleInitSwap = () => {
 
-    if (playerSlot && !isLocked) {
+    if (playerSlot && !isSlotLocked) {
       onClose();
       initiateSwap(playerSlot);
     }
   }
 
   const handleRemovePlayer = () => {
-    if (playerSlot && !isLocked) {
+    if (playerSlot && !isSlotLocked) {
       onClose();
-      removePlayerAtSlot(playerSlot.slotNumber);
+      removePlayer(playerSlot.slotNumber);
     }
   }
 
   const handleMakePlayerCaptain = () => {
-    if (playerSlot && !isLocked) {
-      setTeamCaptainAtSlot(playerSlot.slotNumber);
+    if (playerSlot && !isSlotLocked && !isTeamCaptainLocked && !isTeamCaptain) {
+      setCaptain(playerSlot.slotNumber);
     }
+  }
+
+  const handleSubIn = () => {
+    substituteIn();
+    handleCloseActionModal();
   }
 
   return (
     <BottomSheetView
       className={twMerge(
-        "max-h-[640px] min-h-[400px] py-4 px-6 border-t dark:border-slate-700",
+        "max-h-[640px] text-sm min-h-[200px] py-4 px-6 border-t dark:border-slate-700",
         isReadOnly && "max-h-[300px] min-h-[260px]"
       )}
       dataTutorial="player-action-modal"
@@ -99,6 +117,7 @@ export function PlayerActionModal({
             />}
 
             <p className="text-lg font-bold text-nowrap truncate" >{player.player_name}</p>
+            <SecondaryText>{formatPosition(player.position_class)}</SecondaryText>
 
             {isSub && <SuperSubPill />}
           </div>
@@ -113,7 +132,7 @@ export function PlayerActionModal({
         <div className="flex flex-row items-center justify-between" >
           <div className="" >
             {<PlayerMugshot
-              className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-800"
+              className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-800"
               url={player.image_url}
               teamId={seasonTeam?.athstat_id}
             />}
@@ -122,13 +141,13 @@ export function PlayerActionModal({
           <div className="flex flex-col items-center justify-center" >
             <div className="flex flex-row items-center gap-1" >
               <p className="text-lg" >{player.purchase_price}</p>
-              <Coins className="text-yellow-500 w-6 h-6" />
+              <Coins className="text-yellow-500 w-4 h-4" />
             </div>
 
-            <SecondaryText>
+            <SecondaryText className="text-xs" >
               Purchase Price
             </SecondaryText>
-            <SecondaryText>(Scrum Coins)</SecondaryText>
+            <SecondaryText className="text-xs" >(Scrum Coins)</SecondaryText>
 
           </div>
 
@@ -156,9 +175,9 @@ export function PlayerActionModal({
 
       </div>
 
-      {leagueRound && player.athlete && (
+      {round && player.athlete && (
         <RoundAvailabilityText
-          round={leagueRound}
+          round={round}
           athlete={player.athlete}
         />
       )}
@@ -169,7 +188,15 @@ export function PlayerActionModal({
         />
       </div> */}
 
-      <Activity mode={isReadOnly ? "hidden" : "visible"} >
+      {showSlotLockedWarning && (
+        <WarningCard className="text-sm lg:text-sm" >
+          <p>
+            <strong>{player.player_name}{player.player_name.endsWith('s') ? "'" : "'s"}</strong> slot is locked, therefore you can't remove or swap {player.gender === "F" ? 'her' : 'him'} out of your team, until the round ends
+          </p>
+        </WarningCard>
+      )}
+
+      <Activity mode={(hideControls) ? "hidden" : "visible"} >
 
         <div className="mt-3" >
           <p>Quick Actions</p>
@@ -177,56 +204,61 @@ export function PlayerActionModal({
 
         <div className={twMerge(
           "flex flex-row items-center justify-center gap-2",
-          isLocked && "opacity-60"
+          isSlotLocked && "opacity-60"
         )} >
           <PrimaryButton
-            className="bg-purple-100 text-purple-700 dark:text-purple-300 dark:bg-purple-900/30 dark:hover:bg-purple-900 dark:border-purple-500/50 border-purple-500 hover:bg-purple-200"
+            className="bg-purple-100 text-purple-700 py-4 dark:text-purple-300 dark:bg-purple-900/30 dark:hover:bg-purple-900 dark:border-purple-500/50 border-purple-500 hover:bg-purple-200"
             onClick={handleInitSwap}
             dataTutorial="player-action-swap"
           >
             Swap
-            {isLocked && <Lock className="w-4 h-4" />}
+            {isSlotLocked && <Lock className="w-4 h-4" />}
           </PrimaryButton>
           <PrimaryButton
-            className="bg-red-100 text-red-700 dark:text-red-300 dark:bg-red-900/30 dark:hover:bg-red-900 dark:border-red-500/40 border-red-500 hover:bg-red-200"
+            className="bg-red-100 text-red-700 py-4 dark:text-red-300 dark:bg-red-900/30 dark:hover:bg-red-900 dark:border-red-500/40 border-red-500 hover:bg-red-200"
             onClick={handleRemovePlayer}
           >
             Remove
-            {isLocked && <Lock className="w-4 h-4" />}
+            {isSlotLocked && <Lock className="w-4 h-4" />}
           </PrimaryButton>
         </div>
 
       </Activity>
 
 
-      <Activity mode={isReadOnly ? "hidden" : "visible"} >
+      <Activity mode={(hideControls) ? "hidden" : "visible"} >
         <div className={twMerge(
-          isLocked && "opacity-60"
+          isSlotLocked && "opacity-60"
         )} >
-          {!isTeamCaptain && <RoundedCard
-            className={
-              "border-none hover:dark:text-slate-300 cursor-pointer  bg-slate-200 dark:bg-slate-800 dark:text-slate-400 p-2.5 items-center justify-center flex flex-row gap-1"
-            }
-            onClick={handleMakePlayerCaptain}
-            dataTutorial="player-action-captain"
-          >
-            Make Captain
-            {isLocked && <Lock className="w-4 h-4" />}
-          </RoundedCard>}
 
-          {isTeamCaptain && <div
-            className={
-              "bg-transparent  dark:bg-transparent cursor-pointer dark:text-slate-400 border dark:border-slate-700 rounded-xl p-2.5 items-center justify-center gap-1 flex flex-row"
-            }
-          >
-            Team Captain
-            {isLocked && <Lock className="w-4 h-4" />}
-            <CaptainsArmBand />
-          </div>}
+          {!isSub && !isTeamCaptainLocked && (
+            <RoundedCard
+              className={
+                "border-none hover:dark:text-slate-300 cursor-pointer  bg-slate-200 dark:bg-slate-700 dark:text-slate-200 p-2.5 py-4 items-center justify-center flex flex-row gap-1"
+              }
+              onClick={handleMakePlayerCaptain}
+              dataTutorial="player-action-captain"
+            >
+              {isTeamCaptain ? "Team Captain" : "Make Team Captain"}
+              {isTeamCaptain && <CaptainsArmBand className="h-4" />}
+              {isTeamCaptainLocked && <Lock className="w-4 h-4" />}
+            </RoundedCard>
+          )}
+
+          {isSub && subOutCandidate?.athlete && (
+            <RoundedCard
+              className={
+                "border-none hover:dark:text-slate-300 cursor-pointer  bg-slate-200 dark:bg-slate-700 dark:text-slate-200 p-2.5 py-4 items-center justify-center flex flex-row gap-1"
+              }
+              onClick={handleSubIn}
+            >
+              Subsitute In for {subOutCandidate?.athlete?.athstat_lastname}
+              {isSlotLocked && <Lock className="w-4 h-4" />}
+            </RoundedCard>
+          )}
+
         </div>
       </Activity>
-
-
 
     </BottomSheetView>
   );

@@ -1,17 +1,21 @@
 import { ReactNode, useEffect, useState } from "react"
 import { IFantasyLeagueTeam } from "../../types/fantasyLeague"
-import FantasyTeamProvider from "./FantasyTeamProvider";
 import { ISeasonRound } from "../../types/fantasy/fantasySeason";
 import { useAuth } from "../../contexts/auth/AuthContext";
+import MyTeamProvider from "../../contexts/fantasy/my_team/MyTeamContext";
+import { IFixture } from "../../types/games";
+import { KeyedMutator } from "swr";
 
 
 type Props = {
     leagueRound: ISeasonRound,
-    children?: ReactNode
+    children?: ReactNode,
+    roundGames: IFixture[],
+    onUpdateTeam: KeyedMutator<IFantasyLeagueTeam | undefined>
 }
 
 /** Providers a sudo Fantasy Team Provider in order to create a fantasy team */
-export default function CreateFantasyTeamProvider({leagueRound, children}: Props) {
+export default function CreateTeamProvider({leagueRound, children, roundGames, onUpdateTeam}: Props) {
 
     const [fakeTeam, setTeamFakeTeam] = useState<IFantasyLeagueTeam>();
     const {authUser} = useAuth();
@@ -56,11 +60,15 @@ export default function CreateFantasyTeamProvider({leagueRound, children}: Props
     }
 
     return (
-        <FantasyTeamProvider
+        <MyTeamProvider
             team={fakeTeam}
-            leagueRound={leagueRound}
+            round={leagueRound}
+            manager={authUser}
+            roundGames={roundGames}
+            isReadOnly={false}
+            onUpdateTeam={onUpdateTeam}
         >
             {children}
-        </FantasyTeamProvider>
+        </MyTeamProvider>
     )
 }

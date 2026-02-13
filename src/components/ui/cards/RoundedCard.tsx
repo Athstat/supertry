@@ -24,7 +24,7 @@ export default function RoundedCard({children, className, onClick, dataTutorial}
             onClick={handleClick}
             data-tutorial={dataTutorial}
             className={twMerge(
-                "bg-white dark:text-white dark:hover:text-slate-50  dark:hover:bg-slate-800/50 border border-slate-300 dark:border-slate-800 rounded-2xl transition-all",
+                "bg-white dark:text-white dark:hover:text-slate-50 border border-slate-300 dark:border-slate-800 rounded-[5px] transition-all",
                 AppColours.CARD_BACKGROUND,
                 className
             )}

@@ -1,8 +1,9 @@
-import { ChevronDown, ChevronUp, Medal, User } from "lucide-react";
+import { ChevronDown, ChevronUp, Medal } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { FantasySeasonRankingItem } from "../../../types/fantasyLeagueGroups";
 import { smartRoundUp } from "../../../utils/intUtils";
 import SecondaryText from "../../ui/typography/SecondaryText";
+import UserAvatarCard from "../../auth/user_profile/avatar/UserAvatarCard";
 
 type StandingsProps = {
     ranking: FantasySeasonRankingItem;
@@ -20,7 +21,7 @@ export function LeagueStandingsTableRow({ ranking, isUser, hideUserScore, index,
 
     const rank = ranking.league_rank ?? index + 1;
     const shouldHideScore = (isUser && hideUserScore) || !ranking.total_score
-    const pointsDisplay = shouldHideScore ? '-' : smartRoundUp(ranking.total_score);
+    const pointsDisplay = shouldHideScore ? '-' : smartRoundUp(ranking.league_points === undefined ? ranking.total_score : ranking.league_points);
 
     // const prevRound = ranking.round_number ? ranking.round_number - 1 : undefined;
     // const { userRanking: prevWeekRank } = useUserWeekRoundStanding(ranking.user_id, league?.id, prevRound);
@@ -52,7 +53,7 @@ export function LeagueStandingsTableRow({ ranking, isUser, hideUserScore, index,
 
                     <div className="flex flex-row items-center">
                         <SecondaryText className={twMerge(
-                            "w-10",
+                            "w-10 text-sm",
                             isUser && "text-black dark:text-white"
                         )}>
                             {/* {rank} {badge}{' '} */}
@@ -62,27 +63,29 @@ export function LeagueStandingsTableRow({ ranking, isUser, hideUserScore, index,
 
                     {/* <PositionChangeCard positionChange={positionChange} /> */}
 
-                    {isUser && (
-                        <div className=" w-6 h-6 bg-blue-500 rounded-xl flex flex-col items-center justify-center">
-                            <User className="w-4 h-4 text-white" />
-                        </div>
-                    )}
 
-                    <div className="flex flex-col">
+                    <div className="flex flex-row items-center gap-2">
 
-                        <p>{ranking.username ?? ranking.first_name}</p>
+                        <UserAvatarCard 
+                            imageUrl={ranking.avatar_url}
+                            className="w-[36px] h-[36px]"
+                            iconCN="w-5 h-5"
+                        />
+
+                        <p className="text-sm" >{ranking.username ?? ranking.first_name}</p>
 
                         {isUser && hideUserScore && (
                             <p className={twMerge('text-xs', isUser ? 'text-white/80' : 'text-gray-500')}>
                                 Claim account to see your points
                             </p>
                         )}
+
                     </div>
 
                     {showBadges && <RankingCrown isUser={isUser} ranking={ranking} />}
                 </div>
 
-                <div className="text-right flex flex-row items-center gap-2">
+                <div className="text-right text-sm flex flex-row items-center gap-2">
                     <p>{pointsDisplay}</p>
                 </div>
             </div>

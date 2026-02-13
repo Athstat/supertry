@@ -1,4 +1,4 @@
-import { ChevronRight, Loader, Users } from 'lucide-react';
+import { Users } from 'lucide-react';
 import { FantasyLeagueGroup } from '../../../types/fantasyLeagueGroups';
 import { useCallback } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -6,6 +6,7 @@ import { useJoinLeague } from '../../../hooks/leagues/useJoinLeague';
 import RoundedCard from '../../ui/cards/RoundedCard';
 import LeagueGroupLogo from '../../fantasy_league/LeagueGroupLogo';
 import { LeagueGoldCheckMark } from './LeagueBadge';
+import PrimaryButton from '../../ui/buttons/PrimaryButton';
 
 interface JoinLeagueCardProps {
   leagueGroup: FantasyLeagueGroup
@@ -55,10 +56,14 @@ export function JoinLeagueCard({ leagueGroup }: JoinLeagueCardProps) {
         </div>
 
         <div className='flex flex-row items-center gap-2' >
-            <button onClick={handleJoin} >
-              {!isJoining && <ChevronRight className='text-[#1196F5]' />}
-              {isJoining && <Loader className='text-[#1196F5] animate-spin' />}
-            </button>
+          <PrimaryButton
+            onClick={handleJoin}
+            isLoading={isJoining}
+            disabled={isJoining}
+            className='w-fit px-3 py-2 text-xs'
+          >
+            Join
+          </PrimaryButton>
         </div>
 
       </div>

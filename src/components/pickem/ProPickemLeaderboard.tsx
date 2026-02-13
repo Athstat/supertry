@@ -28,7 +28,7 @@ export default function ProPickemLeaderboard() {
     <div className="flex flex-col gap-3" >
 
       <Table.Root
-        className="px-4"
+        className="dark:bg-transparent px-0 border-none bg-transparent"
         style={{
           borderSpacing: '0px 5px',
           borderCollapse: 'separate'
@@ -40,6 +40,7 @@ export default function ProPickemLeaderboard() {
         <Table.Header>
           <Table.HeaderColumn>Rank</Table.HeaderColumn>
           <Table.HeaderColumn>User</Table.HeaderColumn>
+          <Table.HeaderColumn>Record</Table.HeaderColumn>
           <Table.HeaderColumn>Score</Table.HeaderColumn>
           <Table.HeaderColumn>Accuracy</Table.HeaderColumn>
         </Table.Header>
@@ -81,9 +82,11 @@ function RankingItem({ item }: RankingItemProps) {
 
   const isUserRanking = authUser?.kc_id === item.user_id;
 
+  const completedPredictions = item.predictions_made - item.pending_predictions;
+
   const accuracy = useMemo(() => {
-    return item.correct_predictions && item.predictions_made ? `${Math.floor((item.correct_predictions / item.predictions_made) * 100)}%` : '0%';
-  }, [item.correct_predictions, item.predictions_made]);
+    return item.correct_predictions && completedPredictions ? `${Math.floor((item.correct_predictions / completedPredictions) * 100)}%` : '0%';
+  }, [item.correct_predictions, completedPredictions]);
 
   const userLabel = item.user.username || item.user.first_name || item.user.last_name;
 
@@ -91,7 +94,7 @@ function RankingItem({ item }: RankingItemProps) {
     <Table.Row
       key={item.user_id}
       className={twMerge(
-        "gap-1 h-[55px] items-center cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800",
+        "gap-1 h-[55px] items-center cursor-pointer ",
         isUserRanking && 'bg-blue-500 dark:bg-blue-600 text-white'
       )}
 
@@ -116,6 +119,11 @@ function RankingItem({ item }: RankingItemProps) {
         <div className="min-w-[60px] max-w-[130px]" >
           <p className="text-sm text-wrap truncate" >{userLabel} </p>
         </div>
+      </Table.TableData>
+
+
+      <Table.TableData>
+        <p className="text-center text-xs font-semibold" >{completedPredictions} - {item.correct_predictions}</p>
       </Table.TableData>
 
       <Table.TableData>

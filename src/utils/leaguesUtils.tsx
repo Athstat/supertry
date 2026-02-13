@@ -1,5 +1,5 @@
 import { IFantasyLeagueRound } from '../types/fantasyLeague';
-import { FantasyLeagueGroup } from '../types/fantasyLeagueGroups';
+import { FantasyLeagueGroup, FantasyLeagueGroupType } from '../types/fantasyLeagueGroups';
 import { ISeasonRound } from '../types/fantasy/fantasySeason';
 
 /** Filters to only remain with leagues that seven days away */
@@ -72,8 +72,12 @@ export function getSeasonRoundDeadline(seasonRound: ISeasonRound) {
   return new Date(deadline);
 }
 
-export function isSeasonRoundLocked(seasonRound: ISeasonRound) {
+export function isInSecondChanceMode(seasonRound: ISeasonRound) {
+  return isSeasonRoundStarted(seasonRound);
+}
 
+export function isSeasonRoundStarted(seasonRound: ISeasonRound) {
+  /** Returns true if a season round has started */
   const { games_start } = seasonRound;
 
   if (!games_start) return false;
@@ -85,6 +89,27 @@ export function isSeasonRoundLocked(seasonRound: ISeasonRound) {
 
   return now.valueOf() >= deadline;
 }
+
+export function isPastSeasonRound(seasonRound: ISeasonRound) {
+  /** Returns true if a season round is a past round */
+  
+  const { games_end } = seasonRound;
+
+  if (!games_end) {
+    return true;
+  } 
+
+  const now = new Date();
+  const newGamesEnd = new Date(games_end);
+
+  return now.valueOf() >= newGamesEnd.valueOf();
+}
+
+export function isSeasonRoundTeamsLocked(seasonRound: ISeasonRound) {
+  return isSeasonRoundStarted(seasonRound);
+}
+
+
 
 export function hasLeagueRoundEnded(leagueRound: IFantasyLeagueRound) {
   const { has_ended } = leagueRound;
@@ -168,5 +193,6 @@ export function leaguesOnClockFilter(leagues: FantasyLeagueGroup[]) {
 
 
 export function isLeagueOfficial(league?: FantasyLeagueGroup) {
-  return league?.type === "official_league" || league?.type === "system_created";
+  const verifiedTypes: FantasyLeagueGroupType[] = ["celebrity_created", "official_league", "subscriber_created", "system_created"]
+  return league?.type && verifiedTypes.includes(league?.type);
 }

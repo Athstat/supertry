@@ -1,10 +1,12 @@
-import { User } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
+import UserAvatarCard from "./avatar/UserAvatarCard";
+import { useAuth } from "../../../contexts/auth/AuthContext";
 
 /** Renders a user profile button component */
 export default function UserProfileButton() {
 
+    const {authUser} = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -31,7 +33,11 @@ export default function UserProfileButton() {
             )}
             aria-label="Profile"
         >
-            <User size={20} />
+            <UserAvatarCard
+                imageUrl={authUser?.avatar_url}
+                className="w-[35px] h-[35px]"
+                iconCN="w-6 h-6"
+            />
         </button>
     )
 }

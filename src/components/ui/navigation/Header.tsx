@@ -32,10 +32,10 @@ export function Header() {
   return (
     <Activity mode={topNavViewMode}>
       <header className={twMerge(
-        "sticky top-0 z-50 bg-white/80 backdrop-blur-sm shadow-none mb-0 pb-0",
+        "sticky top-0 z-50 bg-white/80 backdrop-blur-sm shadow-none mb-0 py-3",
         AppColours.BACKGROUND
       )}>
-        <div className="container mx-auto px-1 h-16 overflow-hidden flex items-center justify-between">
+        <div className="container mx-auto px-1 h-10 overflow-hidden flex items-center justify-between">
           <div className="flex items-center gap-1">
             <div
               className="flex flex-row overflow-hidden items-start justify-start cursor-pointer"
@@ -43,7 +43,7 @@ export function Header() {
               tabIndex={0}
               aria-label="Navigate to home"
             >
-              <ScrummyLogoHorizontal className="" />
+              <ScrummyLogoHorizontal className="w-40" />
             </div>
 
             {isInQa && <BetaTag />}

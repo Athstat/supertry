@@ -13,15 +13,20 @@ import { useNavigateBack } from "../../hooks/web/useNavigateBack";
 import { useNavigationGuard } from "../../hooks/web/useNavigationGuard";
 import UnsavedChangesWarningModal from "../ui/modals/UnsavedChangesModal";
 import { useLeagueConfig } from "../../hooks/useLeagueConfig";
+import SecondChanceCard from "./second_chance/SecondChanceCard";
+import { isInSecondChanceMode } from "../../utils/leaguesUtils";
+import { useMyTeam } from "../../hooks/fantasy/my_team/useMyTeam";
+import { useMyTeamActions } from "../../hooks/fantasy/my_team/useMyTeamActions";
 import { useTutorial } from "../../hooks/tutorials/useTutorial";
 import { TUTORIAL_IDS } from "../../tutorials/tutorialIds";
-import { getCreateTeamTutorialSteps, CREATE_TEAM_TUTORIAL_STEP_INDEX } from "../../tutorials/createTeamTutorial";
-
+import { CREATE_TEAM_TUTORIAL_STEP_INDEX, getCreateTeamTutorialSteps } from "../../tutorials/createTeamTutorial";
 
 /** Renders Create Team View Header */
-export default function CreateTeamViewHeader() {
-    const {leagueConfig} = useLeagueConfig();
-    const { totalSpent, selectedCount, leagueRound, isTeamFull, resetToOriginalTeam, setTeam: setRoundTeam } = useFantasyTeam();
+export default function CreateTeamHeader() {
+    const { leagueConfig } = useLeagueConfig();
+
+    const { totalSpent, selectedCount, round: leagueRound, isReadOnly, onUpdateTeam: onUpdateTeam } = useMyTeam();
+    const { isTeamFull, resetToOriginalTeam } = useMyTeamActions();
     const { isActive, isFreeRoam, resumeTutorialAtStep, completeTutorial } = useTutorial();
     const isCreateTeamTutorialActive = isActive(TUTORIAL_IDS.CREATE_TEAM);
 
@@ -37,6 +42,11 @@ export default function CreateTeamViewHeader() {
     const isGuestAccount = useAtomValue(isGuestUserAtom);
 
     const { handleSave, isSaving, saveError, clearSaveError } = useSubmitTeam(handleSuccess);
+    const isSecondChance = leagueRound && isInSecondChanceMode(leagueRound);
+
+    if (!leagueRound || !leagueConfig) {
+        return null;
+    }
 
     const onSaveTeam = () => {
         handleSave();
@@ -49,8 +59,8 @@ export default function CreateTeamViewHeader() {
         }
 
         // Perform Optimistic Update
-        if (createdTeam) {
-            setRoundTeam(createdTeam)
+        if (createdTeam && onUpdateTeam) {
+            onUpdateTeam(createdTeam)
         }
 
         if (isCreateTeamTutorialActive) {
@@ -85,10 +95,6 @@ export default function CreateTeamViewHeader() {
             CREATE_TEAM_TUTORIAL_STEP_INDEX.FINAL_BANNER
         );
     }, [isCreateTeamTutorialActive, isTeamFull, isFreeRoam, resumeTutorialAtStep]);
-
-    if (!leagueRound || !leagueConfig) {
-        return null;
-    }
 
 
     return (
@@ -146,6 +152,12 @@ export default function CreateTeamViewHeader() {
                     Create Team
                 </PrimaryButton>
             </div>
+
+            {!isReadOnly && isSecondChance && (
+                <SecondChanceCard
+                    teamCreation
+                />
+            )}
 
 
             {/* Loading Modal */}
@@ -290,10 +302,8 @@ function UnsavedChangesGuard() {
 
     const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState<boolean>(false);
 
-    const {
-        changesDetected,
-        selectedCount
-    } = useCreateFantasyTeam();
+    const { selectedCount } = useCreateFantasyTeam();
+    const { changesDetected } = useMyTeamActions();
 
     const toggleUnSavedChangesModal = () => {
         setShowUnsavedChangesModal(prev => !prev);

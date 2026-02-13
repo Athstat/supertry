@@ -17,11 +17,11 @@ import { useHideTopNavBar } from "../../../hooks/navigation/useNavigationBars";
 import { ScoutingListPlayerCard } from "../../../components/players/scouting/ScoutingListPlayerCard";
 import ScoutingListPlayerModal from "../../../components/players/scouting/ScoutingListPlayerModal";
 import { usePlayerSeasonTeam } from "../../../hooks/seasons/useSeasonTeams";
-import SearchBar from "../../../components/player_picker/SearchBar";
 import { useDebounced } from "../../../hooks/web/useDebounced";
 import { AthleteFilterBuilder } from "../../../utils/athletes/athlete_filter";
 import { useNavigate } from "react-router-dom";
 import { SCOUTING_LIST_MAX_SIZE } from "../../../types/constants";
+import SearchInput from "../../../components/ui/forms/SearchInput";
 
 /** Renders scouting list screen */
 export default function ScoutingListScreen() {
@@ -206,9 +206,9 @@ function SuggestedPlayers() {
                 <SecondaryText className="text-md" >Suggested Players</SecondaryText>
             </div>
 
-            <SearchBar
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
+            <SearchInput
+                value={searchQuery}
+                onChange={setSearchQuery}
             />
 
             {!searchQuery && <div className="flex flex-col gap-2" >

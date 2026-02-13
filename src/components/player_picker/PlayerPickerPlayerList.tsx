@@ -8,10 +8,10 @@ import PlayerProfileModal from "../player/PlayerProfileModal";
 import { useScoutingList } from "../../hooks/fantasy/scouting/useScoutingList";
 import { useNavigate } from "react-router-dom";
 import QuickActionButton from "../ui/buttons/QuickActionButton";
-import { useSupportedAthletes } from "../../hooks/athletes/useSupportedAthletes";
 import { AthleteFilterBuilder } from "../../utils/athletes/athlete_filter";
 import PlayerPickerListLoadingSkeleton from "./PlayerPickerListLoadingSkeleton";
 import { PlayerListItem } from "./PlayerPickerListItem";
+import { useRoundEligiblePlayers } from "../../hooks/athletes/useRoundEligiblePlayers";
 
 
 type SortField = 'power_rank_rating' | 'price' | null;
@@ -34,7 +34,8 @@ export default function PlayerPickerPlayerList({ onSelect }: Props) {
     } = usePlayerPicker();
 
     const { list, loadingList } = useScoutingList();
-    const {athletes, isLoading: loadingAthletes} = useSupportedAthletes();
+    
+    const {athletes, isLoading: loadingAthletes} = useRoundEligiblePlayers();
 
     const [profileModalPlayer, setProfileModalPlayer] = useState<IProAthlete>();
     const [showModal, setShowModal] = useState<boolean>(false);

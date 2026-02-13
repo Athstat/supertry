@@ -1,5 +1,5 @@
 import { endOfDay, startOfDay, startOfWeek, endOfWeek, getWeek, getYear, format, addDays, subDays } from 'date-fns';
-import { BaseFixture, IFixture } from '../types/games';
+import { BaseFixture, GameKeyEvent, GameKeyEventAction, IFixture } from '../types/games';
 import { ISbrFixture } from '../types/sbr';
 import { IProAthlete } from '../types/athletes';
 import { SortDirection } from '../types/playerSorting';
@@ -596,4 +596,36 @@ export function getOpponent(fixture: IFixture, player: IProAthlete) {
   }
 
   return undefined;
+}
+
+export function getGameKeyEventName(action: GameKeyEventAction) : string {
+  if (action === "TRY") {
+    return "Try";
+  }
+
+  if (action === "CONV") {
+    return "Conversion"
+  }
+
+  if (action === "YELC") {
+    return "Yellow Card"
+  }
+
+  if (action === "PENK") {
+    return "Penalty Kick"
+  }
+
+  return action
+}
+
+export function getPeriodMarkerName(event: GameKeyEvent) : string | undefined   {
+  if (event.action === "START") {
+    return event.period === "First Half" ? "Kick Off" : "Half Time"
+  }
+
+  if (event.action === "END") {
+    return event.period === "First Half" ? undefined : "Full Time";
+  }
+
+  return undefined
 }

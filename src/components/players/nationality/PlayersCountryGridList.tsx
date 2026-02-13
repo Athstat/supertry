@@ -85,12 +85,13 @@ export default function PlayersCountryGridList() {
     }
 
     return (
-        <div className="flex flex-col gap-4" >
+        <div className="flex flex-col gap-4 " >
+
             <div>
                 <p className='font-bold text-md' >By Nationality</p>
             </div>
             
-            <div className="grid grid-cols-3 gap-2" >
+            <div className="grid grid-cols-3 gap-4" >
                 {countries.map((c) => {
                     return (
                         <CountryCard

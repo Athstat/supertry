@@ -32,7 +32,7 @@ export default function PlayerCompareModal() {
   }, [selectedPlayers]);
 
   const playerLen = selectedPlayers.length;
-  const title = `Comparing ${playerLen} player${playerLen === 1 ? '' : 's'}`;
+  const title = playerLen > 0 ? `Comparing ${playerLen} player${playerLen === 1 ? '' : 's'}` : 'Add Players to Compare';
 
   if (open === false) return;
 
