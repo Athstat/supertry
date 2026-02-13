@@ -30,7 +30,7 @@ export function usePlayerNextMatch(athleteId?: string, limit: number = 1) {
 
 /** Hook that fetches a players last N matches */
 
-export function usePlayerLastMatch(athleteId: string, limit: number = 10) {
+export function usePlayerLastMatches(athleteId: string, limit: number = 10) {
     const key = athleteId ? `/athletes/${athleteId}/last-matches?limit=${limit}` : null;
     const {data, isLoading,error, mutate} = useSWR(key, () => athleteService.getLastNMatches(athleteId, limit));
 
