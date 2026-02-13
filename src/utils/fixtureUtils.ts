@@ -3,6 +3,7 @@ import { BaseFixture, GameKeyEvent, GameKeyEventAction, IFixture } from '../type
 import { ISbrFixture } from '../types/sbr';
 import { IProAthlete } from '../types/athletes';
 import { SortDirection } from '../types/playerSorting';
+import { IProTeam } from '../types/team';
 
 export function fixtureSummary(fixture: IFixture) {
   const { team_score, kickoff_time, game_status, opposition_score } = fixture;
@@ -576,16 +577,17 @@ export function findClosestWeekWithSbrFixtures<T extends { kickoff_time?: Date }
 }
 
 
-export function getOpponent(fixture: IFixture, player: IProAthlete) {
-  const { team: playerTeam } = player;
+export function getOpponent(fixture: IFixture, player: IProAthlete, seasonTeam?: IProTeam) {
   const { team, opposition_team } = fixture;
 
   if (!team || !opposition_team || !team) {
     return undefined;
   }
 
-  const isHomePlayer = team.athstat_id === playerTeam?.athstat_id;
-  const isawayPlayer = opposition_team.athstat_id === playerTeam?.athstat_id;
+  const teamId = seasonTeam?.athstat_id || player.team_id;
+
+  const isHomePlayer = team.athstat_id === teamId;
+  const isawayPlayer = opposition_team.athstat_id === teamId;
 
   if (isHomePlayer) {
     return opposition_team;

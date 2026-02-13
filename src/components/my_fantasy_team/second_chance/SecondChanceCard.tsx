@@ -14,7 +14,9 @@ export default function SecondChanceCard({teamCreation = false} : Props) {
         return f.game_status !== "not_started"
     });
 
-    if (liveOrCompleted.length === 0 || !round || (isPastSeasonRound(round))) {
+    const shouldHide = (liveOrCompleted.length === 0) || !round || isPastSeasonRound(round);
+
+    if (shouldHide) {
         return null;
     }
 
