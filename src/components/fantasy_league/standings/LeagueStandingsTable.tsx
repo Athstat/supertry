@@ -152,7 +152,10 @@ export default function LeagueStandingsTable({
         onClick={handleScrollToUser}
       />
 
-      <ScrollToTopButton  className='bottom-24' />
+      <ScrollToTopButton  
+        className='top-4' 
+        showText
+      />
 
       {!isLoading && <div className="divide-y dark:divide-slate-700/20 divide-slate-300/40">
         {completeStandings.map((ranking, index) => {

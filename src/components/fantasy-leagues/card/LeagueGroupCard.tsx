@@ -51,7 +51,7 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
 
             <RoundedCard
                 onClick={handleOnClick}
-                className="py-2 cursor-pointer rounded-md px-4 bg-slate-100 border-none flex flex-row items-center justify-between"
+                className="py-2 cursor-pointer px-4 bg-slate-100 border-none flex flex-row items-center justify-between"
             >
                 <div className="flex flex-row items-center gap-3" >
                     <LeagueGroupLogo className="w-6 h-6" league={leagueGroup} />
