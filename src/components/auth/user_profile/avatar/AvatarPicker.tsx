@@ -93,7 +93,7 @@ export default function AvatarPicker({ isOpen, value, onClose, onChange, isSavin
 
                             className={twMerge(
                                 "transition-all ease-in delay-100",
-                                selectedImage?.image === i.image && 'border-4 border-blue-600 dark:border-blue-500'
+                                selectedImage?.image === i.image && 'border-4 border-blue-600 dark:border-white'
                             )}
 
                             onClick={() => handleChange(i)}

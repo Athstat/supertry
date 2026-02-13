@@ -35,7 +35,7 @@ export default function UserAvatarCard({ imageUrl, className, onClick, iconCN }:
         <div
 
             className={twMerge(
-                "w-[100px] h-[100px] border border-slate-200 dark:border-slate-700 overflow-clip rounded-full bg-slate-400/40 dark:bg-slate-600 cursor-pointer",
+                "w-[100px] h-[100px] drop-shadow-md border border-slate-200 dark:border-slate-700 overflow-clip rounded-full bg-slate-400/40 dark:bg-slate-600 cursor-pointer",
                 className
             )}
 
