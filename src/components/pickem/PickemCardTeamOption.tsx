@@ -64,8 +64,8 @@ export default function PickemCardTeamOption({ team, fixture, fetchGameVotes, on
             </div>}
 
             <div className={twMerge(
-                "relative flex flex-col items-start justify-start gap-2",
-                !isHomeTeam && "justify-end items-end"
+                "relative flex flex-col items-center justify-center w-full gap-2",
+                !isHomeTeam && "justify-end items-center"
             )}>
 
                 {isVotingForTeam && (
@@ -86,7 +86,7 @@ export default function PickemCardTeamOption({ team, fixture, fetchGameVotes, on
                 )}
 
                 <div className={twMerge(
-                    "text-[8px] text-center text-wrap font-medium w-full text-slate-700 dark:text-slate-200 flex flex-row items-center gap-1",
+                    "text-[8px] text-center text-wrap font-medium w-fit text-slate-700 dark:text-slate-200 flex flex-row items-center gap-1",
                 )} >
                     {!isHomeTeam && <p>{showVote ? `(${votePerc}%)` : ''}</p>}
 

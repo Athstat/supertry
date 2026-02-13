@@ -8,6 +8,7 @@ import { getGameKeyEventName, getPeriodMarkerName } from "../../../../utils/fixt
 import WhistleIcon from "../../../ui/icons/WhistleIcon";
 import { MdSportsRugby } from "react-icons/md";
 import RugbyGoalPostIcon from "../../../ui/icons/RugbyGoalPostIcon";
+import { useFixtureScreen } from "../../../../hooks/fixtures/useFixture";
 
 type Props = {
     fixture: IFixture
@@ -21,7 +22,7 @@ export default function FixtureKeyEventsCard({ fixture }: Props) {
     const { data, isLoading } = useSWR(key, () => gamesService.getKeyEvents(fixture.game_id));
 
     const events = [...(data || [])].sort((a, b) => {
-        return ((b.time * 60) + b.secs) - ((a.time * 60) + a.secs);
+        return ((a.time * 60) + a.secs) - ((b.time * 60) + b.secs);
     });
 
     if (isLoading) {
@@ -39,7 +40,7 @@ export default function FixtureKeyEventsCard({ fixture }: Props) {
     return (
         <RoundedCard className="p-4 flex flex-col gap-2 " >
 
-            <div className="flex flex-col gap-1" >
+            <div className="flex flex-col gap-2" >
                 {events.map((e) => {
                     return (
                         <EventCard
@@ -63,17 +64,29 @@ function EventCard({ event, fixture }: EventCardProps) {
     const isHome = event.team_id === fixture.team?.athstat_id;
     const actionName = getGameKeyEventName(event.action);
 
+    const { openPlayerMatchModal } = useFixtureScreen();
+
     if (['END', 'START'].includes(event.action)) {
         return (
             <GamePeriodMarker event={event} fixture={fixture} />
         )
     }
 
+    const handleClick = () => {
+        if (event.athlete) {
+            openPlayerMatchModal(event.athlete);
+        }
+    }
+
     return (
-        <div className={twMerge(
-            "w-full flex flex-row items-center justify-start",
-            !isHome && "justify-end"
-        )} >
+        <div
+            className={twMerge(
+                "w-full flex flex-row items-center justify-start cursor-pointer",
+                !isHome && "justify-end"
+            )}
+
+            onClick={handleClick}
+        >
             <div className="flex flex-row items-center gap-2" >
                 {isHome && <p className="text-sm font-extrabold" >{event.time}'</p>}
                 {isHome && <EventIcon event={event} />}

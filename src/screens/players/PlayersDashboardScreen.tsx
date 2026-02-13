@@ -1,4 +1,4 @@
-import { BicepsFlexed, Shield, WandSparkles } from 'lucide-react'
+import { BicepsFlexed, Shield, User, WandSparkles } from 'lucide-react'
 import PageView from '../../components/ui/containers/PageView'
 import SearchInput from '../../components/ui/forms/SearchInput'
 import RoundedCard from "../../components/ui/cards/RoundedCard"
@@ -17,6 +17,7 @@ import PlayersIcon from '../../components/ui/icons/PlayersIcon'
 import IconCircle from '../../components/ui/icons/IconCircle'
 import TextHeading from '../../components/ui/typography/TextHeading'
 import ScoutingIcon from '../../components/ui/icons/ScoutingIcon'
+import { usePlayerCompareActions } from '../../hooks/usePlayerCompare'
 
 export default function PlayersDashboardScreen() {
 
@@ -66,6 +67,8 @@ export default function PlayersDashboardScreen() {
 
 function Content() {
 
+  const { showCompareModal } = usePlayerCompareActions();
+
   const navigate = useNavigate();
 
   const handleViewAll = () => {
@@ -80,31 +83,54 @@ function Content() {
     navigate(`/scouting/my-list`);
   }
 
+  const handlePlayerCompare = () => {
+    showCompareModal();
+  }
+
   return (
     <Fragment>
       <div className='flex flex-col gap-8' >
 
-        <div className='flex flex-row items-center gap-2' >
-          <RoundedCard
-            className='flex flex-1 cursor-pointer py-3 px-4 dark:border-none flex-col items-center gap-2 justify-between'
-            onClick={handleViewAll}
-          >
-            <p className='text-sm' >View All Players</p>
+        <div className='flex flex-col gap-3' >
 
-            <PlayersIcon lightFill='#1196F5' darkFill='#1196F5' />
+          <div className='flex flex-row items-center gap-2' >
+            <RoundedCard
+              className='flex flex-1 cursor-pointer py-3 px-4 dark:border-none flex-col items-center gap-2 justify-between'
+              onClick={handleViewAll}
+            >
+              <p className='text-sm' >View All Players</p>
 
-          </RoundedCard>
+              <PlayersIcon lightFill='#1196F5' darkFill='#1196F5' />
+
+            </RoundedCard>
 
 
-          <RoundedCard
-            className='flex flex-1 cursor-pointer py-3 px-4 dark:border-none flex-col items-center gap-2 justify-between'
-            onClick={handleViewScoutingList}
-          >
+            <RoundedCard
+              className='flex flex-1 cursor-pointer py-3 px-4 dark:border-none flex-col items-center gap-2 justify-between'
+              onClick={handleViewScoutingList}
+            >
 
-            <p className='text-sm' >View Scouting List</p>
-            <ScoutingIcon lightFill='#1196F5' darkFill='#1196F5' />
+              <p className='text-sm' >View Scouting List</p>
+              <ScoutingIcon lightFill='#1196F5' darkFill='#1196F5' />
 
-          </RoundedCard>
+            </RoundedCard>
+          </div>
+
+          <div className='flex flex-row items-center justify-center' >
+            <RoundedCard
+              className='flex w-1/2 cursor-pointer py-3 px-4 dark:border-none flex-col items-center gap-2 justify-between'
+              onClick={handlePlayerCompare}
+            >
+              <p className='text-sm' >Compare Players</p>
+
+              <div className='flex flex-row items-center gap-1' >
+                <User className={`w-7 h-7 text-[#1196F5] dark:text-[#1196F5]`} />
+                <div className='bg-[#1196F5] dark:bg-[#1196F5] w-[3px] h-[25px]' />
+                <User className={`w-7 h-7 text-[#1196F5] dark:text-[#1196F5]`} />
+              </div>
+
+            </RoundedCard>
+          </div>
         </div>
 
       </div>

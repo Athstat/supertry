@@ -1,11 +1,9 @@
-import { useAtomValue } from "jotai";
 import { X } from "lucide-react";
 import { useMemo, useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDebounced } from "../../hooks/web/useDebounced";
 import { usePlayerCompareActions } from "../../hooks/usePlayerCompare";
 import { useQueryState } from "../../hooks/web/useQueryState";
-import { comparePlayersAtomGroup } from "../../state/comparePlayers.atoms";
 import { IProAthlete } from "../../types/athletes"
 import { SortField, SortDirection } from "../../types/playerSorting";
 import { IProTeam } from "../../types/team";
@@ -13,7 +11,6 @@ import { getAthletesSummary } from "../../utils/athletes/athleteUtils";
 import PlayerProfileModal from "../player/PlayerProfileModal";
 import SecondaryText from "../ui/typography/SecondaryText";
 import TeamLogo from "../team/TeamLogo";
-import PlayerCompareModal from "./compare/PlayerCompareModal";
 import PlayersScreenCompareStatus from "./compare/PlayersScreenCompareStatus";
 import { twMerge } from "tailwind-merge";
 import { AppColours } from "../../types/constants";
@@ -91,9 +88,7 @@ export default function PlayersList({ players, stickyHeaderClassName }: Props) {
         setShowPlayerModal(false);
     };
 
-    const isPickingPlayers = useAtomValue(comparePlayersAtomGroup.isCompareModePicking);
-
-    const { addOrRemovePlayer, startPicking, showCompareModal } = usePlayerCompareActions();
+    const { addOrRemovePlayer, startPicking, showCompareModal, isPicking: isPickingPlayers } = usePlayerCompareActions();
 
     // Handle player selection with useCallback for better performance
     const handlePlayerClick = useCallback(
@@ -215,8 +210,6 @@ export default function PlayersList({ players, stickyHeaderClassName }: Props) {
                         onClearSearchQuery={() => setSearchQuery("")}
                     />
                 )}
-
-                <PlayerCompareModal />
 
                 {playerModalPlayer && (
                     <PlayerProfileModal

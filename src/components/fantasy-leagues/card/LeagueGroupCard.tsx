@@ -6,7 +6,7 @@ import RoundedCard from "../../ui/cards/RoundedCard";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { Users } from "lucide-react";
-import LeagueBadge, { LeagueGoldCheckMark } from "./LeagueBadge";
+import LeagueBadge from "./LeagueBadge";
 import { useAuth } from "../../../contexts/auth/AuthContext";
 
 type CardProps = {
@@ -51,7 +51,7 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
 
             <RoundedCard
                 onClick={handleOnClick}
-                className="py-2 cursor-pointer rounded-md px-4 bg-slate-100 border-none flex flex-row items-center justify-between"
+                className="py-2 cursor-pointer px-4 bg-slate-100 border-none flex flex-row items-center justify-between"
             >
                 <div className="flex flex-row items-center gap-3" >
                     <LeagueGroupLogo className="w-6 h-6" league={leagueGroup} />
@@ -63,7 +63,7 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
                                 {leagueGroup.title}
                             </h3>
                             
-                            <LeagueGoldCheckMark leagueGroup={leagueGroup} />
+                            {/* <LeagueGoldCheckMark leagueGroup={leagueGroup} /> */}
                         </div>
 
 

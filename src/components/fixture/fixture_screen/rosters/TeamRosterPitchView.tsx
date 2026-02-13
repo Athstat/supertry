@@ -51,7 +51,7 @@ export function TeamRosterPitchView({ team, fixture }: TeamRosterProps) {
             )} />
 
             <Activity mode={hasRosterItems ? "visible" : "hidden"} >
-                <div className="absolute mt-16 lg:mt-20 w-full top-0 left-0 flex flex-col gap-2" >
+                <div className="absolute mt-10 lg:mt-20 w-full top-0 left-0 flex flex-col gap-2" >
                     <div className="flex w-full flex-row items-center justify-center gap-6" >
                         <RosterStarterItem
                             item={getByJersey(1)}

@@ -94,7 +94,7 @@ function RankingItem({ item }: RankingItemProps) {
     <Table.Row
       key={item.user_id}
       className={twMerge(
-        "gap-1 h-[55px] items-center cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800",
+        "gap-1 h-[55px] items-center cursor-pointer ",
         isUserRanking && 'bg-blue-500 dark:bg-blue-600 text-white'
       )}
 

@@ -40,5 +40,8 @@ export function useTheme() {
   if (context === undefined) {
     throw new Error('useTheme must be used within a ThemeProvider');
   }
-  return context;
+
+  const isDark = context.theme === "dark";
+
+  return {...context, isDark};
 }

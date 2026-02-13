@@ -1,5 +1,5 @@
 import { IFantasyLeagueRound } from '../types/fantasyLeague';
-import { FantasyLeagueGroup } from '../types/fantasyLeagueGroups';
+import { FantasyLeagueGroup, FantasyLeagueGroupType } from '../types/fantasyLeagueGroups';
 import { ISeasonRound } from '../types/fantasy/fantasySeason';
 
 /** Filters to only remain with leagues that seven days away */
@@ -193,5 +193,6 @@ export function leaguesOnClockFilter(leagues: FantasyLeagueGroup[]) {
 
 
 export function isLeagueOfficial(league?: FantasyLeagueGroup) {
-  return league?.type === "official_league" || league?.type === "system_created";
+  const verifiedTypes: FantasyLeagueGroupType[] = ["celebrity_created", "official_league", "subscriber_created", "system_created"]
+  return league?.type && verifiedTypes.includes(league?.type);
 }
