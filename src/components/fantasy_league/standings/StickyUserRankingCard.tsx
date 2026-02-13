@@ -21,18 +21,19 @@ export default function StickyUserRankingCard({ userRanking, onClick }: Props) {
 
 
                 <div className="flex-row items-center gap-2 justify-between flex" >
-                    <div className="flex flex-row gap-4 items-center" >
+
+                    <div className="flex flex-row gap-4 items-center w-3/4 overflow-x-clip" >
                         <div>
                             <p className="font-semibold" >{userRanking?.league_rank}</p>
                         </div>
 
-                        <div className="flex flex-row items-center gap-2" >
+                        <div className="flex flex-row items-center gap-2 " >
                             <UserAvatarCard 
                                 imageUrl={userRanking?.avatar_url}
                                 className="w-[35px] h-[35px] border-none"
                                 iconCN="w-4 h-4"
                             />
-                            <p>{userRanking?.username}</p>
+                            <p className="text-sm w-2/5 truncate" >{userRanking?.username}</p>
                         </div>
                     </div>
                     <div>
