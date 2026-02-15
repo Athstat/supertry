@@ -44,10 +44,6 @@ export default function CreateTeamHeader() {
     const { handleSave, isSaving, saveError, clearSaveError } = useSubmitTeam(handleSuccess);
     const isSecondChance = leagueRound && isInSecondChanceMode(leagueRound);
 
-    if (!leagueRound || !leagueConfig) {
-        return null;
-    }
-
     const onSaveTeam = () => {
         handleSave();
     }
@@ -95,6 +91,10 @@ export default function CreateTeamHeader() {
             CREATE_TEAM_TUTORIAL_STEP_INDEX.FINAL_BANNER
         );
     }, [isCreateTeamTutorialActive, isTeamFull, isFreeRoam, resumeTutorialAtStep]);
+
+    if (!leagueRound || !leagueConfig) {
+        return null;
+    }
 
 
     return (
