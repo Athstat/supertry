@@ -49,8 +49,6 @@ export default function MyTeamProvider({ team, manager, round, children, isReadO
         showPointsModal: false
     });
 
-    console.log("Round Team X", team)
-
     return (
         <MyTeamContext.Provider
             value={{
