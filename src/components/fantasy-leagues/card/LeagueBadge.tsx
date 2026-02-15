@@ -66,7 +66,7 @@ const Badge = ({ variant, children }: { variant: string; children: React.ReactNo
             case 'invite':
                 return 'bg-slate-200 text-slate-800 dark:bg-slate-600/70 dark:text-slate-200';
             case 'official':
-                return 'bg-[#F2EDDC] text-[#BF9701] dark:bg-[#BF9701] dark:text-[#000000]';
+                return 'bg-[#F2EDDC] text-[#BF9701] dark:bg-yellow-500 dark:text-[#000000]';
             case 'celebrity':
                 return 'bg-[#E6E2F5] text-[#5A30EF] dark:bg-[#5A30EF] dark:text-[#FEFEFE]';
             case 'subscriber':
