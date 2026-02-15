@@ -79,6 +79,7 @@ export default function MyTeamModals() {
                 <PointsBreakdownModal
                     isOpen={showPointsModal}
                     athlete={selectedPlayer.athlete}
+                    round={round}
                     team={team}
                     onClose={handleClosePointsModal}
                     multiplier={
