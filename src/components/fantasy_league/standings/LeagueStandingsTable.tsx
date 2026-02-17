@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { ErrorState } from '../../ui/ErrorState';
 import { LeagueStandingsTableRow } from './LeagueStandingsTableRow';
 import StickyUserRankingCard from './StickyUserRankingCard';
-import { isSeasonRoundTeamsLocked } from '../../../utils/leaguesUtils';
+import { isSeasonRoundStarted, isSeasonRoundTeamsLocked } from '../../../utils/leaguesUtils';
 import { ISeasonRound } from '../../../types/fantasy/fantasySeason';
 import { useAuth } from '../../../contexts/auth/AuthContext';
 import ScrollToTopButton from '../../ui/buttons/ScrollToTopButton';
@@ -94,6 +94,11 @@ export default function LeagueStandingsTable({
 
   const isLoading = loadingStandings;
 
+  const roundForGrouping = selectedRound ?? currentRound;
+  const shouldShowGroupings = Boolean(roundForGrouping)
+    && isSeasonRoundStarted(roundForGrouping)
+    && members.length > 20;
+
   const handleScrollToUser = () => {
     if (userRef.current) {
       userRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -161,12 +166,23 @@ export default function LeagueStandingsTable({
         {completeStandings.map((ranking, index) => {
 
           const isUser = authUser?.kc_id === ranking.user_id
+          const rank = ranking.league_rank ?? index + 1;
+          const showTopTierLabel = shouldShowGroupings && rank === 1;
+          const showEliteLabel = shouldShowGroupings && rank === 4;
 
           return (
             <div
               ref={isUser ? userRef : undefined}
               key={ranking.user_id}
             >
+              {showTopTierLabel && (
+                <LeaderboardDivisionLabel label="Top Tier SCRUMMERS" />
+              )}
+
+              {showEliteLabel && (
+                <LeaderboardDivisionLabel label="Elite SCRUMMERS" />
+              )}
+
               <LeagueStandingsTableRow
                 ranking={ranking}
                 index={index}
@@ -182,6 +198,20 @@ export default function LeagueStandingsTable({
       </div>}
 
 
+    </div>
+  );
+}
+
+type LeaderboardDivisionLabelProps = {
+  label: string;
+}
+
+function LeaderboardDivisionLabel({ label }: LeaderboardDivisionLabelProps) {
+  return (
+    <div className="px-4 py-2 bg-slate-200/80 dark:bg-slate-700/40">
+      <SecondaryText className="text-xs font-semibold tracking-[0.12em] uppercase">
+        {label}
+      </SecondaryText>
     </div>
   );
 }
