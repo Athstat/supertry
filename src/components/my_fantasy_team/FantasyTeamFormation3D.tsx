@@ -71,4 +71,3 @@ export function FantasyTeamFormation3D({ onPlayerClick, marginCN, firstRowMargin
     </div>
   );
 }
-

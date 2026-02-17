@@ -102,6 +102,7 @@ export function PlayerActionModal({
         "max-h-[640px] text-sm min-h-[200px] py-4 px-6 border-t dark:border-slate-700",
         isReadOnly && "max-h-[300px] min-h-[260px]"
       )}
+      dataTutorial="player-action-modal"
       hideHandle
       key={player.tracking_id}
       onClickOutside={onClose}
@@ -208,6 +209,7 @@ export function PlayerActionModal({
           <PrimaryButton
             className="bg-purple-100 text-purple-700 py-4 dark:text-purple-300 dark:bg-purple-900/30 dark:hover:bg-purple-900 dark:border-purple-500/50 border-purple-500 hover:bg-purple-200"
             onClick={handleInitSwap}
+            dataTutorial="player-action-swap"
           >
             Swap
             {isSlotLocked && <Lock className="w-4 h-4" />}
@@ -235,6 +237,7 @@ export function PlayerActionModal({
                 "border-none hover:dark:text-slate-300 cursor-pointer  bg-slate-200 dark:bg-slate-700 dark:text-slate-200 p-2.5 py-4 items-center justify-center flex flex-row gap-1"
               }
               onClick={handleMakePlayerCaptain}
+              dataTutorial="player-action-captain"
             >
               {isTeamCaptain ? "Team Captain" : "Make Team Captain"}
               {isTeamCaptain && <CaptainsArmBand className="h-4" />}

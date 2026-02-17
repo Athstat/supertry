@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PrimaryButton from '../ui/buttons/PrimaryButton';
 
 import PlayerProfileModal from '../player/PlayerProfileModal';
@@ -14,6 +14,11 @@ import { IProAthlete } from '../../types/athletes';
 import { PlayerActionModal } from './PlayerActionModal';
 import CreateTeamHeader from './CreateTeamHeader';
 import MyTeamBenchDrawer from './MyTeamBenchDrawer';
+import { useTutorial } from '../../hooks/tutorials/useTutorial';
+import { TUTORIAL_IDS } from '../../tutorials/tutorialIds';
+import { CREATE_TEAM_TUTORIAL_STEP_INDEX } from '../../tutorials/createTeamTutorial';
+import CoachScrummyBanner from '../tutorials/CoachScrummyBanner';
+import { useLocation } from 'react-router-dom';
 
 /** Renders a create team view */
 export default function CreateFantasyTeamView() {
@@ -25,6 +30,24 @@ export default function CreateFantasyTeamView() {
   const [actionModalPlayer, setActionModalPlayer] = useState<IFantasyTeamAthlete>();
 
   const { navigate: tabNavigate } = useTabView();
+  const location = useLocation();
+  const { isActive, stepIndex, setStepIndex, enterFreeRoam, isFreeRoam } = useTutorial();
+  const isCreateTeamTutorialActive = isActive(TUTORIAL_IDS.CREATE_TEAM);
+
+  const slot1HasAthlete = useMemo(() => {
+    const slot1 = slots.find((s) => s.slotNumber === 1);
+    return Boolean(slot1?.athlete);
+  }, [slots]);
+
+  const slot1IsCaptain = useMemo(() => {
+    const slot1 = slots.find((s) => s.slotNumber === 1);
+    return Boolean(slot1?.isCaptain);
+  }, [slots]);
+
+  const slot2HasAthlete = useMemo(() => {
+    const slot2 = slots.find((s) => s.slotNumber === 2);
+    return Boolean(slot2?.athlete);
+  }, [slots]);
 
   const excludePlayers = useMemo(() => {
     const alreadySelectedPlayers: IFantasyTeamAthlete[] = [];
@@ -66,6 +89,184 @@ export default function CreateFantasyTeamView() {
     setActionModalPlayer(undefined);
   }
 
+  useEffect(() => {
+    if (!isCreateTeamTutorialActive) {
+      return;
+    }
+
+    if (
+      stepIndex === CREATE_TEAM_TUTORIAL_STEP_INDEX.DASHBOARD_CTA &&
+      location.pathname.startsWith('/my-team')
+    ) {
+      setStepIndex(CREATE_TEAM_TUTORIAL_STEP_INDEX.INTRO);
+    }
+  }, [
+    isCreateTeamTutorialActive,
+    location.pathname,
+    setStepIndex,
+    stepIndex,
+  ]);
+
+  useEffect(() => {
+    if (!isCreateTeamTutorialActive) {
+      return;
+    }
+
+    if (stepIndex === CREATE_TEAM_TUTORIAL_STEP_INDEX.SLOT_1_EMPTY && swapState.open) {
+      setStepIndex(CREATE_TEAM_TUTORIAL_STEP_INDEX.PLAYER_PICKER_SLOT_1);
+    }
+  }, [isCreateTeamTutorialActive, stepIndex, swapState.open, setStepIndex]);
+
+  useEffect(() => {
+    if (!isCreateTeamTutorialActive) {
+      return;
+    }
+
+    if (
+      stepIndex <= CREATE_TEAM_TUTORIAL_STEP_INDEX.PLAYER_PICKER_SLOT_1 &&
+      slot1HasAthlete &&
+      !swapState.open
+    ) {
+      setStepIndex(CREATE_TEAM_TUTORIAL_STEP_INDEX.SLOT_1_PLAYER);
+    }
+  }, [
+    isCreateTeamTutorialActive,
+    slot1HasAthlete,
+    stepIndex,
+    swapState.open,
+    setStepIndex,
+  ]);
+
+  useEffect(() => {
+    if (!isCreateTeamTutorialActive) {
+      return;
+    }
+
+    if (
+      stepIndex <= CREATE_TEAM_TUTORIAL_STEP_INDEX.SLOT_1_PLAYER &&
+      actionModalPlayer
+    ) {
+      setStepIndex(CREATE_TEAM_TUTORIAL_STEP_INDEX.ACTION_MODAL_SWAP);
+    }
+  }, [
+    isCreateTeamTutorialActive,
+    actionModalPlayer,
+    stepIndex,
+    setStepIndex,
+  ]);
+
+  useEffect(() => {
+    if (!isCreateTeamTutorialActive) {
+      return;
+    }
+
+    if (
+      stepIndex === CREATE_TEAM_TUTORIAL_STEP_INDEX.ACTION_MODAL_SWAP &&
+      swapState.open
+    ) {
+      setStepIndex(CREATE_TEAM_TUTORIAL_STEP_INDEX.PLAYER_PICKER_SWAP);
+    }
+  }, [
+    isCreateTeamTutorialActive,
+    stepIndex,
+    swapState.open,
+    setStepIndex,
+  ]);
+
+  useEffect(() => {
+    if (!isCreateTeamTutorialActive) {
+      return;
+    }
+
+    if (
+      stepIndex === CREATE_TEAM_TUTORIAL_STEP_INDEX.PLAYER_PICKER_SWAP &&
+      slot1HasAthlete &&
+      !swapState.open
+    ) {
+      setStepIndex(CREATE_TEAM_TUTORIAL_STEP_INDEX.SLOT_1_PLAYER_CAPTAIN_PROMPT);
+    }
+  }, [
+    isCreateTeamTutorialActive,
+    stepIndex,
+    slot1HasAthlete,
+    swapState.open,
+    setStepIndex,
+  ]);
+
+  useEffect(() => {
+    if (!isCreateTeamTutorialActive) {
+      return;
+    }
+
+    if (
+      stepIndex === CREATE_TEAM_TUTORIAL_STEP_INDEX.SLOT_1_PLAYER_CAPTAIN_PROMPT &&
+      actionModalPlayer
+    ) {
+      setStepIndex(CREATE_TEAM_TUTORIAL_STEP_INDEX.ACTION_MODAL_CAPTAIN);
+    }
+  }, [
+    isCreateTeamTutorialActive,
+    stepIndex,
+    actionModalPlayer,
+    setStepIndex,
+  ]);
+
+  useEffect(() => {
+    if (!isCreateTeamTutorialActive) {
+      return;
+    }
+
+    if (
+      stepIndex === CREATE_TEAM_TUTORIAL_STEP_INDEX.ACTION_MODAL_CAPTAIN &&
+      slot1IsCaptain
+    ) {
+      setStepIndex(CREATE_TEAM_TUTORIAL_STEP_INDEX.AFTER_CAPTAIN_NEXT);
+    }
+  }, [
+    isCreateTeamTutorialActive,
+    stepIndex,
+    slot1IsCaptain,
+    setStepIndex,
+  ]);
+
+  useEffect(() => {
+    if (!isCreateTeamTutorialActive) {
+      return;
+    }
+
+    if (
+      stepIndex === CREATE_TEAM_TUTORIAL_STEP_INDEX.SLOT_2_EMPTY &&
+      swapState.open
+    ) {
+      setStepIndex(CREATE_TEAM_TUTORIAL_STEP_INDEX.PLAYER_PICKER_PRICE);
+    }
+  }, [
+    isCreateTeamTutorialActive,
+    stepIndex,
+    swapState.open,
+    setStepIndex,
+  ]);
+
+  useEffect(() => {
+    if (!isCreateTeamTutorialActive) {
+      return;
+    }
+
+    if (
+      stepIndex === CREATE_TEAM_TUTORIAL_STEP_INDEX.PLAYER_PICKER_PICK &&
+      slot2HasAthlete &&
+      !swapState.open
+    ) {
+      enterFreeRoam(TUTORIAL_IDS.CREATE_TEAM);
+    }
+  }, [
+    isCreateTeamTutorialActive,
+    stepIndex,
+    slot2HasAthlete,
+    swapState.open,
+    enterFreeRoam,
+  ]);
+
   const handleCompleteSwap = (player: IProAthlete) => {
     completeSwap(player);
     console.log("Ran complete Swap Function! ", player);
@@ -90,9 +291,18 @@ export default function CreateFantasyTeamView() {
 
 
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full flex flex-col" data-tutorial="my-team-intro">
 
       <CreateTeamHeader />
+
+      {isCreateTeamTutorialActive && isFreeRoam && (
+        <div className="px-4 mt-3">
+          <CoachScrummyBanner
+            message="Pick the rest of your team. When you’re ready, tap Create Team."
+            dataTutorial="coach-scrummy-banner"
+          />
+        </div>
+      )}
 
       <div className='relative' >
         <FantasyTeamFormation3D

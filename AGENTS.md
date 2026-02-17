@@ -29,10 +29,36 @@
 ## Commit & Pull Request Guidelines
 - Recent commit history uses short, imperative, lowercase messages (e.g., “adds context provider to league screen”). Keep messages concise and action-oriented.
 - PRs should include: summary, testing performed, and screenshots for UI changes. Link related issues if available.
+- Prefer small PRs that are easy to review.
+- Use meaningful PR titles.
+- Avoid "AI slop" code. Keep code clean and intentional.
+- For Notion tickets, include clear, non-overly-technical detail so non-engineers can understand.
 
 ## Workflow Notes
 - Before starting any planning, pull from `main` to ensure the latest context from other contributors.
 - When a Notion page includes embedded URLs (images, PDFs, other Notion pages, docs), load those assets/pages; if any cannot be loaded, explicitly report it.
+
+## Releases
+- Production deploys require a release card in Notion listing Major (if any), Minor, and Patch changes for UAT.
+- UAT feedback is posted in `uat-reports`. Tackle UAT issues one by one.
+- When a task for a release is complete, update the release Notion ticket.
+- When ready to deploy, create a GitHub release with an appropriate version and name, copying release notes from Notion. Do this for both server and frontend apps.
+
+## React Guidelines
+- Avoid over-engineering or unnecessary verbosity.
+- Optimize for memory usage, FPS, and bundle size.
+- Write small, reusable components that are easy to extend.
+- Split overly long files into smaller components where appropriate.
+- Use relative imports with `@/` mapped to `./src/**`.
+- Follow the existing feature-based folder structure.
+- Prioritize readability for easier PR review.
+- The `<Activity />` component exists and should be used when applicable.
+- Delete dead code and unused components.
+- Refactor after completing tasks to reduce redundancy and bundle size.
+
+## Github
+- Before opening a PR, run `lint`, `build`, and `test`, and fix any errors.
+- Pull latest `main` into the feature branch and resolve conflicts before PR.
 
 ## Configuration & Environment
 - Copy `.env.example` to `.env` and set required `VITE_` variables (e.g., `VITE_API_BASE_URL`). The app will fail fast if required variables are missing.
