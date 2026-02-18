@@ -46,7 +46,7 @@ export function PlayerListItem({ player, onViewPlayerProfile, onSelectPlayer, da
 
     return (
         <tr ref={ref} data-tutorial={dataTutorial} className={twMerge(
-            "hover:bg-slate-50 items-center w-[100%]",
+            "items-center w-[100%]",
             !isAffordable && 'opacity-50',
         )} >
             <Activity mode={inView ? "visible" : "hidden"} >
