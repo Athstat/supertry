@@ -123,7 +123,7 @@ function RankingItem({ item }: RankingItemProps) {
 
 
       <Table.TableData>
-        <p className="text-center text-xs font-semibold" >{completedPredictions} - {item.correct_predictions}</p>
+        <p className="text-center text-xs font-semibold" >{item.correct_predictions} - {item.wrong_predictions}</p>
       </Table.TableData>
 
       <Table.TableData>

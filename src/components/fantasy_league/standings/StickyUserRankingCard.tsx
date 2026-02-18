@@ -33,7 +33,7 @@ export default function StickyUserRankingCard({ userRanking, onClick }: Props) {
                                 className="w-[35px] h-[35px] border-none"
                                 iconCN="w-4 h-4"
                             />
-                            <p className="text-sm w-2/5 truncate" >{userRanking?.username}</p>
+                            <p className="text-sm truncate" >{userRanking?.username}</p>
                         </div>
                     </div>
                     <div>

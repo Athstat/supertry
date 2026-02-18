@@ -1,7 +1,4 @@
-import useSWR from 'swr';
-import { powerRankingsService } from '../../../services/powerRankingsService';
 import { LoadingIndicator } from '../../ui/LoadingIndicator';
-import { SingleMatchPowerRanking } from '../../../types/powerRankings';
 import { Calendar } from 'lucide-react';
 import TeamLogo from '../../team/TeamLogo';
 import { twMerge } from 'tailwind-merge';
@@ -12,6 +9,10 @@ import SecondaryText from '../../ui/typography/SecondaryText';
 import RoundedCard from '../../ui/cards/RoundedCard';
 import { formatDate } from 'date-fns';
 import { abbreviateSeasonName } from '../../../utils/stringUtils';
+import { usePlayerLastMatches } from '../../../hooks/athletes/usePlayerNextMatch';
+import { usePlayerSeasonTeam } from '../../../hooks/seasons/useSeasonTeams';
+import { IFixture } from '../../../types/games';
+import { IProTeam } from '../../../types/team';
 
 type Props = {
   player: IProAthlete;
@@ -19,34 +20,29 @@ type Props = {
 
 export default function PlayerMatchsPRList({ player }: Props) {
 
-  const { data, isLoading } = useSWR(`player-matches-pr/${player.tracking_id}`, () =>
-    powerRankingsService.getPastMatchsPowerRankings(player.tracking_id ?? '', 10)
-  );
+  const { seasonTeam } = usePlayerSeasonTeam(player);
+  const { lastMatches, isLoading } = usePlayerLastMatches(player.tracking_id, 10);
 
-  const matchesPR: SingleMatchPowerRanking[] = data ?? [];
+  const noMatches = lastMatches.length === 0
 
   if (isLoading) return <LoadingIndicator />;
 
-  if (matchesPR.length === 0) {
+  if (noMatches || !seasonTeam) {
     return <></>;
   }
 
-  if (matchesPR.length === 0) {
-    return;
-  }
-
-  const matchesWon = matchesPR.reduce((sum, m) => {
-    const { athleteTeamWon } = didAthleteTeamWin(m);
+  const matchesWon = lastMatches.reduce((sum, game) => {
+    const { athleteTeamWon } = didAthleteTeamWin(game, seasonTeam.athstat_id);
     return sum + (athleteTeamWon ? 1 : 0);
   }, 0);
 
-  const matchesLost = matchesPR.reduce((sum, m) => {
-    const { athleteTeamWon } = didAthleteTeamWin(m);
+  const matchesLost = lastMatches.reduce((sum, game) => {
+    const { athleteTeamWon } = didAthleteTeamWin(game, seasonTeam.athstat_id);;
     return sum + (athleteTeamWon ? 0 : 1);
   }, 0);
 
-  const matchesDrawn = matchesPR.reduce((sum, m) => {
-    const { wasDraw } = didAthleteTeamWin(m);
+  const matchesDrawn = lastMatches.reduce((sum, game) => {
+    const { wasDraw } = didAthleteTeamWin(game, seasonTeam.athstat_id);;
     return sum + (wasDraw ? 1 : 0);
   }, 0);
 
@@ -56,7 +52,7 @@ export default function PlayerMatchsPRList({ player }: Props) {
       <div className="flex flex-col gap-3">
         <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
           <Calendar className="w-4 h-4" />
-          Last {matchesPR.length} Matches
+          Last {lastMatches.length} Matches
         </h3>
 
         {/* Filter Pills */}
@@ -83,8 +79,8 @@ export default function PlayerMatchsPRList({ player }: Props) {
 
       {/* Match Cards */}
       <div className="flex flex-col gap-3">
-        {matchesPR.map((matchPr, index) => {
-          return <PlayerSingleMatchPrCard key={index} singleMatchPr={matchPr} />;
+        {lastMatches.map((matchPr, index) => {
+          return <PlayerSingleMatchPrCard key={index} game={matchPr} seasonTeam={seasonTeam} />;
         })}
       </div>
     </div>
@@ -92,44 +88,32 @@ export default function PlayerMatchsPRList({ player }: Props) {
 }
 
 type CardProps = {
-  singleMatchPr: SingleMatchPowerRanking;
+  game: IFixture;
+  seasonTeam: IProTeam
 };
 
-function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
-  const {
-    opposition_score,
-    team_score,
-    game_status,
-  } = singleMatchPr.game;
+function PlayerSingleMatchPrCard({ game, seasonTeam }: CardProps) {
 
-  const { player, setSelectedFixture } = usePlayerData();
+  const {opposition_score, team_score} = game;
 
-
-  if (
-    !player ||
-    opposition_score === undefined ||
-    team_score === undefined ||
-    game_status !== 'completed'
-  ) {
-    return;
-  }
+  const { setSelectedFixture } = usePlayerData();
 
   const handleClick = () => {
-    setSelectedFixture(singleMatchPr.game);
+    setSelectedFixture(game);
   }
 
-  const wasHomePlayer = singleMatchPr.team_id === singleMatchPr.game.team?.athstat_id;
+  const wasHomePlayer = seasonTeam.athstat_id === game.team?.athstat_id;
 
-  const { wasDraw, athleteTeamWon } = didAthleteTeamWin(singleMatchPr);
-  const kickoff_time = singleMatchPr.game.kickoff_time ? new Date(singleMatchPr.game.kickoff_time) : undefined;
+  const { wasDraw, athleteTeamWon } = didAthleteTeamWin(game, seasonTeam.athstat_id);
+  const kickoff_time = game.kickoff_time ? new Date(game.kickoff_time) : undefined;
 
   const oppositionTeamName = wasHomePlayer
-    ? singleMatchPr.game.opposition_team?.athstat_name
-    : singleMatchPr.game.team?.athstat_name;
+    ? game.opposition_team?.athstat_name
+    : game.team?.athstat_name;
 
   const oppositionImageUrl = wasHomePlayer
-    ? singleMatchPr.game.opposition_team?.image_url
-    : singleMatchPr.game.team?.image_url;
+    ? game.opposition_team?.image_url
+    : game.team?.image_url;
 
 
   return (
@@ -170,14 +154,15 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
         {/* Power Ranking Badge */}
         <div className='flex flex-col items-center justify-center gap-1' >
           <MatchPrCard
-            pr={singleMatchPr.updated_power_ranking}
+            pr={game.updated_power_ranking}
           />
           <SecondaryText className='text-xs' >Rating</SecondaryText>
         </div>
+
       </div>
 
       <div className='flex flex-row items-center gap-1' >
-        {kickoff_time && <SecondaryText className='text-xs' >{abbreviateSeasonName(singleMatchPr.game.competition_name || "")},</SecondaryText>}
+        {kickoff_time && <SecondaryText className='text-xs' >{abbreviateSeasonName(game.competition_name || "")},</SecondaryText>}
         {kickoff_time && <SecondaryText className='text-xs' >{formatDate(kickoff_time, "EEEE dd MMMM yyyy")}</SecondaryText>}
       </div>
 
@@ -185,9 +170,9 @@ function PlayerSingleMatchPrCard({ singleMatchPr }: CardProps) {
   );
 }
 
-function didAthleteTeamWin(singleMatchPr: SingleMatchPowerRanking) {
-  const { opposition_score, team_score } = singleMatchPr.game;
-  const wasHomePlayer = singleMatchPr.team_id === singleMatchPr.game.team?.athstat_id;
+function didAthleteTeamWin(game: IFixture, team_id: string) {
+  const { opposition_score, team_score } = game;
+  const wasHomePlayer = team_id === game.team?.athstat_id;
 
   const homeTeamWon = (team_score || 0) > (opposition_score || 0);
   const awayTeamWon = (opposition_score || 0) > (team_score || 0);
