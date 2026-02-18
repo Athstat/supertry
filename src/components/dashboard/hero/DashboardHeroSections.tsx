@@ -317,6 +317,7 @@ function PlayNowCTAButton({ currentRound, nextRound, roundTeam, hideVerboseInstr
       <button
         onClick={handlePickTeam}
         className={`px-6 w-fit py-2.5 rounded-md bg-[#011E5C]/20 border border-white font-semibold text-sm text-white uppercase shadow-md transition-colors hover:bg-[#011E5C]/30`}
+        data-tutorial="dashboard-pick-team-cta"
       >
         {isGameweekOpen && isFirstTime && <p>Pick Team</p>}
         {isGameweekOpen && !isFirstTime && <p>Manage Team</p>}

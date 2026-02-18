@@ -32,5 +32,8 @@ test-results.xml
 .maestro/.maestro/
 *.maestro-logs
 
+# Playwright artifacts
+output/playwright/
+
 # Test data with sensitive credentials
 .maestro/test-data/users.yaml

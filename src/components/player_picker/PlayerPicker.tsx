@@ -98,6 +98,15 @@ function InnerPlayerPicker({ title, onClose, onSelect, isOpen }: InnerPlayerPick
     }
   }
 
+  const handleSelectPlayer = (player: IProAthlete) => {
+    if (onSelect) {
+      onSelect(player);
+    }
+    if (onClose) {
+      onClose();
+    }
+  }
+
   return (
     <DialogModal
       open={isOpen}
@@ -114,7 +123,7 @@ function InnerPlayerPicker({ title, onClose, onSelect, isOpen }: InnerPlayerPick
       <PlayerPickerHeader />
 
       <PlayerPickerPlayerList
-        onSelect={onSelect}
+        onSelect={handleSelectPlayer}
       />
       <PlayerPickerFAB
         onClick={handleClickFAB}

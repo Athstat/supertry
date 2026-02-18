@@ -12,6 +12,7 @@ import PickemCtaCard from '../components/dashboard/PickemCtaCard';
 import { DashboardHeroLoadingSkeleton } from '../components/dashboard/hero/DashboardHeroSections';
 import RoundedCard from '../components/ui/cards/RoundedCard';
 import OnboardingChecker from '../components/dashboard/OnboardingChecker';
+import CreateTeamTutorialTrigger from '../components/tutorials/CreateTeamTutorialTrigger';
 
 
 export function DashboardScreen() {
@@ -47,6 +48,7 @@ export function DashboardScreen() {
           <PickemCtaCard className='p-4 m-4' />
 
           <OnboardingChecker />
+          <CreateTeamTutorialTrigger />
 
         </PageView>
       </Activity>

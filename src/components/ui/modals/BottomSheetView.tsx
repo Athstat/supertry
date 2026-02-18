@@ -13,11 +13,12 @@ type Props = {
     overlayBg?: boolean,
     onClickOutside?: () => void,
     hideOverlay?: boolean,
-    rootClassName?: string
+    rootClassName?: string,
+    dataTutorial?: string
 }
 
 /** Renders a bottom sheet view that starts from the bottom of the screen */
-export default function BottomSheetView({ className, children, hideHandle, noAnimation, showTopBorder, onClickOutside, hideOverlay = false, rootClassName }: Props) {
+export default function BottomSheetView({ className, children, hideHandle, noAnimation, showTopBorder, onClickOutside, hideOverlay = false, rootClassName, dataTutorial }: Props) {
 
 
     const handleClickOutside = () => {
@@ -29,7 +30,9 @@ export default function BottomSheetView({ className, children, hideHandle, noAni
     if (hideOverlay) {
         return (
             <Root className={rootClassName} noAnimation={noAnimation} >
-                <div className={twMerge(
+                <div
+                    data-tutorial={dataTutorial}
+                    className={twMerge(
                     "lg:max-w-[40%] overflow-y-auto no-scrollbar flex flex-col gap-2 md:max-w-[50%] max-h-[130px] min-h-[130px]  w-full bg-white dark:bg-[#0D0D0D] rounded-t-3xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]",
                     className,
                     showTopBorder && "border-t dark:border-slate-600",
@@ -56,7 +59,9 @@ export default function BottomSheetView({ className, children, hideHandle, noAni
             </div>
 
             <Root className={rootClassName} noAnimation={noAnimation} >
-                <div className={twMerge(
+                <div
+                    data-tutorial={dataTutorial}
+                    className={twMerge(
                     "lg:max-w-[40%] overflow-y-auto no-scrollbar flex flex-col gap-2 md:max-w-[50%] max-h-[130px] min-h-[130px]  w-full bg-white dark:bg-[#0D0D0D] rounded-t-3xl drop-shadow-2xl shadow-[0_-8px_20px_rgba(0,0,0,0.3)]",
                     className,
                     showTopBorder && "border-t dark:border-slate-600",
