@@ -4,14 +4,15 @@ import { useAuth } from '../../contexts/auth/AuthContext';
 import { useInternalUserProfile } from '../../hooks/auth/useInternalUserProfile';
 import { useFantasySeasons } from '../../hooks/dashboard/useFantasySeasons';
 import { useUserRoundTeam } from '../../hooks/fantasy/useUserRoundTeam';
-import { isSeasonRoundLocked } from '../../utils/leaguesUtils';
 import { useTutorial } from '../../hooks/tutorials/useTutorial';
 import { TUTORIAL_IDS } from '../../tutorials/tutorialIds';
 import { getTutorialFlags } from '../../utils/tutorials/tutorialStorage';
 import { isCreateTeamTutorialEligible } from '../../utils/tutorials/createTeamTutorialEligibility';
 import { getCreateTeamTutorialSteps } from '../../tutorials/createTeamTutorial';
+import { isPastSeasonRound } from '../../utils/leaguesUtils';
 
 export default function CreateTeamTutorialTrigger() {
+  
   const { authUser } = useAuth();
   const { internalProfile, isLoading: loadingProfile } = useInternalUserProfile();
   const { currentRound, nextRound } = useFantasySeasons();
@@ -19,8 +20,8 @@ export default function CreateTeamTutorialTrigger() {
   const location = useLocation();
 
   const userId = authUser?.kc_id;
-  const isLocked = currentRound ? isSeasonRoundLocked(currentRound) : false;
-  const eligibleRound = isLocked ? nextRound : currentRound;
+  const isPast = currentRound ? isPastSeasonRound(currentRound) : false;
+  const eligibleRound = isPast ? nextRound : currentRound;
 
   const { roundTeam, isLoading: loadingTeam } = useUserRoundTeam(
     userId,
