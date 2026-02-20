@@ -57,6 +57,7 @@ export function PlayerActionModal({
   const isTeamCaptainLocked = round && isSeasonRoundStarted(round) && isTeamCaptainSlotLocked && (teamCaptain !== undefined);
 
   const hideControls = isReadOnly || isSlotLocked;
+  const isSubPossible = isSub && subOutCandidate?.athlete && !isPlayerLocked(subOutCandidate.athlete.athlete);
 
   const handleViewProfile = () => {
     if (onViewProfile) {
@@ -242,7 +243,7 @@ export function PlayerActionModal({
             </RoundedCard>
           )}
 
-          {isSub && subOutCandidate?.athlete && (
+          {isSubPossible && (
             <RoundedCard
               className={
                 "border-none hover:dark:text-slate-300 cursor-pointer  bg-slate-200 dark:bg-slate-700 dark:text-slate-200 p-2.5 py-4 items-center justify-center flex flex-row gap-1"
@@ -260,3 +261,4 @@ export function PlayerActionModal({
     </BottomSheetView>
   );
 }
+
