@@ -6,7 +6,7 @@ import RoundedCard from "../../ui/cards/RoundedCard";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { Users } from "lucide-react";
-import LeagueBadge from "./LeagueBadge";
+import { LeagueGoldCheckMark } from "./LeagueBadge";
 import { useAuth } from "../../../contexts/auth/AuthContext";
 
 type CardProps = {
@@ -22,6 +22,8 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
     const { userRanking, isLoading } = useUserOverallStandings(authUser?.kc_id, leagueGroup.id);
     const { ref, inView } = useInView({ triggerOnce: true });
 
+
+    // const isOfficial = isLeagueOfficial(leagueGroup);
 
     const handleOnClick = () => {
         if (onClick) {
@@ -63,7 +65,7 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
                                 {leagueGroup.title}
                             </h3>
                             
-                            {/* <LeagueGoldCheckMark leagueGroup={leagueGroup} /> */}
+                            <LeagueGoldCheckMark leagueGroup={leagueGroup} />
                         </div>
 
 
@@ -78,7 +80,7 @@ export function LeagueGroupCard({ leagueGroup, onClick }: CardProps) {
 
                 <div className="flex flex-row items-center gap-2" >
 
-                    <LeagueBadge leagueGroup={leagueGroup} />
+                    {/* {!isOfficial && <LeagueBadge leagueGroup={leagueGroup} />} */}
 
                     {!isLoading && <div className="text-slate-600 dark:text-slate-200 font-semibold text-sm" >
                         <p>{userRanking?.league_rank}</p>
