@@ -18,7 +18,7 @@ export function usePlayerRoundAvailability(athleteId: string, seasonId: string, 
     finalSeasonId,
     roundNumber,
     team_id
-  ), {revalidateIfStale: true});
+  ), {revalidateIfStale: true, revalidateOnFocus: false});
 
   const firstReport = data;
 
