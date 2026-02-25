@@ -7,7 +7,6 @@ import { usePlayerRoundAvailability } from "../../../hooks/fantasy/usePlayerRoun
 import { usePlayerSeasonTeam } from "../../../hooks/seasons/useSeasonTeams"
 import { ISeasonRound } from "../../../types/fantasy/fantasySeason"
 import { useFantasySeasons } from "../../../hooks/dashboard/useFantasySeasons"
-import { useInView } from "react-intersection-observer"
 
 type Props = {
     athlete: IProAthlete,
@@ -19,8 +18,6 @@ type Props = {
 /** Renders an Availability Indicator Icon, usually to be placed on top of a card */
 export default function AvailabilityIcon({ athlete, className, iconClassName, shouldFetch }: Props) {
 
-    const {inView, ref} = useInView({triggerOnce: true});
-
     const { currentRound } = useFantasySeasons();
     const { seasonTeam } = usePlayerSeasonTeam(athlete);
 
@@ -29,9 +26,7 @@ export default function AvailabilityIcon({ athlete, className, iconClassName, sh
     const roundNumber = currentRound?.round_number;
     const teamId = seasonTeam?.athstat_id
 
-    const finalShouldFetch = shouldFetch && inView;
-
-    const { isLoading, showAvailabilityWarning } = usePlayerRoundAvailability(athleteId, seasonId || '', roundNumber || 0, teamId, finalShouldFetch);
+    const { isLoading, showAvailabilityWarning } = usePlayerRoundAvailability(athleteId, seasonId || '', roundNumber || 0, teamId, shouldFetch);
 
     if (isLoading) {
         return;
@@ -43,7 +38,7 @@ export default function AvailabilityIcon({ athlete, className, iconClassName, sh
     }
 
     return (
-        <div ref={ref} >
+        <div>
             <div className={twMerge(
                 "bg-yellow-100 dark:bg-yellow-900/40 hover:bg-yellow-400 border border-yellow-500 dark:border-yellow-700 w-7 h-7 rounded-xl flex flex-col items-center justify-center",
                 className
