@@ -27,7 +27,7 @@ export function useWeekCursor(today: Date = new Date()) {
     const weekEnd = useMemo(() => {
 
         if (pivotDate) {
-            const end = endOfDay(nextMonday(new Date(pivotDate)));
+            const end = startOfDay(nextMonday(new Date(pivotDate)));
             return end;
         }
 
