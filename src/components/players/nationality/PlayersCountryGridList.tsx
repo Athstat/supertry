@@ -3,10 +3,13 @@ import { useSupportedAthletes } from "../../../hooks/athletes/useSupportedAthlet
 import CountryCard from "../../teams/countries/CountryCard";
 import { useNavigate } from "react-router-dom";
 import RoundedCard from "../../ui/cards/RoundedCard";
+import { useFantasySeasons } from "../../../hooks/dashboard/useFantasySeasons";
 
 /** Renders a list of countries for available players through use athletes */
 export default function PlayersCountryGridList() {
 
+    const {selectedSeason} = useFantasySeasons();
+ 
     const navigate = useNavigate();
     const { athletes, isLoading: loadingSupported } = useSupportedAthletes();
     const [isLoading, setLoading] = useState<boolean>(false);
@@ -81,6 +84,10 @@ export default function PlayersCountryGridList() {
     }
 
     if (countries.length === 0) {
+        return null;
+    }
+
+    if (selectedSeason?.competition_name === "Six Nations") {
         return null;
     }
 

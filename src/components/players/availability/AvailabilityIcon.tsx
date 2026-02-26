@@ -38,7 +38,7 @@ export default function AvailabilityIcon({ athlete, className, iconClassName, sh
     }
 
     return (
-        <div >
+        <div>
             <div className={twMerge(
                 "bg-yellow-100 dark:bg-yellow-900/40 hover:bg-yellow-400 border border-yellow-500 dark:border-yellow-700 w-7 h-7 rounded-xl flex flex-col items-center justify-center",
                 className
