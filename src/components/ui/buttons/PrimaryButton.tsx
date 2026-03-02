@@ -11,9 +11,10 @@ type Props = {
     isLoading?: boolean,
     type?: "submit" | "reset" | "button" | undefined,
     destroy?: boolean,
-    slate?: boolean
+    slate?: boolean,
+    dataTutorial?: string
 }
-export default function PrimaryButton({ children, className, onClick, disbabled, isLoading = false, type, disabled, destroy, slate }: Props) {
+export default function PrimaryButton({ children, className, onClick, disbabled, isLoading = false, type, disabled, destroy, slate, dataTutorial }: Props) {
 
     const handleOnClick = () => {
         if (onClick) {
@@ -35,7 +36,7 @@ export default function PrimaryButton({ children, className, onClick, disbabled,
                 isLoading && 'animate-pulse'
             )}
             onClick={handleOnClick}
-
+            data-tutorial={dataTutorial}
             type={type}
         >
             <div className='flex flex-row items-center gap-1' >
@@ -55,6 +56,7 @@ export function TranslucentButton(props: Props) {
             disbabled={props.disbabled}
             isLoading={props.isLoading}
             type={props.type}
+            dataTutorial={props.dataTutorial}
             className={twMerge(
                 'bg-blue-100/10 dark:bg-blue-100/10  border-white/20 ',
                 'hover:bg-blue-100/20 hover:dark:bg-blue-100/20',
@@ -75,6 +77,7 @@ export function OutlinedButton(props: Props) {
             disbabled={props.disbabled}
             isLoading={props.isLoading}
             type={props.type}
+            dataTutorial={props.dataTutorial}
             className={twMerge(
                 "bg-transparent dark:bg-transparent hover:bg-transparent dark:border-white/60 border-slate-400 text-slate-600 dark:text-white",
                 props.className

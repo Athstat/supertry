@@ -45,7 +45,7 @@ export default function PlayerPickerHeader() {
                 />
             </div>
 
-            <PlayerPickerTeamFilterRow />
+            <PlayerPickerTeamFilterRow dataTutorial="player-picker-filter" />
 
             {/* {playerToBeReplaced && (
                 <div key={playerToBeReplaced.tracking_id} className="flex flex-col gap-1" >
@@ -107,6 +107,7 @@ function ScoutingListSwitcher() {
                 current={viewType}
                 value="scouting-list"
                 onSelect={handleChange}
+                dataTutorial="player-picker-scouting-tab"
             // icon={<Binoculars className="w-4 h-4" />}
             />
         </div>

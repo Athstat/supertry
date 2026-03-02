@@ -19,8 +19,14 @@ export function EmptySlotPitchCard({ slot }: EmptySlotProps) {
         initiateSwap(slot);
     };
 
+    const dataTutorial = slot.slotNumber === 1
+        ? 'team-slot-1-empty'
+        : slot.slotNumber === 2
+          ? 'team-slot-2-empty'
+          : undefined;
+
     return (
-        <div className="flex flex-col items-center justify-center gap-1 relative">
+        <div className="flex flex-col items-center justify-center gap-1 relative" data-tutorial={dataTutorial}>
             <div
                 className={twMerge(
                     'overflow-hidden flex flex-col items-center justify-center cursor-pointer rounded-lg min-h-[150px] max-h-[150px] min-w-[115px] max-w-[115px] ',

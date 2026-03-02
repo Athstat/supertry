@@ -37,6 +37,8 @@ export function MyTeamSlotCard({ slot, onPlayerClick, position }: SlotCardProps)
     )
   };
 
+  const dataTutorial = slot.slotNumber === 1 ? 'team-slot-1-player' : undefined;
+
   return (
     <div
       className="absolute"
@@ -45,6 +47,7 @@ export function MyTeamSlotCard({ slot, onPlayerClick, position }: SlotCardProps)
         top: `${position.y}%`,
         transform: 'translate(-50%, -50%)',
       }}
+      data-tutorial={dataTutorial}
     >
       <div className='relative' >
         <PlayerPitchCard

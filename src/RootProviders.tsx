@@ -11,6 +11,7 @@ import FantasySeasonsProvider from "./providers/fantasy_seasons/FantasySeasonsPr
 import CacheProvider from "./providers/caching/CacheProvider";
 import AppErrorFallback from "./components/ui/navigation/AppErrorFallback";
 import TooltipProvider from "./providers/ui/TooltipProvider";
+import TutorialProvider from "./providers/ui/TutorialProvider";
 import { FantasySeasonsPickerModal } from "./components/fantasy-seasons/FantasySeasonsPickerModal";
 import { preloadRugbyPitches } from "./components/ui/containers/RugbyPitch";
 import { AppStateProvider } from "./contexts/app_state/AppStateContext";
@@ -135,9 +136,11 @@ function AppStateLayer({ children }: Props) {
                         onError={handleError}
                         fallback={(props: FallbackProps) => <AppErrorFallback {...props} />}
                     >
-                        <UILayer>
-                            {children}
-                        </UILayer>
+                        <TutorialProvider>
+                            <UILayer>
+                                {children}
+                            </UILayer>
+                        </TutorialProvider>
                     </ErrorBoundary>
                 </GeoLocationProvider>
             </AppStateProvider>

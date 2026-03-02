@@ -9,7 +9,11 @@ import { BudgetIndicator } from "./BudgetIndicator";
 
 
 
-export default function PlayerPickerTeamFilterRow() {
+type PlayerPickerTeamFilterRowProps = {
+    dataTutorial?: string
+};
+
+export default function PlayerPickerTeamFilterRow({ dataTutorial }: PlayerPickerTeamFilterRowProps) {
 
     const { availbleTeams, filterTeams, setFilterTeams, remainingBudget } = usePlayerPicker();
     const len = filterTeams.length;
@@ -23,7 +27,7 @@ export default function PlayerPickerTeamFilterRow() {
     }
 
     return (
-        <div className="flex flex-col gap-1" >
+        <div className="flex flex-col gap-1" data-tutorial={dataTutorial} >
 
             <div className="flex flex-row items-center justify-between " >
 

@@ -1,5 +1,5 @@
 import { Check, Info, Loader, Shield } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAtomValue } from "jotai";
 import { useFantasyTeam } from "../../hooks/fantasy/useFantasyTeam";
@@ -17,14 +17,18 @@ import SecondChanceCard from "./second_chance/SecondChanceCard";
 import { isInSecondChanceMode } from "../../utils/leaguesUtils";
 import { useMyTeam } from "../../hooks/fantasy/my_team/useMyTeam";
 import { useMyTeamActions } from "../../hooks/fantasy/my_team/useMyTeamActions";
-
+import { useTutorial } from "../../hooks/tutorials/useTutorial";
+import { TUTORIAL_IDS } from "../../tutorials/tutorialIds";
+import { CREATE_TEAM_TUTORIAL_STEP_INDEX, getCreateTeamTutorialSteps } from "../../tutorials/createTeamTutorial";
 
 /** Renders Create Team View Header */
 export default function CreateTeamHeader() {
     const { leagueConfig } = useLeagueConfig();
 
     const { totalSpent, selectedCount, round: leagueRound, isReadOnly, onUpdateTeam: onUpdateTeam } = useMyTeam();
-    const {isTeamFull, resetToOriginalTeam} = useMyTeamActions();
+    const { isTeamFull, resetToOriginalTeam } = useMyTeamActions();
+    const { isActive, isFreeRoam, resumeTutorialAtStep, completeTutorial } = useTutorial();
+    const isCreateTeamTutorialActive = isActive(TUTORIAL_IDS.CREATE_TEAM);
 
     const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
     const [showClaimAccountModal, setShowClaimAccountModal] = useState<boolean>(false);
@@ -40,10 +44,6 @@ export default function CreateTeamHeader() {
     const { handleSave, isSaving, saveError, clearSaveError } = useSubmitTeam(handleSuccess);
     const isSecondChance = leagueRound && isInSecondChanceMode(leagueRound);
 
-    if (!leagueRound || !leagueConfig) {
-        return;
-    }
-
     const onSaveTeam = () => {
         handleSave();
     }
@@ -58,6 +58,10 @@ export default function CreateTeamHeader() {
         if (createdTeam && onUpdateTeam) {
             onUpdateTeam(createdTeam)
         }
+
+        if (isCreateTeamTutorialActive) {
+            completeTutorial(TUTORIAL_IDS.CREATE_TEAM);
+        }
     }
 
     const handleCancelClaimAccount = () => {
@@ -66,6 +70,30 @@ export default function CreateTeamHeader() {
 
     const handleCloseClaimAccountModal = () => {
         setShowClaimAccountModal(false);
+    }
+
+    useEffect(() => {
+        if (!isCreateTeamTutorialActive) {
+            return;
+        }
+
+        if (!isTeamFull) {
+            return;
+        }
+
+        if (!isFreeRoam) {
+            return;
+        }
+
+        resumeTutorialAtStep(
+            TUTORIAL_IDS.CREATE_TEAM,
+            getCreateTeamTutorialSteps(),
+            CREATE_TEAM_TUTORIAL_STEP_INDEX.FINAL_BANNER
+        );
+    }, [isCreateTeamTutorialActive, isTeamFull, isFreeRoam, resumeTutorialAtStep]);
+
+    if (!leagueRound || !leagueConfig) {
+        return null;
     }
 
 
@@ -119,6 +147,7 @@ export default function CreateTeamHeader() {
                     disabled={!isTeamFull}
                     isLoading={isSaving}
                     onClick={onSaveTeam}
+                    dataTutorial="create-team-button"
                 >
                     Create Team
                 </PrimaryButton>
@@ -151,6 +180,7 @@ export default function CreateTeamHeader() {
             {/* Success Modal */}
             {showSuccessModal && (
                 <SuccessModal
+                    showCoachMessage={isCreateTeamTutorialActive}
                     onContinue={handleCloseSuccessModal}
                 />
             )}
@@ -179,10 +209,11 @@ export default function CreateTeamHeader() {
 
 
 type SuccessModalProps = {
-    onContinue?: () => void
+    onContinue?: () => void,
+    showCoachMessage?: boolean
 }
 
-function SuccessModal({ onContinue }: SuccessModalProps) {
+function SuccessModal({ onContinue, showCoachMessage }: SuccessModalProps) {
 
     const { leagueRound } = useFantasyTeam();
 
@@ -194,10 +225,15 @@ function SuccessModal({ onContinue }: SuccessModalProps) {
                         <Check className="w-8 h-8" />
                     </div>
                     <h2 className="text-2xl font-bold mb-2 dark:text-gray-100">Team Submitted!</h2>
-                    <p className="text-gray-600 dark:text-gray-400 mb-6">
+                    <p className="text-gray-600 dark:text-gray-400 mb-4">
                         Your team has been successfully submitted
                         {leagueRound ? ` to ${leagueRound.season}` : ''}
                     </p>
+                    {showCoachMessage && (
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                            Great job! Next you can create a league and invite your friends.
+                        </p>
+                    )}
                     <PrimaryButton
                         className="w-full"
                         onClick={onContinue}
@@ -267,7 +303,7 @@ function UnsavedChangesGuard() {
     const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState<boolean>(false);
 
     const { selectedCount } = useCreateFantasyTeam();
-    const {changesDetected} = useMyTeamActions();
+    const { changesDetected } = useMyTeamActions();
 
     const toggleUnSavedChangesModal = () => {
         setShowUnsavedChangesModal(prev => !prev);
